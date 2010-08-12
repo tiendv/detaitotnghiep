@@ -1,0 +1,33 @@
+- Hoan thanh Crawl.
+- Tim hieu google scholar API.
+- Thu thap tai lieu de lam datatraining nganh Cs.
+- Su dung va dung SVN lib.
+- Doc cac tai lieu lien quan,co trong Document ,
++ doc xong tom tat lai viet trong document_br sau do bo tai lieu do ra doc_read
+
+
+------------------------
+------------------------
+
+cac cong cu search co san co nhung chuc nang searhc cua cac to chuc dua ra gom :
+
+
+
+ACM 
+
+IEEE Computer Society 
+
+Association for Computational Linguistics 
+IEEE Press 
+
+IEEE Computer Society Press 
+
+Springer-Verlag 
+
+- Cac he thoing co phan loai khong? phan loai ntn ? lay ve duoc thi lay duoc nhung gi.
+Thu thap (abtrach ) phan loai de lam gi ?????????????????? lam giau ontology,ontology de luu vet cong bo bai bao va 
+noi dung bai bao tat cac bai bao .
+tren cac bai bao cho lay nhung cai gi trong metadata ().......--> bo sung vao database ve bai bao.
+
+viet crawl thu thap thong tin <lay cai file >
+
