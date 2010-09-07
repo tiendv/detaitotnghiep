@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+
+	<application>
+		<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+	</application>
+
+	<managed-bean>
+		<managed-bean-name>searchController</managed-bean-name>
+		<managed-bean-class>
+			edu.cs.ucdavis.dblp.web.ui.controllers.SearchController
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>searchBean</managed-bean-name>
+		<managed-bean-class>
+			edu.cs.ucdavis.dblp.web.ui.data.SearchBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>kwSearchBean</managed-bean-name>
+		<managed-bean-class>
+			edu.cs.ucdavis.dblp.web.ui.data.KeywordSearchBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>nodeProfile</managed-bean-name>
+		<managed-bean-class>
+			edu.cs.ucdavis.dblp.web.ui.data.NodeProfileBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>HOME</from-outcome>
+			<to-view-id>/home.jsp</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>NODES_SEARCHED</from-outcome>
+			<to-view-id>/searchByTaxonomy.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>PEOPLE_SEARCHED</from-outcome>
+			<to-view-id>/searchByResearcher.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>TOPIC_SEARCH_CLEARED</from-outcome>
+			<to-view-id>/searchByTopic.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/searchByTaxonomy.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>NODE_RESULTS_FOUND</from-outcome>
+			<to-view-id>/taxonomyResults.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<to-view-id>/searchByTaxonomy.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/searchByResearcher.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>NODE_RESULTS_FOUND</from-outcome>
+			<to-view-id>/taxonomyResults.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<to-view-id>/searchByResearcher.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+</faces-config>
