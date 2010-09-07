@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- DBLPs -->
+	<bean id="dblpPubDao"
+		class="edu.ucdavis.cs.dblp.data.DblpPubDaoImpl" />
+		
+	<bean id="researcherDao"
+		class="edu.ucdavis.cs.dblp.experts.ResearcherDaoImpl" />
+
+	<bean id="dataLoader"
+		class="edu.ucdavis.cs.dblp.data.DblpDataLoader">
+		<property name="inputSourceItemProvider"
+			ref="inputSourceItemProviderBean" />
+<!--	 	<property name="itemProcessor" ref="itemProcessorBean" /> -->
+ 		<property name="itemProcessor" ref="kwItemProcessorBean" />
+		<property name="batchSize" value="250" />
+	</bean>
+
+	<bean id="inputSourceItemProviderBean"
+		class="edu.ucdavis.cs.dblp.data.DblpInputSourceItemProvider">
+		<!--  use this one to reference your local download of the DBLP data dump 
+		<property name="inputSource" 
+			value="file:/Documents and Settings/Philip/My Documents/UC Davis/ms thesis/dblp/dblp.xml.gz" />
+			-->
+		<property name="inputSource"
+			value="file:/dev/data/dblp/dblp.xml.gz"/>
+		<!-- use this one to avoid having to download the dblp data dump separately: 
+		<property name="inputSource" 
+			value="http://dblp.uni-trier.de/xml/dblp.xml.gz" /> -->
+		 <!-- use this one for testing:
+		<property name="inputSource" 
+			value="classpath:sample_dblp.xml" /> --> 
+	</bean>
+
+	<bean id="itemProcessorBean"
+		class="edu.ucdavis.cs.dblp.data.DblpItemReProcessor">
+		<property name="dao" ref="dblpPubDao" />
+		<property name="contentService" ref="contentService" />
+	</bean>
+	
+	<bean id="kwItemProcessorBean"
+		class="edu.ucdavis.cs.dblp.data.DblpItemKeywordProcessor" lazy-init="true"
+		scope="prototype">
+		<property name="dao" ref="dblpPubDao" />
+		<property name="contentService" ref="contentService" />
+		<property name="recognizer" ref="keywordRecognizer" />
+	</bean>
+	
+	
+	<!-- ACM CCS (Taxonomy system) -->
+	<bean id="categoryDao"
+		class="edu.ucdavis.cs.taxonomy.CategoryDaoImpl" />	
+	
+	<bean id="ccsDataLoader"
+		class="edu.ucdavis.cs.taxonomy.acm.CcsDataLoader">
+		<property name="inputSourceItemProvider"
+			ref="ccsInputSourceItemProviderBean" />
+		<property name="itemProcessor" ref="ccsItemProcessorBean" />
+		<property name="batchSize" value="1000" />
+	</bean>
+
+	<bean id="ccsInputSourceItemProviderBean"
+		class="edu.ucdavis.cs.taxonomy.acm.CcsInputSourceItemProvider">
+		<!--  use this one to reference your local download of the ACM CCS dump  
+		<property name="inputSource" 
+			value="file:/Documents and Settings/Philip/My Documents/UC Davis/ms thesis/taxonomy/acm/acmccs98-1.2.3.xml" />
+			-->
+		<!-- use this one to avoid having to download the ACM CCS data dump separately: --> 
+		<property name="inputSource" 
+			value="http://www.acm.org/class/1998/acmccs98-1.2.3.xml" />
+	</bean>
+
+	<bean id="ccsItemProcessorBean"
+		class="edu.ucdavis.cs.taxonomy.acm.CcsItemProcessor">
+		<property name="dao" ref="categoryDao" />	
+	</bean>
+
+	<!-- Master content service that delegates to the wrapped underlying services -->	
+	<bean id="contentService" class="edu.ucdavis.cs.dblp.service.DemuxContentService"
+		scope="prototype">
+		<property name="contentServices">
+			<list>
+				<ref bean="acmContentService"/>
+				<ref bean="ieeeContentService"/>
+				<ref bean="ieeeCsContentService"/>
+				<ref bean="springerContentService"/>				
+			</list>
+		</property>
+	</bean>
+
+	<bean id="acmContentService" class="edu.ucdavis.cs.dblp.service.AcmDlContentService"
+		scope="prototype">
+		<constructor-arg ref="resourceFetcher" />
+	</bean>
+	<bean id="ieeeContentService" class="edu.ucdavis.cs.dblp.service.IeeeDlContentService"
+		scope="prototype">
+		<constructor-arg ref="resourceFetcher" />
+	</bean>
+	<bean id="ieeeCsContentService" class="edu.ucdavis.cs.dblp.service.IeeeCsDlContentService"
+		scope="prototype">
+		<constructor-arg ref="resourceFetcher" />
+	</bean>
+	<bean id="springerContentService" class="edu.ucdavis.cs.dblp.service.SpringerDlContentService"
+		scope="prototype">
+		<constructor-arg ref="resourceFetcher" />
+	</bean>
+	
+	<alias name="localCacheResourceFetcher" alias="resourceFetcher"/>
+	
+	<bean id="localCacheResourceFetcher"
+		class="edu.ucdavis.cs.dblp.service.LocalCacheResourceFetcher"
+		scope="prototype">
+		<property name="baseURL" value="http://192.168.1.22/acm/" />
+	</bean>
+	<bean id="localAcmFetcher"
+		class="edu.ucdavis.cs.dblp.service.AcmResourceFetcher"
+		scope="prototype">
+		<constructor-arg index="0">
+			<bean id="localFetcher"
+				class="edu.ucdavis.cs.dblp.service.LocalResourceFetcher">
+				<constructor-arg index="0" value="file:/dev/data" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+</beans>
