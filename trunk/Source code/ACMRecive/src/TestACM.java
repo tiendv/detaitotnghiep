@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.imports.BibtexParser;
+import net.sf.jabref.imports.ImportInspector;
 import net.sf.jabref.imports.ParserResult;
 
 
@@ -54,15 +55,15 @@ public class TestACM {
 	                if (!shouldContinue)
 	                    break;
 	                BibtexEntry entry = fetchArticleBibtex(articleURL);
-	                dialog.addEntry(entry);
-	                dialog.setProgress(++parsed, hits);
+	            //    dialog.addEntry(entry);
+	             //   dialog.setProgress(++parsed, hits);
 	            }
 
 	        } catch (MalformedURLException e) {
 	            e.printStackTrace();
 	            return false;
 	        } catch (ConnectException e) {
-	            System.out.prinnf("Connection to ACM failed");
+	            System.out.print("Connection to ACM failed");
 	            return false;
 	        } catch (IOException e) {
 	            e.printStackTrace();
@@ -346,12 +347,18 @@ public class TestACM {
 
 	        return page.toString();
 	    }
-	public static void main(String[] args) {
-		TestACM test = new TestACM();
-		String t= null;
-		//t = 
-		//System.out.printf(" Test test ");
+	/*public static void main(String[] args) throws IOException {
+		//TestACM test = new TestACM();
+		// String hitlist = test.executeQuery("onepageresult");
+	      //  List<String> urls = test.loadArticleURLs(hitlist);
+	        String url = "http://portal.acm.org/citation.cfm?id=584969&coll=Portal&dl=ACM&CFID=43787999&CFTOKEN=74051097";
+	        BibtexEntry e = test.fetchArticleBibtex(url);
+	        String year = e.getAuthorTitleYear(500) + e.getCiteKey();
+	        System.out.printf(year);
 		// TODO Auto-generated method stub
-	}
+		//ImportInspector dialog = new ImportInspector();
+		//ACMPortalFetcher 
+		
+	} */
 
 }
