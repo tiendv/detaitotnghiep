@@ -4,10 +4,14 @@
  * @author TKORG-PC1
  *
  */
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Panel;
 
+import javax.swing.JPanel;
+
 import net.sf.jabref.imports.ACMPortalFetcher;
+import net.sf.jabref.imports.ImportInspector;
 public class main {
 
 	/**

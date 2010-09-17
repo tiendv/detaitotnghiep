@@ -347,14 +347,14 @@ public class TestACM {
 
 	        return page.toString();
 	    }
-	/*public static void main(String[] args) throws IOException {
-		//TestACM test = new TestACM();
+/*	public static void main(String[] args) throws IOException {
+		TestACM test = new TestACM();
 		// String hitlist = test.executeQuery("onepageresult");
 	      //  List<String> urls = test.loadArticleURLs(hitlist);
 	        String url = "http://portal.acm.org/citation.cfm?id=584969&coll=Portal&dl=ACM&CFID=43787999&CFTOKEN=74051097";
 	        BibtexEntry e = test.fetchArticleBibtex(url);
-	        String year = e.getAuthorTitleYear(500) + e.getCiteKey();
-	        System.out.printf(year);
+	        String year = e.getAuthorTitleYear(500);
+	        System.out.print(year);
 		// TODO Auto-generated method stub
 		//ImportInspector dialog = new ImportInspector();
 		//ACMPortalFetcher 
