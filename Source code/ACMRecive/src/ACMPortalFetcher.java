@@ -37,7 +37,10 @@ public class ACMPortalFetcher implements EntryFetcher {
 	OutputPrinter status;
     final HTMLConverter htmlConverter = new HTMLConverter();
     private String terms;
+    // String bat dau tim kiem tren trang portal
+    
     String startUrl = "http://portal.acm.org/";
+    // string tim kiem tren file tren ket qua tra ve
     String searchUrlPart = "results.cfm?query=";
     String searchUrlPartII = "&dl=";
     String endUrl = "&coll=Portal&short=0";//&start=";
@@ -45,6 +48,7 @@ public class ACMPortalFetcher implements EntryFetcher {
     private JRadioButton acmButton = new JRadioButton(Globals.lang("The ACM Digital Library"));
     private JRadioButton guideButton = new JRadioButton(Globals.lang("The Guide to Computing Literature"));
     private JCheckBox absCheckBox = new JCheckBox(Globals.lang("Include abstracts"), false);
+    // do ket qua dem ve 
     
     private static final int MAX_FETCH = 20; // 20 when short=0
     private int perPage = MAX_FETCH, hits = 0, unparseable = 0, parsed = 0;
@@ -52,13 +56,13 @@ public class ACMPortalFetcher implements EntryFetcher {
     private boolean fetchAbstract = false;
     private boolean acmOrGuide = false;
 
+    // Cac pattern tim kiem cac thong tin ve so ket qua tra ve, ket qua lon nhat, fiel bibtex,abtract cua bai bao va referent cua bai bao
     Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
     Pattern maxHitsPattern = Pattern.compile(".*Results \\d+ - \\d+ of (\\d+,*\\d*).*");
     Pattern bibPattern = Pattern.compile(".*(popBibTex.cfm.*)','BibTex'.*");
     Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
-    
     Pattern fullCitationPattern =Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
-
+   // panel giup cho nguoi dung lua con cac tuy chon cua ACM portal  
     public JPanel getOptionsPanel() {
         JPanel pan = new JPanel();
         pan.setLayout(new GridLayout(0,1));
@@ -75,6 +79,12 @@ public class ACMPortalFetcher implements EntryFetcher {
         
         return pan;
     }
+    // Qua trinh xy ly cau query trong ACM
+    /**
+     *  String : Cau query 
+     *  dialog : cho phep add và xu ly mot fie bitext vao.
+     *  status : dialog cho phep hien thi trang thai cua chuong trinh.
+     */
 
     public boolean processQuery(String query, ImportInspector dialog, OutputPrinter status) {
         this.dialog = dialog;
@@ -85,31 +95,56 @@ public class ACMPortalFetcher implements EntryFetcher {
         parsed = 0;
         unparseable = 0;
         acmOrGuide = acmButton.isSelected();
+        
+        /** Tao URL dau tien  bang phuong thuc makeUrl bao gom cac truong sau:
+         * http://portal.acm.org/ + results.cfm?query= + &dl="
+         *
+         */
         String address = makeUrl(0);
         try {
             URL url = new URL(address);
 
             //dialog.setVisible(true);
+            //Lay noi dung trang dau tien
+            
             String page = getResults(url);
             //System.out.println(address);
+            
+            /**
+             * Lay so ket qua tra ve cua page bang pattern lay ket qua 
+             */
+             
             hits = getNumberOfHits(page, "Found", hitsPattern);
+            
+            /**
+             * tra ve vi tri cua chuoi foud trong string Page , 
+             * neu khong co tra ve gia tri la -1
+             */
 			int index = page.indexOf("Found");
+			
+			
 			if (index >= 0) {
-            	page = page.substring(index + 5);
+			// tim lay chuoi tiep sau tu found thu nhat cho den het ca string vi trong
+			// page tra ve co 2 cho  thong bao found  
+            	page = page.substring(index + 5);//+5 tuc la tinh sau tu found
 				index = page.indexOf("Found");
 				if (index >= 0)
             		page = page.substring(index);
 			}
             //System.out.println(page);
             //System.out.printf("Hit %d\n", hits);
-            
+            // Neu khogn co ket qua tra ve ket thuc chuong trinh
             if (hits == 0) {
                 status.showMessage(Globals.lang("No entries found for the search string '%0'",
                         terms),
                         Globals.lang("Search ACM Portal"), JOptionPane.INFORMATION_MESSAGE);
                 return false;
             }
-
+            
+            // Lay so tai lieu ma trang web tra ve tren mot trang 
+            // Results 1 - 20 of 238,684  , voi ket qua nay no se tra ve 
+            
+            
             int maxHits = getNumberOfHits(page, "Results", maxHitsPattern);
             //System.out.printf("maxHit %d\n", maxHits);
             //String page = getResultsFromFile(new File("/home/alver/div/temp50.txt"));
@@ -117,6 +152,11 @@ public class ACMPortalFetcher implements EntryFetcher {
             //List entries = new ArrayList();
             //System.out.println("Number of hits: "+hits);
             //System.out.println("Maximum returned: "+maxHits);
+            
+            
+           // Neu ma so ket qua tra ve ma lon hon gia tri 
+            //lon nhat cua 1 trang thi so ket qua bang so trang
+            
             if (hits > maxHits)
                 hits = maxHits;
             
@@ -127,11 +167,16 @@ public class ACMPortalFetcher implements EntryFetcher {
                         Globals.lang("Search ACM Portal"), JOptionPane.INFORMATION_MESSAGE);
                 hits = MAX_FETCH;
             }
-        
+            // cho phep lay ca abtract cua bai bao
+            
             fetchAbstract = absCheckBox.isSelected();
             //parse(dialog, page, 0, 51);
             //dialog.setProgress(perPage/2, hits);
+            
+            //parse(ImportInspector dialog, String text, int startIndex, int firstEntryNumber)
+            
             parse(dialog, page, 0, 1);
+            
             //System.out.println(page);
             int firstEntry = perPage;
             while (shouldContinue && (firstEntry < hits)) {
@@ -162,6 +207,11 @@ public class ACMPortalFetcher implements EntryFetcher {
     }
 
     private String makeUrl(int startIndex) {
+    	/**
+    	 * startUrl: http://portal.acm.org/ 
+    	 * searchUrlPart results.cfm?query= 
+    	 * searchUrlPartII: &dl="
+    	 */
         StringBuffer sb = new StringBuffer(startUrl).append(searchUrlPart);
         sb.append(terms.replaceAll(" ", "%20"));
         sb.append(searchUrlPartII);
@@ -179,13 +229,17 @@ public class ACMPortalFetcher implements EntryFetcher {
         piv = startIndex;
         int entryNumber = firstEntryNumber;
         BibtexEntry entry;
-        while (((entry = parseNextEntry(text, piv, entryNumber)) != null)
-            && (shouldContinue)) {
-            if (entry.getField("title") != null) {
+        // trong khi file bitex khong bang null va con tiep tuc
+        // private BibtexEntry parseNextEntry(String allText, int startIndex, int entryNumber)
+        while (((entry = parseNextEntry(text, piv, entryNumber)) != null)&& (shouldContinue)) {
+           // neu ma bai bao co tile 
+        	if (entry.getField("title") != null) {
+        	//	thi add bai bao vao trong dialog 
                 dialog.addEntry(entry);
                 dialog.setProgress(parsed + unparseable, hits);
                 parsed++;
             }
+        	// tang bien xu ly 
             entryNumber++;
             try {
             	Thread.sleep(10000);//wait between requests or you will be blocked by ACM
@@ -198,17 +252,28 @@ public class ACMPortalFetcher implements EntryFetcher {
     private BibtexEntry parseEntryBibTeX(String fullCitation, boolean abs) throws IOException {
         URL url;
         try {
+        	// tao URL de truy nhap va trang cua bai bao
+        	
             url = new URL(startUrl + fullCitation);
+            // Lay noi dun trang vua tao
+            
         	String page = getResults(url);
+        	
 			Thread.sleep(10000);//wait between requests or you will be blocked by ACM
+			
+			// Tim kiem thong tin bibtex 
 			Matcher bibtexAddr = bibPattern.matcher(page);
 			if (bibtexAddr.find()) {
 				URL bibtexUrl = new URL(startUrl + bibtexAddr.group(1));
+				
+				// lay noi dung trong trang bitext cua bai bao them vao entry
+				
 				BufferedReader in = new BufferedReader(new InputStreamReader(bibtexUrl.openStream()));
 				ParserResult result = BibtexParser.parse(in);
 				in.close();
 				Collection<BibtexEntry> item = result.getDatabase().getEntries();
 				BibtexEntry entry = item.iterator().next();
+				// Lay noi dung abtract cua bai bao dua vao entry
 				if (abs == true) {
 					Matcher absMatch = absPattern.matcher(page);
 					if (absMatch.find()) {
@@ -238,10 +303,12 @@ public class ACMPortalFetcher implements EntryFetcher {
 			return null;
 		}
     }
-
+// tao file bibtex tu string dua vao 
+    
     private BibtexEntry parseNextEntry(String allText, int startIndex, int entryNumber) {
-        String toFind = new StringBuffer().append("<strong>")
-                .append(entryNumber).append("</strong>").toString();
+    	// tao mot strinng de tim kiem va xu ly tren mot string trong table cua mot bai bao
+    	
+        String toFind = new StringBuffer().append("<strong>").append(entryNumber).append("</strong>").toString();
         int index = allText.indexOf(toFind, startIndex);
         int endIndex = allText.indexOf("</table>", index+1);
         //if (endIndex < 0)
@@ -253,8 +320,12 @@ public class ACMPortalFetcher implements EntryFetcher {
             piv = index+1;
             String text = allText.substring(index, endIndex);
             // Always try RIS import first
-			Matcher fullCitation =
-				fullCitationPattern.matcher(text);
+            
+            // tim kiem thong tin ve reference cua bai bao link lien ket
+            
+            
+			Matcher fullCitation =fullCitationPattern.matcher(text);
+			// Neu tim thay 
 			if (fullCitation.find()) {
 				try {
 					Thread.sleep(10000);//wait between requests or you will be blocked by ACM
