@@ -1,5 +1,8 @@
 package uit.tkorg.disa.gui.main;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -206,7 +209,7 @@ public class DISAApplication extends JFrame {
 	private JMenu getJMenu0() {
 		if (jMenu0 == null) {
 			jMenu0 = new JMenu();
-			jMenu0.setText("File");
+			jMenu0.setText(("File"));
 			jMenu0.add(getJMenuItem0());
 			jMenu0.add(getJMenuItem5());
 			jMenu0.add(getJMenuItem6());
@@ -270,6 +273,9 @@ public class DISAApplication extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				Locale locale = Locale.US;
+				Locale.setDefault(locale);
+				DISAResourceBundle.res = DISAResourceBundle.initResources();
 				DISAApplication frame = new DISAApplication();
 				frame.setDefaultCloseOperation(DISAApplication.EXIT_ON_CLOSE);
 				frame.setTitle("DISAApplication");
