@@ -1,5 +1,10 @@
 package uit.tkorg.disa.gui.main;
 
+/**
+*
+* @author Nguyen Phuoc Cuong
+*/
+
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
