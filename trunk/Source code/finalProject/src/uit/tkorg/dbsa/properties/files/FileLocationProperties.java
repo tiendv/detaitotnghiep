@@ -1,4 +1,4 @@
-package uit.tkorg.disa.properties.files;
+package uit.tkorg.dbsa.properties.files;
 /**
  * 
  * @author tiendv

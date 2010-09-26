@@ -1,4 +1,4 @@
-package uit.tkorg.disa.gui.main;
+package uit.tkorg.dbsa.gui.main;
 
 /**
 *

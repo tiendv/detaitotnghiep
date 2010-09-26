@@ -1,4 +1,4 @@
-package uit.tkorg.disa.cores.fetchers;
+package uit.tkorg.dbsa.cores.fetchers;
 
 import java.awt.GridLayout;
 import java.io.BufferedInputStream;

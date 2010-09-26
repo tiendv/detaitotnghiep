@@ -1,9 +1,9 @@
-package uit.tkorg.disa.gui.main;
+package uit.tkorg.dbsa.gui.main;
 
 import javax.swing.JTabbedPane;
 
-import uit.tkorg.disa.gui.classification.ClassificationPanel;
-import uit.tkorg.disa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 
 /**
 *

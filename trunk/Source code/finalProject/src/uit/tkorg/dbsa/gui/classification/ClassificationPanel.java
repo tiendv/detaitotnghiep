@@ -1,4 +1,4 @@
-package uit.tkorg.disa.gui.classification;
+package uit.tkorg.dbsa.gui.classification;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
