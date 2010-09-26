@@ -1,9 +1,9 @@
-package uit.tkorg.disa.gui.main;
+package uit.tkorg.dbsa.gui.main;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import uit.tkorg.disa.gui.main.ComponentUilities.ComponentUtilities;
+import uit.tkorg.dbsa.gui.main.ComponentUilities.ComponentUtilities;
 /**
  * 
  * @author CuongNP

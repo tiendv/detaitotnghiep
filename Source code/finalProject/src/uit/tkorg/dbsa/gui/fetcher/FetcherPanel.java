@@ -1,4 +1,4 @@
-package uit.tkorg.disa.gui.fetcher;
+package uit.tkorg.dbsa.gui.fetcher;
 /**
  *@author CuongNP 
  */

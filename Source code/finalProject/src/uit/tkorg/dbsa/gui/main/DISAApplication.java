@@ -1,4 +1,4 @@
-package uit.tkorg.disa.gui.main;
+package uit.tkorg.dbsa.gui.main;
 
 /**
  *
@@ -22,10 +22,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import uit.tkorg.disa.gui.classification.ClassificationPanel;
-import uit.tkorg.disa.gui.fetcher.FetcherPanel;
-import uit.tkorg.disa.gui.fetcher.FetcherToolBar;
-import uit.tkorg.disa.properties.files.DISAModulesProperties;
+import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherToolBar;
+import uit.tkorg.dbsa.properties.files.DISAModulesProperties;
 
 public class DISAApplication {
 

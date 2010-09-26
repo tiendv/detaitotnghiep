@@ -1,4 +1,4 @@
-package uit.tkorg.disa.gui.fetcher;
+package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
