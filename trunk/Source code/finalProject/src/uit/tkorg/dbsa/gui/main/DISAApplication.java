@@ -6,7 +6,6 @@ package uit.tkorg.dbsa.gui.main;
  */
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,9 +30,11 @@ public class DISAApplication {
 
 	private static JFrame disaJFrame = null;
 	private JMenuBar jMenuBar = null;
+	private DISAStatusBar disaStatusBar = null;
 	
 	private JMenu fileJMenu = null;
 	private JMenu editJMenu = null;
+	private JMenu fetcherJMenu = null;
 	private JMenu classificationJMenu = null;
 	private JMenu optionJMenu = null;
 	private JMenu helpJMenu = null;
@@ -63,6 +64,8 @@ public class DISAApplication {
 	
 	private FetcherToolBar fetcherToolbar = null;
 	
+	private DISAStatusBar disaStatus = null;
+	private String disaProgressStatus = null;
 	private JFrame getDISAJFrame(){
 	
 		if (disaJFrame == null) {
@@ -74,10 +77,20 @@ public class DISAApplication {
 			
 			//ComponentUtilities.setMiniSize(disaJFrame);
 			disaJFrame.setTitle("DISA - Data Index Science Articles");
-			disaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
+			//disaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
 			disaJFrame.getContentPane().add(getDISATabpanel(), BorderLayout.CENTER);
-//			disaJFrame.getContentPane().add(getIDRSStatusBar(), BorderLayout.SOUTH);
-//					
+			disaJFrame.getContentPane().add(getDISAStatusBar(), BorderLayout.SOUTH);
+			
+			if(fetcherPanel == null){
+				fetcherPanel = new FetcherPanel();
+			}else{
+				if(disaStatus == null){
+					disaStatus = new DISAStatusBar();
+				}else
+				disaStatus.setStatusJLabel("abc");
+				disaStatus.repaint();
+			}
+			disaJFrame.repaint();
 		}
 		return disaJFrame;
 	}
@@ -94,6 +107,7 @@ public class DISAApplication {
 			
 			jMenuBar.add(getFileJMenu());
 			jMenuBar.add(getEditJMenu());
+			jMenuBar.add(getFetcherJMenu());
 			jMenuBar.add(getClassificationJMenu());
 			jMenuBar.add(getOptionJMenu());
 			jMenuBar.add(getHelpJMenu());
@@ -316,6 +330,21 @@ public class DISAApplication {
 //			fileJMenu.add(getExitMenuItem());
 		}
 		return classificationJMenu;
+	}
+	
+	/**
+	 * This method initializes classificationJMenu	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getFetcherJMenu() {
+		if (fetcherJMenu == null) {
+			fetcherJMenu = new JMenu();
+			fetcherJMenu.setText(("Fetcher"));
+//			fileJMenu.add(getSaveMenuItem());
+//			fileJMenu.add(getExitMenuItem());
+		}
+		return fetcherJMenu;
 	}	
 
 	/**
@@ -440,6 +469,17 @@ public class DISAApplication {
 		return disaTabPanel;
 	}
 	
+	/**
+	 * This is method 
+	 * @return
+	 */
+	private DISAStatusBar getDISAStatusBar(){
+		if(disaStatusBar == null){
+			disaStatusBar = new DISAStatusBar();
+		}
+		return disaStatusBar;
+	}
+	
 	private FetcherToolBar getFetcherToolBar(){
 		if(fetcherToolbar == null){
 			fetcherToolbar = new FetcherToolBar(disaJFrame);
@@ -450,27 +490,23 @@ public class DISAApplication {
 	private void setDISAToolBar(int IDToolBar){
 		switch (IDToolBar) {
 		case DISAModulesProperties.FETCHER_MODULE_NAME:
-			//disableClassificationPanel();
 			//fetcherPanel.setEnabled(true);
-			//classificationPanel.setEnabled(false);
 			disaJFrame.getContentPane().repaint();
-			disaJFrame.getContentPane().add(getFetcherPanel(),BorderLayout.NORTH);
+			//disaJFrame.getContentPane().add(getFetcherPanel(),BorderLayout.NORTH);
 			disaJFrame.invalidate();
 			disaJFrame.validate();
 			disaJFrame.getContentPane().repaint();
 			break;
 			
 		case DISAModulesProperties.CLASSIFICATION_MODULE_NAME:
-			//classificationPanel.setEnabled(true);
-			//fetcherPanel.setEnabled(false);
-			//
+		
 			disaJFrame.getContentPane().repaint();
-			disaJFrame.getContentPane().add(getClassificationPanel(),BorderLayout.NORTH);
+			//disaJFrame.getContentPane().add(getClassificationPanel(),BorderLayout.NORTH);
 			disaJFrame.invalidate();
 			disaJFrame.validate();
 			disaJFrame.getContentPane().repaint();
 			break;
-
+		
 		}
 	}
 	
@@ -497,7 +533,13 @@ public class DISAApplication {
 	}
 	
 	/**
-	 * This method update text of components
+	 * This method get progress status.
+	 * @return String 
+	 */
+	
+	
+	/**
+	 * This is method update text of components
 	 * 
 	 * @return null
 	 */
