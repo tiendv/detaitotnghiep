@@ -65,7 +65,7 @@ public class DISAApplication {
 	private FetcherToolBar fetcherToolbar = null;
 	
 	private DISAStatusBar disaStatus = null;
-	private String disaProgressStatus = null;
+
 	private JFrame getDISAJFrame(){
 	
 		if (disaJFrame == null) {

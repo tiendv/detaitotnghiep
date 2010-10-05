@@ -6,27 +6,27 @@ import javax.swing.JTabbedPane;
 
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DISATabPanel extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
-	private FetcherPanel fetcherJPanel;
-	private ClassificationPanel classificationJPanel;
-	private JPanel databaseManagementJPanel;
-	private JTabbedPane disaJTabbedPane;
+	private FetcherPanel fetcherJPanel = null;
+	private FetcherResultPanel fetcherResultPanel = null;
+	private ClassificationPanel classificationJPanel = null;
+	private JPanel databaseManagementJPanel = null;
+	private JTabbedPane disaJTabbedPane = null;
 
 	public DISATabPanel() {
 		super();
-		this.setBorder(BorderFactory.createTitledBorder("Functions"));
-		add("Fetcher", getFetcherJPanel());
-		addTab("Classification",getClassificationJPanel());
-		addTab("Database management",getDatabaseManagementJPanel());
+		
+		initComponents();
 	}
 
 	private void initComponents() {
 		setBorder(BorderFactory.createTitledBorder("Functions"));
-		addTab("Fetcher", getFetcherJPanel());
+		addTab("Fetcher", getFetcherResultPanel());
 		addTab("Classification", getClassificationJPanel());
 		addTab("Database management", getDatabaseManagementJPanel());
 		setSize(674, 411);
@@ -36,9 +36,9 @@ public class DISATabPanel extends JTabbedPane {
 		if (disaJTabbedPane == null) {
 			disaJTabbedPane = new JTabbedPane();
 			disaJTabbedPane.setBorder(BorderFactory.createTitledBorder("Functions"));
-			disaJTabbedPane.addTab("Fetcher", null, getFetcherJPanel(), "Fetcher");
-			disaJTabbedPane.addTab("Classification", null, getClassificationJPanel(), "Classification");
-			disaJTabbedPane.addTab("Database management", null, getDatabaseManagementJPanel(), "Database management");
+			disaJTabbedPane.addTab("Fetcher",getFetcherJPanel());
+			disaJTabbedPane.addTab("Classification", getClassificationJPanel());
+			disaJTabbedPane.addTab("Database management",getDatabaseManagementJPanel());
 		}
 		return disaJTabbedPane;
 	}
@@ -64,5 +64,10 @@ public class DISATabPanel extends JTabbedPane {
 		return fetcherJPanel;
 	}
 	
-
+	private FetcherResultPanel getFetcherResultPanel(){
+		if(fetcherResultPanel == null){
+			fetcherResultPanel = new FetcherResultPanel();
+		}
+		return fetcherResultPanel;
+	}
 }
