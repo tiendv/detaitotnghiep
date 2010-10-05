@@ -24,13 +24,13 @@ import javax.swing.event.ChangeListener;
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherToolBar;
-import uit.tkorg.dbsa.properties.files.DISAModulesProperties;
+import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
-public class DISAApplication {
+public class DBSAApplication {
 
-	private static JFrame disaJFrame = null;
+	private static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
-	private DISAStatusBar disaStatusBar = null;
+	private DBSAStatusBar dbsaStatusBar = null;
 	
 	private JMenu fileJMenu = null;
 	private JMenu editJMenu = null;
@@ -58,41 +58,41 @@ public class DISAApplication {
 	private JMenuItem helpJMenuItem = null;
 	private JMenuItem aboutJMenuItem = null;
 	
-	private DISATabPanel disaTabPanel = null;
+	private DBSATabPanel dbsaTabPanel = null;
 	private FetcherPanel fetcherPanel = null;
 	private ClassificationPanel classificationPanel = null;
 	
 	private FetcherToolBar fetcherToolbar = null;
 	
-	private DISAStatusBar disaStatus = null;
+	private DBSAStatusBar dbsaStatus = null;
 
-	private JFrame getDISAJFrame(){
+	private JFrame getDBSAJFrame(){
 	
-		if (disaJFrame == null) {
-			disaJFrame = new JFrame();
-			disaJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			disaJFrame.setJMenuBar(getJMenuBar());
-			//disaJFrame.setSize(640, 480);
-			disaJFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		if (dbsaJFrame == null) {
+			dbsaJFrame = new JFrame();
+			dbsaJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			dbsaJFrame.setJMenuBar(getJMenuBar());
+			//dbsaJFrame.setSize(640, 480);
+			dbsaJFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			
-			//ComponentUtilities.setMiniSize(disaJFrame);
-			disaJFrame.setTitle("DISA - Data Index Science Articles");
-			//disaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
-			disaJFrame.getContentPane().add(getDISATabpanel(), BorderLayout.CENTER);
-			disaJFrame.getContentPane().add(getDISAStatusBar(), BorderLayout.SOUTH);
+			//ComponentUtilities.setMiniSize(dbsaJFrame);
+			dbsaJFrame.setTitle("dbsa - Data Index Science Articles");
+			//dbsaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
+			dbsaJFrame.getContentPane().add(getDBSATabpanel(), BorderLayout.CENTER);
+			dbsaJFrame.getContentPane().add(getDBSAStatusBar(), BorderLayout.SOUTH);
 			
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel();
 			}else{
-				if(disaStatus == null){
-					disaStatus = new DISAStatusBar();
+				if(dbsaStatus == null){
+					dbsaStatus = new DBSAStatusBar();
 				}else
-				disaStatus.setStatusJLabel("abc");
-				disaStatus.repaint();
+					dbsaStatus.setStatusJLabel("abc");
+				dbsaStatus.repaint();
 			}
-			disaJFrame.repaint();
+			dbsaJFrame.repaint();
 		}
-		return disaJFrame;
+		return dbsaJFrame;
 	}
 
 	/**
@@ -374,7 +374,7 @@ public class DISAApplication {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					DISAConfigurationDialog dialog = new DISAConfigurationDialog(disaJFrame);
+					DBSAConfigurationDialog dialog = new DBSAConfigurationDialog(dbsaJFrame);
 					dialog.setVisible(true);
 				}
 				
@@ -450,61 +450,61 @@ public class DISAApplication {
 	
 	/**
 	 * 
-	 * return DISATabPanel
+	 * return DBSATabPanel
 	 */
-	private DISATabPanel getDISATabpanel(){
-		if(disaTabPanel == null){
-			disaTabPanel = new DISATabPanel();
+	private DBSATabPanel getDBSATabpanel(){
+		if(dbsaTabPanel == null){
+			dbsaTabPanel = new DBSATabPanel();
 			
-			disaTabPanel.addChangeListener(new ChangeListener(){
+			dbsaTabPanel.addChangeListener(new ChangeListener(){
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					// TODO Auto-generated method stub
-					setDISAToolBar(disaTabPanel.getSelectedIndex() + 1);
+					setDBSAToolBar(dbsaTabPanel.getSelectedIndex() + 1);
 				}
 				
 			});			
 		}
-		return disaTabPanel;
+		return dbsaTabPanel;
 	}
 	
 	/**
 	 * This is method 
 	 * @return
 	 */
-	private DISAStatusBar getDISAStatusBar(){
-		if(disaStatusBar == null){
-			disaStatusBar = new DISAStatusBar();
+	private DBSAStatusBar getDBSAStatusBar(){
+		if(dbsaStatusBar == null){
+			dbsaStatusBar = new DBSAStatusBar();
 		}
-		return disaStatusBar;
+		return dbsaStatusBar;
 	}
 	
 	private FetcherToolBar getFetcherToolBar(){
 		if(fetcherToolbar == null){
-			fetcherToolbar = new FetcherToolBar(disaJFrame);
+			fetcherToolbar = new FetcherToolBar(dbsaJFrame);
 		}
 		return fetcherToolbar;
 	}
 	
-	private void setDISAToolBar(int IDToolBar){
+	private void setDBSAToolBar(int IDToolBar){
 		switch (IDToolBar) {
-		case DISAModulesProperties.FETCHER_MODULE_NAME:
+		case DBSAModulesProperties.FETCHER_MODULE_NAME:
 			//fetcherPanel.setEnabled(true);
-			disaJFrame.getContentPane().repaint();
-			//disaJFrame.getContentPane().add(getFetcherPanel(),BorderLayout.NORTH);
-			disaJFrame.invalidate();
-			disaJFrame.validate();
-			disaJFrame.getContentPane().repaint();
+			dbsaJFrame.getContentPane().repaint();
+			//DBSAJFrame.getContentPane().add(getFetcherPanel(),BorderLayout.NORTH);
+			dbsaJFrame.invalidate();
+			dbsaJFrame.validate();
+			dbsaJFrame.getContentPane().repaint();
 			break;
 			
-		case DISAModulesProperties.CLASSIFICATION_MODULE_NAME:
+		case DBSAModulesProperties.CLASSIFICATION_MODULE_NAME:
 		
-			disaJFrame.getContentPane().repaint();
-			//disaJFrame.getContentPane().add(getClassificationPanel(),BorderLayout.NORTH);
-			disaJFrame.invalidate();
-			disaJFrame.validate();
-			disaJFrame.getContentPane().repaint();
+			dbsaJFrame.getContentPane().repaint();
+			//DBSAJFrame.getContentPane().add(getClassificationPanel(),BorderLayout.NORTH);
+			dbsaJFrame.invalidate();
+			dbsaJFrame.validate();
+			dbsaJFrame.getContentPane().repaint();
 			break;
 		
 		}
@@ -515,9 +515,9 @@ public class DISAApplication {
 	 * 
 	 * @return null
 	 */
-	public void disableFetcherPanel(){
+	public void DBSAbleFetcherPanel(){
 		if(fetcherPanel != null){
-			disaJFrame.getContentPane().remove(fetcherPanel);
+			dbsaJFrame.getContentPane().remove(fetcherPanel);
 		}
 	}
 	
@@ -526,9 +526,9 @@ public class DISAApplication {
 	 * 
 	 * @return null
 	 */
-	public void disableClassificationPanel(){
+	public void DBSAbleClassificationPanel(){
 		if(classificationPanel != null){
-			disaJFrame.getContentPane().remove(classificationPanel);
+			dbsaJFrame.getContentPane().remove(classificationPanel);
 		}
 	}
 	
@@ -544,7 +544,7 @@ public class DISAApplication {
 	 * @return null
 	 */
 	public static void updateTextOfComponents(){
-		disaJFrame.setTitle(DISAResourceBundle.res.getString("application.title"));
+		dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.title"));
 	}
 	/**
 	 * @param args
@@ -555,11 +555,11 @@ public class DISAApplication {
 				try {
 					Locale locale = Locale.US;
 					Locale.setDefault(locale);	
-					DISAResourceBundle.res = DISAResourceBundle.initResources();
+					DBSAResourceBundle.res = DBSAResourceBundle.initResources();
 					//UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
-					DISAApplication disaApplication = new DISAApplication();
+					DBSAApplication DBSAApplication = new DBSAApplication();
 					//updateTextOfComponents();
-					disaApplication.getDISAJFrame().setVisible(true);
+					DBSAApplication.getDBSAJFrame().setVisible(true);
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();

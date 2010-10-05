@@ -9,11 +9,11 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class DISAResourceBundle {
+public class DBSAResourceBundle {
 
 	public static ResourceBundle res = null;
 	
-	private DISAResourceBundle(){
+	private DBSAResourceBundle(){
 	}
 	
 	public static ResourceBundle getInstance(){

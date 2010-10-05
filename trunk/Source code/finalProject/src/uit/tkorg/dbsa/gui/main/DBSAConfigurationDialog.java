@@ -29,7 +29,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
-public class DISAConfigurationDialog extends JDialog {
+public class DBSAConfigurationDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private int width = 442;
@@ -47,11 +47,11 @@ public class DISAConfigurationDialog extends JDialog {
 	private JComboBox languageJComboBox;
 	private JPanel languageJPanel;
 
-	public DISAConfigurationDialog() {
+	public DBSAConfigurationDialog() {
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(JFrame mainFrame) {
+	public DBSAConfigurationDialog(JFrame mainFrame) {
 		super(mainFrame, true);
 		disaJFrame = mainFrame;
 		xLocation = disaJFrame.getX() + (disaJFrame.getWidth()-width)/2;
@@ -59,75 +59,75 @@ public class DISAConfigurationDialog extends JDialog {
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(JFrame parent, boolean modal) {
+	public DBSAConfigurationDialog(JFrame parent, boolean modal) {
 		super(parent, modal);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(JFrame parent, String title) {
+	public DBSAConfigurationDialog(JFrame parent, String title) {
 		super(parent, title);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(JFrame parent, String title, boolean modal) {
+	public DBSAConfigurationDialog(JFrame parent, String title, boolean modal) {
 		super(parent, title, modal);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(JFrame parent, String title, boolean modal,
+	public DBSAConfigurationDialog(JFrame parent, String title, boolean modal,
 			GraphicsConfiguration arg) {
 		super(parent, title, modal, arg);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Dialog parent) {
+	public DBSAConfigurationDialog(Dialog parent) {
 		super(parent);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Dialog parent, boolean modal) {
+	public DBSAConfigurationDialog(Dialog parent, boolean modal) {
 		super(parent, modal);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Dialog parent, String title) {
+	public DBSAConfigurationDialog(Dialog parent, String title) {
 		super(parent, title);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Dialog parent, String title, boolean modal) {
+	public DBSAConfigurationDialog(Dialog parent, String title, boolean modal) {
 		super(parent, title, modal);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Dialog parent, String title, boolean modal,
+	public DBSAConfigurationDialog(Dialog parent, String title, boolean modal,
 			GraphicsConfiguration arg) {
 		super(parent, title, modal, arg);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Window parent) {
+	public DBSAConfigurationDialog(Window parent) {
 		super(parent);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Window parent, ModalityType modalityType) {
+	public DBSAConfigurationDialog(Window parent, ModalityType modalityType) {
 		super(parent, modalityType);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Window parent, String title) {
+	public DBSAConfigurationDialog(Window parent, String title) {
 		super(parent, title);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Window parent, String title,
+	public DBSAConfigurationDialog(Window parent, String title,
 			ModalityType modalityType) {
 		super(parent, title, modalityType);
 		initComponents();
 	}
 
-	public DISAConfigurationDialog(Window parent, String title,
+	public DBSAConfigurationDialog(Window parent, String title,
 			ModalityType modalityType, GraphicsConfiguration arg) {
 		super(parent, title, modalityType, arg);
 		initComponents();
@@ -254,12 +254,12 @@ public class DISAConfigurationDialog extends JDialog {
 		String language = (String)this.languageJComboBox.getSelectedItem();
 		if(language.equalsIgnoreCase("Vietnamese")){
 			Locale.setDefault(new Locale("vn", "VN"));
-			DISAApplication.updateTextOfComponents();
-			DISAResourceBundle.res = DISAResourceBundle.initResources();
+			DBSAApplication.updateTextOfComponents();
+			DBSAResourceBundle.res = DBSAResourceBundle.initResources();
 		}else if(language.equalsIgnoreCase("English")){
 			Locale.setDefault(Locale.US);
-			DISAResourceBundle.res = DISAResourceBundle.initResources();
-			DISAApplication.updateTextOfComponents();
+			DBSAResourceBundle.res = DBSAResourceBundle.initResources();
+			DBSAApplication.updateTextOfComponents();
 		}
 		this.dispose();
 		

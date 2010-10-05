@@ -10,7 +10,7 @@ import uit.tkorg.dbsa.gui.main.ComponentUilities.ComponentUtilities;
  *
  */
 
-public class DISAToolBar extends JToolBar{
+public class DBSAToolBar extends JToolBar{
 	private static final long serialVersionUID = 1L;
 	private JButton openButton = null;
 	
@@ -20,7 +20,7 @@ public class DISAToolBar extends JToolBar{
 		}
 		return openButton;
 	}
-	public DISAToolBar() {
+	public DBSAToolBar() {
 		super();		
 		add(getOpenButton());
 		
