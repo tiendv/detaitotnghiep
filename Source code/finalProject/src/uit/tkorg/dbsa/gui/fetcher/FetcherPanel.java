@@ -72,6 +72,8 @@ public class FetcherPanel extends JPanel {
 		if (jPanel0 == null) {
 			jPanel0 = new JPanel();
 			jPanel0.setBorder(BorderFactory.createTitledBorder("Border Title"));
+			jPanel0.setAlignmentX(0.5f);
+			jPanel0.setAlignmentY(0.5f);
 			jPanel0.setLayout(new GroupLayout());
 			jPanel0.add(getJPanel1(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 61, 10, 10)));
 			jPanel0.add(getJPanel2(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
@@ -84,6 +86,8 @@ public class FetcherPanel extends JPanel {
 		if (jPanel3 == null) {
 			jPanel3 = new JPanel();
 			jPanel3.setBorder(BorderFactory.createTitledBorder("Actions"));
+			jPanel3.setAlignmentX(0.5f);
+			jPanel3.setAlignmentY(0.5f);
 			jPanel3.setLayout(new GroupLayout());
 			jPanel3.add(getJButton0(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(2, 12, 12)));
 			jPanel3.add(getJButton1(), new Constraints(new Trailing(138, 241, 271), new Leading(2, 12, 12)));
@@ -112,6 +116,7 @@ public class FetcherPanel extends JPanel {
 		if (jButton0 == null) {
 			jButton0 = new JButton();
 			jButton0.setText("Close");
+			jButton0.setAlignmentX(0.5f);
 		}
 		return jButton0;
 	}
@@ -164,6 +169,8 @@ public class FetcherPanel extends JPanel {
 		if (jPanel2 == null) {
 			jPanel2 = new JPanel();
 			jPanel2.setBorder(BorderFactory.createTitledBorder("Choose DLs"));
+			jPanel2.setAlignmentX(0.5f);
+			jPanel2.setAlignmentY(0.5f);
 			jPanel2.setLayout(new GroupLayout());
 			jPanel2.add(getJCheckBox1(), new Constraints(new Leading(8, 8, 8), new Leading(67, 8, 8)));
 			jPanel2.add(getJCheckBox2(), new Constraints(new Leading(8, 8, 8), new Leading(101, 8, 8)));
@@ -254,6 +261,8 @@ public class FetcherPanel extends JPanel {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
 			jPanel1.setBorder(BorderFactory.createTitledBorder("Input"));
+			jPanel1.setAlignmentX(0.5f);
+			jPanel1.setAlignmentY(0.5f);
 			jPanel1.setLayout(new GroupLayout());
 			jPanel1.add(getKeywordJTextField(), new Constraints(new Bilateral(113, 12, 4), new Leading(0, 28, 12, 12)));
 			jPanel1.add(getKeywordJLabel(), new Constraints(new Leading(0, 108, 10, 10), new Leading(0, 28, 12, 12)));
@@ -275,10 +284,11 @@ public class FetcherPanel extends JPanel {
 			keywordJLabel = new JLabel();
 			keywordJLabel.setText("  Input keyword :");
 			keywordJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			keywordJLabel.setAlignmentX(0.5f);
 		}
 		return keywordJLabel;
 	}
-	
+
 	public void setTooltip(String tooltipText){
 		this.tooltipText = tooltipText;
 	}
