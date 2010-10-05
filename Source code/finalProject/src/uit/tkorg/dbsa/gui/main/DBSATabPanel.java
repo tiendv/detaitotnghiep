@@ -9,7 +9,7 @@ import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
-public class DISATabPanel extends JTabbedPane {
+public class DBSATabPanel extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 	private FetcherPanel fetcherJPanel = null;
@@ -18,7 +18,7 @@ public class DISATabPanel extends JTabbedPane {
 	private JPanel databaseManagementJPanel = null;
 	private JTabbedPane disaJTabbedPane = null;
 
-	public DISATabPanel() {
+	public DBSATabPanel() {
 		super();
 		
 		initComponents();

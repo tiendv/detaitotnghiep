@@ -5,7 +5,7 @@ package uit.tkorg.dbsa.properties.files;
  * @author CuongNP
  *
  */
-public class DISAModulesProperties {
+public class DBSAModulesProperties {
 
 	/*
 	 * Define name module of DISA

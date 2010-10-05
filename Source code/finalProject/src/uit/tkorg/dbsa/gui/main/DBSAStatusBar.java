@@ -9,13 +9,13 @@ import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
-public class DISAStatusBar extends JPanel {
+public class DBSAStatusBar extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel statusJLabel;
 	private JPanel statusJPanel;
 
-	public DISAStatusBar() {
+	public DBSAStatusBar() {
 		initComponents();
 		
 	}
