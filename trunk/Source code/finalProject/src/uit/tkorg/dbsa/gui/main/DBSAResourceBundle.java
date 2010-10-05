@@ -33,9 +33,9 @@ public class DBSAResourceBundle {
 	public static ResourceBundle initResources(){
 		try{
 			if(Locale.getDefault().equals(Locale.US)){
-				res = ResourceBundle.getBundle("uit/tkorg/dbsa/properties/files/DISA_Resources_EN");
+				res = ResourceBundle.getBundle("uit/tkorg/dbsa/properties/files/DBSA_Resources_EN");
 			}else{
-				res = ResourceBundle.getBundle("uit/tkorg/dbsa/properties/files/DISA_Resources_VN");
+				res = ResourceBundle.getBundle("uit/tkorg/dbsa/properties/files/DBSA_Resources_VN");
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
