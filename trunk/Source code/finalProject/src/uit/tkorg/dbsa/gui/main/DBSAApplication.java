@@ -28,7 +28,7 @@ import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
 public class DBSAApplication {
 
-	private static JFrame dbsaJFrame = null;
+	public static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
 	private DBSAStatusBar dbsaStatusBar = null;
 	
