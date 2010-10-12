@@ -3,6 +3,9 @@ package uit.tkorg.dbsa.gui.fetcher;
  *@author CuongNP 
  */
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -12,6 +15,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
 import org.dyno.visual.swing.layouts.Bilateral;
@@ -20,34 +24,38 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
+
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel jPanel0;
+	private JPanel fetcherJPanel;
 	private JLabel keywordJLabel;
 	private JTextField keywordJTextField;
-	private JPanel jPanel1;
-	private JLabel jLabel2;
+	private JPanel inputJPanel;
+	private JLabel fetchFromJLabel;
 	private JCheckBox fetchFromACMCheckBox;
 	private JLabel maxResultLabel;
-	private JCheckBox jCheckBox1;
-	private JSpinner jSpinner0;
-	private JSpinner jSpinner1;
-	private JCheckBox jCheckBox2;
-	private JSpinner jSpinner2;
-	private JPanel jPanel2;
-	private JCheckBox jCheckBox0;
-	private JSpinner jSpinner3;
-	private JProgressBar jProgressBar0;
-	private JProgressBar jProgressBar2;
-	private JProgressBar jProgressBar1;
-	private JProgressBar jProgressBar3;
-	private JButton jButton0;
-	private JButton jButton1;
-	private JButton jButton2;
-	private JPanel jPanel3;
-	private JLabel jLabel0;
+	private JCheckBox ieeexploreDLCheckBox;
+	private JSpinner acmJSpinner;
+	private JSpinner ieeexploreJSpinner1;
+	private JCheckBox citeseerDLCheckBox;
+	private JSpinner citeseerJSpinner2;
+	private JPanel chooseJPanel;
+	private JCheckBox scienceDirectDLCheckBox;
+	private JSpinner scienceDirectJSpinner;
+	private JProgressBar acmJProgressBar;
+	private JProgressBar citeseerJProgressBar;
+	private JProgressBar ieeeploreJProgressBar;
+	private JProgressBar scienceDirectJProgressBar;
+	private JButton closeJButton;
+	private JButton showResultJButton;
+	private JButton fetcherJButton;
+	private JPanel actionsJPanel;
+	private JLabel fetcherStatusJLabel;
+	
+	private boolean isShowResult = false;
 
 	private String tooltipText = null;
 	public FetcherPanel() {
@@ -56,180 +64,202 @@ public class FetcherPanel extends JPanel {
 
 	private void initComponents() {
 		setLayout(new GroupLayout());
-		add(getJPanel0(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
-		setSize(631, 398);
+		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
+		setSize(650, 387);
 	}
 
-	private JLabel getJLabel0() {
-		if (jLabel0 == null) {
-			jLabel0 = new JLabel();
-			jLabel0.setText("Fetcher status");
+	private JLabel getFetcherStatusJLabel() {
+		if (fetcherStatusJLabel == null) {
+			fetcherStatusJLabel = new JLabel();
+			fetcherStatusJLabel.setText("Fetcher status");
 		}
-		return jLabel0;
+		return fetcherStatusJLabel;
 	}
 
-	private JPanel getJPanel0() {
-		if (jPanel0 == null) {
-			jPanel0 = new JPanel();
-			jPanel0.setBorder(BorderFactory.createTitledBorder("Border Title"));
-			jPanel0.setAlignmentX(0.5f);
-			jPanel0.setAlignmentY(0.5f);
-			jPanel0.setLayout(new GroupLayout());
-			jPanel0.add(getJPanel1(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 61, 10, 10)));
-			jPanel0.add(getJPanel2(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
-			jPanel0.add(getJPanel3(), new Constraints(new Bilateral(0, 0, 513), new Trailing(0, 68, 278, 278)));
+	private JPanel getFetcherJPanel() {
+		if (fetcherJPanel == null) {
+			fetcherJPanel = new JPanel();
+			fetcherJPanel.setBorder(BorderFactory.createTitledBorder("Fetcher"));
+			fetcherJPanel.setLayout(new GroupLayout());
+			fetcherJPanel.add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 61, 10, 10)));
+			fetcherJPanel.add(getChooseJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
+			fetcherJPanel.add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 513), new Trailing(0, 68, 278, 278)));
 		}
-		return jPanel0;
+		return fetcherJPanel;
 	}
 
-	private JPanel getJPanel3() {
-		if (jPanel3 == null) {
-			jPanel3 = new JPanel();
-			jPanel3.setBorder(BorderFactory.createTitledBorder("Actions"));
-			jPanel3.setAlignmentX(0.5f);
-			jPanel3.setAlignmentY(0.5f);
-			jPanel3.setLayout(new GroupLayout());
-			jPanel3.add(getJButton0(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(2, 12, 12)));
-			jPanel3.add(getJButton1(), new Constraints(new Trailing(138, 241, 271), new Leading(2, 12, 12)));
-			jPanel3.add(getJButton2(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(2, 12, 12)));
+	private JPanel getActionsJPanel() {
+		if (actionsJPanel == null) {
+			actionsJPanel = new JPanel();
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
+			actionsJPanel.setLayout(new GroupLayout());
+			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(2, 12, 12)));
+			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(2, 12, 12)));
+			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(2, 12, 12)));
 		}
-		return jPanel3;
+		return actionsJPanel;
 	}
 
-	private JButton getJButton2() {
-		if (jButton2 == null) {
-			jButton2 = new JButton();
-			jButton2.setText("Fetcher");
+	private JButton getFetcherJButton() {
+		if (fetcherJButton == null) {
+			fetcherJButton = new JButton();
+			fetcherJButton.setText("Fetcher");
+			
 		}
-		return jButton2;
+		return fetcherJButton;
 	}
 
-	private JButton getJButton1() {
-		if (jButton1 == null) {
-			jButton1 = new JButton();
-			jButton1.setText("Show results");
+	private JButton getShowResultJButton() {
+		if (showResultJButton == null) {
+			showResultJButton = new JButton();
+			showResultJButton.setText("Show results");
+			showResultJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					ACMFetcher(keywordJTextField.getText());
+					setIsShowResult(true);
+					DBSAApplication.getDBSAContent();
+					DBSAApplication.dbsaJFrame.repaint();
+				}
+				
+			});
 		}
-		return jButton1;
+		return showResultJButton;
+	}
+	
+	private void ACMFetcher(String keyword){
+		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
 	}
 
-	private JButton getJButton0() {
-		if (jButton0 == null) {
-			jButton0 = new JButton();
-			jButton0.setText("Close");
-			jButton0.setAlignmentX(0.5f);
+	public void setIsShowResult(boolean isShowResult){
+		this.isShowResult = isShowResult;
+	}
+	
+	public boolean getIsShowResult(){
+		return isShowResult;
+	}
+	
+	private JButton getCloseJButton() {
+		if (closeJButton == null) {
+			closeJButton = new JButton();
+			closeJButton.setText("Close");
+			closeJButton.setAlignmentX(0.5f);
 		}
-		return jButton0;
+		return closeJButton;
 	}
 
-	private JProgressBar getJProgressBar3() {
-		if (jProgressBar3 == null) {
-			jProgressBar3 = new JProgressBar();
+	private JProgressBar getScienceDirectJProgressBar() {
+		if (scienceDirectJProgressBar == null) {
+			scienceDirectJProgressBar = new JProgressBar();
 		}
-		return jProgressBar3;
+		return scienceDirectJProgressBar;
 	}
 
-	private JProgressBar getJProgressBar1() {
-		if (jProgressBar1 == null) {
-			jProgressBar1 = new JProgressBar();
+	private JProgressBar getIeeeploreJProgressBar() {
+		if (ieeeploreJProgressBar == null) {
+			ieeeploreJProgressBar = new JProgressBar();
 		}
-		return jProgressBar1;
+		return ieeeploreJProgressBar;
 	}
 
-	private JProgressBar getJProgressBar2() {
-		if (jProgressBar2 == null) {
-			jProgressBar2 = new JProgressBar();
+	private JProgressBar getCiteseerJProgressBar() {
+		if (citeseerJProgressBar == null) {
+			citeseerJProgressBar = new JProgressBar();
 		}
-		return jProgressBar2;
+		return citeseerJProgressBar;
 	}
 
-	private JProgressBar getJProgressBar0() {
-		if (jProgressBar0 == null) {
-			jProgressBar0 = new JProgressBar();
+	private JProgressBar getAcmJProgressBar() {
+		if (acmJProgressBar == null) {
+			acmJProgressBar = new JProgressBar();
 		}
-		return jProgressBar0;
+		return acmJProgressBar;
 	}
 
-	private JSpinner getJSpinner3() {
-		if (jSpinner3 == null) {
-			jSpinner3 = new JSpinner();
-			jSpinner3.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+	private JSpinner getScienceDirectJSpinner() {
+		if (scienceDirectJSpinner == null) {
+			scienceDirectJSpinner = new JSpinner();
+			scienceDirectJSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			scienceDirectJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
-		return jSpinner3;
+		return scienceDirectJSpinner;
 	}
 
-	private JCheckBox getJCheckBox0() {
-		if (jCheckBox0 == null) {
-			jCheckBox0 = new JCheckBox();
-			jCheckBox0.setText("Fetch from ScienceDirect digital library");
+	private JCheckBox getScienceDirectDLCheckBox() {
+		if (scienceDirectDLCheckBox == null) {
+			scienceDirectDLCheckBox = new JCheckBox();
+			scienceDirectDLCheckBox.setText("Fetch from ScienceDirect digital library");
 		}
-		return jCheckBox0;
+		return scienceDirectDLCheckBox;
 	}
 
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
-			jPanel2 = new JPanel();
-			jPanel2.setBorder(BorderFactory.createTitledBorder("Choose DLs"));
-			jPanel2.setAlignmentX(0.5f);
-			jPanel2.setAlignmentY(0.5f);
-			jPanel2.setLayout(new GroupLayout());
-			jPanel2.add(getJCheckBox1(), new Constraints(new Leading(8, 8, 8), new Leading(67, 8, 8)));
-			jPanel2.add(getJCheckBox2(), new Constraints(new Leading(8, 8, 8), new Leading(101, 8, 8)));
-			jPanel2.add(getJLabel2(), new Constraints(new Leading(12, 89, 12, 12), new Leading(5, 21, 12, 12)));
-			jPanel2.add(getFetchFromACMCheckBox(), new Constraints(new Leading(8, 212, 10, 10), new Leading(34, 8, 8)));
-			jPanel2.add(getJCheckBox0(), new Constraints(new Leading(8, 8, 8), new Leading(137, 10, 10)));
-			jPanel2.add(getMaxResultLabel(), new Constraints(new Leading(286, 67, 10, 10), new Leading(3, 24, 12, 12)));
-			jPanel2.add(getJSpinner0(), new Constraints(new Leading(293, 43, 10, 10), new Leading(38, 22, 12, 12)));
-			jPanel2.add(getJSpinner1(), new Constraints(new Leading(293, 43, 12, 12), new Leading(72, 12, 12)));
-			jPanel2.add(getJSpinner2(), new Constraints(new Leading(293, 12, 12), new Leading(104, 22, 12, 12)));
-			jPanel2.add(getJSpinner3(), new Constraints(new Leading(293, 12, 12), new Leading(138, 22, 12, 12)));
-			jPanel2.add(getJProgressBar0(), new Constraints(new Bilateral(348, 9, 10), new Leading(41, 12, 12)));
-			jPanel2.add(getJProgressBar1(), new Constraints(new Bilateral(348, 12, 10), new Leading(78, 12, 12)));
-			jPanel2.add(getJProgressBar2(), new Constraints(new Bilateral(347, 12, 10), new Leading(110, 12, 12)));
-			jPanel2.add(getJProgressBar3(), new Constraints(new Bilateral(347, 12, 10), new Leading(144, 12, 12)));
-			jPanel2.add(getJLabel0(), new Constraints(new Leading(366, 106, 10, 10), new Leading(7, 12, 12)));
+	private JPanel getChooseJPanel() {
+		if (chooseJPanel == null) {
+			chooseJPanel = new JPanel();
+			chooseJPanel.setBorder(BorderFactory.createTitledBorder("Choose DLs"));
+			chooseJPanel.setLayout(new GroupLayout());
+			chooseJPanel.add(getIeeexploreDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(67, 8, 8)));
+			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(101, 8, 8)));
+			chooseJPanel.add(getFetchFromJLabel(), new Constraints(new Leading(12, 89, 12, 12), new Leading(5, 21, 12, 12)));
+			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(8, 212, 10, 10), new Leading(34, 8, 8)));
+			chooseJPanel.add(getScienceDirectDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(137, 10, 10)));
+			chooseJPanel.add(getMaxResultLabel(), new Constraints(new Leading(286, 67, 10, 10), new Leading(3, 24, 12, 12)));
+			chooseJPanel.add(getAcmJSpinner(), new Constraints(new Leading(293, 43, 10, 10), new Leading(38, 22, 12, 12)));
+			chooseJPanel.add(getIeeexploreJSpinner1(), new Constraints(new Leading(293, 43, 12, 12), new Leading(72, 12, 12)));
+			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(293, 12, 12), new Leading(104, 22, 12, 12)));
+			chooseJPanel.add(getScienceDirectJSpinner(), new Constraints(new Leading(293, 12, 12), new Leading(138, 22, 12, 12)));
+			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Leading(366, 106, 10, 10), new Leading(7, 12, 12)));
+			chooseJPanel.add(getCiteseerJProgressBar(), new Constraints(new Bilateral(347, 12, 10), new Leading(104, 23, 12, 12)));
+			chooseJPanel.add(getScienceDirectJProgressBar(), new Constraints(new Bilateral(347, 12, 10), new Leading(138, 23, 12, 12)));
+			chooseJPanel.add(getIeeeploreJProgressBar(), new Constraints(new Bilateral(348, 12, 10), new Leading(71, 22, 12, 12)));
+			chooseJPanel.add(getAcmJProgressBar(), new Constraints(new Bilateral(348, 13, 250), new Leading(38, 22, 12, 12)));
 		}
-		return jPanel2;
+		return chooseJPanel;
 	}
 
-	private JSpinner getJSpinner2() {
-		if (jSpinner2 == null) {
-			jSpinner2 = new JSpinner();
-			jSpinner2.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+	private JSpinner getCiteseerJSpinner2() {
+		if (citeseerJSpinner2 == null) {
+			citeseerJSpinner2 = new JSpinner();
+			citeseerJSpinner2.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			citeseerJSpinner2.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
-		return jSpinner2;
+		return citeseerJSpinner2;
 	}
 
-	private JCheckBox getJCheckBox2() {
-		if (jCheckBox2 == null) {
-			jCheckBox2 = new JCheckBox();
-			jCheckBox2.setText("Fetch from Citeseer digital library");
+	private JCheckBox getCiteseerDLCheckBox() {
+		if (citeseerDLCheckBox == null) {
+			citeseerDLCheckBox = new JCheckBox();
+			citeseerDLCheckBox.setText("Fetch from Citeseer digital library");
 		}
-		return jCheckBox2;
+		return citeseerDLCheckBox;
 	}
 
-	private JSpinner getJSpinner1() {
-		if (jSpinner1 == null) {
-			jSpinner1 = new JSpinner();
-			jSpinner1.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+	private JSpinner getIeeexploreJSpinner1() {
+		if (ieeexploreJSpinner1 == null) {
+			ieeexploreJSpinner1 = new JSpinner();
+			ieeexploreJSpinner1.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			ieeexploreJSpinner1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
-		return jSpinner1;
+		return ieeexploreJSpinner1;
 	}
 
-	private JSpinner getJSpinner0() {
-		if (jSpinner0 == null) {
-			jSpinner0 = new JSpinner();
-			jSpinner0.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+	private JSpinner getAcmJSpinner() {
+		if (acmJSpinner == null) {
+			acmJSpinner = new JSpinner();
+			acmJSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			acmJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
-		return jSpinner0;
+		return acmJSpinner;
 	}
 
-	private JCheckBox getJCheckBox1() {
-		if (jCheckBox1 == null) {
-			jCheckBox1 = new JCheckBox();
-			jCheckBox1.setSelected(true);
-			jCheckBox1.setText("Fetch from IEEExplore digital libary");
+	private JCheckBox getIeeexploreDLCheckBox() {
+		if (ieeexploreDLCheckBox == null) {
+			ieeexploreDLCheckBox = new JCheckBox();
+			ieeexploreDLCheckBox.setSelected(true);
+			ieeexploreDLCheckBox.setText("Fetch from IEEExplore digital libary");
 		}
-		return jCheckBox1;
+		return ieeexploreDLCheckBox;
 	}
 
 	private JLabel getMaxResultLabel() {
@@ -249,25 +279,25 @@ public class FetcherPanel extends JPanel {
 		return fetchFromACMCheckBox;
 	}
 
-	private JLabel getJLabel2() {
-		if (jLabel2 == null) {
-			jLabel2 = new JLabel();
-			jLabel2.setText("Fetch from:");
+	private JLabel getFetchFromJLabel() {
+		if (fetchFromJLabel == null) {
+			fetchFromJLabel = new JLabel();
+			fetchFromJLabel.setText("Fetch from:");
 		}
-		return jLabel2;
+		return fetchFromJLabel;
 	}
 
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			jPanel1 = new JPanel();
-			jPanel1.setBorder(BorderFactory.createTitledBorder("Input"));
-			jPanel1.setAlignmentX(0.5f);
-			jPanel1.setAlignmentY(0.5f);
-			jPanel1.setLayout(new GroupLayout());
-			jPanel1.add(getKeywordJTextField(), new Constraints(new Bilateral(113, 12, 4), new Leading(0, 28, 12, 12)));
-			jPanel1.add(getKeywordJLabel(), new Constraints(new Leading(0, 108, 10, 10), new Leading(0, 28, 12, 12)));
+	private JPanel getInputJPanel() {
+		if (inputJPanel == null) {
+			inputJPanel = new JPanel();
+			inputJPanel.setBorder(BorderFactory.createTitledBorder("Input"));
+			inputJPanel.setAlignmentX(0.5f);
+			inputJPanel.setAlignmentY(0.5f);
+			inputJPanel.setLayout(new GroupLayout());
+			inputJPanel.add(getKeywordJTextField(), new Constraints(new Bilateral(113, 12, 4), new Leading(0, 28, 12, 12)));
+			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(0, 108, 10, 10), new Leading(0, 28, 12, 12)));
 		}
-		return jPanel1;
+		return inputJPanel;
 	}
 
 	private JTextField getKeywordJTextField() {

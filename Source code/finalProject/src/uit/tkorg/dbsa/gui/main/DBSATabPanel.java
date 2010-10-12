@@ -16,31 +16,33 @@ public class DBSATabPanel extends JTabbedPane {
 	private FetcherResultPanel fetcherResultPanel = null;
 	private ClassificationPanel classificationJPanel = null;
 	private JPanel databaseManagementJPanel = null;
-	private JTabbedPane disaJTabbedPane = null;
+	private JTabbedPane dbsaJTabbedPane = null;
 
 	public DBSATabPanel() {
 		super();
-		
 		initComponents();
+		getDbsaJTabbedPane();
 	}
 
 	private void initComponents() {
 		setBorder(BorderFactory.createTitledBorder("Functions"));
-		addTab("Fetcher", getFetcherResultPanel());
+		addTab("Fetcher", getFetcherJPanel());
 		addTab("Classification", getClassificationJPanel());
 		addTab("Database management", getDatabaseManagementJPanel());
-		setSize(674, 411);
+		setSize(755, 437);
 	}
 
-	private JTabbedPane getDisaJTabbedPane() {
-		if (disaJTabbedPane == null) {
-			disaJTabbedPane = new JTabbedPane();
-			disaJTabbedPane.setBorder(BorderFactory.createTitledBorder("Functions"));
-			disaJTabbedPane.addTab("Fetcher",getFetcherJPanel());
-			disaJTabbedPane.addTab("Classification", getClassificationJPanel());
-			disaJTabbedPane.addTab("Database management",getDatabaseManagementJPanel());
+	private JTabbedPane getDbsaJTabbedPane() {
+		if (dbsaJTabbedPane == null) {
+			dbsaJTabbedPane = new JTabbedPane();
+			dbsaJTabbedPane.setBorder(BorderFactory.createTitledBorder("Functions"));
 		}
-		return disaJTabbedPane;
+		addTab("Fetcher", getFetcherJPanel());
+		addTab("Fetcher result",getFetcherResultPanel());	
+		addTab("Classification", getClassificationJPanel());
+		addTab("Database management",getDatabaseManagementJPanel());
+
+		return dbsaJTabbedPane;
 	}
 
 	private JPanel getDatabaseManagementJPanel() {

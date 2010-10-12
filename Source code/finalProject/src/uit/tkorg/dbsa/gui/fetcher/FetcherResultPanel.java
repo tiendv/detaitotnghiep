@@ -58,6 +58,15 @@ public class FetcherResultPanel extends JPanel {
 		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 127), new Trailing(69, 309, 67, 148)));
 		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 384, 51, 426)));
 		setSize(631, 551);
+		
+		if(resultsJTable != null){
+			titleJTextArea.setText(resultsJTable.getModel().getValueAt(0, 1).toString());
+			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(0, 2).toString());
+			yearJTextArea.setText(resultsJTable.getModel().getValueAt(0, 3).toString());
+			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(0, 4).toString());
+			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(0, 5).toString());		
+
+		}
 	}
 
 	private JScrollPane getJScrollPane5() {
