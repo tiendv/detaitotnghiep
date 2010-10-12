@@ -30,7 +30,7 @@ public class DBSAApplication {
 
 	public static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
-	private DBSAStatusBar dbsaStatusBar = null;
+	private static DBSAStatusBar dbsaStatusBar = null;
 	
 	private JMenu fileJMenu = null;
 	private JMenu editJMenu = null;
@@ -58,7 +58,7 @@ public class DBSAApplication {
 	private JMenuItem helpJMenuItem = null;
 	private JMenuItem aboutJMenuItem = null;
 	
-	private DBSATabPanel dbsaTabPanel = null;
+	private static DBSATabPanel dbsaTabPanel = null;
 	private FetcherPanel fetcherPanel = null;
 	private ClassificationPanel classificationPanel = null;
 	
@@ -77,9 +77,7 @@ public class DBSAApplication {
 			
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
 			dbsaJFrame.setTitle("dbsa - Data Index Science Articles");
-			//dbsaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
-			dbsaJFrame.getContentPane().add(getDBSATabpanel(), BorderLayout.CENTER);
-			dbsaJFrame.getContentPane().add(getDBSAStatusBar(), BorderLayout.SOUTH);
+			getDBSAContent();
 			
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel();
@@ -93,6 +91,12 @@ public class DBSAApplication {
 			dbsaJFrame.repaint();
 		}
 		return dbsaJFrame;
+	}
+	
+	public static void getDBSAContent(){
+		//dbsaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
+		dbsaJFrame.getContentPane().add(getDBSATabpanel(), BorderLayout.CENTER);
+		dbsaJFrame.getContentPane().add(getDBSAStatusBar(), BorderLayout.SOUTH);
 	}
 
 	/**
@@ -425,45 +429,22 @@ public class DBSAApplication {
 		}
 		return aboutJMenuItem;
 	}
-	
-	/**
-	 * This method display fetcher module tab
-	 * 
-	 */
-	private FetcherPanel getFetcherPanel(){
-		if(fetcherPanel == null){
-			fetcherPanel = new FetcherPanel();
-		}
-		return fetcherPanel;
-	}
-	
-	/**
-	 * This method display fetcher module tab
-	 * 
-	 */
-	private ClassificationPanel getClassificationPanel(){
-		if(classificationPanel == null){
-			classificationPanel = new ClassificationPanel();
-		}
-		return classificationPanel;
-	}
+		
 	
 	/**
 	 * 
 	 * return DBSATabPanel
 	 */
-	private DBSATabPanel getDBSATabpanel(){
+	private static DBSATabPanel getDBSATabpanel(){
 		if(dbsaTabPanel == null){
 			dbsaTabPanel = new DBSATabPanel();
-			
+			//dbsaTabPanel.g
 			dbsaTabPanel.addChangeListener(new ChangeListener(){
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					// TODO Auto-generated method stub
 					setDBSAToolBar(dbsaTabPanel.getSelectedIndex() + 1);
-				}
-				
+				}				
 			});			
 		}
 		return dbsaTabPanel;
@@ -473,7 +454,7 @@ public class DBSAApplication {
 	 * This is method 
 	 * @return
 	 */
-	private DBSAStatusBar getDBSAStatusBar(){
+	private static DBSAStatusBar getDBSAStatusBar(){
 		if(dbsaStatusBar == null){
 			dbsaStatusBar = new DBSAStatusBar();
 		}
@@ -487,7 +468,7 @@ public class DBSAApplication {
 		return fetcherToolbar;
 	}
 	
-	private void setDBSAToolBar(int IDToolBar){
+	private static void setDBSAToolBar(int IDToolBar){
 		switch (IDToolBar) {
 		case DBSAModulesProperties.FETCHER_MODULE_NAME:
 			//fetcherPanel.setEnabled(true);
