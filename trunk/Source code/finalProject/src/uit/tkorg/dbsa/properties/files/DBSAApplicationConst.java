@@ -7,9 +7,5 @@ package uit.tkorg.dbsa.properties.files;
  */
 
 public class DBSAApplicationConst {
-	/**
-	 * PLEASE ADD GATE'S ANNOTATION NAME (BELOW). SOMEONE ELSE WILL SORT THEM LATER
-	 */
-
 	
 }
