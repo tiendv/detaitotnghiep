@@ -5,6 +5,7 @@ package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -113,11 +114,17 @@ public class FetcherPanel extends JPanel {
 		if (showResultJButton == null) {
 			showResultJButton = new JButton();
 			showResultJButton.setText("Show results");
+			showResultJButton.isDefaultButton();
 			showResultJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ACMFetcher(keywordJTextField.getText());
+					try {
+						ACMFetcher(keywordJTextField.getText());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					setIsShowResult(true);
 					DBSAApplication.getDBSAContent();
 					DBSAApplication.dbsaJFrame.repaint();
@@ -128,7 +135,7 @@ public class FetcherPanel extends JPanel {
 		return showResultJButton;
 	}
 	
-	private void ACMFetcher(String keyword){
+	private void ACMFetcher(String keyword) throws IOException{
 		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
 	}
 
