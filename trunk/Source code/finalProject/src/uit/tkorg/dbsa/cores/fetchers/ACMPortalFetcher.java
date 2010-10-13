@@ -408,6 +408,7 @@ public class ACMPortalFetcher implements EntryFetcher {
             for (int i=0; i<bytesRead; i++)
                 sb.append((char)buffer[i]);
         }
+        System.out.println( "get results= " + sb.toString());
         return sb.toString();
     }
 

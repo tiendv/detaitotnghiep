@@ -31,21 +31,22 @@ public class ACMFetcher {
 	
 	private static int hits = 0;
 	
-	private static Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
-	private static Pattern maxHitsPattern = Pattern.compile(".*Results \\d+ - \\d+ of (\\d+,*\\d*).*");
+	static Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
+    Pattern maxHitsPattern = Pattern.compile(".*Results \\d+ - \\d+ of (\\d+,*\\d*).*");
 	
 	public ACMFetcher(){
 		
 	}
 	
 	public static URL MakeUrl(String keyword){
-		StringBuffer sb = new StringBuffer(startUrl).append(searchUrlPart);
-		
+		StringBuffer sb = new StringBuffer(startUrl); 
+		sb.append(searchUrlPart);		
 		sb.append(keyword.replaceAll(" ", "20%"));
 		sb.append(searchUrlPartII);
 		sb.append("ACM");
 		sb.append(endUrl);
 		System.out.println(" sb.toString = " + sb.toString());
+		
 		URL urlSearch = null;
 		
 		try {
@@ -55,10 +56,11 @@ public class ACMFetcher {
 			e.printStackTrace();
 		}
 		System.out.println("urlsearch = " + urlSearch);
+		
 		return urlSearch;
 	}
 	
-	public static void Fetcher(String keyword){
+	public static void Fetcher(String keyword) throws IOException{
 		
 		/*
 		 * 
@@ -70,9 +72,11 @@ public class ACMFetcher {
 		 */
 		String page = getFetcherResult(url);
 		
+		GetResultList(page);
+		
 		FileOutputStream fileOutput;
 		DataOutputStream dataOutput;
-		File file = new File("C:\\abc.html");
+		File file = new File("C:\\abc.txt");
 		try {
 			fileOutput = new FileOutputStream(file);
 			dataOutput =  new DataOutputStream(fileOutput);
@@ -87,58 +91,57 @@ public class ACMFetcher {
 			e.printStackTrace();
 		}
 		
-		GetResultList(page);
+		
 		//System.out.println("---------====><====-----------" + page);
 	}
 	
-	public static String getFetcherResult(URL url){
-		
+	public static String getFetcherResult(URL url) throws IOException{
+	
+		InputStream in = url.openStream();
 		StringBuffer sb = new StringBuffer();
 		
-		try {
-			InputStream in = url.openStream();
-			byte [] buffer = new byte[256];
-			
-			while(true){
-				int byteRead = in.read(buffer);
-				if(byteRead == -1)
-					break;
-				for(int i = 0; i < byteRead; i++){
-					sb.append((char)buffer[i]);
-				}
+		byte [] buffer = new byte[256];
+		
+		while(true){
+			int byteRead = in.read(buffer);
+			if(byteRead == -1)
+				break;
+			for(int i = 0; i < byteRead; i++){
+				sb.append((char)buffer[i]);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
 		
 		return sb.toString();
 	}
 	
 	public static void GetResultList(String page){
-		try {
-			hits = getNumberOfHits(page, "Found", hitsPattern);
+		
+			try {
+				hits = getNumberOfHits(page, "Found", hitsPattern);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			int index = page.indexOf("Found");
 			System.out.println("index = " + index);
 			if (index >= 0) {
 				//System.out.println("page = " + page);
-            	page = page.substring(index + 9, index + 12);
-            	System.out.println("page = index + 9 = " + page);
+            	page = page.substring(index + 5);
+            	//System.out.println("page = index + 9 = " + page);
 				index = page.indexOf("Found");
 				if (index >= 0)
             		page = page.substring(index);
 			}
 			
 			//int maxHits = getNumberOfHits(page, "Results", maxHitsPattern);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		System.out.println(">''< ==> " + hits);
 	}
 	
-	 private static int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
+	private static int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
 	        int ind = page.indexOf(marker);
 	        if (ind < 0) {
 	        	System.out.println(page);
