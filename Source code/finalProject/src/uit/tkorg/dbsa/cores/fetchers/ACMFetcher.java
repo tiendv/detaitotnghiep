@@ -49,7 +49,7 @@ public class ACMFetcher {
     private static Pattern bibPattern = Pattern.compile(".*(popBibTex.cfm.*)','BibTex'.*");
 	private static Pattern fullCitationPattern = Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
 	private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
-	private static boolean shouldContinue = false;
+	private static boolean shouldContinue = true;
 	private int unparseable = 0;
 	private static int parsed = 0;
 	
