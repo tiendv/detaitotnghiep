@@ -1,16 +1,11 @@
 package uit.tkorg.dbsa.cores.fetchers;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,104 +14,80 @@ import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.Globals;
 import net.sf.jabref.imports.BibtexParser;
 import net.sf.jabref.imports.HTMLConverter;
-import net.sf.jabref.imports.ImportInspector;
 import net.sf.jabref.imports.ParserResult;
-
-import antlr.ByteBuffer;
 
 public class ACMFetcher {
 	
 	//Tu khoa can tim kiem
-	private String keywordString = null;
-	
-	private static String terms = null;
+	private static String keywordString = null;
 	
 	private final static HTMLConverter htmlConverter = new HTMLConverter();
 	
+	//Cac chuoi tao cau query chua tu khoa can tim kiem
 	private static String startUrl = "http://portal.acm.org/";
 	private static String searchUrlPart = "results.cfm?query=";
 	private static String searchUrlPartII = "&dl=";
 	static String endUrl = "&coll=Portal&short=0";//&start=";
 	/**
-	 * ex: http://portal.acm.org/results.cfm?coll=ACM&dl=ACM&CFID=107834110&CFTOKEN=22371969
+	 * Vi du:
+	 * Tu khoa: computer vision 
+	 * Câu query: http://portal.acm.org/results.cfm?query=computer20%vision&dl=ACM&coll=Portal&short=0
 	 */
-	private static int MAX_FETCH = 20;
-	private static int perPage = MAX_FETCH;
-	private static int hits = 0;
 	
+	private static int MAX_FETCH = 20; // ket qua thu thap toi da
+	private static int perPage = MAX_FETCH;
+	private static int hits = 0; // so ket qua thu thap duoc
+	
+	//Cac the dung de nhan dang noi dung file html vua thu thap
 	private static Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
     private static Pattern maxHitsPattern = Pattern.compile(".*Results \\d+ - \\d+ of (\\d+,*\\d*).*");
+    //Nhan dang file BibTex trong file html
     private static Pattern bibPattern = Pattern.compile(".*(popBibTex.cfm.*)','BibTex'.*");
+    //Nhan dang URL cua mot bai bao khoa hoc trong file html
 	private static Pattern fullCitationPattern = Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
+	//Nhan dang phan Abstract cua bai bao trong file html
 	private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
+	
+	//Bien cho phep lua chon tiep tuc tim kiem hay không
 	private static boolean shouldContinue = true;
-	private int unparseable = 0;
-	private static int parsed = 0;
 	
 	public ACMFetcher(){
 		
-	}
-	
-	public static URL MakeUrl(int startIndex){
-		StringBuffer sb = new StringBuffer(startUrl); 
-		sb.append(searchUrlPart);		
-		sb.append(terms.replaceAll(" ", "20%"));
-		sb.append(searchUrlPartII);
-		sb.append("ACM");
-		sb.append(endUrl);
-		
-		URL urlSearch = null;
-		
-		try {
-			urlSearch = new URL(sb.toString());
-		} catch (MalformedURLException e) {
-			
-			e.printStackTrace();
-		}
-		
-		return urlSearch;
-	}
+	}	
 	
 	public static void Fetcher(String keyword) throws IOException{
 		
-		terms = keyword;
-	
-		/*
-		 * 
-		 */
+		keywordString = keyword; 
+		
+		//Tao URL tu keyword do nguoi dung nhap
 		URL url = MakeUrl(0);
 		
-		
-		/*
-		 * 
-		 */
+		//Thu thap trang html dau tien sau khi gui tu khoa len thu vien so.
 		System.out.println("Url = " + url);
-		
 		String page = getFetcherResult(url);
 		
-		System.out.println("page 1");
+		//lay so ket qua tu 
+		GetResultNumber(page);
 		
-		GetResultList(page);
-		
+		//lay thong tin cua bai bao khoa hoc tu trang html
 		parse(page, 0, 1);
 		
 		int firstEntry = perPage;
-        while (shouldContinue && (firstEntry < hits)) {
-            
+		
+		System.out.println("Hits = " + hits);
+		
+        while (shouldContinue && (firstEntry < hits)) {            
         	page = getFetcherResult(MakeUrl(firstEntry));
-        	
-        	//System.out.println("Fetching from: "+firstEntry);
-            
-//        	address = makeUrl(firstEntry);
-            //System.out.println(address);
-//            page = getResults(new URL(address));
-            
-            //dialog.setProgress(firstEntry+perPage/2, hits);
+        		
             if (!shouldContinue)
                 break;
 
-            parse(page, 0, 1+firstEntry);
+            parse(page, 0, firstEntry + 1);
+            
+            System.out.println("FirstEntry = " + firstEntry);
+            
             firstEntry += perPage;
+            
         }
         
 //		FileOutputStream fileOutput;
@@ -137,6 +108,33 @@ public class ACMFetcher {
 //		}
 	}
 	
+	/*
+	 * Ham tao URL tu cac chuoi tren (chuoi startUrl, searchUrlPart, searchUrlPartII, endUrl) 
+	 * va tu khoa do nguoi dung nhap.
+	 */
+	public static URL MakeUrl(int startIndex){
+		StringBuffer sb = new StringBuffer(startUrl); 
+		sb.append(searchUrlPart);		
+		sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
+		sb.append(searchUrlPartII);
+		sb.append("ACM");
+		sb.append(endUrl);
+		
+		URL urlSearch = null;		
+		try {
+			//Tao URL tu chuoi tren
+			urlSearch = new URL(sb.toString());
+		} catch (MalformedURLException e) {			
+			e.printStackTrace();
+		}
+		
+		return urlSearch;
+	}
+	
+	/*
+	 * Thu thap 1 trang html dua vao Url cua trang do
+	 * @return String
+	 */
 	public static String getFetcherResult(URL url) throws IOException{
 	
 		InputStream in = url.openStream();
@@ -155,16 +153,20 @@ public class ACMFetcher {
 		return sb.toString();
 	}
 	
-	public static void GetResultList(String page){
+	/*
+	 * Lay so ket qua cua thu vien so tim duoc theo tu khoa do nguoi dung vua nhap. 
+	 * @return null
+	 */
+	public static void GetResultNumber(String page){
 		
 			try {
 				hits = getNumberOfHits(page, "Found", hitsPattern);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			int index = page.indexOf("Found");
+			int maxHits = 0;
 			
 			if (index >= 0) {
             	page = page.substring(index + 5);
@@ -175,19 +177,22 @@ public class ACMFetcher {
 			}
 			
 			try {
-				int maxHits = getNumberOfHits(page, "Results", maxHitsPattern);	
+				maxHits = getNumberOfHits(page, "Results", maxHitsPattern);	
 			} catch (IOException e) {
 				
 				e.printStackTrace();
 			}
 			
-			if(hits > MAX_FETCH){
+			if(hits > maxHits){
 				hits = MAX_FETCH;
-			}
-		
-		
+			}		
 	}
 	
+	/*
+	 * Ham tim 1 chuoi trong file html dua vao noi dung the (Pattern). 
+	 * The nay (Pattern) duoc dinh nghia bang cach su dung Regular Expressions.
+	 * @return int
+	 */
 	private static int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
 	        int ind = page.indexOf(marker);
 	        if (ind < 0) {
@@ -201,12 +206,10 @@ public class ACMFetcher {
 	        	System.out.println(substring);
 	        } else {
 	            try {
-	            	// get rid of ,
 	            	String number = m.group(1);
-	            	//NumberFormat nf = NumberFormat.getInstance();
-	            	//return nf.parse(number).intValue();
+	            	
 	            	number = number.replaceAll(",", "");
-	            	//System.out.println(number);
+	            	
 	                return Integer.parseInt(number);
 	            } catch (NumberFormatException ex) {
 	                throw new IOException(Globals.lang("Could not parse number of hits"));
@@ -217,22 +220,25 @@ public class ACMFetcher {
 	        throw new IOException(Globals.lang("Could not parse number of hits"));
 	}
 	
+	/*
+	 * Ham lay cac bai bao khoa hoc tu 1 trang.
+	 */
 	static int piv = 0;
 	
 	private static void parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
         int entryNumber = firstEntryNumber;
         
+        System.out.println("<===> FirstEntryNumber " + firstEntryNumber + " <===>");
+        
         BibtexEntry entry;
+        
         while (((entry = parseNextEntry(text, piv, entryNumber)) != null) && (shouldContinue)) {
         
-        	if (entry.getField("title") != null) {
-        		System.out.println( "title" + entry.getField("title"));
-                //dialog.addEntry(entry);
-               // dialog.setProgress(parsed + unparseable, hits);
-                parsed++;
-            }
-            entryNumber++;
+        	if (entry.getField("title") != null) {    
+        		System.out.println("<===> " + entryNumber + " <===>");
+                entryNumber++;                
+        	}
             try {
             	Thread.sleep(10000);//wait between requests or you will be blocked by ACM
             } catch (InterruptedException e) {
@@ -241,6 +247,10 @@ public class ACMFetcher {
         }
     }
 	
+	/*
+	 * Ham lay 1 bai bao khoa hoc 
+	 * @return BibTexEntry
+	 */
 	private static BibtexEntry parseNextEntry(String allText, int startIndex, int entryNumber){
 		
 		String toFind = new StringBuffer().append("<strong>").append(entryNumber).append("</strong>").toString();
@@ -253,8 +263,6 @@ public class ACMFetcher {
 		
 		BibtexEntry entry = null;
 		
-		System.out.println("index = " + index);
-		
 		if(index >= 0){
 			piv = index + 1;
 			String text = allText.substring(index, endIndex);
@@ -263,7 +271,7 @@ public class ACMFetcher {
 			
 			if(fullCitition.find()){
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(10000);
 					entry  = parseEntryBibTeX(fullCitition.group(1));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -282,6 +290,10 @@ public class ACMFetcher {
 		return null;
 	}
 	
+	/*
+	 * Ham phan tich cu phap va lay thong tin cua mot bai bao khoa hoc
+	 * @return BibTexEntry
+	 */
 	private static BibtexEntry parseEntryBibTeX(String fullCitation){
 		URL url;
 		
@@ -291,7 +303,7 @@ public class ACMFetcher {
 			
 			System.out.println("url = " + url);
 			
-			Thread.sleep(10000);
+			Thread.sleep(10000); //wait between requests or you will be blocked by ACM
 			
 			Matcher bibtexAddr = bibPattern.matcher(page);
 			
@@ -318,9 +330,13 @@ public class ACMFetcher {
 				}
 				
 				Thread.sleep(10000);//wait between requests or you will be blocked by ACM
+				
 				System.out.println("Title : " + entry.getField("title"));
+				System.out.println("Authors : " + entry.getField("author"));
 				System.out.println("Year : " + entry.getField("year"));
 				System.out.println("Abstract : " + entry.getField("abstract"));
+				System.out.println("Publisher : " + entry.getField("publisher"));
+				System.out.println("Volume : " + entry.getField("volume"));
 				
 				return entry;
 				
