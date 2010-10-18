@@ -26,15 +26,9 @@ public class ScienceDirectFetcher implements EntryFetcher {
     protected static final String SEARCH_URL = WEBSITE_URL +"/science/quicksearch?query=";
 
     protected static final String linkPrefix = "http://www.sciencedirect.com/science?_ob=ArticleURL&" ;
-    protected static final Pattern linkPattern = Pattern.compile(
-            "<a href=\""+
-            linkPrefix.replaceAll("\\?", "\\\\?")+
-            "([^\"]+)\"\"");
+    protected static final Pattern linkPattern = Pattern.compile("<a href=\""+linkPrefix.replaceAll("\\?", "\\\\?")+"([^\"]+)\"\"");
 
-    protected static final Pattern nextPagePattern = Pattern.compile(
-            "<a href=\"(.*)\">Next &gt;");
-
-
+    protected static final Pattern nextPagePattern = Pattern.compile("<a href=\"(.*)\">Next &gt;");
     protected boolean stopFetching = false;
     protected boolean noAccessFound = false;
 
@@ -64,7 +58,7 @@ public class ScienceDirectFetcher implements EntryFetcher {
         noAccessFound = false;
     }
 
-    public boolean processQuery(String query, ImportInspector dialog, OutputPrinter status) {
+    public boolean processQuery1(String query, ImportInspector dialog, OutputPrinter status) {
         stopFetching = false;
         try {
             List<String> citations = getCitations(query);
