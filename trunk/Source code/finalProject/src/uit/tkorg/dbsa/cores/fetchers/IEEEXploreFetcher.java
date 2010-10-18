@@ -1,7 +1,5 @@
 package uit.tkorg.dbsa.cores.fetchers;
 
-import java.awt.BorderLayout;
-
 import java.io.BufferedReader;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,8 +13,6 @@ import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,59 +22,65 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
 import net.sf.jabref.BibtexDatabase;
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.BibtexEntryType;
-import net.sf.jabref.GUIGlobals;
 import net.sf.jabref.Globals;
 import net.sf.jabref.OutputPrinter;
 import net.sf.jabref.Util;
+import net.sf.jabref.imports.BibtexParser;
+import net.sf.jabref.imports.HTMLConverter;
+import net.sf.jabref.imports.ParserResult;
 
-public class IEEEXploreFetcher implements EntryFetcher {
+public class IEEEXploreFetcher {
 
-    ImportInspector dialog = null;
+   // ImportInspector dialog = null;
 	OutputPrinter status;
-    final HTMLConverter htmlConverter = new HTMLConverter();
+    final static HTMLConverter htmlConverter = new HTMLConverter();
     
-    private JCheckBox absCheckBox = new JCheckBox(Globals.lang("Include abstracts"), false);
+   /* private JCheckBox absCheckBox = new JCheckBox(Globals.lang("Include abstracts"), false);
     private JRadioButton htmlButton = new JRadioButton(Globals.lang("HTML parser"));
     private JRadioButton bibButton = new JRadioButton(Globals.lang("BibTeX importer"));
-    
+ */   
     private static final int MAX_FETCH = 100;
-    private int perPage = MAX_FETCH, hits = 0, unparseable = 0, parsed = 0;
-    private int piv = 0;
-    private boolean shouldContinue = false;
-    private boolean includeAbstract = false;
-    private boolean importBibtex = false;
+    private static int perPage = MAX_FETCH;
+	static int hits = 0;
+	static int unparseable = 0;
+	static int parsed = 0;
+    private static int piv = 0;
+    private static boolean shouldContinue = false;
+    private static boolean includeAbstract = true;
+    private static boolean importBibtex = false;
     
-    private String terms;
-    private final String startUrl = "http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=";
-    private final String endUrl = "&rowsPerPage=" + Integer.toString(perPage) + "&pageNumber=";
-    private String searchUrl;
-    private final String importUrl = "http://ieeexplore.ieee.org/xpls/downloadCitations";
+  //Cac chuoi tao cau query chua tu khoa can tim kiem
     
-    private final Pattern hitsPattern = Pattern.compile("([0-9,]+) results");
-    private final Pattern idPattern = Pattern.compile("<input name=\"\" type=\"checkbox\" value=\"\"\\s*" +
-    		"id=\"([0-9]+)\"/>");
-    private final Pattern typePattern = Pattern.compile("<span class=\"type\">\\s*(.+)");
-    private HashMap<String, String> fieldPatterns = new HashMap<String, String>();
-    private final Pattern absPattern = Pattern.compile("<p>\\s*(.+)");
+    private static String terms;
+    private final static String startUrl = "http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=";
+    private final static String endUrl = "&rowsPerPage=" + Integer.toString(perPage) + "&pageNumber=";
+    private static String searchUrl;
+    private final static String importUrl = "http://ieeexplore.ieee.org/xpls/downloadCitations";
+    /**
+     * Kieu cau truy van sau khi duoc thanh lap:
+     * http://ieeexplore.ieee.org/search/freesearchresult.jsp?newsearch=true&queryText=database&x=0&y=0
+     */
     
-    Pattern stdEntryPattern = Pattern.compile(".*<strong>(.+)</strong><br>"
-			+ "\\s+(.+)");
-    
-    Pattern publicationPattern = Pattern.compile("(.*), \\d*\\.*\\s?(.*)");
-    Pattern proceedingPattern = Pattern.compile("(.*?)\\.?\\s?Proceedings\\s?(.*)");
-    Pattern abstractLinkPattern = Pattern.compile(
-            "<a href=\"(.+)\" class=\"bodyCopySpaced\">Abstract</a>");
-    String abrvPattern = ".*[^,] '?\\d+\\)?";
+    //Cac pattern tim kiem cac thong tin ve so ket qua tra ve, ket qua lon nhat, fiel bibtex,abtract cua bai bao va referent cua bai bao
+    // Tim kiem so ket qua tra ve tu page
+    private final static Pattern hitsPattern = Pattern.compile("([0-9,]+) results");
+    // Tim kiem id 
+    private final static Pattern idPattern = Pattern.compile("<input name=\"\" type=\"checkbox\" value=\"\"\\s*" +"id=\"([0-9]+)\"/>");
+    // Tim kiem loai cua tai lieu
+    private final static Pattern typePattern = Pattern.compile("<span class=\"type\">\\s*(.+)");
+    // Tim kiem abstract cua tai lieu
+    private final static Pattern absPattern = Pattern.compile("<p>\\s*(.+)");
+    // Map chua string ket qua tra ve va cac pattern de tim kiem cac truong thong tin tai lieu
+    private static HashMap<String, String> fieldPatterns = new HashMap<String, String>();
 
+    Pattern stdEntryPattern = Pattern.compile(".*<strong>(.+)</strong><br>"+ "\\s+(.+)");
+    static Pattern publicationPattern = Pattern.compile("(.*), \\d*\\.*\\s?(.*)");
+    static Pattern proceedingPattern = Pattern.compile("(.*?)\\.?\\s?Proceedings\\s?(.*)");
+    Pattern abstractLinkPattern = Pattern.compile("<a href=\"(.+)\" class=\"bodyCopySpaced\">Abstract</a>");
+    static String abrvPattern = ".*[^,] '?\\d+\\)?";
     Pattern ieeeArticleNumberPattern = Pattern.compile("<a href=\".*arnumber=(\\d+).*\">");
     
     public IEEEXploreFetcher() {
@@ -93,33 +95,13 @@ public class IEEEXploreFetcher implements EntryFetcher {
         fieldPatterns.put("pages", "Page\\(s\\):\\s*(\\d+)\\s*-\\s*(\\d*)");
         fieldPatterns.put("doi", "Digital Object Identifier:\\s*<a href=.*>(.+)</a>");
     }
-    public JPanel getOptionsPanel() {
-        JPanel pan = new JPanel();
-        pan.setLayout(new BorderLayout());
-        htmlButton.setSelected(true);
-        htmlButton.setEnabled(false);
-        bibButton.setEnabled(false);
-        
-        ButtonGroup group = new ButtonGroup();
-        group.add(htmlButton);
-        group.add(bibButton);
-        pan.add(absCheckBox, BorderLayout.NORTH);
-        pan.add(htmlButton, BorderLayout.CENTER);
-        pan.add(bibButton, BorderLayout.EAST);
-		
-        return pan;
-    }
-
-    public boolean processQuery(String query, ImportInspector dialog, OutputPrinter status) {
-        this.dialog = dialog;
-        this.status = status;
+    public static void processQuery(String query) {
         terms = query;
         piv = 0;
         shouldContinue = true;
         parsed = 0;
         unparseable = 0;
         int pageNumber = 1;
-        
         searchUrl = makeUrl(pageNumber);//start at page 1
         
         try {
@@ -127,41 +109,44 @@ public class IEEEXploreFetcher implements EntryFetcher {
         	String page = getResults(url);
             
             if (page.indexOf("You have entered an invalid search") >= 0) {
-                status.showMessage(Globals.lang("You have entered an invalid search '%0'.",
+            	System.out.print("You have entered an invalid search ");
+               /* status.showMessage(Globals.lang("You have entered an invalid search '%0'.",
                         terms),
                         Globals.lang("Search IEEEXplore"), JOptionPane.INFORMATION_MESSAGE);
-                return false;
+            */    return ;
             }
             
             if (page.indexOf("Bad request") >= 0) {
-            	status.showMessage(Globals.lang("Bad Request '%0'.",
+            	System.out.print("Bad Request");
+            /*	status.showMessage(Globals.lang("Bad Request '%0'.",
                         terms),
                         Globals.lang("Search IEEEXplore"), JOptionPane.INFORMATION_MESSAGE);
-                return false;
+            */ //   return false;
             }
             
             if (page.indexOf("No results were found.") >= 0) {
-                status.showMessage(Globals.lang("No entries found for the search string '%0'",
+            	System.out.print("No entries found for the search string");
+              /*  status.showMessage(Globals.lang("No entries found for the search string '%0'",
                         terms),
-                        Globals.lang("Search IEEEXplore"), JOptionPane.INFORMATION_MESSAGE);
-                return false;
+                        Globals.lang("Search IEEEXplore"), JOptionPane.INFORMATION_MESSAGE);*/
+             //   return false;
             }
-            
+            // Tim so ket qua tra ve tu trang 
             hits = getNumberOfHits(page, "display-status", hitsPattern);
 
-
-            includeAbstract = absCheckBox.isSelected();
-            importBibtex = bibButton.isSelected();
+        /*    includeAbstract = absCheckBox.isSelected();
+            importBibtex = bibButton.isSelected();*/
             
             if (hits > MAX_FETCH) {
-            	status.showMessage(Globals.lang("%0 entries found. To reduce server load, "
+            	System.out.printf("Vuot qua gioi han cho phep load tu server");
+            /*	status.showMessage(Globals.lang("%0 entries found. To reduce server load, "
                        +"only %1 will be downloaded.",
                                 new String[] {String.valueOf(hits), String.valueOf(MAX_FETCH)}),
-                        Globals.lang("Search IEEEXplore"), JOptionPane.INFORMATION_MESSAGE);
+                        Globals.lang("Search IEEEXplore"), JOptionPane.INFORMATION_MESSAGE);*/
            		hits = MAX_FETCH;
             }
 
-            parse(dialog, page, 0, 1);
+            parse(page, 0, 1);
             int firstEntry = perPage;
             while (shouldContinue && firstEntry < hits) {
             	pageNumber++;
@@ -171,24 +156,27 @@ public class IEEEXploreFetcher implements EntryFetcher {
                 if (!shouldContinue)
                     break;
 
-                parse(dialog, page, 0, firstEntry + 1);
+                parse(page, 0, firstEntry + 1);
                 firstEntry += perPage;
 
             }
-            return true;
+          //  return true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (ConnectException e) {
-            status.showMessage(Globals.lang("Connection to IEEEXplore failed"),
-                    Globals.lang("Search IEEEXplore"), JOptionPane.ERROR_MESSAGE);
+        	System.out.print("Loi trong qua trinh connection voi IEEE");
+       /*     status.showMessage(Globals.lang("Connection to IEEEXplore failed"),
+                    Globals.lang("Search IEEEXplore"), JOptionPane.ERROR_MESSAGE);*/
         } catch (IOException e) {
+        	System.out.printf(e.getMessage());
+        	/*
         	status.showMessage(Globals.lang(e.getMessage()),
                     Globals.lang("Search IEEEXplore"), JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            e.printStackTrace();*/
         }
-        return false;
+       // return false;
     }
-
+/*
     public String getTitle() {
         return Globals.menuTitle("Search IEEEXplore");
     }
@@ -203,7 +191,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
 
     public String getKeyName() {
         return "Search IEEEXplore";
-    }
+    }*/
 
     /**
      * This method is called by the dialog when the user has cancelled the import.
@@ -211,8 +199,12 @@ public class IEEEXploreFetcher implements EntryFetcher {
     public void stopFetching() {
         shouldContinue = false;
     }
-
-    private String makeUrl(int startIndex) {
+    /**
+     * 
+     * @param startIndex page de down noi dung ve 
+     * @return
+     */
+    private static String makeUrl(int startIndex) {
         StringBuffer sb = new StringBuffer(startUrl);
         sb.append(terms.replaceAll(" ", "+"));
         sb.append(endUrl);
@@ -220,9 +212,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
         return sb.toString();
     }
 
-    
-
-    private void parse(ImportInspector dialog, String text, int startIndex, int firstEntryNumber) {
+    private static void parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
         int entryNumber = firstEntryNumber;
         
@@ -239,10 +229,10 @@ public class IEEEXploreFetcher implements EntryFetcher {
 		 		Collection<BibtexEntry> items = dbase.getEntries();
 		 		Iterator<BibtexEntry> iter = items.iterator();
 		 		while (iter.hasNext()) {
-		 			BibtexEntry entry = iter.next();
-		 			dialog.addEntry(cleanup(entry));
+		 			/*BibtexEntry entry = iter.next();*/	
+		 	/*		dialog.addEntry(cleanup(entry));
 	                dialog.setProgress(parsed + unparseable, hits);
-	                parsed++;
+	     */           parsed++;
 		 		}
 		 	} catch (IOException e) {
 		 		e.printStackTrace();
@@ -252,8 +242,10 @@ public class IEEEXploreFetcher implements EntryFetcher {
         	BibtexEntry entry;
 	        while (((entry = parseNextEntry(text, piv)) != null) && shouldContinue) {
 	            if (entry.getField("title") != null) {
+	            	/*
 	                dialog.addEntry(entry);
 	                dialog.setProgress(parsed + unparseable, hits);
+	                */
 	                parsed++;
 	            }
 	            entryNumber++;
@@ -261,7 +253,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
         }
     }
 
-    private BibtexDatabase parseBibtexDatabase(List<String> id, boolean abs) throws IOException {
+    private static BibtexDatabase parseBibtexDatabase(List<String> id, boolean abs) throws IOException {
     	if (id.isEmpty())
     		return null;
         URL url;
@@ -275,8 +267,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
         }
         conn.setDoInput(true);
         conn.setDoOutput(true);
-        conn.setRequestProperty("Content-Type",
-                "application/x-www-form-urlencoded");
+        conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
         conn.setRequestProperty("Referer", searchUrl);
         PrintWriter out = new PrintWriter(
                 conn.getOutputStream());
@@ -294,7 +285,6 @@ public class IEEEXploreFetcher implements EntryFetcher {
         out.write(content);
         out.flush();
         out.close();
-
         BufferedReader bufr = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         StringBuffer sb = new StringBuffer();
         char[] buffer = new char[256];
@@ -311,7 +301,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
         return results.getDatabase();
     }
 
-    private BibtexEntry cleanup(BibtexEntry entry) {
+    private static BibtexEntry cleanup(BibtexEntry entry) {
     	if (entry == null)
     		return null;
     	
@@ -478,7 +468,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
 		return entry;
     }
 
-    private String parseNextEntryId(String allText, int startIndex) {
+    private static String parseNextEntryId(String allText, int startIndex) {
 	    int index = allText.indexOf("<div class=\"select", startIndex);
 	    int endIndex = allText.indexOf("</div>", index);
 	    
@@ -496,7 +486,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
 	    return null;
     }
     
-    private BibtexEntry parseNextEntry(String allText, int startIndex) {
+    private static BibtexEntry parseNextEntry(String allText, int startIndex) {
         BibtexEntry entry = null;
         
      	int index = allText.indexOf("<div class=\"detail", piv);
@@ -591,6 +581,11 @@ public class IEEEXploreFetcher implements EntryFetcher {
 	            	}
 	            }
             }
+            System.out.println("Title : " + entry.getField("title"));
+    		System.out.println("Authors : " + entry.getField("author"));
+    		System.out.println("Year : " + entry.getField("year"));
+    		System.out.println("Abstract : " + entry.getField("abstract"));
+    		System.out.println("Publisher : " + entry.getField("publisher"));
         }
         
         if (entry == null) {
@@ -604,7 +599,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
      * Find out how many hits were found.
      * @param page
      */
-    private int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
+    private static int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
     	int ind = page.indexOf(marker);
         if (ind < 0) {
         	System.out.println(page);
@@ -624,7 +619,7 @@ public class IEEEXploreFetcher implements EntryFetcher {
      * @return
      * @throws IOException
      */
-    public String getResults(URL source) throws IOException {
+    public static String getResults(URL source) throws IOException {
         
         InputStream in = source.openStream();
         StringBuffer sb = new StringBuffer();

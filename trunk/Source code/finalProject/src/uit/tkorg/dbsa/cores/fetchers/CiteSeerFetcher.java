@@ -1,9 +1,4 @@
-/*
- * Created on Jun 13, 2004
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
+
 package uit.tkorg.dbsa.cores.fetchers;
 
 import java.awt.BorderLayout;
@@ -41,6 +36,8 @@ import net.sf.jabref.KeyCollisionException;
 import net.sf.jabref.SidePaneComponent;
 import net.sf.jabref.SidePaneManager;
 import net.sf.jabref.Util;
+import net.sf.jabref.imports.BooleanAssign;
+import net.sf.jabref.imports.CiteSeerUndoHandler;
 import net.sf.jabref.undo.NamedCompound;
 
 import org.xml.sax.SAXException;
@@ -48,12 +45,14 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author mspiegel
+ * modifi: tiendv,cuongnp
  *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class CiteSeerFetcher extends SidePaneComponent {
-
+public class CiteSeerFetcher {
+	
+	//Cac chuoi tao cau query chua tu khoa can tim kiem
     final static String CITESEER_HOST = "citeseer.ist.psu.edu";
 	final static String PREFIX_URL = "http://" + CITESEER_HOST + "/";
 	final static String PREFIX_IDENTIFIER = "oai:CiteSeerPSU:";
@@ -61,6 +60,9 @@ public class CiteSeerFetcher extends SidePaneComponent {
 	final static String OAI_URL = OAI_HOST + "cgi-bin/oai.cgi?";
 	final static String OAI_ACTION = "verb=GetRecord";
 	final static String OAI_METADATAPREFIX ="metadataPrefix=oai_citeseer";
+	/**
+	 * http://cs1.ist.psu.edu/cgi-bin/oai.cgi?
+	 */
 	protected SAXParserFactory parserFactory;
 	protected SAXParser saxParser;
 	
@@ -74,54 +76,8 @@ public class CiteSeerFetcher extends SidePaneComponent {
 	SidePaneManager sidePaneManager;
 
 
-	public CiteSeerFetcher(SidePaneManager p0)  {
-		super(p0, GUIGlobals.getIconUrl("citeseer"), Globals.lang("CiteSeer Transfer"));
-
-		sidePaneManager = p0;
-		progressBar = new JProgressBar();
-		progressBar2 = new JProgressBar();
-		citeSeerProgress = new JLabel();
-		progressBar.setValue(0);
-		progressBar.setMinimum(0);
-		progressBar.setMaximum(100);
-		progressBar.setStringPainted(true);
-		progressBar2.setValue(0);
-		progressBar2.setMinimum(0);
-		progressBar2.setMaximum(100);
-		progressBar2.setStringPainted(true);
-                JPanel main = new JPanel();
-		main.setLayout(gbl);
-		//SidePaneHeader header = new SidePaneHeader
-		//	("CiteSeer Transfer", GUIGlobals.wwwCiteSeerIcon, this);
-		con.gridwidth = GridBagConstraints.REMAINDER;			
-		con.fill = GridBagConstraints.BOTH;
-		con.weightx = 1;
-		con.insets = new Insets(0, 0, 2,  0);
-		//gbl.setConstraints(header, con);
-		//add(header);
-		con.insets = new Insets(0, 0, 0,  0);
-		con.fill = GridBagConstraints.HORIZONTAL;		
-		gbl.setConstraints(progressBar, con);
-		main.add(progressBar);		
-		gbl.setConstraints(progressBar2, con);
-		main.add(progressBar2);
-		gbl.setConstraints(citeSeerProgress, con);
-		main.add(citeSeerProgress);		
-                main.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-                add(main, BorderLayout.CENTER);
-		try {
-			citationFetcherActive = false;
-			importFetcherActive = false;
-			parserFactory = SAXParserFactory.newInstance();
-			saxParser = parserFactory.newSAXParser();
-
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
+	public CiteSeerFetcher()  {
 	}
-
 	/***********************************/
 	/* Begin Inner Class Declarations */
 	/* The inner classes are used to modify components, when not in the
@@ -139,11 +95,13 @@ public class CiteSeerFetcher extends SidePaneComponent {
 	class ShowEmptyFetchSetDialog implements Runnable {
 	
 		public void run() {
-			JOptionPane.showMessageDialog(panel.frame(),
-				Globals.lang("The CiteSeer fetch operation returned zero results" 
+			System.out.print("he CiteSeer fetch operation returned zero results");
+			/*
+			JOptionPane.showMessageDialog("The CiteSeer fetch operation returned zero results" 
 						+ "."),
 				"CiteSeer",
 				JOptionPane.INFORMATION_MESSAGE);
+				*/
 			deactivateCitationFetcher();
 		}		
 	}
@@ -158,11 +116,14 @@ public class CiteSeerFetcher extends SidePaneComponent {
 				targetURL = URL;
 		}
 		public void run() {
+			System.out.print("Check the connect");
+			/*
 				JOptionPane.showMessageDialog(panel.frame(),
 				Globals.lang("Could not connect to host") + " " + targetURL + ".  " +
 				Globals.lang("Please check your network connection to this machine" + "."),
 				Globals.lang("CiteSeer Error"),
 				JOptionPane.ERROR_MESSAGE);
+				*/
 		}
 	}
 
@@ -207,12 +168,15 @@ public class CiteSeerFetcher extends SidePaneComponent {
             	} else {
             		rowNumbers = rowNumbers + " "+Globals.lang("and")+" " + rowSet.first().toString();
             	}
+            	System.out.print("Khong the parse citeseerURl");
+            	/*
                 JOptionPane.showMessageDialog(panel.frame(),
                         Globals.lang("Couldn't parse the 'citeseerurl' field of the following entries") + ':' + '\n' + 
                         rowNumbers + ".\n" + 
                         Globals.lang("Please refer to the JabRef help manual on using the CiteSeer tools" + '.'),
                         Globals.lang("Warning"),
                         JOptionPane.WARNING_MESSAGE);
+                        */
             }
         }
 	}	
@@ -226,12 +190,15 @@ public class CiteSeerFetcher extends SidePaneComponent {
 			rowNumber = row;
 		}
 		public void run() {
+			System.out.print(" Khong the part duoc tring file URL");
+			/*
 			JOptionPane.showMessageDialog(panel.frame(),
 			Globals.lang("Couldn't find an entry associated with this URL") + ": \"" + badURL + '\"' +
 			Globals.lang(" on entry number ") + (rowNumber + 1) + ".  " +
 			Globals.lang("Please refer to the JabRef help manual on using the CiteSeer tools."),
 			Globals.lang("CiteSeer Error"),
 			JOptionPane.ERROR_MESSAGE);
+			*/
 		}
 	}
 	
@@ -244,12 +211,15 @@ public class CiteSeerFetcher extends SidePaneComponent {
 			rowNumber = row;
 		}
 		public void run() {
+			System.out.print("Khong the parse theo URL");
+			/*
 			JOptionPane.showMessageDialog(panel.frame(),
 			Globals.lang("Unable to parse the following URL") + ": \"" + badURL + '\"' +
 			Globals.lang(" on entry number ") + (rowNumber + 1) + ".  " +
 			Globals.lang("Please refer to the JabRef help manual on using the CiteSeer tools."),
 			Globals.lang("CiteSeer Error"),
 			JOptionPane.ERROR_MESSAGE);
+			*/
 		}
 	}
 
@@ -260,83 +230,17 @@ public class CiteSeerFetcher extends SidePaneComponent {
 			rowNumber = row;
 		}
 		public void run() {
+			System.out.print("ket qua tra ve khong the lay duoc so ket qua");
+			/*
 			JOptionPane.showMessageDialog(panel.frame(),
 			Globals.lang("The URL field appears to be empty on entry number ") + (rowNumber + 1) + ".  " +
 			Globals.lang("Please refer to the JabRef help manual on using the CiteSeer tools."),
 			Globals.lang("CiteSeer Error"),
 			JOptionPane.ERROR_MESSAGE);
+			*/
 		}
-	}
-	
-	class UpdateProgressBarMaximum implements Runnable {
-		protected int maximum;
-		UpdateProgressBarMaximum(int newValue) {
-			maximum = newValue;
-		}
-		public void run() {
-			progressBar.setMaximum(maximum);
-		}
-	}
-
-	class UpdateProgressBarTwoMaximum implements Runnable {
-		protected int maximum;
-		UpdateProgressBarTwoMaximum(int newValue) {
-			maximum = newValue;
-		}
-		public void run() {
-			progressBar2.setMaximum(maximum);
-		}
-	}
-
-	class InitializeProgressBar implements Runnable {
-	    public void run() {
-			progressBar.setValue(0);
-	        progressBar.setMinimum(0);
-			progressBar.setMaximum(100);
-		    progressBar.setString(null);
-	    }
-	}
-
-	class InitializeProgressBarTwo implements Runnable {
-
-		public void run() {
-			progressBar2.setValue(0);
-	        progressBar2.setMinimum(0);
-			progressBar2.setMaximum(100);
-		    progressBar2.setString(null);
-	    }
 	}
 		
-	class UpdateProgressBarValue implements Runnable {
-		protected int counter;
-		UpdateProgressBarValue(int newValue) {
-			counter = newValue;
-		}
-		public void run() {
-			progressBar.setValue(counter);
-		}
-	}
-
-	class UpdateProgressBarTwoValue implements Runnable {
-		protected int counter;
-		UpdateProgressBarTwoValue(int newValue) {
-			counter = newValue;
-		}
-		public void run() {
-			progressBar2.setValue(counter);
-		}		
-	}
-
-	class UpdateProgressStatus implements Runnable {
-		protected String status;
-		UpdateProgressStatus(String newStatus) {
-			status = newStatus;
-		}
-		public void run() {
-			citeSeerProgress.setText(status);
-		}
-	}
-	
 	/* End Inner Class Declarations */
 
 
@@ -365,22 +269,20 @@ public class CiteSeerFetcher extends SidePaneComponent {
 	synchronized public void deactivateImportFetcher() {
 		importFetcherActive = false;
 	}
-
+/*
 	public void beginImportCiteSeerProgress() {
 	    progressBar.setIndeterminate(true);
 	    progressBar.setString("");
 	    progressBar2.setVisible(false);
 	    citeSeerProgress.setText("");
 	    sidePaneManager.show("CiteSeerProgress");
-	}
-	public void endImportCiteSeerProgress() {
+	}*/
+/*	public void endImportCiteSeerProgress() {
 	    progressBar.setIndeterminate(false);
 		progressBar.setMinimum(0);
 		progressBar.setMaximum(100);
 		progressBar.setValue(100);
-	}
-
-
+	}*/
 	/**
 	 * @param newDatabase
 	 * @param targetDatabase
@@ -393,22 +295,22 @@ public class CiteSeerFetcher extends SidePaneComponent {
 		BibtexEntry currentEntry;
 		Map<String, Boolean> citationHashTable = new HashMap<String, Boolean>();
 		Hashtable<Integer, BibtexEntry> rejectedEntries = new Hashtable<Integer, BibtexEntry>();
-		InitializeProgressBar initializeProgressBar = new InitializeProgressBar();
+		/*InitializeProgressBar initializeProgressBar = new InitializeProgressBar();
 		InitializeProgressBarTwo initializeProgressBarTwo = new InitializeProgressBarTwo();
-		UpdateProgressBarMaximum updateMaximum = new UpdateProgressBarMaximum(targetDatabase.getEntryCount());		
+		UpdateProgressBarMaximum updateMaximum = new UpdateProgressBarMaximum(targetDatabase.getEntryCount());*/		
 	    progressBar2.setVisible(true);		
-		SwingUtilities.invokeLater(initializeProgressBar);
+		/*SwingUtilities.invokeLater(initializeProgressBar);
 		SwingUtilities.invokeLater(initializeProgressBarTwo);
-		SwingUtilities.invokeLater(updateMaximum);		
+		SwingUtilities.invokeLater(updateMaximum);		*/
 		int identifierCounter = 0;
-		UpdateProgressStatus progressStatus = new UpdateProgressStatus(Globals.lang("Fetching Identifiers"));
-		SwingUtilities.invokeLater(progressStatus);
+		//UpdateProgressStatus progressStatus = new UpdateProgressStatus(Globals.lang("Fetching Identifiers"));
+		//SwingUtilities.invokeLater(progressStatus);
 		while (targetIterator.hasNext() && !abortOperation) {
 			currentKey = targetIterator.next();
 			currentEntry = targetDatabase.getEntryById(currentKey);
 			abortOperation = generateIdentifierList(currentEntry, citationHashTable, rejectedEntries);
-			UpdateProgressBarValue updateValue = new UpdateProgressBarValue(++identifierCounter);			
-			SwingUtilities.invokeLater(updateValue);
+			//UpdateProgressBarValue updateValue = new UpdateProgressBarValue(++identifierCounter);			
+		//	SwingUtilities.invokeLater(updateValue);
 		}
 		if (rejectedEntries.size() > 0) {
 			errorCode = -1;
@@ -416,14 +318,14 @@ public class CiteSeerFetcher extends SidePaneComponent {
 		    SwingUtilities.invokeLater(badIdentifiersDialog);
 		}
 		if (citationHashTable.size() > 0) {
-			UpdateProgressBarTwoMaximum update2Maximum = new UpdateProgressBarTwoMaximum(citationHashTable.size());
-			SwingUtilities.invokeLater(update2Maximum);
+		//	UpdateProgressBarTwoMaximum update2Maximum = new UpdateProgressBarTwoMaximum(citationHashTable.size());
+		//	SwingUtilities.invokeLater(update2Maximum);
 		}
-		progressStatus = new UpdateProgressStatus(Globals.lang("Fetching Citations"));
-		SwingUtilities.invokeLater(progressStatus);		
+	//	progressStatus = new UpdateProgressStatus(Globals.lang("Fetching Citations"));
+		//SwingUtilities.invokeLater(progressStatus);		
 		generateCitationList(citationHashTable, newDatabase);
-		progressStatus = new UpdateProgressStatus(Globals.lang("Done"));
-		SwingUtilities.invokeLater(progressStatus);
+		//progressStatus = new UpdateProgressStatus(Globals.lang("Done"));
+		//SwingUtilities.invokeLater(progressStatus);
 		if (abortOperation)
 			errorCode = -2;
 		return(errorCode);
@@ -450,8 +352,8 @@ public class CiteSeerFetcher extends SidePaneComponent {
 					saxParser.parse(citeseerConnection.getInputStream(), new CiteSeerUndoHandler(dummyNamedCompound, newEntry, panel, dummyBoolean));
 					database.insertEntry(newEntry);
 					citationCounter++;
-					UpdateProgressBarTwoValue updateValue = new UpdateProgressBarTwoValue(citationCounter);
-					SwingUtilities.invokeLater(updateValue);
+					//UpdateProgressBarTwoValue updateValue = new UpdateProgressBarTwoValue(citationCounter);
+			//		SwingUtilities.invokeLater(updateValue);
 			    }
 			}
 		} catch (SAXException e) {
