@@ -6,7 +6,6 @@ import net.sf.jabref.Globals;
 import net.sf.jabref.OutputPrinter;
 import net.sf.jabref.imports.EntryFetcher;
 import net.sf.jabref.imports.ImportInspector;
-import net.sf.jabref.net.URLDownload;
 
 import javax.swing.*;
 import java.io.IOException;
