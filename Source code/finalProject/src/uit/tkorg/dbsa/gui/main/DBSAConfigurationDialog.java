@@ -254,8 +254,9 @@ public class DBSAConfigurationDialog extends JDialog {
 		String language = (String)this.languageJComboBox.getSelectedItem();
 		if(language.equalsIgnoreCase("Vietnamese")){
 			Locale.setDefault(new Locale("vn", "VN"));
-			DBSAApplication.updateTextOfComponents();
 			DBSAResourceBundle.res = DBSAResourceBundle.initResources();
+			DBSAApplication.updateTextOfComponents();
+			
 		}else if(language.equalsIgnoreCase("English")){
 			Locale.setDefault(Locale.US);
 			DBSAResourceBundle.res = DBSAResourceBundle.initResources();

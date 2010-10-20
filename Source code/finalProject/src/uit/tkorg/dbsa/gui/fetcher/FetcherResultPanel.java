@@ -26,7 +26,7 @@ import org.dyno.visual.swing.layouts.Trailing;
 public class FetcherResultPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable resultsJTable;
+	public static JTable resultsJTable;
 	private JScrollPane resultsJScrollPane;
 	private JPanel actionsJPanel;
 	private JButton closeJButton;
@@ -48,6 +48,17 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane jScrollPane4;
 	private JTextArea publisherJTextArea;
 	private JScrollPane jScrollPane5;
+	
+	private static int rowNumber = 0;
+	private static String title = "";
+	private static String author = "";
+	private static String year = "";
+	private static String abstracts = "";
+	private static String publisher = "";
+	private static boolean mark = false;
+	
+	private static DefaultTableModel model;
+	
 	public FetcherResultPanel() {
 		initComponents();
 	}
@@ -189,60 +200,132 @@ public class FetcherResultPanel extends JPanel {
 		return authorsJLabel;
 	}
 
-	private JTable getResultsJTable() {
+	public static void setDefaultTableModel(DefaultTableModel value){
+		model = value;
+	}
+	
+	public static DefaultTableModel getDefaultTableModel(){
+		return model;
+	}
+	
+	public JTable getResultsJTable() {
+		
 		if (resultsJTable == null) {
-			resultsJTable = new JTable();
 			
-			resultsJTable.setModel(new DefaultTableModel(new Object[][] { 
-					{ 1, "Ten bai bao", "Tac gia", "1988", "Tom tat", "To chuc", true, },
-					{ 2, "afi bao", "ac gia", "2003", "Tom tat", "To chuc", false, },
-					{ 3, "in bai bao", "hoc gia", "1999", "Tom tat", "To chuc", true, },
-					{ 4, "een bai bao", "rac gia", "2000", "gom tat", "To chuc", false, }, }
-					, new String[] { "No.", "Title", "Authors", "Year", "Abstract",
-					"Publisher", "Mark", }) {
-				private static final long serialVersionUID = 1L;
+		
+			model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
+			private static final long serialVersionUID = 1L;
 				Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class, String.class, String.class, Boolean.class, };
 	
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
-			});
+			};
+			
+			resultsJTable = new JTable();
+			setDefaultTableModel(model);
+			resultsJTable.setModel(getDefaultTableModel());
+			
+			//Sap xep noi dung cac dong trong table theo thu tu alpha B.
+			//Cho phep sap xep theo tu cot rieng biet
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(resultsJTable.getModel());
 			resultsJTable.setRowSorter(sorter);
+			
 			/*
 			 * Set width of table column 
 			 */
+			resultsJTable.setShowGrid(true);
+			resultsJTable.setShowVerticalLines(true);
+			resultsJTable.setShowHorizontalLines(true);
 			
 			for(int i = 0; i < 6; i++){
 				TableColumn col = resultsJTable.getColumnModel().getColumn(i);
 				if(i == 0){
-					col.setPreferredWidth(20);
+					col.setPreferredWidth(5);
 				}else if(i == 1){
-					col.setPreferredWidth(200);
+					col.setPreferredWidth(250);
 				}else if(i == 2){
 					col.setPreferredWidth(150);
 				}else if(i == 3){
-					col.setPreferredWidth(50);
+					col.setPreferredWidth(20);
 				}else if(i == 4){
 					col.setPreferredWidth(500);
 				}else if (i == 5){
 					col.setPreferredWidth(100);
 				}else{
-					col.setPreferredWidth(20);
+					col.setPreferredWidth(10);
 				}
 			}
-			TableColumn col = resultsJTable.getColumnModel().getColumn(0);
-			col.setWidth(50);
-			resultsJTable.addMouseListener(new MouseAdapter() {
-	
-				public void mouseClicked(MouseEvent event) {
-					jTable0MouseMouseClicked(event);
+			
+		}else if(resultsJTable != null){
+			
+			//resultsJTable.clearSelection();
+			//resultsJTable.removeAll();
+			resultsJTable = null;
+			resultsJTable = new JTable();
+			resultsJTable.setModel(model);
+			
+			for(int i = 0; i < getRowNumber(); i++){
+				
+				if((i + 1) == getRowNumber()){
+
+					insertData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark());
 				}
-			});
+				
+			}
+			
 		}
+			
+		resultsJTable.addMouseListener(new MouseAdapter() {			
+			public void mouseClicked(MouseEvent event) {
+				resultJTableMouseMouseClicked(event);
+			}
+		});
+		
+		
 		return resultsJTable;
 	}
-
+	
+	private void insertData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
+		model.insertRow(rowNumber, addTableData(rowNumber ,title, author, year, abstracts, publisher, isMark));
+		
+	}
+	
+	/*
+	 * Ham tao danh sach ten cac cot trong table
+	 * @return String []
+	 */
+	private  String [] getColumnName(){
+		String [] columnNames = { "No.", "Title", "Authors", "Year", "Abstract", "Publisher", "Mark", };
+			
+		return columnNames;
+	}
+	
+	/*
+	 * Ham input data cho table
+	 * @return Object [][]
+	 */
+	public  Object [][] getTableData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
+		
+		Object [][] data = {addTableData(rowNumber, title, author, year, abstracts, publisher, isMark)};
+		
+		return data;
+		
+	}
+	
+//	public  void getRowData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
+//		
+//		model.insertRow(rowNumber,  addTableData(rowNumber, title, author, year, abstracts, publisher, isMark));	
+//		
+//	}
+	
+	
+	public  Object [] addTableData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
+		Object [] dataRow =  {rowNumber, getTitle(), author, year, abstracts, publisher, isMark};
+		
+		return dataRow;
+	}
+	
 	private JPanel getEntryJPanel() {
 		if (entryJPanel == null) {
 			entryJPanel = new JPanel();
@@ -307,18 +390,81 @@ public class FetcherResultPanel extends JPanel {
 		return resultsJScrollPane;
 	}
 
-	private void jTable0MouseMouseClicked(MouseEvent event) {
+	private  void resultJTableMouseMouseClicked(MouseEvent event) {
 		/*
 		 * get row number is select
 		 */
-		int rowNumber = resultsJTable.getSelectedRow();
-		//int columnNumber = resultsJTable.getSelectedColumn();
 		
-		titleJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 1).toString());
-		authorsJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 2).toString());
-		yearJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 3).toString());
-		abstractJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 4).toString());
-		publisherJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 5).toString());		
+		int rowNumber = resultsJTable.getSelectedRow();
+		System.out.println( "row number " + rowNumber + resultsJTable.getRowCount());
+		
+		if(rowNumber >= 0){
+			titleJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 1).toString());
+			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 2).toString());
+			yearJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 3).toString());
+			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 4).toString());
+			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 5).toString());
+		}
+	}
+	
+	/*
+	 * 
+	 * set & get paper bibliography 
+	 */
+	
+	public static void setRowNumber(int number){
+		rowNumber = number;
+	}
+	
+	public  static int getRowNumber(){
+		return rowNumber;
+	}
+	
+	public static void setTitle(String titleString){
+		title = titleString;
 	}
 
+	public  static String getTitle(){
+		return title;
+	}
+	
+	public static void setAuthor(String authorString){
+		author = authorString;
+	}
+
+	public  String getAuthor(){
+		return author;
+	}
+	
+	public static void setYear(String yearString){
+		year = yearString;
+	}
+
+	public static String getYear(){
+		return year;
+	}
+	
+	public static void setAbstract(String abstractString){
+		abstracts = abstractString;
+	}
+
+	public static String getAbstract(){
+		return abstracts;
+	}
+	
+	public static void setPublisher(String publisherString){
+		publisher = publisherString;
+	}
+
+	public static String getPublisher(){
+		return publisher;
+	}
+	
+	public static void setMark(boolean isMark){
+		mark = isMark;
+	}
+	
+	public static boolean getMark(){
+		return mark;
+	}
 }
