@@ -106,6 +106,24 @@ public class FetcherPanel extends JPanel {
 			fetcherJButton = new JButton();
 			fetcherJButton.setText("Fetcher");
 			
+			fetcherJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						ACMFetcher(keywordJTextField.getText());
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
+					setIsShowResult(true);
+					DBSAApplication.getDBSAContent();
+					DBSAApplication.dbsaJFrame.repaint();
+					
+				}
+				
+			});
+			
 		}
 		return fetcherJButton;
 	}
@@ -115,22 +133,7 @@ public class FetcherPanel extends JPanel {
 			showResultJButton = new JButton();
 			showResultJButton.setText("Show results");
 			showResultJButton.isDefaultButton();
-			showResultJButton.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					try {
-						ACMFetcher(keywordJTextField.getText());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					setIsShowResult(true);
-					DBSAApplication.getDBSAContent();
-					DBSAApplication.dbsaJFrame.repaint();
-				}
-				
-			});
+			
 		}
 		return showResultJButton;
 	}
@@ -152,6 +155,16 @@ public class FetcherPanel extends JPanel {
 			closeJButton = new JButton();
 			closeJButton.setText("Close");
 			closeJButton.setAlignmentX(0.5f);
+			
+			closeJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = false;
+					
+				}
+				
+			});
 		}
 		return closeJButton;
 	}
