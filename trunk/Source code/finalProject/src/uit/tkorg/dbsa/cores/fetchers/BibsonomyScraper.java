@@ -1,7 +1,6 @@
 package uit.tkorg.dbsa.cores.fetchers;
 
 import net.sf.jabref.BibtexEntry;
-import net.sf.jabref.Util;
 import net.sf.jabref.imports.BibtexParser;
 import net.sf.jabref.imports.ParserResult;
 
