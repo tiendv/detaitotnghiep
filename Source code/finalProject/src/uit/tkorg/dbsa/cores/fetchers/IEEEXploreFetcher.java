@@ -10,6 +10,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.BibtexEntryType;
 import net.sf.jabref.Globals;
@@ -55,6 +58,7 @@ public class IEEEXploreFetcher {
     static Pattern proceedingPattern = Pattern.compile("(.*?)\\.?\\s?Proceedings\\s?(.*)");
     Pattern abstractLinkPattern = Pattern.compile("<a href=\"(.+)\" class=\"bodyCopySpaced\">Abstract</a>");
     static String abrvPattern = ".*[^,] '?\\d+\\)?";
+	private static FetcherResultPanel resultFetch = new FetcherResultPanel();
     Pattern ieeeArticleNumberPattern = Pattern.compile("<a href=\".*arnumber=(\\d+).*\">");
     
     
@@ -159,13 +163,22 @@ public class IEEEXploreFetcher {
      */
     private static void parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
+        int fetcherNumber = FetcherPanel.getIeeeResultNumber() + firstEntryNumber;
+        
         int entryNumber = firstEntryNumber;
-        BibtexEntry entry;
-	    while (((entry = parseNextEntry(text, piv)) != null) && shouldContinue) {
-	            if (entry.getField("title") != null) {
-	                parsed++;
-	            }
+
+	    while ( shouldContinue) {
+
+	            parseNextEntry(text, piv);
 	            entryNumber++;
+	            
+	            if(entryNumber >= fetcherNumber){
+	            	shouldContinue = false;
+	            	break;
+	            }
+	            
+	            FetcherPanel.setIeeeProgressBar(entryNumber/fetcherNumber*100);
+	            //FetcherPanel.PROPER
 	        }   
     }
     /**
@@ -291,7 +304,9 @@ public class IEEEXploreFetcher {
     * @param startIndex
     * @return
     */
-    private static BibtexEntry parseNextEntry(String allText, int startIndex) {
+    static int number = 0;
+    @SuppressWarnings("static-access")
+	private static BibtexEntry parseNextEntry(String allText, int startIndex) {
         BibtexEntry entry = null;
         
         fieldPatterns.put("title", "<a\\s*href=[^<]+>\\s*(.+)\\s*</a>");
@@ -405,6 +420,17 @@ public class IEEEXploreFetcher {
     		System.out.println("Abstract : " + entry.getField("abstract"));
     		System.out.println("Publisher : " + entry.getField("sourceField"));
     		System.out.println("Doi : " + entry.getField("doi"));
+    		
+    		number ++;
+			resultFetch.setRowNumber(number);
+			resultFetch.setTitle(entry.getField("title"));
+			resultFetch.setAuthor(entry.getField("author"));
+			resultFetch.setYear(entry.getField("year"));
+			resultFetch.setAbstract(entry.getField("abstract"));
+			resultFetch.setPublisher(entry.getField("publisher"));
+			
+			resultFetch.getResultsJTable();
+			
             return entry;
         }
     }
