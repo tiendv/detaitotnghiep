@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
+import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 
 import net.sf.jabref.BibtexEntry;
@@ -93,12 +94,7 @@ public class ACMFetcher {
             System.out.println("FirstEntry = " + firstEntry);
             
             firstEntry += perPage;
-            System.out.println(" perPage " + perPage);
-            if(perPage > 80){
-            	shouldContinue = false;
-            	System.out.println("Stop....");
-            }
-            
+         
         }
         
 //		FileOutputStream fileOutput;
@@ -238,22 +234,24 @@ public class ACMFetcher {
 	
 	private static void parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
+        int fetcherNumber = FetcherPanel.getAcmResultNumber() + firstEntryNumber;
+        
         int entryNumber = firstEntryNumber;
-        
-       
-		BibtexEntry entry;
-        
-        while (((entry = parseNextEntry(text, piv, entryNumber)) != null) && (shouldContinue)) {
+         
+        while ((shouldContinue)) {
         	
-        	System.out.println("<===> " + entryNumber + " <===>");
-        	
-        	entryNumber++;  
-        	
-        	if(entryNumber > 2){
+        	if(entryNumber >= fetcherNumber){
         		
         		shouldContinue = false;
         		break;
         	}
+        	
+        	parseNextEntry(text, piv, entryNumber);
+        	
+        	entryNumber++;  
+        	
+        	FetcherPanel.setAcmProgressBar(entryNumber/fetcherNumber*100);
+        	
             try {
             	Thread.sleep(10000);//wait between requests or you will be blocked by ACM
             } catch (InterruptedException e) {
@@ -364,14 +362,7 @@ public class ACMFetcher {
 				resultFetch.setYear(entry.getField("year"));
 				resultFetch.setAbstract(entry.getField("abstract"));
 				resultFetch.setPublisher(entry.getField("publisher"));
-	
-				
-				//.addTableData(resultFetch.getRowNumber(), resultFetch.getTitle(), resultFetch.getAuthor(), resultFetch.getYear(),
-					//	resultFetch.getAbstract(), resultFetch.getPublisher(), resultFetch.getMark());
-//
-				//resultFetch.getRowData(resultFetch.getRowNumber(), resultFetch.getTitle(), resultFetch.getAuthor(), resultFetch.getYear(),
-				//		resultFetch.getAbstract(), resultFetch.getPublisher(), resultFetch.getMark());
-	
+
 				resultFetch.getResultsJTable();
 				
 				return entry;
