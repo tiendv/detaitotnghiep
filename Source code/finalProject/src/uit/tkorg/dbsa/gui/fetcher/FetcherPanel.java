@@ -28,6 +28,7 @@ import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction;
 
+
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherPanel extends JPanel {
 
@@ -76,7 +77,7 @@ public class FetcherPanel extends JPanel {
 	private void initComponents() {
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
-		setSize(650, 133);
+		setSize(650, 310);
 	}
 
 	private JLabel getFetcherStatusJLabel() {
@@ -206,6 +207,13 @@ public class FetcherPanel extends JPanel {
 	
 	private void ACMFetcher(String keyword) throws IOException{
 		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
+	}
+	private void IEEEXploreFethcer( String keyword) throws IOException {
+		uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction.Fetcher(keyword);
+		
+	}
+	private void JSTORFetcher ( String keyword) throws IOException {
+		uit.tkorg.dbsa.actions.fetchers.JSTORFetcherAction.Fetcher(keyword);
 	}
 
 	private void IEEExploreFetch(String keyword) throws IOException{
