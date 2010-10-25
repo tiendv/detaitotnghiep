@@ -61,7 +61,6 @@ public class ACMFetcher {
 	public ACMFetcher(){
 		
 	}	
-	
 	public static void Fetcher(String keyword) throws IOException{
 		
 		keywordString = keyword; 
