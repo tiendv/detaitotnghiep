@@ -258,12 +258,10 @@ public class FetcherResultPanel extends JPanel {
 			}
 			
 		}else if(resultsJTable != null){
-			
-			//resultsJTable.clearSelection();
-			//resultsJTable.removeAll();
-			resultsJTable = null;
+
 			resultsJTable = new JTable();
 			resultsJTable.setModel(model);
+		
 			
 			for(int i = 0; i < getRowNumber(); i++){
 				
@@ -307,7 +305,7 @@ public class FetcherResultPanel extends JPanel {
 	 */
 	public  Object [][] getTableData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
 		
-		Object [][] data = {addTableData(rowNumber, title, author, year, abstracts, publisher, isMark)};
+		Object [][] data = {addTableData(rowNumber, "title awef", "author", "year", abstracts, publisher, isMark)};
 		
 		return data;
 		

@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
@@ -25,7 +26,7 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
-import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherPanel extends JPanel {
@@ -56,9 +57,18 @@ public class FetcherPanel extends JPanel {
 	private JPanel actionsJPanel;
 	private JLabel fetcherStatusJLabel;
 	
+	private static int acmResultNumber;
+	private static int ieeeResultNumber;
+	
 	private boolean isShowResult = false;
 
 	private String tooltipText = null;
+	
+	private boolean fetcherBoolean = false;
+	
+	private static int acmProgressPer = 0;
+	private static int ieeeProgressPer = 0;
+	
 	public FetcherPanel() {
 		initComponents();
 	}
@@ -66,7 +76,7 @@ public class FetcherPanel extends JPanel {
 	private void initComponents() {
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
-		setSize(650, 387);
+		setSize(650, 133);
 	}
 
 	private JLabel getFetcherStatusJLabel() {
@@ -100,7 +110,8 @@ public class FetcherPanel extends JPanel {
 		}
 		return actionsJPanel;
 	}
-
+	
+	
 	private JButton getFetcherJButton() {
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
@@ -110,15 +121,53 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
+					if(getAcmProgressBar() != 0){
+					//	setAcmProgressBar(0);
+					}
 					try {
-						ACMFetcher(keywordJTextField.getText());
+						
+						if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
+							JOptionPane.showMessageDialog(null, "Input keyword before press Fetch!");
+						}
+						else if(keywordJTextField.getText() != ""){
+							if(fetchFromACMCheckBox.isSelected() == true){
+								fetcherBoolean = true;
+								uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
+								setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
+								acmJProgressBar.setValue(getAcmProgressBar());
+								ACMFetcher(keywordJTextField.getText());
+							}
+							
+							if(ieeexploreDLCheckBox.isSelected() == true){
+								fetcherBoolean = true;
+								
+								setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
+								ieeeploreJProgressBar.setValue(30);
+								IEEExploreFetch(keywordJTextField.getText());
+								
+							}
+							
+							if(!fetcherBoolean){
+								JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
+							}
+							/*
+							 * reset application Jpanel
+							 */
+							keywordJTextField.setText("");
+							acmJProgressBar.setValue(0);
+							ieeeploreJProgressBar.setValue(0);
+							citeseerJProgressBar.setValue(0);
+							fetcherBoolean = false;
+						}
+						
 					} catch (IOException e1) {
 						
 						e1.printStackTrace();
 					}
-					setIsShowResult(true);
-					DBSAApplication.getDBSAContent();
-					DBSAApplication.dbsaJFrame.repaint();
+//					setIsShowResult(true);
+//					DBSAApplication.getDBSAContent();
+//					DBSAApplication.dbsaJFrame.repaint();
 					
 				}
 				
@@ -128,12 +177,29 @@ public class FetcherPanel extends JPanel {
 		return fetcherJButton;
 	}
 
+	///public static void ProgressBar(){
+	//	ieeeploreJProgressBar.setValue(getIeeeProgressBar());
+	//}
+	
 	private JButton getShowResultJButton() {
 		if (showResultJButton == null) {
 			showResultJButton = new JButton();
 			showResultJButton.setText("Show results");
 			showResultJButton.isDefaultButton();
-			
+			showResultJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						IEEEXploreFetcherAction.Fetcher(keywordJTextField.getText());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
+				
+			});
 		}
 		return showResultJButton;
 	}
@@ -142,6 +208,10 @@ public class FetcherPanel extends JPanel {
 		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
 	}
 
+	private void IEEExploreFetch(String keyword) throws IOException{
+		IEEEXploreFetcherAction.Fetcher(keyword);
+	}
+	
 	public void setIsShowResult(boolean isShowResult){
 		this.isShowResult = isShowResult;
 	}
@@ -172,6 +242,8 @@ public class FetcherPanel extends JPanel {
 	private JProgressBar getScienceDirectJProgressBar() {
 		if (scienceDirectJProgressBar == null) {
 			scienceDirectJProgressBar = new JProgressBar();
+			scienceDirectJProgressBar.setValue(0);
+			scienceDirectJProgressBar.setStringPainted(true);
 		}
 		return scienceDirectJProgressBar;
 	}
@@ -179,28 +251,49 @@ public class FetcherPanel extends JPanel {
 	private JProgressBar getIeeeploreJProgressBar() {
 		if (ieeeploreJProgressBar == null) {
 			ieeeploreJProgressBar = new JProgressBar();
+			ieeeploreJProgressBar.setValue(0);
+			ieeeploreJProgressBar.setStringPainted(true);
 		}
 		return ieeeploreJProgressBar;
 	}
 
+	public static void setIeeeProgressBar(int value){
+		ieeeProgressPer = value;
+	}
+	
+	public static int getIeeeProgressBar(){
+		return ieeeProgressPer;
+	}
 	private JProgressBar getCiteseerJProgressBar() {
 		if (citeseerJProgressBar == null) {
 			citeseerJProgressBar = new JProgressBar();
+			citeseerJProgressBar.setValue(0);
+			citeseerJProgressBar.setStringPainted(true);
 		}
 		return citeseerJProgressBar;
 	}
 
 	private JProgressBar getAcmJProgressBar() {
 		if (acmJProgressBar == null) {
-			acmJProgressBar = new JProgressBar();
+			acmJProgressBar = new JProgressBar(0, 100);
+			acmJProgressBar.setValue(0);
+			acmJProgressBar.setStringPainted(true);
 		}
 		return acmJProgressBar;
+	}
+	
+	public static void setAcmProgressBar(int value){
+		acmProgressPer = value;
+	}
+	
+	public static int getAcmProgressBar(){
+		return acmProgressPer;
 	}
 
 	private JSpinner getScienceDirectJSpinner() {
 		if (scienceDirectJSpinner == null) {
 			scienceDirectJSpinner = new JSpinner();
-			scienceDirectJSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			scienceDirectJSpinner.setModel(new SpinnerNumberModel(1, 1, 20, 1));
 			scienceDirectJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
 		return scienceDirectJSpinner;
@@ -347,4 +440,24 @@ public class FetcherPanel extends JPanel {
 		return tooltipText;
 	}
 
+	/*
+	 * 
+	 * 
+	 */
+	public static int getAcmResultNumber(){
+		return acmResultNumber;
+	}
+	
+	public static void setAcmResultNumber(int resultNumber){
+		acmResultNumber = resultNumber;
+	}
+	
+	public static int getIeeeResultNumber(){
+		return ieeeResultNumber;
+	}
+	
+	public static void setIeeeResultNumber(int resultNumber){
+		ieeeResultNumber = resultNumber;
+	}
+	
 }
