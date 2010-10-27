@@ -60,6 +60,7 @@ public class FetcherPanel extends JPanel {
 	
 	private static int acmResultNumber;
 	private static int ieeeResultNumber;
+	private static int citeResultNumber;
 	
 	private boolean isShowResult = false;
 
@@ -148,6 +149,12 @@ public class FetcherPanel extends JPanel {
 								IEEExploreFetch(keywordJTextField.getText());
 								
 							}
+							if(citeseerDLCheckBox.isSelected() == true){
+								fetcherBoolean = true;
+								setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
+								citeseerJProgressBar.setValue(10);
+								CiteSeeXFetcher(keywordJTextField.getText());
+							}
 							
 							if(!fetcherBoolean){
 								JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
@@ -214,6 +221,9 @@ public class FetcherPanel extends JPanel {
 	}
 	private void JSTORFetcher ( String keyword) throws IOException {
 		uit.tkorg.dbsa.actions.fetchers.JSTORFetcherAction.Fetcher(keyword);
+	}
+	private void CiteSeeXFetcher ( String keyword) {
+		uit.tkorg.dbsa.actions.fetchers.CiteSeerXFetcherAction.Fetcher(keyword);
 	}
 
 	private void IEEExploreFetch(String keyword) throws IOException{
@@ -467,5 +477,21 @@ public class FetcherPanel extends JPanel {
 	public static void setIeeeResultNumber(int resultNumber){
 		ieeeResultNumber = resultNumber;
 	}
+
+	/**
+	 * @param citeResultNumber the citeResultNumber to set
+	 */
+	public static void setCiteResultNumber(int citeResultNumber) {
+		FetcherPanel.citeResultNumber = citeResultNumber;
+	}
+
+	/**
+	 * @return the citeResultNumber
+	 */
+	public static int getCiteResultNumber() {
+		return citeResultNumber;
+	}
+	
+	
 	
 }
