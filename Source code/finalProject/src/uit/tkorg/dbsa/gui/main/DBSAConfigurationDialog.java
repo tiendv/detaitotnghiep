@@ -3,6 +3,7 @@ package uit.tkorg.dbsa.gui.main;
 /**
  * 
  * @author Nguyen Phuoc Cuong
+ * modifi: tiendv
  */
 
 import java.awt.Color;
@@ -15,18 +16,23 @@ import java.awt.event.ActionListener;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
-
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DBSAConfigurationDialog extends JDialog {
@@ -40,12 +46,19 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JToggleButton cancelJButton;
 	private JToggleButton okJButton;
 	private JPanel ationsJPanel;
-	private JPanel fontOptionJPanel;
 	private JPanel lookAndFeelJPanel;
 	private JPanel configurationJPanel;
-	private JComboBox lookandFeelJComboBox;
+	private JComboBox lookAndFeelJComboBox;
 	private JComboBox languageJComboBox;
+	private JComboBox fontSizeJComboBox;
+	private JCheckBox fontBoldJCheckBox;
+	private JCheckBox fontItalicJCheckBox;
+	private JPanel fontOptionsJPanel;
+	private JComboBox fontNameJComboBox;
 	private JPanel languageJPanel;
+	private ButtonGroup fontOptionsButtonGroup;
+	private JRadioButton textCompJRadioButton;
+	private JRadioButton menuCompJRadioButton;
 
 	public DBSAConfigurationDialog() {
 		initComponents();
@@ -143,6 +156,41 @@ public class DBSAConfigurationDialog extends JDialog {
 		setLocation(xLocation, yLocation);
 	}
 
+	private JCheckBox getFontItalicJCheckBox() {
+		if (fontItalicJCheckBox == null) {
+			fontItalicJCheckBox = new JCheckBox();
+			fontItalicJCheckBox.setText("Italic");
+		}
+		return fontItalicJCheckBox;
+	}
+
+	private JCheckBox getFontBoldJCheckBox() {
+		if (fontBoldJCheckBox == null) {
+			fontBoldJCheckBox = new JCheckBox();
+			fontBoldJCheckBox.setText("Bold");
+		}
+		return fontBoldJCheckBox;
+	}
+
+	private JComboBox getFontSizeJComboBox() {
+		if (fontSizeJComboBox == null) {
+			fontSizeJComboBox = new JComboBox();
+			fontSizeJComboBox.setModel(new DefaultComboBoxModel(new Object[] { "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" }));
+			fontSizeJComboBox.setDoubleBuffered(false);
+			fontSizeJComboBox.setBorder(null);
+		}
+		return fontSizeJComboBox;
+	}
+
+	private JRadioButton getTextCompJRadioButton() {
+		if (textCompJRadioButton == null) {
+			textCompJRadioButton = new JRadioButton();
+			textCompJRadioButton.setSelected(true);
+			textCompJRadioButton.setText(DBSAResourceBundle.res.getString("text.components.font"));
+		}
+		return textCompJRadioButton;
+	}
+
 	private JPanel getLanguageJPanel() {
 		if (languageJPanel == null) {
 			languageJPanel = new JPanel();
@@ -151,6 +199,13 @@ public class DBSAConfigurationDialog extends JDialog {
 			languageJPanel.add(getLanguageJComboBox(), new Constraints(new Bilateral(7, 12, 60), new Leading(0, 12, 12)));
 		}
 		return languageJPanel;
+	}
+	private JRadioButton getMenuCompJRadioButton() {
+		if (menuCompJRadioButton == null) {
+			menuCompJRadioButton = new JRadioButton();
+			menuCompJRadioButton.setText(DBSAResourceBundle.res.getString("menu.component.font"));
+		}
+		return menuCompJRadioButton;
 	}
 
 	private JComboBox getLanguageJComboBox() {
@@ -171,13 +226,23 @@ public class DBSAConfigurationDialog extends JDialog {
 	}
 
 	private JComboBox getLookandFeelJComboBox() {
-		if (lookandFeelJComboBox == null) {
-			lookandFeelJComboBox = new JComboBox();
-			lookandFeelJComboBox.setModel(new DefaultComboBoxModel(new Object[] { "Windows" }));
-			lookandFeelJComboBox.setDoubleBuffered(false);
-			lookandFeelJComboBox.setBorder(null);
+		if (lookAndFeelJComboBox == null) {
+			lookAndFeelJComboBox = new JComboBox();
+			lookAndFeelJComboBox.setModel(new DefaultComboBoxModel(
+						new Object[] { 
+								DBSAResourceBundle.res.getString("windows"), 
+								DBSAResourceBundle.res.getString("metal"), 
+								DBSAResourceBundle.res.getString("motif"), 
+								DBSAResourceBundle.res.getString("windows.classic"), 
+								DBSAResourceBundle.res.getString("macOS") 
+						}));
+			lookAndFeelJComboBox.setDoubleBuffered(false);
+			lookAndFeelJComboBox.setBorder(null);
+			
+			String lookAndFeelStyle = UIManager.getLookAndFeel().getName();
+			lookAndFeelJComboBox.setSelectedItem(lookAndFeelStyle);
 		}
-		return lookandFeelJComboBox;
+		return lookAndFeelJComboBox;
 	}
 
 	private JPanel getConfigurationJPanel() {
@@ -202,14 +267,38 @@ public class DBSAConfigurationDialog extends JDialog {
 		}
 		return lookAndFeelJPanel;
 	}
-
-	private JPanel getFontOptionJPanel() {
-		if (fontOptionJPanel == null) {
-			fontOptionJPanel = new JPanel();
-			fontOptionJPanel.setBorder(BorderFactory.createTitledBorder("Font options"));
-			fontOptionJPanel.setLayout(new GroupLayout());
+	private JComboBox getFontNameJComboBox() {
+		if (fontNameJComboBox == null) {
+			fontNameJComboBox = new JComboBox();
+			fontNameJComboBox.setModel(new DefaultComboBoxModel(new Object[] { "Times New Romance", "Tahoma" }));
+			fontNameJComboBox.setDoubleBuffered(false);
+			fontNameJComboBox.setBorder(null);
 		}
-		return fontOptionJPanel;
+		return fontNameJComboBox;
+	}
+	private ButtonGroup getFontOptionsButtonGroup() {
+		if (fontOptionsButtonGroup == null) {
+			fontOptionsButtonGroup = new ButtonGroup();
+			fontOptionsButtonGroup.add(textCompJRadioButton);
+			fontOptionsButtonGroup.add(menuCompJRadioButton);
+		}
+		return fontOptionsButtonGroup;
+	}
+	private JPanel getFontOptionJPanel() {
+		if (fontOptionsJPanel == null) {
+			fontOptionsJPanel = new JPanel();
+			fontOptionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("font.options")));
+			fontOptionsJPanel.setLayout(new GroupLayout());
+			fontOptionsJPanel.add(getTextCompJRadioButton(), new Constraints(new Leading(3, 10, 10), new Leading(12, 10, 10)));
+			fontOptionsJPanel.add(getMenuCompJRadioButton(), new Constraints(new Leading(168, 10, 10), new Leading(12, 8, 8)));
+			fontOptionsJPanel.add(getFontBoldJCheckBox(), new Constraints(new Leading(3, 8, 8), new Leading(88, 8, 8)));
+			fontOptionsJPanel.add(getFontItalicJCheckBox(), new Constraints(new Leading(80, 10, 10), new Leading(88, 8, 8)));
+			fontOptionsJPanel.add(getFontNameJComboBox(), new Constraints(new Leading(6, 345, 12, 12), new Leading(55, 10, 10)));
+			fontOptionsJPanel.add(getFontSizeJComboBox(), new Constraints(new Leading(357, 55, 10, 10), new Leading(55, 12, 12)));
+			
+			getFontOptionsButtonGroup();
+		}
+		return fontOptionsJPanel;
 	}
 
 	private JPanel getAtionsJPanel() {
@@ -248,21 +337,45 @@ public class DBSAConfigurationDialog extends JDialog {
 	}
 	
 	private void okJButtonAction(ActionEvent event){
-		/**
-		 * Select languages
-		 */
-		String language = (String)this.languageJComboBox.getSelectedItem();
-		if(language.equalsIgnoreCase("Vietnamese")){
-			Locale.setDefault(new Locale("vn", "VN"));
-			DBSAResourceBundle.res = DBSAResourceBundle.initResources();
-			DBSAApplication.updateTextOfComponents();
-			
-		}else if(language.equalsIgnoreCase("English")){
-			Locale.setDefault(Locale.US);
-			DBSAResourceBundle.res = DBSAResourceBundle.initResources();
-			DBSAApplication.updateTextOfComponents();
-		}
-		this.dispose();
+		try
+		{
 		
+			String lookAndFeel = (String) this.lookAndFeelJComboBox.getSelectedItem();
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("metal"))) {
+				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			}
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("motif"))){
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+			}
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("windows"))){
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			}
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("windows.classic"))){
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			}
+			
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("macOS"))){
+				 UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+			}
+			/**
+			 * Select languages
+			 */
+			String language = (String)this.languageJComboBox.getSelectedItem();
+			if(language.equalsIgnoreCase("Vietnamese")){
+				Locale.setDefault(new Locale("vn", "VN"));
+				DBSAResourceBundle.res = DBSAResourceBundle.initResources();
+				DBSAApplication.updateTextOfComponents();
+			}else if(language.equalsIgnoreCase("English")){
+				Locale.setDefault(Locale.US);
+				DBSAResourceBundle.res = DBSAResourceBundle.initResources();
+				DBSAApplication.updateTextOfComponents();
+			}
+			SwingUtilities.updateComponentTreeUI(disaJFrame);
+			this.dispose();
+		}
+		catch (Exception ex){
+			ex.printStackTrace();
+		}
 	}
+	
 }
