@@ -33,10 +33,16 @@ public class AboutFrame extends JFrame {
 	private JButton jButton1;
 	private JButton jButton2;
 	private JPanel jPanel3;
+	private int width = 442;
+	private int height = 390;
+	private int xLocation;
+	private int yLocation;
+	private JFrame disaJFrame;
 
 	public AboutFrame() {
 		initComponents();
 	}
+	
 
 	private void initComponents() {
 		setTitle("About IDRS");
@@ -44,8 +50,17 @@ public class AboutFrame extends JFrame {
 		add(getJPanel0(), new Constraints(new Leading(0, 172, 10, 10), new Leading(0, 257, 10, 10)));
 		add(getJPanel1(), new Constraints(new Bilateral(173, 0, 0), new Leading(0, 257, 12, 12)));
 		add(getJPanel2(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(258, 0, 0)));
-		setSize(619, 327);
+		setSize(375, 328);
+		setLocation(xLocation, yLocation);
 	}
+	public AboutFrame(JFrame mainFrame) {
+		super();
+		disaJFrame = mainFrame;
+		xLocation = disaJFrame.getX() + (disaJFrame.getWidth()-width)/2;
+		yLocation = disaJFrame.getY() + (disaJFrame.getHeight()-height)/2;
+		initComponents();
+	}
+
 
 	private JPanel getJPanel3() {
 		if (jPanel3 == null) {
@@ -113,7 +128,7 @@ public class AboutFrame extends JFrame {
 		if (jTextArea0 == null) {
 			jTextArea0 = new JTextArea();
 			String temp = "";
-			temp += "DISA \n";
+			temp += "DBSA \n";
 			temp += "Version: 1.0. \n";
 			temp += ".";
 			jTextArea0.setText(temp);
