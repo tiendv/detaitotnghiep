@@ -27,6 +27,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction;
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
 
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -78,7 +79,7 @@ public class FetcherPanel extends JPanel {
 	private void initComponents() {
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
-		setSize(650, 310);
+		setSize(668, 407);
 	}
 
 	private JLabel getFetcherStatusJLabel() {
@@ -145,7 +146,7 @@ public class FetcherPanel extends JPanel {
 								fetcherBoolean = true;
 								
 								setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
-								ieeeploreJProgressBar.setValue(30);
+								ieeeploreJProgressBar.setValue(ieeeploreJProgressBar.getValue());
 								IEEExploreFetch(keywordJTextField.getText());
 								
 							}
@@ -248,7 +249,7 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = false;
+					DBSAApplication.dbsaJFrame.dispose();
 					
 				}
 				
@@ -275,12 +276,12 @@ public class FetcherPanel extends JPanel {
 		return ieeeploreJProgressBar;
 	}
 
-	public static void setIeeeProgressBar(int value){
-		ieeeProgressPer = value;
+	public void setIeeeProgressBar(int value){
+		ieeeploreJProgressBar.setValue(value);
 	}
 	
-	public static int getIeeeProgressBar(){
-		return ieeeProgressPer;
+	public int getIeeeProgressBar(){
+		return ieeeploreJProgressBar.getValue();
 	}
 	private JProgressBar getCiteseerJProgressBar() {
 		if (citeseerJProgressBar == null) {
@@ -404,7 +405,6 @@ public class FetcherPanel extends JPanel {
 	private JCheckBox getFetchFromACMCheckBox() {
 		if (fetchFromACMCheckBox == null) {
 			fetchFromACMCheckBox = new JCheckBox();
-			fetchFromACMCheckBox.setSelected(true);
 			fetchFromACMCheckBox.setText("Fetch from ACM digital library");
 		}
 		return fetchFromACMCheckBox;

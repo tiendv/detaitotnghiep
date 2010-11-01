@@ -177,7 +177,7 @@ public class IEEEXploreFetcher {
 	            	break;
 	            }
 	            
-	            FetcherPanel.setIeeeProgressBar(entryNumber/fetcherNumber*100);
+	            //FetcherPanel.setIeeeProgressBar(entryNumber/fetcherNumber*100);
 	            //FetcherPanel.PROPER
 	        }   
     }
@@ -305,7 +305,7 @@ public class IEEEXploreFetcher {
     * @return
     */
     static int number = 0;
-    @SuppressWarnings("static-access")
+
 	private static BibtexEntry parseNextEntry(String allText, int startIndex) {
         BibtexEntry entry = null;
         
@@ -430,7 +430,8 @@ public class IEEEXploreFetcher {
 			resultFetch.setPublisher(entry.getField("publisher"));
 			
 			resultFetch.getResultsJTable();
-			
+			//resultFetch.getResultsJScrollPane();
+			//resultFetch.updateTable();
             return entry;
         }
     }

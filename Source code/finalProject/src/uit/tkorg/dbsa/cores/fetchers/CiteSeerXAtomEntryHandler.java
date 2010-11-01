@@ -1,7 +1,5 @@
 package uit.tkorg.dbsa.cores.fetchers;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +10,7 @@ import net.sf.jabref.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
 
 /**
  * parse atom XML file to Bibtex Entry
@@ -30,7 +29,7 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
     
     boolean nextAssign = false;
 
-    
+
     
     public CiteSeerXAtomEntryHandler(List<BibtexEntry> entries){
     	if(entries == null){
@@ -66,6 +65,7 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
+		System.out.println(qName + "   ");
 		if (qName.equals("title")) {
             nextField = "title";
             nextValue = "";
@@ -98,20 +98,22 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
         }
 		
 	}
-    
+
 	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		if (nextAssign) {
 			if (qName.equals("title")) {
-				entry.setField("title", nextValue);
+				entry.setField("title", nextValue);				
 			} else if (qName.equals("name")) {
-				entry.setField("author", nextValue);
+				entry.setField("author", nextValue);				
 			} else if (qName.equals("summary")) {
 				entry.setField("abstract", nextValue);
 			}
+			
 			nextAssign = false;
 		}
+		
 
 	}
 

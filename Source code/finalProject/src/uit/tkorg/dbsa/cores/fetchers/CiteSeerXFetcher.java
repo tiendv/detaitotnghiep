@@ -18,16 +18,21 @@ import net.sf.jabref.BibtexEntry;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+/**
+ * @author Tiger
+ * @modify tiendv
+ *
+ */
 public class CiteSeerXFetcher {
 	
 	private static boolean shouldContinue = false;
 	public static final String baseURL="http://citeseerx.ist.psu.edu/search?q=";
 	
-	/**
-	 * @author Tiger
-	 * @modify tiendv
-	 *
-	 */
+    private static FetcherResultPanel resultFetch = new FetcherResultPanel();
+    
+	
 	
 	 /* search title, author ,table
 	 * doc
@@ -52,13 +57,14 @@ public class CiteSeerXFetcher {
 	protected SAXParserFactory parserFactory;
 	protected SAXParser saxParser;
 	
+	@SuppressWarnings("static-access")
 	public boolean processQuery(String keyword/*, String type, String feedType*/){
 		
-			//replace all white-space to '+'
-			keyword = keyword.replaceAll("\\s", "+");
+		//replace all white-space to '+'
+		keyword = keyword.replaceAll("\\s", "+");
 				
 		String queryString = baseURL+keyword+feedAction+feedAtom+"&sort=rel";
-		
+		System.out.println(queryString);
 		List<BibtexEntry> entries = new ArrayList<BibtexEntry>();
 		
 		try {
@@ -67,17 +73,32 @@ public class CiteSeerXFetcher {
 			InputStream inputStream = citeseerConnection.getInputStream();
 			
 			DefaultHandler handlerBase = new CiteSeerXAtomEntryHandler(entries);
-
+			
             if (saxParser == null)
             	saxParser = SAXParserFactory.newInstance().newSAXParser();
-            	saxParser.parse(inputStream, handlerBase);
-            	
+        
+            saxParser.parse(inputStream, handlerBase);
+            
+            int checkResult = 0;
             for(BibtexEntry entry : entries){
-            	
+            	checkResult++;
+            	if(checkResult > FetcherPanel.getCiteResultNumber()){
+            		break;
+            	}
             	Set<String> fields = entry.getAllFields();
             	for(String f:fields){
             		System.out.println(f+":"+entry.getField(f));
-            	}
+            	}	
+            		resultFetch.setRowNumber(1);
+            		resultFetch.setTitle(entry.getField("title"));
+            		resultFetch.setAuthor(entry.getField("author"));
+            		resultFetch.setYear(entry.getField("year"));
+            		resultFetch.setAbstract(entry.getField("abstract"));
+            		
+            		resultFetch.getResultsJTable();
+            		
+            	System.out.println(entry.getAuthorTitleYear(0));
+            		
             	System.out.println();
             }
             
