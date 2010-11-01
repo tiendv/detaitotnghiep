@@ -95,23 +95,6 @@ public class ACMFetcher {
             firstEntry += perPage;
          
         }
-        
-//		FileOutputStream fileOutput;
-//		DataOutputStream dataOutput;
-//		File file = new File("C:\\abc.txt");
-//		try {
-//			fileOutput = new FileOutputStream(file);
-//			dataOutput =  new DataOutputStream(fileOutput);
-//			try {
-//				dataOutput.writeChars(page);
-//			} catch (IOException e) {
-//				
-//				e.printStackTrace();
-//			}
-//		} catch (FileNotFoundException e) {
-//		
-//			e.printStackTrace();
-//		}
 	}
 	
 	/*

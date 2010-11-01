@@ -1,11 +1,14 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,6 +24,8 @@ import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
+
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherResultPanel extends JPanel {
@@ -48,6 +53,7 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane jScrollPane4;
 	private JTextArea publisherJTextArea;
 	private JScrollPane jScrollPane5;
+	private int rowNumberSelected = 0;
 	
 	private static int rowNumber = 0;
 	private static String title = "";
@@ -200,11 +206,11 @@ public class FetcherResultPanel extends JPanel {
 		return authorsJLabel;
 	}
 
-	public static void setDefaultTableModel(DefaultTableModel value){
+	public void setDefaultTableModel(DefaultTableModel value){
 		model = value;
 	}
 	
-	public static DefaultTableModel getDefaultTableModel(){
+	public DefaultTableModel getDefaultTableModel(){
 		return model;
 	}
 	
@@ -223,7 +229,7 @@ public class FetcherResultPanel extends JPanel {
 			};
 			
 			resultsJTable = new JTable();
-			setDefaultTableModel(model);
+			setDefaultTableModel(getDefaultTableModel());
 			resultsJTable.setModel(getDefaultTableModel());
 			
 			//Sap xep noi dung cac dong trong table theo thu tu alpha B.
@@ -258,16 +264,23 @@ public class FetcherResultPanel extends JPanel {
 			}
 			
 		}else if(resultsJTable != null){
-
-			resultsJTable = new JTable();
-			resultsJTable.setModel(model);
-		
 			
+			resultsJTable.removeAll();
+			
+			resultsJTable = new JTable();
+			System.out.println("Jtable is created!");
+			setDefaultTableModel(getDefaultTableModel());
+			resultsJTable.setModel(getDefaultTableModel());
+			
+			//Object []data = {1, "123", "author", "1988", "abstract", "publisher", true};
+			//model.insertRow(1, data);
 			for(int i = 0; i < getRowNumber(); i++){
 				
 				if((i + 1) == getRowNumber()){
-
-					insertData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark());
+					//insertData(resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark());
+					Object [] data = {resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
+			
+					model.insertRow(resultsJTable.getRowCount(), data );
 				}
 				
 			}
@@ -276,12 +289,20 @@ public class FetcherResultPanel extends JPanel {
 			
 		resultsJTable.addMouseListener(new MouseAdapter() {			
 			public void mouseClicked(MouseEvent event) {
-				resultJTableMouseMouseClicked(event);
+				resultJTableMouseClicked(event);
 			}
 		});
 		
 		
 		return resultsJTable;
+	}
+	
+	public void updateTable(){
+		resultsJTable = new JTable();
+		resultsJTable.setModel(getDefaultTableModel());
+		Object []data = {1, "123", "author", "1988", "abstract", "publisher", true};
+		model.insertRow(1, data);
+		getResultsJScrollPane();
 	}
 	
 	private void insertData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
@@ -319,7 +340,7 @@ public class FetcherResultPanel extends JPanel {
 	
 	
 	public  Object [] addTableData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
-		Object [] dataRow =  {rowNumber, getTitle(), author, year, abstracts, publisher, isMark};
+		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 		
 		return dataRow;
 	}
@@ -363,6 +384,15 @@ public class FetcherResultPanel extends JPanel {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
 			closeJButton.setText("Close");
+			closeJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					DBSAApplication.dbsaJFrame.dispose();
+				}
+				
+			});
 		}
 		return closeJButton;
 	}
@@ -379,7 +409,7 @@ public class FetcherResultPanel extends JPanel {
 		return actionsJPanel;
 	}
 
-	private JScrollPane getResultsJScrollPane() {
+	public JScrollPane getResultsJScrollPane() {
 		if (resultsJScrollPane == null) {
 			resultsJScrollPane = new JScrollPane();
 			resultsJScrollPane.setBorder(BorderFactory.createTitledBorder("Results list"));
@@ -388,20 +418,22 @@ public class FetcherResultPanel extends JPanel {
 		return resultsJScrollPane;
 	}
 
-	private  void resultJTableMouseMouseClicked(MouseEvent event) {
+	private  void resultJTableMouseClicked(MouseEvent event) {
 		/*
-		 * get row number is select
+		 * get row number is selected
 		 */
 		
-		int rowNumber = resultsJTable.getSelectedRow();
-		System.out.println( "row number " + rowNumber + resultsJTable.getRowCount());
+		rowNumberSelected  = resultsJTable.getSelectedRow();
+		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
 		
-		if(rowNumber >= 0){
-			titleJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 1).toString());
-			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 2).toString());
-			yearJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 3).toString());
-			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 4).toString());
-			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumber, 5).toString());
+		if(rowNumberSelected >= 0){
+			titleJTextArea.setText(resultsJTable.getModel().getValueAt(4, 1).toString());
+			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 2).toString());
+			yearJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 3).toString());
+			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 4).toString());
+			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 5).toString());
+		}else if(rowNumberSelected == -1){
+			JOptionPane.showMessageDialog(null, "No row is selected!");
 		}
 	}
 	
@@ -410,23 +442,23 @@ public class FetcherResultPanel extends JPanel {
 	 * set & get paper bibliography 
 	 */
 	
-	public static void setRowNumber(int number){
+	public  void setRowNumber(int number){
 		rowNumber = number;
 	}
 	
-	public  static int getRowNumber(){
+	public   int getRowNumber(){
 		return rowNumber;
 	}
 	
-	public static void setTitle(String titleString){
+	public  void setTitle(String titleString){
 		title = titleString;
 	}
 
-	public  static String getTitle(){
+	public   String getTitle(){
 		return title;
 	}
 	
-	public static void setAuthor(String authorString){
+	public  void setAuthor(String authorString){
 		author = authorString;
 	}
 
@@ -434,35 +466,35 @@ public class FetcherResultPanel extends JPanel {
 		return author;
 	}
 	
-	public static void setYear(String yearString){
+	public  void setYear(String yearString){
 		year = yearString;
 	}
 
-	public static String getYear(){
+	public  String getYear(){
 		return year;
 	}
 	
-	public static void setAbstract(String abstractString){
+	public  void setAbstract(String abstractString){
 		abstracts = abstractString;
 	}
 
-	public static String getAbstract(){
+	public  String getAbstract(){
 		return abstracts;
 	}
 	
-	public static void setPublisher(String publisherString){
+	public  void setPublisher(String publisherString){
 		publisher = publisherString;
 	}
 
-	public static String getPublisher(){
+	public  String getPublisher(){
 		return publisher;
 	}
 	
-	public static void setMark(boolean isMark){
+	public  void setMark(boolean isMark){
 		mark = isMark;
 	}
 	
-	public static boolean getMark(){
+	public  boolean getMark(){
 		return mark;
 	}
 }
