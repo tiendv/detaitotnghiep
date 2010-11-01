@@ -52,6 +52,7 @@ public class CiteSeerXFetcher {
 	public static final String feedRss = "rss"; 
 	public static final String feedAtom = "atom";
 	public static final String feedAction="&feed=";
+	public int i =0;
 	
 	
 	protected SAXParserFactory parserFactory;
@@ -64,7 +65,6 @@ public class CiteSeerXFetcher {
 		keyword = keyword.replaceAll("\\s", "+");
 				
 		String queryString = baseURL+keyword+feedAction+feedAtom+"&sort=rel";
-		System.out.println(queryString);
 		List<BibtexEntry> entries = new ArrayList<BibtexEntry>();
 		
 		try {
@@ -81,6 +81,7 @@ public class CiteSeerXFetcher {
             
             int checkResult = 0;
             for(BibtexEntry entry : entries){
+
             	checkResult++;
             	if(checkResult > FetcherPanel.getCiteResultNumber()){
             		break;
