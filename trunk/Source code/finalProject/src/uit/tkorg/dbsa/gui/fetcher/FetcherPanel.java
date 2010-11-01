@@ -5,6 +5,8 @@ package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -70,7 +72,6 @@ public class FetcherPanel extends JPanel {
 	private boolean fetcherBoolean = false;
 	
 	private static int acmProgressPer = 0;
-	private static int ieeeProgressPer = 0;
 	
 	public FetcherPanel() {
 		initComponents();
@@ -124,6 +125,7 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					fetcherJButton.setEnabled(false);
 					
 					if(getAcmProgressBar() != 0){
 					//	setAcmProgressBar(0);
@@ -138,24 +140,27 @@ public class FetcherPanel extends JPanel {
 								fetcherBoolean = true;
 								uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
 								setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
-								acmJProgressBar.setValue(getAcmProgressBar());
+								acmJProgressBar.setIndeterminate(true);
 								ACMFetcher(keywordJTextField.getText());
 							}
+							//acmJProgressBar.setIndeterminate(false);
 							
 							if(ieeexploreDLCheckBox.isSelected() == true){
 								fetcherBoolean = true;
-								
 								setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
-								ieeeploreJProgressBar.setValue(ieeeploreJProgressBar.getValue());
+								ieeeploreJProgressBar.setIndeterminate(true);
 								IEEExploreFetch(keywordJTextField.getText());
 								
 							}
+							ieeeploreJProgressBar.setIndeterminate(false);
+							
 							if(citeseerDLCheckBox.isSelected() == true){
 								fetcherBoolean = true;
 								setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
-								citeseerJProgressBar.setValue(10);
+								citeseerJProgressBar.setIndeterminate(true);
 								CiteSeeXFetcher(keywordJTextField.getText());
 							}
+							citeseerJProgressBar.setIndeterminate(false);
 							
 							if(!fetcherBoolean){
 								JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
@@ -216,6 +221,7 @@ public class FetcherPanel extends JPanel {
 	private void ACMFetcher(String keyword) throws IOException{
 		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
 	}
+
 	private void IEEEXploreFethcer( String keyword) throws IOException {
 		uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction.Fetcher(keyword);
 		
@@ -271,7 +277,8 @@ public class FetcherPanel extends JPanel {
 		if (ieeeploreJProgressBar == null) {
 			ieeeploreJProgressBar = new JProgressBar();
 			ieeeploreJProgressBar.setValue(0);
-			ieeeploreJProgressBar.setStringPainted(true);
+			//ieeeploreJProgressBar.setStringPainted(true);
+			//ieeeploreJProgressBar.setIndeterminate(true);
 		}
 		return ieeeploreJProgressBar;
 	}
@@ -287,7 +294,7 @@ public class FetcherPanel extends JPanel {
 		if (citeseerJProgressBar == null) {
 			citeseerJProgressBar = new JProgressBar();
 			citeseerJProgressBar.setValue(0);
-			citeseerJProgressBar.setStringPainted(true);
+			//citeseerJProgressBar.setStringPainted(true);
 		}
 		return citeseerJProgressBar;
 	}
@@ -296,7 +303,7 @@ public class FetcherPanel extends JPanel {
 		if (acmJProgressBar == null) {
 			acmJProgressBar = new JProgressBar(0, 100);
 			acmJProgressBar.setValue(0);
-			acmJProgressBar.setStringPainted(true);
+			//acmJProgressBar.setStringPainted(true);
 		}
 		return acmJProgressBar;
 	}
@@ -435,7 +442,12 @@ public class FetcherPanel extends JPanel {
 		if (keywordJTextField == null) {
 			keywordJTextField = new JTextField();
 			keywordJTextField.setToolTipText("Nguyeen van a");
-			setTooltip(getToolTipText());
+			keywordJTextField.addMouseListener(new MouseAdapter() {
+	
+				public void mousePressed(MouseEvent event) {
+					keywordJTextFieldMouseMousePressed(event);
+				}
+			});
 		}
 		return keywordJTextField;
 	}
@@ -490,6 +502,10 @@ public class FetcherPanel extends JPanel {
 	 */
 	public static int getCiteResultNumber() {
 		return citeResultNumber;
+	}
+
+	private void keywordJTextFieldMouseMousePressed(MouseEvent event) {
+		fetcherJButton.setEnabled(true);
 	}
 	
 	
