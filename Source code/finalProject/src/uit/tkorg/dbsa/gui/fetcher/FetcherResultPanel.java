@@ -218,7 +218,7 @@ public class FetcherResultPanel extends JPanel {
 		
 		if (resultsJTable == null) {
 			
-		
+			System.out.println(" resultsJTable  = null \n");
 			model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
 			private static final long serialVersionUID = 1L;
 				Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class, String.class, String.class, Boolean.class, };
@@ -268,7 +268,7 @@ public class FetcherResultPanel extends JPanel {
 			resultsJTable.removeAll();
 			
 			resultsJTable = new JTable();
-			System.out.println("Jtable is created!");
+			System.out.println("resultsJTable != null\n");
 			setDefaultTableModel(getDefaultTableModel());
 			resultsJTable.setModel(getDefaultTableModel());
 			
@@ -281,10 +281,8 @@ public class FetcherResultPanel extends JPanel {
 					Object [] data = {resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 			
 					model.insertRow(resultsJTable.getRowCount(), data );
-				}
-				
-			}
-			
+				}				
+			}			
 		}
 			
 		resultsJTable.addMouseListener(new MouseAdapter() {			

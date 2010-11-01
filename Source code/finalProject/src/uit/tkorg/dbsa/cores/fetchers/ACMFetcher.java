@@ -300,7 +300,7 @@ public class ACMFetcher {
 			
 			System.out.println("url = " + url);
 			
-			Thread.sleep(1000); //wait between requests or you will be blocked by ACM
+			Thread.sleep(10000); //wait between requests or you will be blocked by ACM
 			
 			Matcher bibtexAddr = bibPattern.matcher(page);
 			
