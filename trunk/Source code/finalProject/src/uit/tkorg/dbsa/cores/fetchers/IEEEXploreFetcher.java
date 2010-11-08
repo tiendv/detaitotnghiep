@@ -58,13 +58,15 @@ public class IEEEXploreFetcher {
     static Pattern proceedingPattern = Pattern.compile("(.*?)\\.?\\s?Proceedings\\s?(.*)");
     Pattern abstractLinkPattern = Pattern.compile("<a href=\"(.+)\" class=\"bodyCopySpaced\">Abstract</a>");
     static String abrvPattern = ".*[^,] '?\\d+\\)?";
-	private static FetcherResultPanel resultFetch = new FetcherResultPanel();
+	
+    private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
+    
     Pattern ieeeArticleNumberPattern = Pattern.compile("<a href=\".*arnumber=(\\d+).*\">");
     
     
     public IEEEXploreFetcher() {
-    	super();
-        }
+    	super();    
+   }
     
     public static void processQuery(String query){
         terms = query;
@@ -168,14 +170,15 @@ public class IEEEXploreFetcher {
         int entryNumber = firstEntryNumber;
 
 	    while ( shouldContinue) {
-
-	            parseNextEntry(text, piv);
+	    	if (entryNumber >= fetcherNumber) {
+				shouldContinue = false;
+				break;
+			}
+	    	if(shouldContinue){
+	    		parseNextEntry(text, piv);
 	            entryNumber++;
-	            
-	            if(entryNumber >= fetcherNumber){
-	            	shouldContinue = false;
-	            	break;
-	            }
+	    	}
+         
 	            
 	            //FetcherPanel.setIeeeProgressBar(entryNumber/fetcherNumber*100);
 	            //FetcherPanel.PROPER
@@ -430,8 +433,7 @@ public class IEEEXploreFetcher {
 			resultFetch.setPublisher(entry.getField("publisher"));
 			
 			resultFetch.getResultsJTable();
-			//resultFetch.getResultsJScrollPane();
-			//resultFetch.updateTable();
+			
             return entry;
         }
     }
