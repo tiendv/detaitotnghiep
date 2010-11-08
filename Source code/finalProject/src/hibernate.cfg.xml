@@ -15,8 +15,6 @@
       <property name="hibernate.hbm2ddl.auto">update</property>
       <!-- Mapping files -->
       <mapping resource="uit/tkorg/dbsa/model/Publication.hbm.xml"/>
-      <mapping resource="uit/tkorg/dbsa/model/Author.hbm.xml"/>
-      <mapping resource="uit/tkorg/dbsa/model/DBSAPublication.hbm.xml"/>
-      <mapping resource="uit/tkorg/dbsa/model/Subject.hbm.xml"/>     
+      <mapping resource="uit/tkorg/dbsa/model/Author.hbm.xml"/>   
 </session-factory>
 </hibernate-configuration>
