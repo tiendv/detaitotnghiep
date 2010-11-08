@@ -8,6 +8,6 @@
      </composite-id> 
     <property column="editor" name="editor" type="boolean"/>
     <property column="author_num" name="authorNum" type="integer"/>
-    <many-to-one class="Publication" column="pub_id" insert="true" name="publications" update="true"/>
+    <many-to-one class="Publication" column="pub_id" insert="false" name="publications" update="false"/>
   </class>
 </hibernate-mapping>
