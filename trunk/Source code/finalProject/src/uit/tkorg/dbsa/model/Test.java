@@ -20,21 +20,21 @@ public class Test {
         Session session = sessionFactory.openSession();
 
         //get Publication with ID = 1
-        Publication a = (Publication) session.load(Publication.class, 1);
+        Publication a = (Publication) session.load(Publication.class, 500);
         System.out.println(a.getTitle());
-        for (int i = 0; i < a.getAuthors().size(); i++) {
+      /*  for (int i = 0; i < a.getAuthors().size(); i++) {
             Author temp = (Author) a.getAuthors().get(i);
             System.out.println("Author -------------");
             System.out.println("Name: " + temp.getAuthor());
             System.out.println("--------------------------");
-        }
+        }*/
     	}catch (Exception e) {
     		System.out.printf(e.getMessage());// TODO: handle exception
 		}
     	
     }
 
-   /* public static void test2() {
+  public static void test2() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         // get author with name = Philip K. Chan
@@ -64,5 +64,5 @@ public class Test {
             Publication object = a.getRefPubs().get(i);
             System.out.println("ref: " + object.getTitle());
         }
-    }*/
+    }
 }

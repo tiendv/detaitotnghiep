@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="uit.tkorg.dbsa.model">
-    <class name="Publication" table="dbsa_pub">
+    <class name="DBSAPublication" table="dbsa_pub">
         <id column="id" name="id" type="integer">
             <generator class="native"/>
         </id>
 		<property column="sbj_id" name="sbj_id" type="int"/>
         <property column="title" name="title" type="string"/>
-        <property column="abstract" name="abstract" type="string"/>
+        <property column="abstract" name="abstractPub" type="string"/>
         <property column="year" name="year" type="integer"/>
 		<property column="publisher" name="publisher" type="string"/>
 		<property column="authors" name="authors" type="string"/>
