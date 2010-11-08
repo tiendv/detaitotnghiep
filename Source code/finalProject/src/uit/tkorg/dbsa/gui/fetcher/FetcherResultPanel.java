@@ -64,9 +64,12 @@ public class FetcherResultPanel extends JPanel {
 	private static boolean mark = false;
 	
 	private static DefaultTableModel model;
-	
+	int temp = 1;
 	public FetcherResultPanel() {
-		initComponents();
+		if(temp == 1){
+			initComponents();
+			temp ++;
+		}
 	}
 
 	public FetcherResultPanel(int i){
@@ -109,7 +112,6 @@ public class FetcherResultPanel extends JPanel {
 		if (jScrollPane4 == null) {
 			jScrollPane4 = new JScrollPane();
 			jScrollPane4.setViewportView(getAbstractJTextArea());
-			//jScrollPane4.setAutoscrolls(false);
 			
 		}
 		return jScrollPane4;
@@ -118,8 +120,6 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getAbstractJTextArea() {
 		if (abstractJTextArea == null) {
 			abstractJTextArea = new JTextArea();
-			//abstractJTextArea.setAutoscrolls(false);
-			abstractJTextArea.setCaretPosition(abstractJTextArea.getText().length());
 		}
 		return abstractJTextArea;
 	}
@@ -269,6 +269,7 @@ public class FetcherResultPanel extends JPanel {
 		
 		return table;
 	}
+	
 	/*
 	 * ham lay gia tri cho table
 	 * @return JTable
@@ -278,12 +279,9 @@ public class FetcherResultPanel extends JPanel {
 		
 		if (resultsJTable == null) {
 			
-			resultsJTable = createResultJTable();
-			
-		}else if(resultsJTable != null){
-			
-			for(int i = 0; i < getRowNumber(); i++){
-				
+			resultsJTable = createResultJTable();			
+		}else if(resultsJTable != null){			
+			for(int i = 0; i < getRowNumber(); i++){				
 				if((i + 1) == getRowNumber()){
 					//
 					if(resultsJTable.getRowCount() == 1 && checkRemovedFirst == false){
@@ -292,8 +290,7 @@ public class FetcherResultPanel extends JPanel {
 					}else{
 						Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 						model.insertRow(resultsJTable.getRowCount(), data );
-					}
-					
+					}			
 				}				
 			}	
 			
@@ -309,6 +306,13 @@ public class FetcherResultPanel extends JPanel {
 			}
 		});
 		
+//		if(resultsJTable.getRowCount() > 0){
+//			titleJTextArea.setText(resultsJTable.getModel().getValueAt(0, 1).toString());
+//			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(0, 2).toString());
+//			yearJTextArea.setText(resultsJTable.getModel().getValueAt(0, 3).toString());
+//			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(0, 4).toString());
+//			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(0, 5).toString());		
+//		}
 		
 		return resultsJTable;
 	}
@@ -379,8 +383,28 @@ public class FetcherResultPanel extends JPanel {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
 			deleteJButton.setText("Delete");
+			deleteJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					removeRowsIsSelected();
+				}
+				
+			});
 		}
 		return deleteJButton;
+	}
+
+	private void removeRowsIsSelected() {
+		// TODO Auto-generated method stub
+		for(int i = resultsJTable.getRowCount()-1; i >= 0; i--){
+			
+			if(resultsJTable.getModel().getValueAt(i, 6).toString().equals("true")){
+				System.out.println(resultsJTable.getModel().getValueAt(i, 6).toString());
+				model.removeRow(i);
+			}
+		}
 	}
 
 	private JButton getCloseJButton() {

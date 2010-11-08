@@ -430,8 +430,10 @@ public class IEEEXploreFetcher {
 			resultFetch.setAuthor(entry.getField("author"));
 			resultFetch.setYear(entry.getField("year"));
 			resultFetch.setAbstract(entry.getField("abstract"));
-			resultFetch.setPublisher(entry.getField("publisher"));
-			
+			if(entry.getField("publisher") != null)
+				resultFetch.setPublisher(entry.getField("publisher"));
+			else
+				resultFetch.setPublisher("IEEE");
 			resultFetch.getResultsJTable();
 			
             return entry;
