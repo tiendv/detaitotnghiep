@@ -16,5 +16,54 @@ public class DBSAPublication {
 	private String publisher;
 	private String author;
 	private String links;
-
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getSbj_id() {
+		return sbj_id;
+	}
+	public void setSbj_id(int sbj_id) {
+		this.sbj_id = sbj_id;
+	}
+	public String getAbstractPub() {
+		return abstractPub;
+	}
+	public void setAbstractPub(String abstractPub) {
+		this.abstractPub = abstractPub;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	public String getPublisher() {
+		return publisher;
+	}
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getLinks() {
+		return links;
+	}
+	public void setLinks(String links) {
+		this.links = links;
+	}
 }
+
