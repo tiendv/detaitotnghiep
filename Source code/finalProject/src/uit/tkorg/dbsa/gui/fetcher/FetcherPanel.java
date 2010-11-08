@@ -3,6 +3,8 @@ package uit.tkorg.dbsa.gui.fetcher;
  *@author CuongNP 
  */
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -21,6 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -143,11 +148,16 @@ public class FetcherPanel extends JPanel {
 								acmJProgressBar.setIndeterminate(true);
 								ACMFetcher(keywordJTextField.getText());
 							}
-							//acmJProgressBar.setIndeterminate(false);
+							acmJProgressBar.setIndeterminate(false);
 							
 							if(ieeexploreDLCheckBox.isSelected() == true){
 								fetcherBoolean = true;
+								System.out.println(ieeexploreJSpinner1.getValue().toString());
+								
+								
+
 								setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
+								
 								ieeeploreJProgressBar.setIndeterminate(true);
 								IEEExploreFetch(keywordJTextField.getText());
 								
@@ -158,7 +168,8 @@ public class FetcherPanel extends JPanel {
 								fetcherBoolean = true;
 								setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
 								citeseerJProgressBar.setIndeterminate(true);
-								CiteSeeXFetcher(keywordJTextField.getText());
+							
+								CiteSeeXFetcher(keywordJTextField.getText());								
 							}
 							citeseerJProgressBar.setIndeterminate(false);
 							
@@ -230,6 +241,7 @@ public class FetcherPanel extends JPanel {
 		uit.tkorg.dbsa.actions.fetchers.JSTORFetcherAction.Fetcher(keyword);
 	}
 	private void CiteSeeXFetcher ( String keyword) {
+		
 		uit.tkorg.dbsa.actions.fetchers.CiteSeerXFetcherAction.Fetcher(keyword);
 	}
 
@@ -319,8 +331,23 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getScienceDirectJSpinner() {
 		if (scienceDirectJSpinner == null) {
 			scienceDirectJSpinner = new JSpinner();
-			scienceDirectJSpinner.setModel(new SpinnerNumberModel(1, 1, 20, 1));
+			scienceDirectJSpinner.setModel(new SpinnerNumberModel(1, null, null, 1));
 			scienceDirectJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			scienceDirectJSpinner.addChangeListener(new ChangeListener(){
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if(Integer.parseInt(scienceDirectJSpinner.getValue().toString()) < 1){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						scienceDirectJSpinner.setValue(1);
+					}else if(Integer.parseInt(scienceDirectJSpinner.getValue().toString()) > 50){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						scienceDirectJSpinner.setValue(50);
+					}
+					
+				}
+				
+			});
 		}
 		return scienceDirectJSpinner;
 	}
@@ -336,7 +363,8 @@ public class FetcherPanel extends JPanel {
 	private JPanel getChooseJPanel() {
 		if (chooseJPanel == null) {
 			chooseJPanel = new JPanel();
-			chooseJPanel.setBorder(BorderFactory.createTitledBorder("Choose DLs"));
+			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, "Choose DLs", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			chooseJPanel.setLayout(new GroupLayout());
 			chooseJPanel.add(getIeeexploreDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(67, 8, 8)));
 			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(101, 8, 8)));
@@ -346,13 +374,13 @@ public class FetcherPanel extends JPanel {
 			chooseJPanel.add(getMaxResultLabel(), new Constraints(new Leading(286, 67, 10, 10), new Leading(3, 24, 12, 12)));
 			chooseJPanel.add(getAcmJSpinner(), new Constraints(new Leading(293, 43, 10, 10), new Leading(38, 22, 12, 12)));
 			chooseJPanel.add(getIeeexploreJSpinner1(), new Constraints(new Leading(293, 43, 12, 12), new Leading(72, 12, 12)));
-			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(293, 12, 12), new Leading(104, 22, 12, 12)));
-			chooseJPanel.add(getScienceDirectJSpinner(), new Constraints(new Leading(293, 12, 12), new Leading(138, 22, 12, 12)));
 			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Leading(366, 106, 10, 10), new Leading(7, 12, 12)));
 			chooseJPanel.add(getCiteseerJProgressBar(), new Constraints(new Bilateral(347, 12, 10), new Leading(104, 23, 12, 12)));
 			chooseJPanel.add(getScienceDirectJProgressBar(), new Constraints(new Bilateral(347, 12, 10), new Leading(138, 23, 12, 12)));
 			chooseJPanel.add(getIeeeploreJProgressBar(), new Constraints(new Bilateral(348, 12, 10), new Leading(71, 22, 12, 12)));
 			chooseJPanel.add(getAcmJProgressBar(), new Constraints(new Bilateral(348, 13, 250), new Leading(38, 22, 12, 12)));
+			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(293, 42, 28, 166), new Leading(104, 22, 12, 12)));
+			chooseJPanel.add(getScienceDirectJSpinner(), new Constraints(new Leading(293, 42, 28, 166), new Leading(138, 22, 12, 12)));
 		}
 		return chooseJPanel;
 	}
@@ -360,8 +388,22 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getCiteseerJSpinner2() {
 		if (citeseerJSpinner2 == null) {
 			citeseerJSpinner2 = new JSpinner();
-			citeseerJSpinner2.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			citeseerJSpinner2.setModel(new SpinnerNumberModel(1, null, null, 1));
 			citeseerJSpinner2.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			citeseerJSpinner2.addChangeListener(new ChangeListener(){
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if(Integer.parseInt(citeseerJSpinner2.getValue().toString()) < 1){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						citeseerJSpinner2.setValue(1);
+					}else if(Integer.parseInt(citeseerJSpinner2.getValue().toString()) > 50){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						citeseerJSpinner2.setValue(50);
+					}
+				}
+				
+			});
 		}
 		return citeseerJSpinner2;
 	}
@@ -377,8 +419,24 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getIeeexploreJSpinner1() {
 		if (ieeexploreJSpinner1 == null) {
 			ieeexploreJSpinner1 = new JSpinner();
-			ieeexploreJSpinner1.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			ieeexploreJSpinner1.setModel(new SpinnerNumberModel(1, null, null, 1));
 			ieeexploreJSpinner1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			
+			ieeexploreJSpinner1.addChangeListener(new ChangeListener(){
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) < 1){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						ieeexploreJSpinner1.setValue(1);
+					}else if(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) > 50){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						ieeexploreJSpinner1.setValue(50);
+					}
+					
+				}
+				
+			});
 		}
 		return ieeexploreJSpinner1;
 	}
@@ -386,8 +444,24 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getAcmJSpinner() {
 		if (acmJSpinner == null) {
 			acmJSpinner = new JSpinner();
-			acmJSpinner.setModel(new SpinnerNumberModel(1, 1, 50, 1));
+			acmJSpinner.setModel(new SpinnerNumberModel(1, null, null, 1));
 			acmJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			
+			acmJSpinner.addChangeListener(new ChangeListener(){
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if(Integer.parseInt(acmJSpinner.getValue().toString()) < 1){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						acmJSpinner.setValue(1);
+					}else if(Integer.parseInt(acmJSpinner.getValue().toString()) > 50){
+						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						acmJSpinner.setValue(50);
+					}
+					
+				}
+				
+			});
 		}
 		return acmJSpinner;
 	}

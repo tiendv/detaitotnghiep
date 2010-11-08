@@ -69,6 +69,10 @@ public class FetcherResultPanel extends JPanel {
 		initComponents();
 	}
 
+	public FetcherResultPanel(int i){
+		
+	}
+	
 	private void initComponents() {
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(3, 3, 313), new Trailing(3, 60, 10, 10)));
@@ -105,6 +109,8 @@ public class FetcherResultPanel extends JPanel {
 		if (jScrollPane4 == null) {
 			jScrollPane4 = new JScrollPane();
 			jScrollPane4.setViewportView(getAbstractJTextArea());
+			//jScrollPane4.setAutoscrolls(false);
+			
 		}
 		return jScrollPane4;
 	}
@@ -112,6 +118,8 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getAbstractJTextArea() {
 		if (abstractJTextArea == null) {
 			abstractJTextArea = new JTextArea();
+			//abstractJTextArea.setAutoscrolls(false);
+			abstractJTextArea.setCaretPosition(abstractJTextArea.getText().length());
 		}
 		return abstractJTextArea;
 	}
@@ -213,99 +221,96 @@ public class FetcherResultPanel extends JPanel {
 	public DefaultTableModel getDefaultTableModel(){
 		return model;
 	}
-	
+	/*
+	 * Ham tao Jtable
+	 */
+	private JTable createResultJTable(){
+		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
+		private static final long serialVersionUID = 1L;
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class, String.class, String.class, Boolean.class, };
+
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+		};
+		
+		JTable table = new JTable(model);
+		
+		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
+		//Cho phep sap xep theo tu cot rieng biet
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+		table.setRowSorter(sorter);
+		
+		/*
+		 * Set width of table column 
+		 */
+		table.setShowGrid(true);
+		table.setShowVerticalLines(true);
+		table.setShowHorizontalLines(true);
+		
+		for(int i = 0; i < 6; i++){
+			TableColumn col = table.getColumnModel().getColumn(i);
+			if(i == 0){
+				col.setPreferredWidth(5);
+			}else if(i == 1){
+				col.setPreferredWidth(250);
+			}else if(i == 2){
+				col.setPreferredWidth(150);
+			}else if(i == 3){
+				col.setPreferredWidth(20);
+			}else if(i == 4){
+				col.setPreferredWidth(500);
+			}else if (i == 5){
+				col.setPreferredWidth(100);
+			}else{
+				col.setPreferredWidth(10);
+			}
+		}
+		
+		return table;
+	}
+	/*
+	 * ham lay gia tri cho table
+	 * @return JTable
+	 */
+	boolean checkRemovedFirst = false;
 	public JTable getResultsJTable() {
 		
 		if (resultsJTable == null) {
 			
-			System.out.println(" resultsJTable  = null \n");
-			model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
-			private static final long serialVersionUID = 1L;
-				Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class, String.class, String.class, Boolean.class, };
-	
-				public Class<?> getColumnClass(int columnIndex) {
-					return types[columnIndex];
-				}
-			};
-			
-			resultsJTable = new JTable();
-			setDefaultTableModel(getDefaultTableModel());
-			resultsJTable.setModel(getDefaultTableModel());
-			
-			//Sap xep noi dung cac dong trong table theo thu tu alpha B.
-			//Cho phep sap xep theo tu cot rieng biet
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(resultsJTable.getModel());
-			resultsJTable.setRowSorter(sorter);
-			
-			/*
-			 * Set width of table column 
-			 */
-			resultsJTable.setShowGrid(true);
-			resultsJTable.setShowVerticalLines(true);
-			resultsJTable.setShowHorizontalLines(true);
-			
-			for(int i = 0; i < 6; i++){
-				TableColumn col = resultsJTable.getColumnModel().getColumn(i);
-				if(i == 0){
-					col.setPreferredWidth(5);
-				}else if(i == 1){
-					col.setPreferredWidth(250);
-				}else if(i == 2){
-					col.setPreferredWidth(150);
-				}else if(i == 3){
-					col.setPreferredWidth(20);
-				}else if(i == 4){
-					col.setPreferredWidth(500);
-				}else if (i == 5){
-					col.setPreferredWidth(100);
-				}else{
-					col.setPreferredWidth(10);
-				}
-			}
+			resultsJTable = createResultJTable();
 			
 		}else if(resultsJTable != null){
 			
-			resultsJTable.removeAll();
-			
-			resultsJTable = new JTable();
-			System.out.println("resultsJTable != null\n");
-			setDefaultTableModel(getDefaultTableModel());
-			resultsJTable.setModel(getDefaultTableModel());
-			
-			//Object []data = {1, "123", "author", "1988", "abstract", "publisher", true};
-			//model.insertRow(1, data);
 			for(int i = 0; i < getRowNumber(); i++){
 				
 				if((i + 1) == getRowNumber()){
-					//insertData(resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark());
-					Object [] data = {resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
-			
-					model.insertRow(resultsJTable.getRowCount(), data );
+					//
+					if(resultsJTable.getRowCount() == 1 && checkRemovedFirst == false){
+						Object [] data = {resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
+						model.insertRow(resultsJTable.getRowCount(), data );
+					}else{
+						Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
+						model.insertRow(resultsJTable.getRowCount(), data );
+					}
+					
 				}				
-			}			
+			}	
+			
+			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
+				checkRemovedFirst =  true;
+				model.removeRow(0);
+			}
 		}
 			
 		resultsJTable.addMouseListener(new MouseAdapter() {			
-			public void mouseClicked(MouseEvent event) {
-				resultJTableMouseClicked(event);
+			public void mousePressed(MouseEvent event) {
+				resultJTableMousePressed(event);
 			}
 		});
 		
 		
 		return resultsJTable;
-	}
-	
-	public void updateTable(){
-		resultsJTable = new JTable();
-		resultsJTable.setModel(getDefaultTableModel());
-		Object []data = {1, "123", "author", "1988", "abstract", "publisher", true};
-		model.insertRow(1, data);
-		getResultsJScrollPane();
-	}
-	
-	private void insertData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
-		model.insertRow(rowNumber, addTableData(rowNumber ,title, author, year, abstracts, publisher, isMark));
-		
 	}
 	
 	/*
@@ -416,7 +421,7 @@ public class FetcherResultPanel extends JPanel {
 		return resultsJScrollPane;
 	}
 
-	private  void resultJTableMouseClicked(MouseEvent event) {
+	private  void resultJTableMousePressed(MouseEvent event) {
 		/*
 		 * get row number is selected
 		 */
@@ -425,7 +430,7 @@ public class FetcherResultPanel extends JPanel {
 		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
 		
 		if(rowNumberSelected >= 0){
-			titleJTextArea.setText(resultsJTable.getModel().getValueAt(4, 1).toString());
+			titleJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 1).toString());
 			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 2).toString());
 			yearJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 3).toString());
 			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 4).toString());

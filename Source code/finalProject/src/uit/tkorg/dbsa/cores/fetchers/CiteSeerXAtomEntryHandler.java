@@ -65,7 +65,7 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		System.out.println(qName + "   ");
+		
 		if (qName.equals("title")) {
             nextField = "title";
             nextValue = "";

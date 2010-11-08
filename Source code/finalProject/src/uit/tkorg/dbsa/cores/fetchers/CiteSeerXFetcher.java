@@ -27,10 +27,10 @@ import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
  */
 public class CiteSeerXFetcher {
 	
-	private static boolean shouldContinue = false;
+	private static boolean shouldContinue = true;
 	public static final String baseURL="http://citeseerx.ist.psu.edu/search?q=";
 	
-    private static FetcherResultPanel resultFetch = new FetcherResultPanel();
+    private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
     
 	
 	
@@ -57,10 +57,12 @@ public class CiteSeerXFetcher {
 	
 	protected SAXParserFactory parserFactory;
 	protected SAXParser saxParser;
-	
-	@SuppressWarnings("static-access")
-	public boolean processQuery(String keyword/*, String type, String feedType*/){
+	public CiteSeerXFetcher(){
 		
+	}
+	
+	public boolean processQuery(String keyword/*, String type, String feedType*/){
+	
 		//replace all white-space to '+'
 		keyword = keyword.replaceAll("\\s", "+");
 				
@@ -82,14 +84,21 @@ public class CiteSeerXFetcher {
             int checkResult = 0;
             for(BibtexEntry entry : entries){
 
-            	checkResult++;
-            	if(checkResult > FetcherPanel.getCiteResultNumber()){
+            	
+            	if(checkResult >= FetcherPanel.getCiteResultNumber()){
+            		shouldContinue = false;
             		break;
             	}
-            	Set<String> fields = entry.getAllFields();
-            	for(String f:fields){
-            		System.out.println(f+":"+entry.getField(f));
-            	}	
+            	
+            	checkResult++;
+            	if(shouldContinue == true || checkResult > FetcherPanel.getCiteResultNumber()){
+            		
+	            	
+	            	Set<String> fields = entry.getAllFields();
+	            	for(String f:fields){
+	            		System.out.println(f+":"+entry.getField(f));
+	            	}	
+	            	
             		resultFetch.setRowNumber(1);
             		resultFetch.setTitle(entry.getField("title"));
             		resultFetch.setAuthor(entry.getField("author"));
@@ -97,10 +106,7 @@ public class CiteSeerXFetcher {
             		resultFetch.setAbstract(entry.getField("abstract"));
             		
             		resultFetch.getResultsJTable();
-            		
-            	System.out.println(entry.getAuthorTitleYear(0));
-            		
-            	System.out.println();
+            	}
             }
             
 		} catch (MalformedURLException e) {

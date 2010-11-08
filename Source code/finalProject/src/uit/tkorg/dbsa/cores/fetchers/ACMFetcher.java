@@ -56,7 +56,7 @@ public class ACMFetcher {
 	//Bien cho phep lua chon tiep tuc tim kiem hay không
 	public static boolean shouldContinue = true;
 	
-	private static FetcherResultPanel resultFetch = new FetcherResultPanel();
+	private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
 	
 	public ACMFetcher(){
 		
