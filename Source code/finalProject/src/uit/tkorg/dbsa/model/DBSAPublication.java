@@ -14,7 +14,7 @@ public class DBSAPublication {
 	private String title;
 	private int year;
 	private String publisher;
-	private String author;
+	private String authors;
 	private String links;
 	
 	public int getId() {
@@ -53,11 +53,11 @@ public class DBSAPublication {
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
 	}
-	public String getAuthor() {
-		return author;
+	public String getAuthors() {
+		return authors;
 	}
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setAuthors(String authors) {
+		this.authors = authors;
 	}
 	public String getLinks() {
 		return links;
