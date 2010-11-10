@@ -29,7 +29,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
  *
  * Kiem tra thong tin gom title, nam xuat ban va ten tac gia bai bao.
  */
-public class CheckExit {
+public class CheckExist {
 	static Session session = null;
 	
 	/**
