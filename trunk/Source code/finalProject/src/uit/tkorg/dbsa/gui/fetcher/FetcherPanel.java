@@ -4,6 +4,7 @@ package uit.tkorg.dbsa.gui.fetcher;
  */
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -130,82 +131,99 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					fetcherJButton.setEnabled(false);
+					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					//fetcherJButton.setEnabled(false);
 					
-					if(getAcmProgressBar() != 0){
-					//	setAcmProgressBar(0);
+					if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
+						JOptionPane.showMessageDialog(null, "Input keyword before press Fetch!");
 					}
-					try {
+					else if(keywordJTextField.getText() != ""){
+						if(fetchFromACMCheckBox.isSelected() == true) {
+							fetcherBoolean = true;
+							final String acmQuery = keywordJTextField.getText();
 						
-						if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
-							JOptionPane.showMessageDialog(null, "Input keyword before press Fetch!");
+						Thread acmThread = new Thread (new Runnable(){
+							@Override
+							public void run() {
+								{
+									uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
+									setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
+									acmJProgressBar.setIndeterminate(true);
+									acmJProgressBar.setStringPainted(true);
+									acmJProgressBar.setString("Get Data...");
+									try {
+										ACMFetcher(acmQuery);
+										acmJProgressBar.setIndeterminate(false);
+										acmJProgressBar.setString("Complete");	
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							}});
+						
+							acmThread.start();
 						}
-						else if(keywordJTextField.getText() != ""){
-							if(fetchFromACMCheckBox.isSelected() == true){
-								fetcherBoolean = true;
-								uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
-								setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
-								acmJProgressBar.setIndeterminate(true);
-								ACMFetcher(keywordJTextField.getText());
-							}
-							acmJProgressBar.setIndeterminate(false);
+						if(ieeexploreDLCheckBox.isSelected() == true){
+							fetcherBoolean = true;
+							final String ieeeQuery = keywordJTextField.getText();
+							Thread ieeeThread = new Thread (new Runnable(){
+								@Override
+								public void run() {
+									{
+										setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
+										ieeeploreJProgressBar.setIndeterminate(true);
+										ieeeploreJProgressBar.setStringPainted(true);
+										ieeeploreJProgressBar.setString("Get Data...");
+										try {
+											IEEExploreFetch(ieeeQuery);
+											ieeeploreJProgressBar.setIndeterminate(false);
+											ieeeploreJProgressBar.setString("Compelte");
+										} catch (IOException t) {
+			
+											t.printStackTrace();
+										}
+									}
+								}});
+								ieeeThread.start();
+						}	
+						if(citeseerDLCheckBox.isSelected() == true){
+							fetcherBoolean = true;
 							
-							if(ieeexploreDLCheckBox.isSelected() == true){
-								fetcherBoolean = true;
-								System.out.println(ieeexploreJSpinner1.getValue().toString());
-								
-								
-
-								setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
-								
-								ieeeploreJProgressBar.setIndeterminate(true);
-								IEEExploreFetch(keywordJTextField.getText());
-								
-							}
-							ieeeploreJProgressBar.setIndeterminate(false);
-							
-							if(citeseerDLCheckBox.isSelected() == true){
-								fetcherBoolean = true;
-								setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
-								citeseerJProgressBar.setIndeterminate(true);
-							
-								CiteSeeXFetcher(keywordJTextField.getText());								
-							}
-							citeseerJProgressBar.setIndeterminate(false);
-							
-							if(!fetcherBoolean){
-								JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
-							}
-							/*
-							 * reset application Jpanel
-							 */
-							keywordJTextField.setText("");
-							acmJProgressBar.setValue(0);
-							ieeeploreJProgressBar.setValue(0);
-							citeseerJProgressBar.setValue(0);
-							fetcherBoolean = false;
+							final String citeseerQuery = keywordJTextField.getText();
+							Thread citeseerThread = new Thread (new Runnable(){
+								@Override
+								public void run() {
+									{
+										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
+										citeseerJProgressBar.setIndeterminate(true);
+										citeseerJProgressBar.setStringPainted(true);
+										citeseerJProgressBar.setString("Get Data...");
+										CiteSeeXFetcher(citeseerQuery);	
+										citeseerJProgressBar.setIndeterminate(false);
+										citeseerJProgressBar.setString("Compelte");
+									}
+								}});
+							citeseerThread.start();								
 						}
 						
-					} catch (IOException e1) {
-						
-						e1.printStackTrace();
+						if(!fetcherBoolean){
+							JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
+						}
+						/*
+						 * reset application Jpanel
+						 */
+						keywordJTextField.setText("");
+						fetcherBoolean = false;
+						fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 					}
-//					setIsShowResult(true);
-//					DBSAApplication.getDBSAContent();
-//					DBSAApplication.dbsaJFrame.repaint();
-					
 				}
-				
 			});
 			
 		}
 		return fetcherJButton;
 	}
-
-	///public static void ProgressBar(){
-	//	ieeeploreJProgressBar.setValue(getIeeeProgressBar());
-	//}
-	
+			
 	private JButton getShowResultJButton() {
 		if (showResultJButton == null) {
 			showResultJButton = new JButton();
@@ -289,8 +307,6 @@ public class FetcherPanel extends JPanel {
 		if (ieeeploreJProgressBar == null) {
 			ieeeploreJProgressBar = new JProgressBar();
 			ieeeploreJProgressBar.setValue(0);
-			//ieeeploreJProgressBar.setStringPainted(true);
-			//ieeeploreJProgressBar.setIndeterminate(true);
 		}
 		return ieeeploreJProgressBar;
 	}
@@ -306,7 +322,6 @@ public class FetcherPanel extends JPanel {
 		if (citeseerJProgressBar == null) {
 			citeseerJProgressBar = new JProgressBar();
 			citeseerJProgressBar.setValue(0);
-			//citeseerJProgressBar.setStringPainted(true);
 		}
 		return citeseerJProgressBar;
 	}
@@ -315,7 +330,6 @@ public class FetcherPanel extends JPanel {
 		if (acmJProgressBar == null) {
 			acmJProgressBar = new JProgressBar(0, 100);
 			acmJProgressBar.setValue(0);
-			//acmJProgressBar.setStringPainted(true);
 		}
 		return acmJProgressBar;
 	}
