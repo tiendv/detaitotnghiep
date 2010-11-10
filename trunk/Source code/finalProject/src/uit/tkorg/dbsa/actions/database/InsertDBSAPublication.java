@@ -17,7 +17,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
  * Bai bao duoc luu la cac bai bao duoc nguoi dung chon de luu xuong database
  *
  */
-public class AddDBSAPublication {
+public class InsertDBSAPublication {
 	public static void Adddatabase(ArrayList<DBSAPublication> pub) {
 		Session session = null;
 		try
