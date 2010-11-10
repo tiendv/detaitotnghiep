@@ -14,7 +14,17 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 
 /**
  * @author tiendv
- *
+ * Kiem tra xem bai bao da co trong dblp chua:
+ * B1 : Kiem tra title- > neu chua ton tai -> bai bao moi : ket thuc qua trinh kiem tra
+ *                        neu da ton tai --> B2
+ * B2 : kiem tra nam xuat ban (select cac bai 
+ * bao co title va nam xuat ban )
+ *    neu khong co --> bai bao moi : ket thuc qua trinh kiem tra
+ *    neu co       --> B3
+ * B3 : kiem tra ten tac gia dau tien cua bai bao 
+ * ( de phu hop voi database)
+ *    neu khong co --> bai bao moi : them vao du lieu ket thuc qua trinh kiem tra
+ *    neu co       --> bai bao cu : ket thuc qua trinh kiem tra
  */
 public class CheckExit {
 	static Session session = null;
@@ -59,14 +69,22 @@ public class CheckExit {
 		return true;//// bai bao co trong dblp
 		
 	}
+	/**
+	 * 
+	 * @param publ: danh sach cac bai trong co titile ton tai trong dblp
+	 * @return: true neu bai bao do co cung title va  nam xuat ban trong dblp
+	 *  neu co gia tri false thi gia tri do la bai bao co cung ten nhung 
+	 *  khac nam xuat ban  ==> bai bao do chua ton tai trong database
+	 */
 	private static Boolean CheckYearPublication(DBSAPublication publ) {
 		try
 		{
+		//System.out.printf(publ.getTitle());
 		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		  session = sessionFactory.openSession();
-		  org.hibernate.Query q = session.createQuery("from Publication pub where pub.title = :var and pub.year =?");
-	      q.setString("var", publ.getPublisher());
-	      q.setInteger("?", publ.getYear());
+		  org.hibernate.Query q = session.createQuery("from Publication pub where pub.title = :var and pub.year = :ya");
+	      q.setString("var", publ.getTitle());
+	      q.setInteger("ya", publ.getYear());
 	      List result = q.list();
 	      if(result.isEmpty())
 	    	  return false;// it Contanin
@@ -77,7 +95,32 @@ public class CheckExit {
 			session.close();
 			}
 		return true;
-		
 	}
-
+	/**
+	 * 
+	 * @param publ
+	 * @return
+	 */
+	private static Boolean CheckAuthorPublication(DBSAPublication publ) {
+		try
+		{
+		//System.out.printf(publ.getTitle());
+		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		  session = sessionFactory.openSession();
+		  org.hibernate.Query q = session.createQuery("from Publication pub where pub.title = :var and pub.year = :ya and pub.author = :au");
+	      q.setString("var", publ.getTitle());
+	      q.setInteger("ya", publ.getYear());
+	      // can phai xu ly lay ten tac gia dau tien thoi
+	      q.setString("au", publ.getAuthors());
+	      List result = q.list();
+	      if(result.isEmpty())
+	    	  return false;// it Contanin
+	      
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			session.close();
+			}
+		return true;
+	}
 }
