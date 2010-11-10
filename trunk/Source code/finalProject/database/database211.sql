@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS `dbsa_pub`;
 CREATE TABLE `dbsa_pub` (
   `id` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Id cua bai bao duoc thu thap ve tu he thong DBSA',
   `sbj_id` int(8) DEFAULT NULL COMMENT 'Id cua tua de bai bao sau khi phan loai',
-  `astract` longtext COMMENT 'Tom tat cua bai bao',
+  `abstract` longtext COMMENT 'Tom tat cua bai bao',
   `title` longtext COMMENT 'Tua de cua bai bao',
   `year` int(4) unsigned DEFAULT NULL COMMENT 'Nam xuat ban cua bai bao',
   `publisher` varchar(255) DEFAULT NULL COMMENT 'Nha xuat ban tai lieu',
