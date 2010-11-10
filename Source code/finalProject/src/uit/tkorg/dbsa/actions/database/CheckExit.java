@@ -20,11 +20,14 @@ import uit.tkorg.dbsa.model.DBSAPublication;
  * B2 : kiem tra nam xuat ban (select cac bai 
  * bao co title va nam xuat ban )
  *    neu khong co --> bai bao moi : ket thuc qua trinh kiem tra
- *    neu co       --> B3
+ *    neu co       --> B3 (neu thay can thiet).
  * B3 : kiem tra ten tac gia dau tien cua bai bao 
  * ( de phu hop voi database)
  *    neu khong co --> bai bao moi : them vao du lieu ket thuc qua trinh kiem tra
  *    neu co       --> bai bao cu : ket thuc qua trinh kiem tra
+ *Kiem tra xem bai bao da co trong du lieu cua dbsa chua 
+ *
+ * Kiem tra thong tin gom title, nam xuat ban va ten tac gia bai bao.
  */
 public class CheckExit {
 	static Session session = null;
@@ -40,7 +43,7 @@ public class CheckExit {
 	private ArrayList<Integer> CheckTitlePublications(ArrayList<DBSAPublication> pub) {
 		ArrayList<Integer> result = null;
 		for(int i =0; i<pub.size();i++){
-			if(CheckTitilePublication(pub.get(i).getTitle()) == true)
+			if(CheckTitilePublication(pub.get(i).getTitle()) == true && CheckPublicationInDBSA(pub.get(i))== true)
 				result.add(i);
 		}
 		return result;	
@@ -123,4 +126,32 @@ public class CheckExit {
 			}
 		return true;
 	}
+	/**
+	 *  Ham kiem tra su ton tai cua bai bao trong du lieu cua DBSA
+	 * @param publ: Bai bao tim kiem ve 
+	 * @return true neu bai bao da ton tai trong du lieu DBSA roi.
+	 * 			false neu bai bao chua ton tai trong DBSA
+	 */
+	private static Boolean CheckPublicationInDBSA(DBSAPublication publ) {
+		try
+		{
+		//System.out.printf(publ.getTitle());
+		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		  session = sessionFactory.openSession();
+		  org.hibernate.Query q = session.createQuery("from DBSAPublication pub where pub.title = :var and pub.year = :ya and pub.authors = :au");
+	      q.setString("var", publ.getTitle());
+	      q.setInteger("ya", publ.getYear());
+	      q.setString("au", publ.getAuthors());
+	      List result = q.list();
+	      if(result.isEmpty())
+	    	  return false;// it Contanin
+	      
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			session.close();
+			}
+		return true;
+	}
+	
 }
