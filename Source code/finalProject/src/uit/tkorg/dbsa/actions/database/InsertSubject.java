@@ -15,8 +15,12 @@ import uit.tkorg.dbsa.model.Subject;;
  *
  */
 public class InsertSubject {
-
-	public static void InsertSubjectOfPublication(ArrayList<Subject> sb) {
+	
+	/**
+	 * 
+	 * @param sb
+	 */
+	public  void InsertSubjectOfPublication(ArrayList<Subject> sb) {
 		Session session = null;
 		try
 		{
@@ -28,7 +32,6 @@ public class InsertSubject {
 			  session.save(sb.get(i));
 			  tx.commit();
 		  }
-		  
 		  // Show thanh cong cho nguoi dung biet
 		 
 		}catch (Exception e) {
