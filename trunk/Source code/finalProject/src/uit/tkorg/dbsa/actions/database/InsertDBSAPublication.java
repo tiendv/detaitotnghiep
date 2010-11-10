@@ -18,7 +18,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
  *
  */
 public class InsertDBSAPublication {
-	public static void Adddatabase(ArrayList<DBSAPublication> pub) {
+	public static void InsertPublication(ArrayList<DBSAPublication> pub) {
 		Session session = null;
 		try
 		{
