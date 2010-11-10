@@ -13,8 +13,8 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 
 /**
  * @author tiendv
- * 
- * 
+ * Luu cac bai bao xuong database. 
+ * Bai bao duoc luu la cac bai bao duoc nguoi dung chon de luu xuong database
  *
  */
 public class AddDBSAPublication {
