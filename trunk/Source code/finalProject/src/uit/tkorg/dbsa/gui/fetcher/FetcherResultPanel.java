@@ -329,7 +329,8 @@ public class FetcherResultPanel extends JPanel {
 			
 		resultsJTable.addMouseListener(new MouseAdapter() {			
 			public void mousePressed(MouseEvent event) {
-				resultJTableMousePressed(event);
+				if(event.getClickCount()==1)
+				resultJTableMousePressed();
 			}
 		});
 		
@@ -501,20 +502,20 @@ public class FetcherResultPanel extends JPanel {
 		return resultsJScrollPane;
 	}
 
-	private  void resultJTableMousePressed(MouseEvent event) {
+	private  void resultJTableMousePressed() {
 		/*
 		 * get row number is selected
 		 */
-		
-		rowNumberSelected  = resultsJTable.getSelectedRow();
+		//rowNumberSelected
+		int n  = resultsJTable.getSelectedRow();
 		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
 		
 		if(rowNumberSelected >= 0){
-			titleJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 1).toString());
-			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 2).toString());
-			yearJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 3).toString());
-			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 4).toString());
-			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(rowNumberSelected, 5).toString());
+			titleJTextArea.setText(resultsJTable.getModel().getValueAt(n, 1).toString());
+			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(n, 2).toString());
+			yearJTextArea.setText(resultsJTable.getModel().getValueAt(n, 3).toString());
+			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(n, 4).toString());
+			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
 		}else if(rowNumberSelected == -1){
 			JOptionPane.showMessageDialog(null, "No row is selected!");
 		}
