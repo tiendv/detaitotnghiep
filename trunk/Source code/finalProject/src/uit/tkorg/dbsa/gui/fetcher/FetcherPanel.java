@@ -15,11 +15,13 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
@@ -40,8 +42,9 @@ import uit.tkorg.dbsa.gui.main.DBSAApplication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherPanel extends JPanel {
-
+	
 	private static final long serialVersionUID = 1L;
+	JTabbedPane dbsaTabFrame = null;
 	private JPanel fetcherJPanel;
 	private JLabel keywordJLabel;
 	private JTextField keywordJTextField;
@@ -79,8 +82,9 @@ public class FetcherPanel extends JPanel {
 	
 	private static int acmProgressPer = 0;
 	
-	public FetcherPanel() {
+	public FetcherPanel(JTabbedPane dbsa) {
 		initComponents();
+		this.dbsaTabFrame = dbsa;
 	}
 
 	private void initComponents() {
@@ -249,6 +253,7 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					dbsaTabFrame.setSelectedIndex(1);
 				}
 				
 			});

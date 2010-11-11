@@ -80,7 +80,7 @@ public class DBSAApplication {
 			getDBSAContent();
 			
 			if(fetcherPanel == null){
-				fetcherPanel = new FetcherPanel();
+				fetcherPanel = new FetcherPanel(dbsaTabPanel);
 			}else{
 				if(dbsaStatus == null){
 					dbsaStatus = new DBSAStatusBar();
