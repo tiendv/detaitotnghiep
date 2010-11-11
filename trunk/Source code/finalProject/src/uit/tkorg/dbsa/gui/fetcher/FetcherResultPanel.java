@@ -72,6 +72,8 @@ public class FetcherResultPanel extends JPanel {
 	
 	private static ArrayList<DBSAPublication> dbsaPublication = new ArrayList<DBSAPublication>();
 	
+	private static ArrayList<Integer> numberArray = new ArrayList<Integer>();
+	
 	public FetcherResultPanel() {
 		initComponents();
 	
@@ -325,14 +327,15 @@ public class FetcherResultPanel extends JPanel {
 			
 			if(resultsJTable.getRowCount() >= maxResult){
 				CheckExist check = new CheckExist();
-				ArrayList<Integer> numberArray = new ArrayList<Integer>();
+				
 				numberArray = (ArrayList<Integer>) check.CheckTitlePublications(dbsaPublication).clone();
 				System.out.println("trung lap " +numberArray.size());
 				
 				for(int i = 0; i < numberArray.size(); i++)
 				{
 					resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
-				//	System.out.println("trung lap gia tri " + numberArray.get(i));
+					//resultsJTable.setValueAt(true, numberArray.get(i), 6);
+					System.out.println("trung lap gia tri " + numberArray.get(i));
 					//setForeground(Color.red);
 				}
 			//	resultsJTable.repaint();
@@ -450,6 +453,7 @@ public class FetcherResultPanel extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					removeRowsIsSelected();
+					
 				}
 				
 			});
@@ -457,6 +461,7 @@ public class FetcherResultPanel extends JPanel {
 		return deleteJButton;
 	}
 
+	ArrayList<Integer> a = numberArray;
 	private void removeRowsIsSelected() {
 		// TODO Auto-generated method stub
 		for(int i = resultsJTable.getRowCount()-1; i >= 0; i--){
@@ -464,6 +469,37 @@ public class FetcherResultPanel extends JPanel {
 			if(resultsJTable.getModel().getValueAt(i, 6).toString().equals("true")){
 				System.out.println(resultsJTable.getModel().getValueAt(i, 6).toString());
 				model.removeRow(i);
+				
+				resultsJTable.addRowToPaint(i, Color.white);
+				
+				System.out.println(numberArray.size());
+				System.out.println("i " + i);
+				for(int j = 0; j < numberArray.size(); j++){
+					
+					if(numberArray.get(j) > i){
+						
+						resultsJTable.addRowToPaint(numberArray.get(j), Color.white);
+						resultsJTable.addRowToPaint(numberArray.get(j) - 1, Color.red);
+						numberArray.set(j, numberArray.get(j) - 1);
+						
+					}else if(numberArray.get(j) == i){
+					
+						numberArray.remove(j);
+						for(int k = 0; k < numberArray.size(); k++){
+							if(numberArray.get(k) > j){
+								resultsJTable.addRowToPaint(numberArray.get(k), Color.white);
+								resultsJTable.addRowToPaint(numberArray.get(k) - 1, Color.red);
+								numberArray.set(k, numberArray.get(k) - 1);
+							}
+						}
+					}
+					
+					
+				}
+				
+//				for(int k = i +1; k <= resultsJTable.getRowCount(); k++){
+//					resultsJTable.setValueAt(k + 1, k + 2, 0);
+//				}
 			}
 		}
 	}
@@ -512,17 +548,17 @@ public class FetcherResultPanel extends JPanel {
 		 */
 		//rowNumberSelected
 		int n  = resultsJTable.getSelectedRow();
-		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
+//		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
 		
-		if(rowNumberSelected >= 0){
-			titleJTextArea.setText(resultsJTable.getModel().getValueAt(n, 1).toString());
-			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(n, 2).toString());
-			yearJTextArea.setText(resultsJTable.getModel().getValueAt(n, 3).toString());
-			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(n, 4).toString());
-			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
-		}else if(rowNumberSelected == -1){
-			JOptionPane.showMessageDialog(null, "No row is selected!");
-		}
+//		if(rowNumberSelected >= 0){
+//			titleJTextArea.setText(resultsJTable.getModel().getValueAt(n, 1).toString());
+//			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(n, 2).toString());
+//			yearJTextArea.setText(resultsJTable.getModel().getValueAt(n, 3).toString());
+//			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(n, 4).toString());
+//			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
+//		}else if(rowNumberSelected == -1){
+//			JOptionPane.showMessageDialog(null, "No row is selected!");
+//		}
 	}
 	
 	/*
