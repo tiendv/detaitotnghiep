@@ -44,8 +44,8 @@ public class DBSAPublication {
 	public int getYear() {
 		return year;
 	}
-	public void setYear(int year) {
-		this.year = year;
+	public void setYear(int i) {
+		this.year = i;
 	}
 	public String getPublisher() {
 		return publisher;

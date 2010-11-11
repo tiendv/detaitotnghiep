@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,7 +26,10 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import uit.tkorg.dbsa.actions.database.CheckExist;
+import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.model.DBSAPublication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherResultPanel extends JPanel {
@@ -58,18 +62,18 @@ public class FetcherResultPanel extends JPanel {
 	private static int rowNumber = 0;
 	private static String title = "";
 	private static String author = "";
-	private static String year = "";
+	private static int year = 0;
 	private static String abstracts = "";
 	private static String publisher = "";
 	private static boolean mark = false;
 	
 	private static DefaultTableModel model;
-	int temp = 1;
+	
+	private static ArrayList<DBSAPublication> dbsaPublication = new ArrayList<DBSAPublication>();
+	
 	public FetcherResultPanel() {
-		if(temp == 1){
-			initComponents();
-			temp ++;
-		}
+		initComponents();
+	
 	}
 
 	public FetcherResultPanel(int i){
@@ -227,7 +231,7 @@ public class FetcherResultPanel extends JPanel {
 	private JTable createResultJTable(){
 		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class, String.class, String.class, Boolean.class, };
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, Integer.class, String.class, String.class, Boolean.class, };
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
@@ -287,9 +291,32 @@ public class FetcherResultPanel extends JPanel {
 					if(resultsJTable.getRowCount() == 1 && checkRemovedFirst == false){
 						Object [] data = {resultsJTable.getRowCount(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 						model.insertRow(resultsJTable.getRowCount(), data );
+						
+						DBSAPublication dbsa = new DBSAPublication();
+						dbsa.setId(resultsJTable.getRowCount());
+						dbsa.setTitle(getTitle());
+						dbsa.setAuthors(getAuthor());
+						dbsa.setYear(getYear());
+						dbsa.setAbstractPub(getAbstract());
+						dbsa.setPublisher(getPublisher());
+						
+						dbsaPublication.add(dbsa);
+						
 					}else{
 						Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 						model.insertRow(resultsJTable.getRowCount(), data );
+						
+						DBSAPublication dbsa = new DBSAPublication();
+						dbsa.setId(resultsJTable.getRowCount() + 1);
+						dbsa.setTitle(getTitle());
+						dbsa.setAuthors(getAuthor());
+						dbsa.setYear(getYear());
+						dbsa.setAbstractPub(getAbstract());
+						dbsa.setPublisher(getPublisher());
+						
+						dbsaPublication.add(dbsa);
+						
+						System.out.println("size of dbsapublication:" +  dbsaPublication.size());
 					}			
 				}				
 			}	
@@ -331,7 +358,7 @@ public class FetcherResultPanel extends JPanel {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
+	public  Object [][] getTableData(int rowNumber, String title, String author, int year, String abstracts, String publisher, boolean isMark){
 		
 		Object [][] data = {addTableData(rowNumber, title, author, year, abstracts, publisher, isMark)};
 		
@@ -346,7 +373,7 @@ public class FetcherResultPanel extends JPanel {
 //	}
 	
 	
-	public  Object [] addTableData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
+	public  Object [] addTableData(int rowNumber, String title, String author, int year, String abstracts, String publisher, boolean isMark){
 		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 		
 		return dataRow;
@@ -371,10 +398,39 @@ public class FetcherResultPanel extends JPanel {
 		return entryJPanel;
 	}
 
+	boolean abc = false;
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
 			saveJButton.setText("Save");
+			
+			saveJButton.addActionListener(new ActionListener(){
+
+				@SuppressWarnings("static-access")
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+
+//					if(abc == false){
+
+//					abc = true;
+//					}else{
+//					CheckExist check = new CheckExist();
+//					ArrayList<Integer> numberArray = new ArrayList<Integer>();
+//					numberArray = check.CheckTitlePublications(dbsaPublication);
+//					if(numberArray != null)
+//						System.out.println(numberArray);
+					
+					System.out.println("/n xuat danh sach cac title");
+					for(int i = 0; i < dbsaPublication.size(); i++){
+						System.out.println(dbsaPublication.get(i).getTitle());
+					}
+					InsertDBSAPublication insert = new InsertDBSAPublication();
+					insert.InsertPublication(dbsaPublication);
+//					}
+				}
+				
+			});
 		}
 		return saveJButton;
 	}
@@ -493,11 +549,11 @@ public class FetcherResultPanel extends JPanel {
 		return author;
 	}
 	
-	public  void setYear(String yearString){
-		year = yearString;
+	public  void setYear(int year){
+		this.year = year;
 	}
 
-	public  String getYear(){
+	public  int getYear(){
 		return year;
 	}
 	

@@ -102,7 +102,7 @@ public class CiteSeerXFetcher {
             		resultFetch.setRowNumber(1);
             		resultFetch.setTitle(entry.getField("title"));
             		resultFetch.setAuthor(entry.getField("author"));
-            		resultFetch.setYear(entry.getField("year"));
+            		resultFetch.setYear(Integer.parseInt(entry.getField("year")));
             		resultFetch.setAbstract(entry.getField("abstract"));
             		
             		resultFetch.getResultsJTable();
