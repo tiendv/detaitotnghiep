@@ -1,5 +1,6 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -35,7 +36,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 public class FetcherResultPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	public static JTable resultsJTable;
+	public static MyJTable resultsJTable;
 	private JScrollPane resultsJScrollPane;
 	private JPanel actionsJPanel;
 	private JButton closeJButton;
@@ -228,7 +229,7 @@ public class FetcherResultPanel extends JPanel {
 	/*
 	 * Ham tao Jtable
 	 */
-	private JTable createResultJTable(){
+	private MyJTable createResultJTable(){
 		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
 			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, Integer.class, String.class, String.class, Boolean.class, };
@@ -238,7 +239,7 @@ public class FetcherResultPanel extends JPanel {
 			}
 		};
 		
-		JTable table = new JTable(model);
+		MyJTable table = new MyJTable(model);
 		
 		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
 		//Cho phep sap xep theo tu cot rieng biet
@@ -270,6 +271,7 @@ public class FetcherResultPanel extends JPanel {
 				col.setPreferredWidth(10);
 			}
 		}
+		
 		
 		return table;
 	}
@@ -305,6 +307,7 @@ public class FetcherResultPanel extends JPanel {
 					}else{
 						Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()};
 						model.insertRow(resultsJTable.getRowCount(), data );
+						//resultsJTable.addRowToPaint(10, Color.red);
 						
 						DBSAPublication dbsa = new DBSAPublication();
 						dbsa.setId(resultsJTable.getRowCount() + 1);
@@ -313,13 +316,27 @@ public class FetcherResultPanel extends JPanel {
 						dbsa.setYear(getYear());
 						dbsa.setAbstractPub(getAbstract());
 						dbsa.setPublisher(getPublisher());
-						
 						dbsaPublication.add(dbsa);
-						
-						System.out.println("size of dbsapublication:" +  dbsaPublication.size());
 					}			
 				}				
 			}	
+			
+			int maxResult = FetcherPanel.getAcmResultNumber() + FetcherPanel.getCiteResultNumber() + FetcherPanel.getIeeeResultNumber();
+			
+			if(resultsJTable.getRowCount() >= maxResult){
+				CheckExist check = new CheckExist();
+				ArrayList<Integer> numberArray = new ArrayList<Integer>();
+				numberArray = (ArrayList<Integer>) check.CheckTitlePublications(dbsaPublication).clone();
+				System.out.println("trung lap " +numberArray.size());
+				
+				for(int i = 0; i < numberArray.size(); i++)
+				{
+					resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
+				//	System.out.println("trung lap gia tri " + numberArray.get(i));
+					//setForeground(Color.red);
+				}
+			//	resultsJTable.repaint();
+			}
 			
 			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
 				checkRemovedFirst =  true;
@@ -412,22 +429,9 @@ public class FetcherResultPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 
-//					if(abc == false){
-
-//					abc = true;
-//					}else{
-//					CheckExist check = new CheckExist();
-//					ArrayList<Integer> numberArray = new ArrayList<Integer>();
-//					numberArray = check.CheckTitlePublications(dbsaPublication);
-//					if(numberArray != null)
-//						System.out.println(numberArray);
 					
-					System.out.println("/n xuat danh sach cac title");
-					for(int i = 0; i < dbsaPublication.size(); i++){
-						System.out.println(dbsaPublication.get(i).getTitle());
-					}
-					InsertDBSAPublication insert = new InsertDBSAPublication();
-					insert.InsertPublication(dbsaPublication);
+					//InsertDBSAPublication insert = new InsertDBSAPublication();
+					//insert.InsertPublication(dbsaPublication);
 //					}
 				}
 				
