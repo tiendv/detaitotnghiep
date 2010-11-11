@@ -131,6 +131,7 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
 					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					
 					if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
@@ -138,6 +139,7 @@ public class FetcherPanel extends JPanel {
 					}
 					else if(keywordJTextField.getText() != ""){
 						if(fetchFromACMCheckBox.isSelected() == true) {
+							fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 							fetcherBoolean = true;
 							final String acmQuery = keywordJTextField.getText();
 						
@@ -149,11 +151,13 @@ public class FetcherPanel extends JPanel {
 									setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
 									acmJProgressBar.setIndeterminate(true);
 									acmJProgressBar.setStringPainted(true);
-									acmJProgressBar.setString("Get Data...");
+									acmJProgressBar.setString("Downloading Data from ACM Portal ...");
 									try {
 										ACMFetcher(acmQuery);
 										acmJProgressBar.setIndeterminate(false);
 										acmJProgressBar.setString("Complete");	
+										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+										showResultJButton.setEnabled(true);
 									} catch (IOException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -162,8 +166,11 @@ public class FetcherPanel extends JPanel {
 							}});
 						
 							acmThread.start();
+							acmThread.interrupt();
 						}
 						if(citeseerDLCheckBox.isSelected() == true){
+							fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							
 							fetcherBoolean = true;
 							
 							final String citeseerQuery = keywordJTextField.getText();
@@ -174,16 +181,21 @@ public class FetcherPanel extends JPanel {
 										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
 										citeseerJProgressBar.setIndeterminate(true);
 										citeseerJProgressBar.setStringPainted(true);
-										citeseerJProgressBar.setString("Get Data...");
+										citeseerJProgressBar.setString(" Downloading Data from Citeseer ...");
 										CiteSeeXFetcher(citeseerQuery);	
+										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										citeseerJProgressBar.setIndeterminate(false);
-										citeseerJProgressBar.setString("Compelte");
+										citeseerJProgressBar.setString("Complete");
+										showResultJButton.setEnabled(true);
+										
 									}
 								}});
-							citeseerThread.start();								
+							citeseerThread.start();	
+							citeseerThread.interrupt();
 						}
 						
 						if(ieeexploreDLCheckBox.isSelected() == true){
+							fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 							fetcherBoolean = true;
 							final String ieeeQuery = keywordJTextField.getText();
 							Thread ieeeThread = new Thread (new Runnable(){
@@ -193,11 +205,13 @@ public class FetcherPanel extends JPanel {
 										setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
 										ieeeploreJProgressBar.setIndeterminate(true);
 										ieeeploreJProgressBar.setStringPainted(true);
-										ieeeploreJProgressBar.setString("Get Data...");
+										ieeeploreJProgressBar.setString("Downloading Data from IEEEXPlore ...");
 										try {
 											IEEExploreFetch(ieeeQuery);
 											ieeeploreJProgressBar.setIndeterminate(false);
-											ieeeploreJProgressBar.setString("Compelte");
+											ieeeploreJProgressBar.setString("Complete");
+											showResultJButton.setEnabled(true);
+											fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										} catch (IOException t) {
 			
 											t.printStackTrace();
@@ -205,8 +219,8 @@ public class FetcherPanel extends JPanel {
 									}
 								}});
 								ieeeThread.start();
+								ieeeThread.interrupt();
 						}	
-						
 						
 						if(!fetcherBoolean){
 							JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
@@ -216,14 +230,8 @@ public class FetcherPanel extends JPanel {
 						 */
 						keywordJTextField.setText("");
 						fetcherBoolean = false;
-						
-						
 					}
-					showResultJButton.enable(true);
-					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-					
 				}
-	
 				
 			});
 			
@@ -298,8 +306,8 @@ public class FetcherPanel extends JPanel {
 	private JProgressBar getScienceDirectJProgressBar() {
 		if (scienceDirectJProgressBar == null) {
 			scienceDirectJProgressBar = new JProgressBar();
-			scienceDirectJProgressBar.setValue(0);
 			scienceDirectJProgressBar.setStringPainted(true);
+			scienceDirectJProgressBar.setString("Science Direct Digital");
 		}
 		return scienceDirectJProgressBar;
 	}
@@ -307,7 +315,9 @@ public class FetcherPanel extends JPanel {
 	private JProgressBar getIeeeploreJProgressBar() {
 		if (ieeeploreJProgressBar == null) {
 			ieeeploreJProgressBar = new JProgressBar();
-			ieeeploreJProgressBar.setValue(0);
+			ieeeploreJProgressBar.setStringPainted(true);
+			ieeeploreJProgressBar.setString("IEEEXplore Digital");
+			
 		}
 		return ieeeploreJProgressBar;
 	}
@@ -322,15 +332,19 @@ public class FetcherPanel extends JPanel {
 	private JProgressBar getCiteseerJProgressBar() {
 		if (citeseerJProgressBar == null) {
 			citeseerJProgressBar = new JProgressBar();
-			citeseerJProgressBar.setValue(0);
+			citeseerJProgressBar.setStringPainted(true);
+			citeseerJProgressBar.setString("Citeseer Digital");
+			
 		}
 		return citeseerJProgressBar;
 	}
 
 	private JProgressBar getAcmJProgressBar() {
 		if (acmJProgressBar == null) {
-			acmJProgressBar = new JProgressBar(0, 100);
-			acmJProgressBar.setValue(0);
+			acmJProgressBar = new JProgressBar();
+			acmJProgressBar.setStringPainted(true);
+			acmJProgressBar.setString("ACM Portal Digital");
+			
 		}
 		return acmJProgressBar;
 	}
