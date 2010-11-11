@@ -2,6 +2,11 @@ package uit.tkorg.dbsa.gui.fetcher;
 import javax.swing.*;                          
 import java.awt.Component;
 import javax.swing.table.*;
+/**
+ * 
+ * @author tiendv
+ *
+ */
 
 public class JLabelRenderer extends JLabel implements TableCellRenderer
 {
@@ -29,9 +34,9 @@ public class JLabelRenderer extends JLabel implements TableCellRenderer
     setFont(myTable.getFont());
     
     if(!isSelected)//if the row is not selected then use the custom color
-    setBackground(myTable.getRowToPaint(row));
+    	setBackground(myTable.getRowToPaint(row));
     else //if the row is selected use the default selection color
-    setBackground(myTable.getSelectionBackground());
+    	setBackground(myTable.getSelectionBackground());
 
     //Foreground could be changed using another Hashtable...
     setForeground(myTable.getForeground());

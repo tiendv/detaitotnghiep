@@ -1,12 +1,17 @@
 package uit.tkorg.dbsa.gui.fetcher;
+
 import javax.swing.JTable;    
 import javax.swing.table.*;
 import java.util.Hashtable;
 import java.awt.Color;
+/*
+ * 
+ *  tiendv
+ *  
+ */
 
 public class MyJTable extends JTable
 {
-	
   Hashtable rowsToPaint = new Hashtable(1);
 
   /**
@@ -19,6 +24,8 @@ public class MyJTable extends JTable
   public MyJTable(DefaultTableModel md)
   {
     super(md);
+    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
+    this.getColumnModel().getColumn(6).setCellRenderer(checkBoxRenderer);
   }
 
   /**
@@ -30,6 +37,7 @@ public class MyJTable extends JTable
     super.setModel(tm);
     renderColumns(new JLabelRenderer(this));
   }
+  
 
   /**
    * Add a new entry indicating:
