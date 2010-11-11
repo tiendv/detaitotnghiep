@@ -32,8 +32,6 @@ public class CiteSeerXFetcher {
 	
     private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
     
-	
-	
 	 /* search title, author ,table
 	 * doc
 	 * auth

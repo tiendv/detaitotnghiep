@@ -76,9 +76,11 @@ public class IEEEXploreFetcher {
         unparseable = 0;
         int pageNumber = 1;
         searchUrl = makeUrl(pageNumber);//start at page 1
+       // System.out.println(searchUrl);
         
         try {
         	URL url = new URL(searchUrl);
+        	System.out.println(searchUrl);
         	String page = getResults(url);
         	
             /**
@@ -446,16 +448,18 @@ public class IEEEXploreFetcher {
      */
     private static int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
     	int ind = page.indexOf(marker);
+    	System.out.println(page);
         if (ind < 0) {
         	System.out.println(page);
-            throw new IOException(Globals.lang("Could not parse number of hits"));
+            throw new IOException("Could not parse number of hits");
         }
+        System.out.println(ind);
         String substring = page.substring(ind, page.length());
         Matcher m = pattern.matcher(substring);
         if (m.find())
             return Integer.parseInt(m.group(1));
         else
-        	throw new IOException(Globals.lang("Could not parse number of hits"));
+        	throw new IOException("Could not parse number of hits");
     }
 
     /**
