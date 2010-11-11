@@ -80,7 +80,7 @@ public class IEEEXploreFetcher {
         
         try {
         	URL url = new URL(searchUrl);
-        	System.out.println(searchUrl);
+        	//System.out.println(searchUrl);
         	String page = getResults(url);
         	
             /**
@@ -419,12 +419,12 @@ public class IEEEXploreFetcher {
         	return null;
         } else {
         	cleanup(entry);
-        	System.out.println("Title : " + entry.getField("title"));
+        	/*System.out.println("Title : " + entry.getField("title"));
     		System.out.println("Authors : " + entry.getField("author"));
     		System.out.println("Year : " + entry.getField("year"));
     		System.out.println("Abstract : " + entry.getField("abstract"));
     		System.out.println("Publisher : " + entry.getField("sourceField"));
-    		System.out.println("Doi : " + entry.getField("doi"));
+    		System.out.println("Doi : " + entry.getField("doi"));*/
     		
     		number ++;
 			resultFetch.setRowNumber(number);
@@ -448,12 +448,12 @@ public class IEEEXploreFetcher {
      */
     private static int getNumberOfHits(String page, String marker, Pattern pattern) throws IOException {
     	int ind = page.indexOf(marker);
-    	System.out.println(page);
+    	//System.out.println(page);
         if (ind < 0) {
-        	System.out.println(page);
+        	//System.out.println(page);
             throw new IOException("Could not parse number of hits");
         }
-        System.out.println(ind);
+        //System.out.println(ind);
         String substring = page.substring(ind, page.length());
         Matcher m = pattern.matcher(substring);
         if (m.find())

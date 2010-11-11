@@ -41,10 +41,11 @@ public class CheckExist {
 	 *  neu bai bao ko co trong du lieu dblp
 	 */
 	public ArrayList<Integer> CheckTitlePublications(ArrayList<DBSAPublication> pub) {
-		ArrayList<Integer> result = null;
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		for(int i =0; i<pub.size();i++){
-			if(CheckTitilePublication(pub.get(i).getTitle()) == true && CheckPublicationInDBSA(pub.get(i))== true)
+			if(CheckTitilePublication(pub.get(i).getTitle()) == true || CheckPublicationInDBSA(pub.get(i))== true) {
 				result.add(i);
+			}
 		}
 		return result;	
 	}
