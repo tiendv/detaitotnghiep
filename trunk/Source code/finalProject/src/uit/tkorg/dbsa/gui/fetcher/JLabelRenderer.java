@@ -24,11 +24,10 @@ public class JLabelRenderer extends JLabel implements TableCellRenderer
   public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
   {
     setOpaque(true); //JLabel isn't opaque by default
+    
     setText(value.toString());
     setFont(myTable.getFont());
-
-    //Colors
-
+    
     if(!isSelected)//if the row is not selected then use the custom color
     setBackground(myTable.getRowToPaint(row));
     else //if the row is selected use the default selection color

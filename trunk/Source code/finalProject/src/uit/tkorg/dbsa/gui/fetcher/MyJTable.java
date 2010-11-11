@@ -6,6 +6,7 @@ import java.awt.Color;
 
 public class MyJTable extends JTable
 {
+	
   Hashtable rowsToPaint = new Hashtable(1);
 
   /**

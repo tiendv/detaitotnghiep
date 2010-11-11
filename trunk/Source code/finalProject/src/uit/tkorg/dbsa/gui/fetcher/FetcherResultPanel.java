@@ -231,7 +231,7 @@ public class FetcherResultPanel extends JPanel {
 	/*
 	 * Ham tao Jtable
 	 */
-	private MyJTable createResultJTable(){
+	public MyJTable createResultJTable(){
 		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
 			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, Integer.class, String.class, String.class, Boolean.class, };
@@ -239,6 +239,11 @@ public class FetcherResultPanel extends JPanel {
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
 			}
+			
+			/*public Class getColumnClass(int col) {
+				if (col == 6) return Boolean.class;
+				else return Object.class;
+			}*/
 		};
 		
 		MyJTable table = new MyJTable(model);
@@ -254,6 +259,7 @@ public class FetcherResultPanel extends JPanel {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
+		
 		
 		for(int i = 0; i < 6; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
