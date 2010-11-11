@@ -132,7 +132,6 @@ public class FetcherPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-					//fetcherJButton.setEnabled(false);
 					
 					if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
 						JOptionPane.showMessageDialog(null, "Input keyword before press Fetch!");
@@ -217,9 +216,15 @@ public class FetcherPanel extends JPanel {
 						 */
 						keywordJTextField.setText("");
 						fetcherBoolean = false;
-						fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+						
+						
 					}
+					showResultJButton.enable(true);
+					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					
 				}
+	
+				
 			});
 			
 		}
@@ -231,17 +236,11 @@ public class FetcherPanel extends JPanel {
 			showResultJButton = new JButton();
 			showResultJButton.setText("Show results");
 			showResultJButton.isDefaultButton();
+			showResultJButton.setEnabled(false);
 			showResultJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						IEEEXploreFetcherAction.Fetcher(keywordJTextField.getText());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
 				}
 				
 			});
