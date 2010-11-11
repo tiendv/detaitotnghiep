@@ -43,7 +43,8 @@ public class InsertDBSAPublication {
 			
 			}
 	}
-	public static void main(String[] args) {
+
+	/*public static void main(String[] args) {
 		 	Session session = null;
 	        DBSAPublication test = new DBSAPublication();
 	       // test.setId(2);
@@ -61,6 +62,7 @@ public class InsertDBSAPublication {
 				session.close();
 	        }
 			
-	    }
+	    }*/
+
 
 }
