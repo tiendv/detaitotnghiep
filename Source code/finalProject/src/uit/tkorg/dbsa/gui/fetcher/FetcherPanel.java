@@ -164,6 +164,26 @@ public class FetcherPanel extends JPanel {
 						
 							acmThread.start();
 						}
+						if(citeseerDLCheckBox.isSelected() == true){
+							fetcherBoolean = true;
+							
+							final String citeseerQuery = keywordJTextField.getText();
+							Thread citeseerThread = new Thread (new Runnable(){
+								@Override
+								public void run() {
+									{
+										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
+										citeseerJProgressBar.setIndeterminate(true);
+										citeseerJProgressBar.setStringPainted(true);
+										citeseerJProgressBar.setString("Get Data...");
+										CiteSeeXFetcher(citeseerQuery);	
+										citeseerJProgressBar.setIndeterminate(false);
+										citeseerJProgressBar.setString("Compelte");
+									}
+								}});
+							citeseerThread.start();								
+						}
+						
 						if(ieeexploreDLCheckBox.isSelected() == true){
 							fetcherBoolean = true;
 							final String ieeeQuery = keywordJTextField.getText();
@@ -187,25 +207,7 @@ public class FetcherPanel extends JPanel {
 								}});
 								ieeeThread.start();
 						}	
-						if(citeseerDLCheckBox.isSelected() == true){
-							fetcherBoolean = true;
-							
-							final String citeseerQuery = keywordJTextField.getText();
-							Thread citeseerThread = new Thread (new Runnable(){
-								@Override
-								public void run() {
-									{
-										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
-										citeseerJProgressBar.setIndeterminate(true);
-										citeseerJProgressBar.setStringPainted(true);
-										citeseerJProgressBar.setString("Get Data...");
-										CiteSeeXFetcher(citeseerQuery);	
-										citeseerJProgressBar.setIndeterminate(false);
-										citeseerJProgressBar.setString("Compelte");
-									}
-								}});
-							citeseerThread.start();								
-						}
+						
 						
 						if(!fetcherBoolean){
 							JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
