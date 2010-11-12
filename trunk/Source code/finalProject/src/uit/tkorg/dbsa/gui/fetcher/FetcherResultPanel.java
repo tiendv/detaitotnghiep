@@ -446,29 +446,55 @@ public class FetcherResultPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
+					
 
-					if(numberArray.size() > 0){
-						JOptionPane.showMessageDialog(null,"Delete duplicate article before save to database.");
-					}else{
-						try{
-							InsertDBSAPublication insert = new InsertDBSAPublication();
-							insert.InsertPublication(dbsaPublication);
-							JOptionPane.showMessageDialog(null, "Data is added successfully!");
-							System.out.println(resultsJTable.getRowCount());
-							for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
-								model.removeRow(i);
-							}
-							saveJButton.setEnabled(false);
-						}catch(Exception ex){
-							System.out.println(ex.getMessage());
-						}
-						
+					//default icon, custom title
+					int n = JOptionPane.showConfirmDialog(
+					    DBSAApplication.dbsaJFrame, "Do you want do delete article duplicate before save to database?",
+					    "An Question", JOptionPane.YES_NO_OPTION);
+					
+					boolean checkInsert = false;
+					
+					if(n == JOptionPane.YES_OPTION){
+						JOptionPane.showMessageDialog(null, "Select rows which you want to delete, after press 'Delete' button");
+					}else if(n == JOptionPane.NO_OPTION){
+						checkInsert = insertToDatabase();
+					}
+
+					if(checkInsert == true){
+						JOptionPane.showMessageDialog(null, "Data is added successfully!");
 					}
 				}
 				
 			});
 		}
 		return saveJButton;
+	}
+	
+	@SuppressWarnings("static-access")
+	public boolean insertToDatabase(){
+		boolean checkInsert = false;
+		try{
+			InsertDBSAPublication insert = new InsertDBSAPublication();
+			insert.InsertPublication(dbsaPublication);
+			
+			System.out.println(resultsJTable.getRowCount());
+			for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
+				model.removeRow(i);
+			}
+			
+			titleJTextArea.setText("");
+			authorsJTextArea.setText("");
+			yearJTextArea.setText("");
+			abstractJTextArea.setText("");
+			publisherJTextArea.setText("");
+			
+			saveJButton.setEnabled(false);
+			checkInsert = true;
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
+		return checkInsert;
 	}
 
 	private JButton getDeleteJButton() {
