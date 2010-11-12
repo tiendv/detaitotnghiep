@@ -449,18 +449,25 @@ public class FetcherResultPanel extends JPanel {
 					
 
 					//default icon, custom title
-					int n = JOptionPane.showConfirmDialog(
+					int n = 0;
+					boolean checkInsert = false;
+					
+					if(numberArray.size() > 0){
+						n = JOptionPane.showConfirmDialog(
 					    DBSAApplication.dbsaJFrame, "Do you want do delete article duplicate before save to database?",
 					    "An Question", JOptionPane.YES_NO_OPTION);
 					
-					boolean checkInsert = false;
-					
-					if(n == JOptionPane.YES_OPTION){
-						JOptionPane.showMessageDialog(null, "Select rows which you want to delete, after press 'Delete' button");
-					}else if(n == JOptionPane.NO_OPTION){
+						
+						
+						if(n == JOptionPane.YES_OPTION){
+							JOptionPane.showMessageDialog(null, "Select rows which you want to delete, after press 'Delete' button");
+						}else if(n == JOptionPane.NO_OPTION){
+							checkInsert = insertToDatabase();
+						}
+					}else{
 						checkInsert = insertToDatabase();
 					}
-
+					
 					if(checkInsert == true){
 						JOptionPane.showMessageDialog(null, "Data is added successfully!");
 					}
