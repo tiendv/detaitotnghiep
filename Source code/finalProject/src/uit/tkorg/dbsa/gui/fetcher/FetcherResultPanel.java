@@ -27,6 +27,8 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import com.mysql.jdbc.exceptions.MySQLDataException;
+
 import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
@@ -58,7 +60,7 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane jScrollPane4;
 	private JTextArea publisherJTextArea;
 	private JScrollPane jScrollPane5;
-	private int rowNumberSelected = 0;
+	
 	
 	private static int rowNumber = 0;
 	private static String title = "";
@@ -294,7 +296,12 @@ public class FetcherResultPanel extends JPanel {
 		if (resultsJTable == null) {
 			
 			resultsJTable = createResultJTable();			
-		}else if(resultsJTable != null){			
+		}else if(resultsJTable != null){
+			
+			//if(!saveJButton.){
+			//	saveJButton.setEnabled(true);
+			//}
+			
 			for(int i = 0; i < getRowNumber(); i++){				
 				if((i + 1) == getRowNumber()){
 					//
@@ -328,6 +335,8 @@ public class FetcherResultPanel extends JPanel {
 					}			
 				}				
 			}	
+			//if(saveJButton.equals(false))
+			//	saveJButton.setEnabled(true);
 			
 			int maxResult = FetcherPanel.getAcmResultNumber() + FetcherPanel.getCiteResultNumber() + FetcherPanel.getIeeeResultNumber();
 			
@@ -335,7 +344,7 @@ public class FetcherResultPanel extends JPanel {
 				CheckExist check = new CheckExist();
 				
 				numberArray = (ArrayList<Integer>) check.CheckTitlePublications(dbsaPublication).clone();
-				System.out.println("trung lap " +numberArray.size());
+				System.out.println("trung lap " + numberArray.size());
 				
 				for(int i = 0; i < numberArray.size(); i++)
 				{
@@ -430,7 +439,7 @@ public class FetcherResultPanel extends JPanel {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
 			saveJButton.setText("Save");
-			
+			//saveJButton.setEnabled(false);
 			saveJButton.addActionListener(new ActionListener(){
 
 				@SuppressWarnings("static-access")
@@ -438,10 +447,23 @@ public class FetcherResultPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 
-					
-					//InsertDBSAPublication insert = new InsertDBSAPublication();
-					//insert.InsertPublication(dbsaPublication);
-//					}
+					if(numberArray.size() > 0){
+						JOptionPane.showMessageDialog(null,"Delete duplicate article before save to database.");
+					}else{
+						try{
+							InsertDBSAPublication insert = new InsertDBSAPublication();
+							insert.InsertPublication(dbsaPublication);
+							JOptionPane.showMessageDialog(null, "Data is added successfully!");
+							System.out.println(resultsJTable.getRowCount());
+							for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
+								model.removeRow(i);
+							}
+							saveJButton.setEnabled(false);
+						}catch(Exception ex){
+							System.out.println(ex.getMessage());
+						}
+						
+					}
 				}
 				
 			});
@@ -467,12 +489,15 @@ public class FetcherResultPanel extends JPanel {
 		return deleteJButton;
 	}
 
-	ArrayList<Integer> a = numberArray;
+	
+
 	private void removeRowsIsSelected() {
 		// TODO Auto-generated method stub
+		int check = 0;
 		for(int i = resultsJTable.getRowCount()-1; i >= 0; i--){
 			
 			if(resultsJTable.getModel().getValueAt(i, 6).toString().equals("true")){
+				check ++;
 				System.out.println(resultsJTable.getModel().getValueAt(i, 6).toString());
 				model.removeRow(i);
 				
@@ -503,9 +528,9 @@ public class FetcherResultPanel extends JPanel {
 					
 				}
 				
-//				for(int k = i +1; k <= resultsJTable.getRowCount(); k++){
-//					resultsJTable.setValueAt(k + 1, k + 2, 0);
-//				}
+				if(check == 0){
+					JOptionPane.showMessageDialog(null, "Ban chua chon bai bao can xoa!");
+				}
 			}
 		}
 	}
@@ -556,15 +581,15 @@ public class FetcherResultPanel extends JPanel {
 		int n  = resultsJTable.getSelectedRow();
 //		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
 		
-//		if(rowNumberSelected >= 0){
-//			titleJTextArea.setText(resultsJTable.getModel().getValueAt(n, 1).toString());
-//			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(n, 2).toString());
-//			yearJTextArea.setText(resultsJTable.getModel().getValueAt(n, 3).toString());
-//			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(n, 4).toString());
-//			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
-//		}else if(rowNumberSelected == -1){
-//			JOptionPane.showMessageDialog(null, "No row is selected!");
-//		}
+		if(n >= 0){
+			titleJTextArea.setText(resultsJTable.getModel().getValueAt(n, 1).toString());
+			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(n, 2).toString());
+			yearJTextArea.setText(resultsJTable.getModel().getValueAt(n, 3).toString());
+			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(n, 4).toString());
+			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
+		}else if(n == -1){
+			JOptionPane.showMessageDialog(null, "No row is selected!");
+		}
 	}
 	
 	/*
