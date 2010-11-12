@@ -139,7 +139,7 @@ public class FetcherPanel extends JPanel {
 					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					
 					if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
-						JOptionPane.showMessageDialog(null, "Input keyword before press Fetch!");
+						JOptionPane.showMessageDialog(null, "Please input keyword before press Fetch button!");
 					}
 					else if(keywordJTextField.getText() != ""){
 						if(fetchFromACMCheckBox.isSelected() == true) {
@@ -232,7 +232,7 @@ public class FetcherPanel extends JPanel {
 						/*
 						 * reset application Jpanel
 						 */
-						keywordJTextField.setText("");
+						keywordJTextField.setEnabled(false);
 						fetcherBoolean = false;
 					}
 				}
