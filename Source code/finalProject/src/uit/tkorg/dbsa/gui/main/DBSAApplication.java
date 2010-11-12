@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -581,7 +582,7 @@ public class DBSAApplication {
 					Locale locale = Locale.US;
 					Locale.setDefault(locale);	
 					DBSAResourceBundle.res = DBSAResourceBundle.initResources();
-					//UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+					UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
 					DBSAApplication DBSAApplication = new DBSAApplication();
 					//updateTextOfComponents();
 					DBSAApplication.getDBSAJFrame().setVisible(true);
