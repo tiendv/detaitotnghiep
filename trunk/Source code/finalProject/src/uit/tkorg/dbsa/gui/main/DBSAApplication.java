@@ -10,12 +10,17 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Locale;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -39,9 +44,8 @@ public class DBSAApplication {
 	private JMenu optionJMenu = null;
 	private JMenu helpJMenu = null;
 	
-	private JMenuItem newJMenuItem = null;
-	private JMenuItem openJMenuItem = null;
-	private JMenuItem saveJMenuItem = null;
+	private JMenuItem checkInternetJMenuItem = null;
+	private JMenuItem checkMySQLConnectionJMenuItem = null;
 	private JMenuItem exitJMenuItem = null;
 	
 	private JMenuItem cutJMenuItem = null;
@@ -129,53 +133,84 @@ public class DBSAApplication {
 		if (fileJMenu == null) {
 			fileJMenu = new JMenu();
 			fileJMenu.setText((" File "));
-			fileJMenu.add(getNewJMenuItem());
-			fileJMenu.add(getOpenJMenuItem());
-			fileJMenu.add(getSaveJMenuItem());
+			fileJMenu.add(getcheckInternetJMenuItem());
+			fileJMenu.add(getcheckMySQLConnectionJMenuItem());
 			fileJMenu.add(getExitJMenuItem());
 		}
 		return fileJMenu;
 	}
 	
 	/**
-	 * This method initalizes newJMenuItem
+	 * This method initalizes checkInternetConnectionJMenuItem
 	 * 
 	 * @return javax.swing.JMenuItem
 	 */
-	private JMenuItem getNewJMenuItem(){
-		if(newJMenuItem == null){
-			newJMenuItem = new JMenuItem();
-			newJMenuItem.setText("New database");
-			newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK, true));
+	private JMenuItem getcheckInternetJMenuItem(){
+		if(checkInternetJMenuItem == null){
+			checkInternetJMenuItem = new JMenuItem();
+			checkInternetJMenuItem.setText("Check internet connection");
+			checkInternetJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK, true));
+			checkInternetJMenuItem.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					if(isInternetReachable() == true){
+						JOptionPane.showMessageDialog(null, "Your system is connected the internet. \nYou can fetch article!");
+					}else{
+						JOptionPane.showMessageDialog(null, "Your computer don't connect to internet. ");
+					}
+				}
+				
+			});
 		}
-		return newJMenuItem;
+		return checkInternetJMenuItem;
 	}
+	/*
+	 * This is method check Internet connection
+	 * @return boolean
+	 */
 	
+	 public static boolean isInternetReachable()
+     {
+             try {
+                     //make a URL to a known source
+                     URL url = new URL("http://www.google.com");
+
+                     //open a connection to that source
+                     HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
+
+                     //trying to retrieve data from the source. If there
+                     //is no connection, this line will fail
+                     Object objData = urlConnect.getContent();
+
+             } catch (UnknownHostException e) {
+                     // TODO Auto-generated catch block
+                     //e.printStackTrace();
+                     return false;
+             }
+             catch (IOException e) {
+                     // TODO Auto-generated catch block
+                     //.printStackTrace();
+                     return false;
+             }
+             return true;
+     }
+
+	 
 	/**
-	 * This method initalizes openJMenuItem
+	 * This method initalizes checkMySQLConnectionJMenuItem
 	 * 
 	 * @return javax.swing.JMenuItem
 	 */
-	private JMenuItem getOpenJMenuItem(){
-		if(openJMenuItem == null){
-			openJMenuItem = new JMenuItem();
-			openJMenuItem.setText("Open file");
+	private JMenuItem getcheckMySQLConnectionJMenuItem(){
+		if(checkMySQLConnectionJMenuItem == null){
+			checkMySQLConnectionJMenuItem = new JMenuItem();
+			checkMySQLConnectionJMenuItem.setText("Check database connection!");
 		}
-		return openJMenuItem;
+		return checkMySQLConnectionJMenuItem;
 	}	
 
-	/**
-	 * This method initalizes saveJMenuItem
-	 * 
-	 * @return javax.swing.JMenuItem
-	 */
-	private JMenuItem getSaveJMenuItem(){
-		if(saveJMenuItem == null){
-			saveJMenuItem = new JMenuItem();
-			saveJMenuItem.setText("Save");
-		}
-		return saveJMenuItem;
-	}
 
 	/**
 	 * This method initalizes exitJMenuItem
@@ -186,6 +221,15 @@ public class DBSAApplication {
 		if(exitJMenuItem == null){
 			exitJMenuItem = new JMenuItem();
 			exitJMenuItem.setText("Exit");
+			exitJMenuItem.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					DBSAApplication.dbsaJFrame.dispose();
+				}
+				
+			});
 		}
 		return exitJMenuItem;
 	}		
