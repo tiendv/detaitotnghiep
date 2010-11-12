@@ -15,7 +15,6 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,9 +22,9 @@ import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -58,12 +57,9 @@ public class FetcherPanel extends JPanel {
 	private JCheckBox citeseerDLCheckBox;
 	private JSpinner citeseerJSpinner2;
 	private JPanel chooseJPanel;
-	private JCheckBox scienceDirectDLCheckBox;
-	private JSpinner scienceDirectJSpinner;
 	private JProgressBar acmJProgressBar;
 	private JProgressBar citeseerJProgressBar;
 	private JProgressBar ieeeploreJProgressBar;
-	private JProgressBar scienceDirectJProgressBar;
 	private JButton closeJButton;
 	private JButton showResultJButton;
 	private JButton fetcherJButton;
@@ -90,12 +86,13 @@ public class FetcherPanel extends JPanel {
 	private void initComponents() {
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
-		setSize(668, 407);
+		setSize(935, 477);
 	}
 
 	private JLabel getFetcherStatusJLabel() {
 		if (fetcherStatusJLabel == null) {
 			fetcherStatusJLabel = new JLabel();
+			fetcherStatusJLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 			fetcherStatusJLabel.setText("Fetcher status");
 		}
 		return fetcherStatusJLabel;
@@ -104,11 +101,12 @@ public class FetcherPanel extends JPanel {
 	private JPanel getFetcherJPanel() {
 		if (fetcherJPanel == null) {
 			fetcherJPanel = new JPanel();
-			fetcherJPanel.setBorder(BorderFactory.createTitledBorder("Fetcher"));
+			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, "Fetcher", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			fetcherJPanel.setLayout(new GroupLayout());
 			fetcherJPanel.add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 61, 10, 10)));
-			fetcherJPanel.add(getChooseJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
 			fetcherJPanel.add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 513), new Trailing(0, 68, 278, 278)));
+			fetcherJPanel.add(getChooseJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
 		}
 		return fetcherJPanel;
 	}
@@ -314,15 +312,6 @@ public class FetcherPanel extends JPanel {
 		return closeJButton;
 	}
 
-	private JProgressBar getScienceDirectJProgressBar() {
-		if (scienceDirectJProgressBar == null) {
-			scienceDirectJProgressBar = new JProgressBar();
-			scienceDirectJProgressBar.setStringPainted(true);
-			scienceDirectJProgressBar.setString("Science Direct Digital");
-		}
-		return scienceDirectJProgressBar;
-	}
-
 	private JProgressBar getIeeeploreJProgressBar() {
 		if (ieeeploreJProgressBar == null) {
 			ieeeploreJProgressBar = new JProgressBar();
@@ -368,59 +357,24 @@ public class FetcherPanel extends JPanel {
 		return acmProgressPer;
 	}
 
-	private JSpinner getScienceDirectJSpinner() {
-		if (scienceDirectJSpinner == null) {
-			scienceDirectJSpinner = new JSpinner();
-			scienceDirectJSpinner.setModel(new SpinnerNumberModel(1, null, null, 1));
-			scienceDirectJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			scienceDirectJSpinner.addChangeListener(new ChangeListener(){
-
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if(Integer.parseInt(scienceDirectJSpinner.getValue().toString()) < 1){
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
-						scienceDirectJSpinner.setValue(1);
-					}else if(Integer.parseInt(scienceDirectJSpinner.getValue().toString()) > 50){
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
-						scienceDirectJSpinner.setValue(50);
-					}
-					
-				}
-				
-			});
-		}
-		return scienceDirectJSpinner;
-	}
-
-	private JCheckBox getScienceDirectDLCheckBox() {
-		if (scienceDirectDLCheckBox == null) {
-			scienceDirectDLCheckBox = new JCheckBox();
-			scienceDirectDLCheckBox.setText("Fetch from ScienceDirect digital library");
-		}
-		return scienceDirectDLCheckBox;
-	}
-
 	private JPanel getChooseJPanel() {
 		if (chooseJPanel == null) {
 			chooseJPanel = new JPanel();
 			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, "Choose DLs", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			chooseJPanel.setLayout(new GroupLayout());
-			chooseJPanel.add(getIeeexploreDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(67, 8, 8)));
-			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(101, 8, 8)));
-			chooseJPanel.add(getFetchFromJLabel(), new Constraints(new Leading(12, 89, 12, 12), new Leading(5, 21, 12, 12)));
-			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(8, 212, 10, 10), new Leading(34, 8, 8)));
-			chooseJPanel.add(getScienceDirectDLCheckBox(), new Constraints(new Leading(8, 8, 8), new Leading(137, 10, 10)));
-			chooseJPanel.add(getMaxResultLabel(), new Constraints(new Leading(286, 67, 10, 10), new Leading(3, 24, 12, 12)));
-			chooseJPanel.add(getAcmJSpinner(), new Constraints(new Leading(293, 43, 10, 10), new Leading(38, 22, 12, 12)));
-			chooseJPanel.add(getIeeexploreJSpinner1(), new Constraints(new Leading(293, 43, 12, 12), new Leading(72, 12, 12)));
-			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Leading(366, 106, 10, 10), new Leading(7, 12, 12)));
-			chooseJPanel.add(getCiteseerJProgressBar(), new Constraints(new Bilateral(347, 12, 10), new Leading(104, 23, 12, 12)));
-			chooseJPanel.add(getScienceDirectJProgressBar(), new Constraints(new Bilateral(347, 12, 10), new Leading(138, 23, 12, 12)));
-			chooseJPanel.add(getIeeeploreJProgressBar(), new Constraints(new Bilateral(348, 12, 10), new Leading(71, 22, 12, 12)));
-			chooseJPanel.add(getAcmJProgressBar(), new Constraints(new Bilateral(348, 13, 250), new Leading(38, 22, 12, 12)));
-			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(293, 42, 28, 166), new Leading(104, 22, 12, 12)));
-			chooseJPanel.add(getScienceDirectJSpinner(), new Constraints(new Leading(293, 42, 28, 166), new Leading(138, 22, 12, 12)));
+			chooseJPanel.add(getIeeexploreJSpinner1(), new Constraints(new Leading(399, 48, 12, 12), new Leading(97, 27, 10, 10)));
+			chooseJPanel.add(getFetchFromJLabel(), new Constraints(new Leading(23, 89, 10, 10), new Leading(12, 33, 12, 12)));
+			chooseJPanel.add(getMaxResultLabel(), new Constraints(new Leading(389, 96, 10, 10), new Leading(12, 32, 12, 12)));
+			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Trailing(289, 106, 12, 12), new Leading(12, 35, 12, 12)));
+			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(398, 50, 34, 407), new Leading(136, 26, 10, 10)));
+			chooseJPanel.add(getAcmJSpinner(), new Constraints(new Leading(399, 48, 34, 406), new Leading(54, 28, 12, 12)));
+			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(21, 294, 10, 10), new Leading(59, 23, 12, 12)));
+			chooseJPanel.add(getIeeexploreDLCheckBox(), new Constraints(new Leading(20, 12, 12), new Leading(94, 28, 12, 12)));
+			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(20, 34, 406), new Leading(134, 28, 12, 12)));
+			chooseJPanel.add(getAcmJProgressBar(), new Constraints(new Bilateral(521, 12, 382), new Leading(57, 25, 12, 12)));
+			chooseJPanel.add(getIeeeploreJProgressBar(), new Constraints(new Bilateral(521, 12, 382), new Leading(94, 28, 12, 12)));
+			chooseJPanel.add(getCiteseerJProgressBar(), new Constraints(new Bilateral(520, 12, 383), new Leading(136, 26, 12, 12)));
 		}
 		return chooseJPanel;
 	}
@@ -428,21 +382,17 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getCiteseerJSpinner2() {
 		if (citeseerJSpinner2 == null) {
 			citeseerJSpinner2 = new JSpinner();
-			citeseerJSpinner2.setModel(new SpinnerNumberModel(1, null, null, 1));
-			citeseerJSpinner2.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			citeseerJSpinner2.addChangeListener(new ChangeListener(){
-
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if(Integer.parseInt(citeseerJSpinner2.getValue().toString()) < 1){
+			citeseerJSpinner2.addChangeListener(new ChangeListener() {
+	
+				public void stateChanged(ChangeEvent event) {
+					if (Integer.parseInt(citeseerJSpinner2.getValue().toString()) < 1) {
 						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
 						citeseerJSpinner2.setValue(1);
-					}else if(Integer.parseInt(citeseerJSpinner2.getValue().toString()) > 50){
+					} else if (Integer.parseInt(citeseerJSpinner2.getValue().toString()) > 50) {
 						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
 						citeseerJSpinner2.setValue(50);
 					}
 				}
-				
 			});
 		}
 		return citeseerJSpinner2;
@@ -451,7 +401,9 @@ public class FetcherPanel extends JPanel {
 	private JCheckBox getCiteseerDLCheckBox() {
 		if (citeseerDLCheckBox == null) {
 			citeseerDLCheckBox = new JCheckBox();
+			citeseerDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
 			citeseerDLCheckBox.setText("Fetch from Citeseer digital library");
+			citeseerDLCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return citeseerDLCheckBox;
 	}
@@ -459,23 +411,18 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getIeeexploreJSpinner1() {
 		if (ieeexploreJSpinner1 == null) {
 			ieeexploreJSpinner1 = new JSpinner();
-			ieeexploreJSpinner1.setModel(new SpinnerNumberModel(1, null, null, 1));
-			ieeexploreJSpinner1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			
-			ieeexploreJSpinner1.addChangeListener(new ChangeListener(){
-
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) < 1){
+			ieeexploreJSpinner1.addChangeListener(new ChangeListener() {
+	
+				public void stateChanged(ChangeEvent event) {
+					if (Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) < 1) {
 						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
 						ieeexploreJSpinner1.setValue(1);
-					}else if(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) > 50){
+					} else if (Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) > 50) {
 						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
 						ieeexploreJSpinner1.setValue(50);
 					}
-					
 				}
-				
 			});
 		}
 		return ieeexploreJSpinner1;
@@ -484,23 +431,18 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getAcmJSpinner() {
 		if (acmJSpinner == null) {
 			acmJSpinner = new JSpinner();
-			acmJSpinner.setModel(new SpinnerNumberModel(1, null, null, 1));
-			acmJSpinner.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			
-			acmJSpinner.addChangeListener(new ChangeListener(){
-
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					if(Integer.parseInt(acmJSpinner.getValue().toString()) < 1){
+			acmJSpinner.addChangeListener(new ChangeListener() {
+	
+				public void stateChanged(ChangeEvent event) {
+					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1) {
 						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
 						acmJSpinner.setValue(1);
-					}else if(Integer.parseInt(acmJSpinner.getValue().toString()) > 50){
+					} else if (Integer.parseInt(acmJSpinner.getValue().toString()) > 50) {
 						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
 						acmJSpinner.setValue(50);
 					}
-					
 				}
-				
 			});
 		}
 		return acmJSpinner;
@@ -509,8 +451,9 @@ public class FetcherPanel extends JPanel {
 	private JCheckBox getIeeexploreDLCheckBox() {
 		if (ieeexploreDLCheckBox == null) {
 			ieeexploreDLCheckBox = new JCheckBox();
-			ieeexploreDLCheckBox.setSelected(true);
+			ieeexploreDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
 			ieeexploreDLCheckBox.setText("Fetch from IEEExplore digital libary");
+			ieeexploreDLCheckBox.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
 		return ieeexploreDLCheckBox;
 	}
@@ -518,6 +461,7 @@ public class FetcherPanel extends JPanel {
 	private JLabel getMaxResultLabel() {
 		if (maxResultLabel == null) {
 			maxResultLabel = new JLabel();
+			maxResultLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 			maxResultLabel.setText("Max result:");
 		}
 		return maxResultLabel;
@@ -526,7 +470,9 @@ public class FetcherPanel extends JPanel {
 	private JCheckBox getFetchFromACMCheckBox() {
 		if (fetchFromACMCheckBox == null) {
 			fetchFromACMCheckBox = new JCheckBox();
+			fetchFromACMCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
 			fetchFromACMCheckBox.setText("Fetch from ACM digital library");
+			fetchFromACMCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return fetchFromACMCheckBox;
 	}
@@ -534,6 +480,7 @@ public class FetcherPanel extends JPanel {
 	private JLabel getFetchFromJLabel() {
 		if (fetchFromJLabel == null) {
 			fetchFromJLabel = new JLabel();
+			fetchFromJLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
 			fetchFromJLabel.setText("Fetch from:");
 		}
 		return fetchFromJLabel;
@@ -542,7 +489,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getInputJPanel() {
 		if (inputJPanel == null) {
 			inputJPanel = new JPanel();
-			inputJPanel.setBorder(BorderFactory.createTitledBorder("Input"));
+			inputJPanel.setBorder(BorderFactory.createTitledBorder(" "));
 			inputJPanel.setAlignmentX(0.5f);
 			inputJPanel.setAlignmentY(0.5f);
 			inputJPanel.setLayout(new GroupLayout());
@@ -555,7 +502,6 @@ public class FetcherPanel extends JPanel {
 	private JTextField getKeywordJTextField() {
 		if (keywordJTextField == null) {
 			keywordJTextField = new JTextField();
-			keywordJTextField.setToolTipText("Nguyeen van a");
 			keywordJTextField.addMouseListener(new MouseAdapter() {
 	
 				public void mousePressed(MouseEvent event) {
@@ -569,8 +515,10 @@ public class FetcherPanel extends JPanel {
 	private JLabel getKeywordJLabel() {
 		if (keywordJLabel == null) {
 			keywordJLabel = new JLabel();
+			keywordJLabel.setBackground(Color.white);
+			keywordJLabel.setFont(new Font("Dialog", Font.BOLD, 12));
 			keywordJLabel.setText("  Input keyword :");
-			keywordJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			keywordJLabel.setBorder(new LineBorder(Color.lightGray, 1, false));
 			keywordJLabel.setAlignmentX(0.5f);
 		}
 		return keywordJLabel;
