@@ -127,6 +127,7 @@ public class FetcherPanel extends JPanel {
 	
 	
 	private JButton getFetcherJButton() {
+		
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
 			fetcherJButton.setText("Fetcher");
@@ -135,13 +136,18 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
 					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					
+					
+					//boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
+					if(!DBSAApplication.isInternetReachable()){
+						JOptionPane.showMessageDialog(null, "Your system don't connect to the Internet. \nPlease check your internet!");
+					}
 					
 					if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
 						JOptionPane.showMessageDialog(null, "Please input keyword before press Fetch button!");
 					}
-					else if(keywordJTextField.getText() != ""){
+					else if(keywordJTextField.getText() != "" && DBSAApplication.isInternetReachable()){
 						if(fetchFromACMCheckBox.isSelected() == true) {
 							fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 							fetcherBoolean = true;
