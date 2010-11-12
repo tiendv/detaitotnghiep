@@ -43,7 +43,7 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel actionsJPanel;
 	private JButton closeJButton;
 	private JButton deleteJButton;
-	private JButton saveJButton;
+	private static JButton saveJButton;
 	private JPanel entryJPanel;
 	private JLabel authorsJLabel;
 	private JLabel yearJLabel;
@@ -75,6 +75,8 @@ public class FetcherResultPanel extends JPanel {
 	private static ArrayList<DBSAPublication> dbsaPublication = new ArrayList<DBSAPublication>();
 	
 	private static ArrayList<Integer> numberArray = new ArrayList<Integer>();
+	
+	private boolean checkClickOnJTabel = false; 
 	
 	public FetcherResultPanel() {
 		initComponents();
@@ -298,10 +300,6 @@ public class FetcherResultPanel extends JPanel {
 			resultsJTable = createResultJTable();			
 		}else if(resultsJTable != null){
 			
-			//if(!saveJButton.){
-			//	saveJButton.setEnabled(true);
-			//}
-			
 			for(int i = 0; i < getRowNumber(); i++){				
 				if((i + 1) == getRowNumber()){
 					//
@@ -335,9 +333,9 @@ public class FetcherResultPanel extends JPanel {
 					}			
 				}				
 			}	
-			//if(saveJButton.equals(false))
-			//	saveJButton.setEnabled(true);
 			
+			if(!saveJButton.isEnabled())
+				saveJButton.setEnabled(true);
 			int maxResult = FetcherPanel.getAcmResultNumber() + FetcherPanel.getCiteResultNumber() + FetcherPanel.getIeeeResultNumber();
 			
 			if(resultsJTable.getRowCount() >= maxResult){
@@ -365,7 +363,8 @@ public class FetcherResultPanel extends JPanel {
 		resultsJTable.addMouseListener(new MouseAdapter() {			
 			public void mousePressed(MouseEvent event) {
 				if(event.getClickCount()==1)
-				resultJTableMousePressed();
+					resultJTableMousePressed();
+				checkClickOnJTabel = true;
 			}
 		});
 		
@@ -439,7 +438,8 @@ public class FetcherResultPanel extends JPanel {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
 			saveJButton.setText("Save");
-			//saveJButton.setEnabled(false);
+			saveJButton.setEnabled(false);
+			
 			saveJButton.addActionListener(new ActionListener(){
 
 				@SuppressWarnings("static-access")
@@ -457,8 +457,6 @@ public class FetcherResultPanel extends JPanel {
 					    DBSAApplication.dbsaJFrame, "Do you want do delete article duplicate before save to database?",
 					    "An Question", JOptionPane.YES_NO_OPTION);
 					
-						
-						
 						if(n == JOptionPane.YES_OPTION){
 							JOptionPane.showMessageDialog(null, "Select rows which you want to delete, after press 'Delete' button");
 						}else if(n == JOptionPane.NO_OPTION){
@@ -612,13 +610,17 @@ public class FetcherResultPanel extends JPanel {
 		 */
 		//rowNumberSelected
 		int n  = resultsJTable.getSelectedRow();
-//		System.out.println( "row is selected " + rowNumberSelected + "\n + Row number " + resultsJTable.getRowCount());
+		System.out.println( "row is selected " + n + "\n + Row number " + resultsJTable.getRowCount());
 		
-		if(n >= 0){
-			titleJTextArea.setText(resultsJTable.getModel().getValueAt(n, 1).toString());
-			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(n, 2).toString());
-			yearJTextArea.setText(resultsJTable.getModel().getValueAt(n, 3).toString());
-			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(n, 4).toString());
+		System.out.println(model.toString());
+		
+		if(n >= 0 && checkClickOnJTabel == true){
+			checkClickOnJTabel = false;
+			
+			titleJTextArea.setText(model.getValueAt(n, 1).toString());
+			authorsJTextArea.setText(model.getValueAt(n, 2).toString());
+			yearJTextArea.setText(model.getValueAt(n, 3).toString());
+			abstractJTextArea.setText(model.getValueAt(n, 4).toString());
 			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
 		}else if(n == -1){
 			JOptionPane.showMessageDialog(null, "No row is selected!");
