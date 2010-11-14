@@ -27,17 +27,17 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.sf.jabref.sql.DbImportAction;
+
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
-import uit.tkorg.dbsa.gui.fetcher.FetcherToolBar;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
 public class DBSAApplication {
 
 	public static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
-	private static DBSAStatusBar dbsaStatusBar = null;
-	
+
 	private JMenu fileJMenu = null;
 	private JMenu editJMenu = null;
 	private JMenu fetcherJMenu = null;
@@ -67,9 +67,9 @@ public class DBSAApplication {
 	private FetcherPanel fetcherPanel = null;
 	private ClassificationPanel classificationPanel = null;
 	
-	private FetcherToolBar fetcherToolbar = null;
+	private static DBSAToolBar dbsaToolbar = null;
 	
-	private DBSAStatusBar dbsaStatus = null;
+	public static DBSAStatusBar dbsaStatusBar = null;
 
 	private JFrame getDBSAJFrame(){
 	
@@ -81,25 +81,25 @@ public class DBSAApplication {
 			dbsaJFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
-			dbsaJFrame.setTitle("dbsa - Data Index Science Articles");
+			dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
 			getDBSAContent();
-			
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel(dbsaTabPanel);
 			}else{
-				if(dbsaStatus == null){
-					dbsaStatus = new DBSAStatusBar();
+				if(dbsaStatusBar == null){
+					dbsaStatusBar = new DBSAStatusBar();
 				}else
-					dbsaStatus.setStatusJLabel("abc");
-				dbsaStatus.repaint();
+					dbsaStatusBar.setStatusJLabel("");
+				dbsaStatusBar.repaint();
 			}
 			dbsaJFrame.repaint();
+			
 		}
 		return dbsaJFrame;
 	}
 	
 	public static void getDBSAContent(){
-		//dbsaJFrame.getContentPane().add(getFetcherToolBar(), BorderLayout.NORTH);
+		dbsaJFrame.getContentPane().add(getDBSAToolBar(), BorderLayout.NORTH);
 		dbsaJFrame.getContentPane().add(getDBSATabpanel(), BorderLayout.CENTER);
 		dbsaJFrame.getContentPane().add(getDBSAStatusBar(), BorderLayout.SOUTH);
 	}
@@ -133,7 +133,7 @@ public class DBSAApplication {
 	private JMenu getFileJMenu() {
 		if (fileJMenu == null) {
 			fileJMenu = new JMenu();
-			fileJMenu.setText((" File "));
+			fileJMenu.setText(DBSAResourceBundle.res.getString("file"));
 			fileJMenu.add(getcheckInternetJMenuItem());
 			fileJMenu.add(getcheckMySQLConnectionJMenuItem());
 			fileJMenu.add(getExitJMenuItem());
@@ -149,7 +149,7 @@ public class DBSAApplication {
 	private JMenuItem getcheckInternetJMenuItem(){
 		if(checkInternetJMenuItem == null){
 			checkInternetJMenuItem = new JMenuItem();
-			checkInternetJMenuItem.setText("Check internet connection");
+			checkInternetJMenuItem.setText(DBSAResourceBundle.res.getString("check.internet.connection"));
 			checkInternetJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK, true));
 			checkInternetJMenuItem.addActionListener(new ActionListener(){
 
@@ -157,9 +157,9 @@ public class DBSAApplication {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					if(isInternetReachable() == true){
-						JOptionPane.showMessageDialog(null, "Your system is connected the internet. \nYou can fetch article!");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.ok"));
 					}else{
-						JOptionPane.showMessageDialog(null, "Your computer don't connect to internet. ");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.false"));
 					}
 				}
 				
@@ -207,7 +207,7 @@ public class DBSAApplication {
 	private JMenuItem getcheckMySQLConnectionJMenuItem(){
 		if(checkMySQLConnectionJMenuItem == null){
 			checkMySQLConnectionJMenuItem = new JMenuItem();
-			checkMySQLConnectionJMenuItem.setText("Check database connection!");
+			checkMySQLConnectionJMenuItem.setText(DBSAResourceBundle.res.getString("check.database.connection"));
 		}
 		return checkMySQLConnectionJMenuItem;
 	}	
@@ -221,7 +221,7 @@ public class DBSAApplication {
 	private JMenuItem getExitJMenuItem(){
 		if(exitJMenuItem == null){
 			exitJMenuItem = new JMenuItem();
-			exitJMenuItem.setText("Exit");
+			exitJMenuItem.setText(DBSAResourceBundle.res.getString("exit"));
 			exitJMenuItem.addActionListener(new ActionListener(){
 
 				@Override
@@ -243,7 +243,7 @@ public class DBSAApplication {
 	private JMenu getEditJMenu() {
 		if (editJMenu == null) {
 			editJMenu = new JMenu();
-			editJMenu.setText(("Edit"));
+			editJMenu.setText(DBSAResourceBundle.res.getString("edit"));
 			editJMenu.add(getCutJMenuItem());
 			editJMenu.add(getCopyJMenuItem());
 			editJMenu.add(getPasteJMenuItem());
@@ -374,7 +374,7 @@ public class DBSAApplication {
 	private JMenu getClassificationJMenu() {
 		if (classificationJMenu == null) {
 			classificationJMenu = new JMenu();
-			classificationJMenu.setText(("Classification"));
+			classificationJMenu.setText(DBSAResourceBundle.res.getString("classification"));
 //			fileJMenu.add(getSaveMenuItem());
 //			fileJMenu.add(getExitMenuItem());
 		}
@@ -389,7 +389,7 @@ public class DBSAApplication {
 	private JMenu getFetcherJMenu() {
 		if (fetcherJMenu == null) {
 			fetcherJMenu = new JMenu();
-			fetcherJMenu.setText(("Fetcher"));
+			fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
 //			fileJMenu.add(getSaveMenuItem());
 //			fileJMenu.add(getExitMenuItem());
 		}
@@ -404,7 +404,7 @@ public class DBSAApplication {
 	private JMenu getOptionJMenu() {
 		if (optionJMenu == null) {
 			optionJMenu = new JMenu();
-			optionJMenu.setText(("Option"));
+			optionJMenu.setText(DBSAResourceBundle.res.getString("option"));
 			optionJMenu.add(getConfigurationJMenuItem());
 		}
 		return optionJMenu;
@@ -418,7 +418,7 @@ public class DBSAApplication {
 	private JMenuItem getConfigurationJMenuItem(){
 		if(configurationJMenuItem == null){
 			configurationJMenuItem = new JMenuItem();
-			configurationJMenuItem.setText("Configuration");
+			configurationJMenuItem.setText(DBSAResourceBundle.res.getString("config"));
 			configurationJMenuItem.addActionListener(new ActionListener(){
 
 				@Override
@@ -440,9 +440,10 @@ public class DBSAApplication {
 	private JMenu getHelpJMenu() {
 		if (helpJMenu == null) {
 			helpJMenu = new JMenu();
-			helpJMenu.setText(("Help"));
+			helpJMenu.setText(DBSAResourceBundle.res.getString("help"));
 			helpJMenu.add(getHelpJMenuItem());
 			helpJMenu.add(getAboutJMenuItem());
+			
 		}
 		return helpJMenu;
 	}
@@ -455,7 +456,7 @@ public class DBSAApplication {
 	private JMenuItem getHelpJMenuItem(){
 		if(helpJMenuItem == null){
 			helpJMenuItem = new JMenuItem();
-			helpJMenuItem.setText("Help");
+			helpJMenuItem.setText(DBSAResourceBundle.res.getString("help"));
 			
 		}
 		return helpJMenuItem;
@@ -469,7 +470,16 @@ public class DBSAApplication {
 	private JMenuItem getAboutJMenuItem(){
 		if(aboutJMenuItem == null){
 			aboutJMenuItem = new JMenuItem();
-			aboutJMenuItem.setText("About");
+			aboutJMenuItem.setText(DBSAResourceBundle.res.getString("about"));
+			aboutJMenuItem.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DBSAAboutDialog about = new DBSAAboutDialog(dbsaJFrame);
+					about.setVisible(true);
+					//about.show();
+				}
+			});
 			
 		}
 		return aboutJMenuItem;
@@ -506,11 +516,11 @@ public class DBSAApplication {
 		return dbsaStatusBar;
 	}
 	
-	private FetcherToolBar getFetcherToolBar(){
-		if(fetcherToolbar == null){
-			fetcherToolbar = new FetcherToolBar(dbsaJFrame);
+	private static DBSAToolBar getDBSAToolBar(){
+		if(dbsaToolbar == null){
+			dbsaToolbar = new DBSAToolBar(dbsaJFrame);
 		}
-		return fetcherToolbar;
+		return dbsaToolbar;
 	}
 	
 	private static void setDBSAToolBar(int IDToolBar){

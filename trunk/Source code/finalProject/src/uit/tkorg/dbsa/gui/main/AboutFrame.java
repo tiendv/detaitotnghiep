@@ -7,6 +7,7 @@
 package uit.tkorg.dbsa.gui.main;
 
 import java.awt.Color;
+import java.awt.Frame;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -84,7 +85,6 @@ public class AboutFrame extends JFrame {
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setIcon(new ImageIcon(getClass().getResource("/tkorg/idrs/resources/image/del.png")));
 		}
 		return jButton1;
 	}
@@ -92,7 +92,6 @@ public class AboutFrame extends JFrame {
 	private JButton getJButton0() {
 		if (jButton0 == null) {
 			jButton0 = new JButton();
-			jButton0.setIcon(new ImageIcon(getClass().getResource("/tkorg/idrs/resources/image/edit.png")));
 		}
 		return jButton0;
 	}
