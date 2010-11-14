@@ -3,13 +3,16 @@ package uit.tkorg.dbsa.gui.fetcher;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
+import uit.tkorg.dbsa.properties.files.GUIProperties;
+
 public class FetcherToolBar extends JToolBar{
 	
-private static final long serialVersionUID = 1L;
+/*private static final long serialVersionUID = 1L;
 	
 	private JFrame disaJFrame = null; 
 	private static JButton newButton;
@@ -27,7 +30,7 @@ private static final long serialVersionUID = 1L;
 	private JButton getNewButton(){
 		if(newButton == null) {
 			newButton = new JButton();
-			//newButton.setIcon(new ImageIcon(getClass().getResource()));
+			//newButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_ICON)));;
 			//newButton.setPressedIcon(new ImageIcon(getClass().getResource("lkfl")));
 			newButton.setBorder(null);
 			newButton.setToolTipText("New database");
@@ -56,5 +59,5 @@ private static final long serialVersionUID = 1L;
 			});
 		}
 		return newButton;
-	};
+	};*/
 }

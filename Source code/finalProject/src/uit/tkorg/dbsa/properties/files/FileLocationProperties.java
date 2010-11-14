@@ -7,5 +7,5 @@ package uit.tkorg.dbsa.properties.files;
  */
 
 public class FileLocationProperties {
-	public static final String ICON_LOCATION = "/uit/tkorg/disa/resources/images/";
+	public static final String ICON_LOCATION = "/uit/tkorg/dbsa/resources/images/";
 }
