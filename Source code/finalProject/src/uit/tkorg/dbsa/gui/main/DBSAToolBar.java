@@ -9,7 +9,6 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
@@ -51,7 +50,7 @@ public class DBSAToolBar extends JPanel {
 	private JButton getResultJButton() {
 		if (resultJButton == null) {
 			resultJButton = new JButton();
-			resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_ICON)));
+			resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_BUTTON_TOOLBAR_ICON)));
 			resultJButton.addMouseListener(new MouseListener(){
 
 				@Override
@@ -63,13 +62,13 @@ public class DBSAToolBar extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.PRESSED_RESULT_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
@@ -91,7 +90,7 @@ public class DBSAToolBar extends JPanel {
 	private JButton getDatabaseJButton() {
 		if (databaseJButton == null) {
 			databaseJButton = new JButton();
-			databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_ICON)));
+			databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_BUTTON_TOOLBAR_ICON)));
 			databaseJButton.setToolTipText("Database Manager");
 			databaseJButton.addMouseListener(new MouseListener(){
 
@@ -104,13 +103,13 @@ public class DBSAToolBar extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.PRESSED_DATABASE_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
@@ -132,7 +131,7 @@ public class DBSAToolBar extends JPanel {
 	private JButton getFetcherJButton() {
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
-			fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_ICON)));
+			fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_BUTTON_TOOLBAR_ICON)));
 			fetcherJButton.addMouseListener(new MouseListener(){
 
 				@Override
@@ -144,13 +143,13 @@ public class DBSAToolBar extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.PRESSED_FETCHER_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
@@ -172,7 +171,7 @@ public class DBSAToolBar extends JPanel {
 	private JButton getCheckConnectionJButton() {
 		if (checkConnectionJButton == null) {
 			checkConnectionJButton = new JButton();
-			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_ICON)));
+			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 			checkConnectionJButton.setToolTipText("Check Connection");
 			checkConnectionJButton.addMouseListener(new MouseListener(){
 
@@ -198,13 +197,13 @@ public class DBSAToolBar extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.PRESSED_CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					
+					checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
