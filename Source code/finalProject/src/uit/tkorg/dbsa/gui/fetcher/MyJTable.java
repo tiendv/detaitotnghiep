@@ -2,6 +2,9 @@ package uit.tkorg.dbsa.gui.fetcher;
 
 import javax.swing.JTable;    
 import javax.swing.table.*;
+
+import org.pdfbox.util.operator.SetHorizontalTextScaling;
+
 import java.util.Hashtable;
 import java.awt.Color;
 /*
@@ -36,6 +39,7 @@ public class MyJTable extends JTable
   {
     super.setModel(tm);
     renderColumns(new JLabelRenderer(this));
+    
   }
   
 

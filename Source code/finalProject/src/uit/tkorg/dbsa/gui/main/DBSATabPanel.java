@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
+import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 
@@ -47,7 +48,7 @@ public class DBSATabPanel extends JTabbedPane {
 
 	private JPanel getDatabaseManagementJPanel() {
 		if (databaseManagementJPanel == null) {
-			databaseManagementJPanel = new JPanel();
+			databaseManagementJPanel = new DatabaseManagementPanel();
 		}
 		return databaseManagementJPanel;
 	}

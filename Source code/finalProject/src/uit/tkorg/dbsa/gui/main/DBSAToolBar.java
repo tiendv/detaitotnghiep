@@ -171,6 +171,7 @@ public class DBSAToolBar extends JPanel {
 	private JButton getCheckConnectionJButton() {
 		if (checkConnectionJButton == null) {
 			checkConnectionJButton = new JButton();
+			//checkConnectionJButton.setEnabled(false);
 			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 			checkConnectionJButton.setToolTipText("Check Connection");
 			checkConnectionJButton.addMouseListener(new MouseListener(){

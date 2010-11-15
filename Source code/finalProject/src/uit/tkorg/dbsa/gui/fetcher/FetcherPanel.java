@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -37,6 +38,7 @@ import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
 
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -77,6 +79,8 @@ public class FetcherPanel extends JPanel {
 	private boolean fetcherBoolean = false;
 	
 	private static int acmProgressPer = 0;
+	
+	private static DBSAStatusBar dbsaStatus = new DBSAStatusBar();
 	
 	public FetcherPanel(JTabbedPane dbsa) {
 		initComponents();
@@ -507,6 +511,42 @@ public class FetcherPanel extends JPanel {
 				public void mousePressed(MouseEvent event) {
 					keywordJTextFieldMouseMousePressed(event);
 				}
+			});
+			keywordJTextField.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@SuppressWarnings("static-access")
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					dbsaStatus.setDBSAProgressMessage("Input keyword to fetcher");
+				}
+
+				@SuppressWarnings("static-access")
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					dbsaStatus.setDBSAProgressMessage("Copyright: TKORG - Text Knowlege Organization Research Group.");
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				//@SuppressWarnings("static-access")
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
 			});
 		}
 		return keywordJTextField;

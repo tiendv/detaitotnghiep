@@ -1,10 +1,12 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -15,8 +17,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -26,8 +32,6 @@ import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
-
-import com.mysql.jdbc.exceptions.MySQLDataException;
 
 import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
@@ -42,7 +46,7 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane resultsJScrollPane;
 	private JPanel actionsJPanel;
 	private JButton closeJButton;
-	private JButton deleteJButton;
+	private static JButton deleteJButton;
 	private static JButton saveJButton;
 	private JPanel entryJPanel;
 	private JLabel authorsJLabel;
@@ -90,23 +94,15 @@ public class FetcherResultPanel extends JPanel {
 	private void initComponents() {
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(3, 3, 313), new Trailing(3, 60, 10, 10)));
-		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 127), new Trailing(69, 309, 67, 148)));
-		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 384, 51, 426)));
-		setSize(631, 551);
-		
-		if(resultsJTable != null){
-			titleJTextArea.setText(resultsJTable.getModel().getValueAt(0, 1).toString());
-			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(0, 2).toString());
-			yearJTextArea.setText(resultsJTable.getModel().getValueAt(0, 3).toString());
-			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(0, 4).toString());
-			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(0, 5).toString());		
-
-		}
+		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 310, 10, 170)));
+		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 629), new Trailing(65, 10, 10)));
+		setSize(649, 484);
 	}
 
 	private JScrollPane getJScrollPane5() {
 		if (jScrollPane5 == null) {
 			jScrollPane5 = new JScrollPane();
+			jScrollPane5.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			jScrollPane5.setViewportView(getPublisherJTextArea());
 		}
 		return jScrollPane5;
@@ -122,8 +118,8 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane getJScrollPane4() {
 		if (jScrollPane4 == null) {
 			jScrollPane4 = new JScrollPane();
+			jScrollPane4.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			jScrollPane4.setViewportView(getAbstractJTextArea());
-			
 		}
 		return jScrollPane4;
 	}
@@ -131,6 +127,39 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getAbstractJTextArea() {
 		if (abstractJTextArea == null) {
 			abstractJTextArea = new JTextArea();
+			abstractJTextArea.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
 		}
 		return abstractJTextArea;
 	}
@@ -138,6 +167,7 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane getJScrollPane3() {
 		if (jScrollPane3 == null) {
 			jScrollPane3 = new JScrollPane();
+			jScrollPane3.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			jScrollPane3.setViewportView(getYearJTextArea());
 		}
 		return jScrollPane3;
@@ -153,6 +183,7 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane getJScrollPane2() {
 		if (jScrollPane2 == null) {
 			jScrollPane2 = new JScrollPane();
+			jScrollPane2.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			jScrollPane2.setViewportView(getAuthorsJTextArea());
 		}
 		return jScrollPane2;
@@ -168,6 +199,7 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			jScrollPane1.setViewportView(getTitleJTextArea());
 		}
 		return jScrollPane1;
@@ -225,9 +257,9 @@ public class FetcherResultPanel extends JPanel {
 		return authorsJLabel;
 	}
 
-	public void setDefaultTableModel(DefaultTableModel value){
-		model = value;
-	}
+	//public void setDefaultTableModel(DefaultTableModel value){
+	//	model = value;
+	//}
 	
 	public DefaultTableModel getDefaultTableModel(){
 		return model;
@@ -264,6 +296,12 @@ public class FetcherResultPanel extends JPanel {
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
 		
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();    
+		dtcr.setHorizontalAlignment(SwingConstants.CENTER);  
+		
+		TableCellRenderer tcr = table.getDefaultRenderer(Integer.class);
+		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)tcr; 
+		renderer.setHorizontalAlignment(SwingConstants.CENTER);  
 		
 		for(int i = 0; i < 6; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -279,8 +317,8 @@ public class FetcherResultPanel extends JPanel {
 				col.setPreferredWidth(500);
 			}else if (i == 5){
 				col.setPreferredWidth(100);
-			}else{
-				col.setPreferredWidth(10);
+			}else if(i == 6){
+				col.setPreferredWidth(5);
 			}
 		}
 		
@@ -417,18 +455,19 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getEntryJPanel() {
 		if (entryJPanel == null) {
 			entryJPanel = new JPanel();
-			entryJPanel.setBorder(BorderFactory.createTitledBorder("Entry detail"));
+			entryJPanel.setBorder(BorderFactory.createTitledBorder(null, "Entry detail", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			entryJPanel.setLayout(new GroupLayout());
-			entryJPanel.add(getAuthorsJLabel(), new Constraints(new Leading(3, 78, 12, 12), new Leading(50, 46, 12, 12)));
-			entryJPanel.add(getTitleJLabel(), new Constraints(new Leading(3, 78, 12, 12), new Leading(2, 46, 12, 12)));
-			entryJPanel.add(getJScrollPane2(), new Constraints(new Bilateral(83, 12, 22), new Leading(50, 46, 12, 12)));
-			entryJPanel.add(getYearJLabel(), new Constraints(new Leading(3, 78, 12, 12), new Leading(98, 46, 12, 12)));
-			entryJPanel.add(getJScrollPane3(), new Constraints(new Bilateral(83, 12, 22), new Leading(98, 46, 12, 12)));
-			entryJPanel.add(getAbstractJLabel(), new Constraints(new Leading(3, 78, 12, 12), new Leading(146, 84, 10, 10)));
-			entryJPanel.add(getJScrollPane4(), new Constraints(new Bilateral(83, 12, 22), new Leading(146, 84, 12, 12)));
-			entryJPanel.add(getPublisherJLabel(), new Constraints(new Leading(3, 78, 12, 12), new Leading(232, 46, 10, 10)));
-			entryJPanel.add(getJScrollPane5(), new Constraints(new Bilateral(83, 12, 22), new Leading(232, 46, 12, 12)));
-			entryJPanel.add(getJScrollPane1(), new Constraints(new Bilateral(83, 12, 22), new Leading(2, 46, 12, 12)));
+			entryJPanel.add(getYearJLabel(), new Constraints(new Leading(8, 78, 12, 12), new Leading(80, 30, 10, 10)));
+			entryJPanel.add(getAbstractJLabel(), new Constraints(new Leading(8, 78, 12, 12), new Leading(114, 52, 10, 10)));
+			entryJPanel.add(getAuthorsJLabel(), new Constraints(new Leading(8, 78, 45, 26), new Leading(45, 30, 12, 12)));
+			entryJPanel.add(getTitleJLabel(), new Constraints(new Leading(8, 78, 12, 12), new Leading(10, 30, 12, 12)));
+			entryJPanel.add(getJScrollPane2(), new Constraints(new Bilateral(90, 12, 22), new Leading(45, 30, 12, 12)));
+			entryJPanel.add(getJScrollPane1(), new Constraints(new Bilateral(90, 12, 22), new Leading(10, 30, 10, 10)));
+			entryJPanel.add(getJScrollPane3(), new Constraints(new Bilateral(89, 12, 532), new Leading(80, 30, 10, 10)));
+			entryJPanel.add(getPublisherJLabel(), new Constraints(new Leading(8, 78, 46, 27), new Leading(170, 30, 10, 10)));
+			entryJPanel.add(getJScrollPane5(), new Constraints(new Bilateral(89, 12, 532), new Leading(170, 30, 10, 10)));
+			entryJPanel.add(getJScrollPane4(), new Constraints(new Bilateral(89, 12, 532), new Leading(114, 52, 12, 12)));
 		}
 		return entryJPanel;
 	}
@@ -506,6 +545,7 @@ public class FetcherResultPanel extends JPanel {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
 			deleteJButton.setText("Delete");
+			deleteJButton.setEnabled(false);
 			deleteJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -612,7 +652,9 @@ public class FetcherResultPanel extends JPanel {
 		int n  = resultsJTable.getSelectedRow();
 		System.out.println( "row is selected " + n + "\n + Row number " + resultsJTable.getRowCount());
 		
-		System.out.println(model.toString());
+		//if(model.getValueAt(n, 6).toString().equals("true")){
+			deleteJButton.setEnabled(true);
+	//	}
 		
 		if(n >= 0 && checkClickOnJTabel == true){
 			checkClickOnJTabel = false;

@@ -19,10 +19,10 @@ import org.dyno.visual.swing.layouts.Leading;
 public class DBSAStatusBar extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel statusJLabel;
+	private static JLabel statusJLabel;
 	private JPanel statusJPanel;
 	private JProgressBar dbsaProgressbar;
-	private JLabel dbsaProgressMessage;
+	private static JLabel dbsaProgressMessage;
 
 	public DBSAStatusBar() {
 		initComponents();
@@ -44,6 +44,10 @@ public class DBSAStatusBar extends JPanel {
 		return dbsaProgressMessage;
 	}
 
+	public static void setDBSAProgressMessage(String text){
+		dbsaProgressMessage.setText(text);
+	}
+	
 	private JProgressBar dbsaProgressbar() {
 		if (dbsaProgressbar == null) {
 			dbsaProgressbar = new JProgressBar();
@@ -65,9 +69,10 @@ public class DBSAStatusBar extends JPanel {
 		return statusJPanel;
 	}
 
-	public void setStatusJLabel(String disaStatus){
-		statusJLabel.setText("Status: " + disaStatus );
+	public void setStatusJLabel(String dbsaStatus){
+		statusJLabel.setText("Status: " + dbsaStatus );
 	}
+	
 	private JLabel getStatusJLabel() {
 		if (statusJLabel == null) {
 			statusJLabel = new JLabel();
@@ -76,16 +81,18 @@ public class DBSAStatusBar extends JPanel {
 		return statusJLabel;
 	}
 	
+
+	@SuppressWarnings("static-access")
 	public void setLoadingStatusBar(boolean isLoading) {
 		if(isLoading) {
 			this.setMessage("Loading : ");
 			this.dbsaProgressbar.setIndeterminate(true);
 			this.dbsaProgressbar.setVisible(true);
 		}else {
-			this.setMessage(("copyright"));
+			this.setMessage((""));
 			this.dbsaProgressbar.setIndeterminate(false);
 			this.dbsaProgressbar.setVisible(false);
-			this.dbsaProgressMessage.setText(" TKORG - Group ");
+			this.dbsaProgressMessage.setText("Copyright: TKORG - Text Knowlege Organization Research Group ");
 		}
 	}
 	/**
