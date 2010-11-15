@@ -12,7 +12,7 @@ import uit.tkorg.dbsa.model.Subject;;
 
 /**
  * @author tiendv
- *
+ * @modifier cuongnp
  */
 public class InsertSubject {
 	
@@ -20,7 +20,7 @@ public class InsertSubject {
 	 * 
 	 * @param sb
 	 */
-	public  void InsertSubjectOfPublication(ArrayList<Subject> sb) {
+	public  void InsertSubjectArrayOfPublication(ArrayList<Subject> sb) {
 		Session session = null;
 		try
 		{
@@ -32,6 +32,28 @@ public class InsertSubject {
 			  session.save(sb.get(i));
 			  tx.commit();
 		  }
+		  // Show thanh cong cho nguoi dung biet
+		 
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			// Actual Public insertion will happen at this step
+			session.flush();
+			session.close();
+			}
+	}
+	
+	public  void InsertSubjectOfPublication(Subject sb) {
+		Session session = null;
+		try
+		{
+		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		  session = sessionFactory.openSession();
+		  
+			  Transaction tx = session.beginTransaction();
+			  session.save(sb);
+			  tx.commit();
+		  
 		  // Show thanh cong cho nguoi dung biet
 		 
 		}catch (Exception e) {
