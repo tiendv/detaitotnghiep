@@ -21,6 +21,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -33,7 +34,7 @@ import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
-public class DBSAApplication {
+public class DBSAApplication extends JPanel {
 
 	public static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
@@ -518,7 +519,7 @@ public class DBSAApplication {
 	
 	private static DBSAToolBar getDBSAToolBar(){
 		if(dbsaToolbar == null){
-			dbsaToolbar = new DBSAToolBar(dbsaJFrame);
+			dbsaToolbar = new DBSAToolBar();
 		}
 		return dbsaToolbar;
 	}
