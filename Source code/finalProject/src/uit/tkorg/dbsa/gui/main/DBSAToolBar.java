@@ -1,51 +1,58 @@
 package uit.tkorg.dbsa.gui.main;
 
+import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+
+import org.dyno.visual.swing.layouts.Bilateral;
+import org.dyno.visual.swing.layouts.Constraints;
+import org.dyno.visual.swing.layouts.GroupLayout;
+import org.dyno.visual.swing.layouts.Leading;
+
 import uit.tkorg.dbsa.properties.files.GUIProperties;
-import uit.tkorg.dbsa.gui.main.DBSAApplication;
-/**
- * 
- * @author CuongNP
- * modif : tiendv
- *
- */
 
-public class DBSAToolBar extends JToolBar{
+//VS4E -- DO NOT REMOVE THIS LINE!
+public class DBSAToolBar extends JPanel {
+
 	private static final long serialVersionUID = 1L;
-	JFrame dbsaJFrame = null;
-	private JButton checkConnectionButton = null;
-	private JButton fetcherButton = null;
-	private JButton databaseButton = null;
+	private JButton checkConnectionJButton;
+	private JButton fetcherJButton;
+	private JButton databaseJButton;
+	private JButton resultJButton;
+	//private JFrame dbsaJFrame = null;
 
-	private JButton resultButton = null;
-	
-	public DBSAToolBar(JFrame dbsa) {
+	public DBSAToolBar() {
 		super();
-		this.dbsaJFrame = dbsaJFrame;
+		
 		initComponents();
-		
 	}
+
 	private void initComponents() {
-		add(getCheckConnectionButton());
-		add(getFetcherButton());
-		add(getResultButton());
-		add(getDatabaseButton());
+		setBorder(BorderFactory.createTitledBorder(null, null, TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(
+				51, 51, 51)));
+		setLayout(new GroupLayout());
+		add(getResultJButton(), new Constraints(new Leading(291, 12, 12), new Bilateral(12, 12, 10)));
+		add(getDatabaseJButton(), new Constraints(new Leading(198, 12, 12), new Bilateral(12, 12, 10)));
+		add(getFetcherJButton(), new Constraints(new Leading(105, 12, 12), new Bilateral(12, 12, 10)));
+		add(getCheckConnectionJButton(), new Constraints(new Leading(12, 12, 12), new Bilateral(12, 12, 10)));
+		setSize(555, 144);
 	}
-	public JButton getFetcherButton() {
-		if(fetcherButton == null) {
-			fetcherButton = new JButton();
-			fetcherButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_ICON)));
-			fetcherButton.setBorder(null);
-			fetcherButton.setToolTipText("Fetcher");
-			fetcherButton.addMouseListener(new MouseListener(){
+
+	private JButton getResultJButton() {
+		if (resultJButton == null) {
+			resultJButton = new JButton();
+			resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_ICON)));
+			resultJButton.addMouseListener(new MouseListener(){
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -76,18 +83,17 @@ public class DBSAToolBar extends JToolBar{
 					// TODO Auto-generated method stub
 					
 				}
-			});		
+			});	
 		}
-		
-		return fetcherButton;
+		return resultJButton;
 	}
-	public JButton getDatabaseButton() {
-		if(databaseButton == null) {
-			databaseButton = new JButton();
-			databaseButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_ICON)));
-			databaseButton.setBorder(null);
-			databaseButton.setToolTipText("Database Manager");
-			databaseButton.addMouseListener(new MouseListener(){
+
+	private JButton getDatabaseJButton() {
+		if (databaseJButton == null) {
+			databaseJButton = new JButton();
+			databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_ICON)));
+			databaseJButton.setToolTipText("Database Manager");
+			databaseJButton.addMouseListener(new MouseListener(){
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -118,17 +124,16 @@ public class DBSAToolBar extends JToolBar{
 					// TODO Auto-generated method stub
 					
 				}
-			});		
+			});
 		}
-		return databaseButton;
+		return databaseJButton;
 	}
-	public JButton getResultButton() {
-		if(resultButton == null) {
-			resultButton = new JButton();
-			resultButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_ICON)));
-			resultButton.setBorder(null);
-			resultButton.setToolTipText("Result");
-			resultButton.addMouseListener(new MouseListener(){
+
+	private JButton getFetcherJButton() {
+		if (fetcherJButton == null) {
+			fetcherJButton = new JButton();
+			fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_ICON)));
+			fetcherJButton.addMouseListener(new MouseListener(){
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -159,18 +164,17 @@ public class DBSAToolBar extends JToolBar{
 					// TODO Auto-generated method stub
 					
 				}
-			});		
+			});	
 		}
-		return resultButton;
+		return fetcherJButton;
 	}
 
-	public JButton getCheckConnectionButton() {
-		if(checkConnectionButton == null) {
-			checkConnectionButton = new JButton();
-			checkConnectionButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_ICON)));
-			checkConnectionButton.setBorder(null);
-			checkConnectionButton.setToolTipText("Check Connection");
-			checkConnectionButton.addMouseListener(new MouseListener(){
+	private JButton getCheckConnectionJButton() {
+		if (checkConnectionJButton == null) {
+			checkConnectionJButton = new JButton();
+			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_ICON)));
+			checkConnectionJButton.setToolTipText("Check Connection");
+			checkConnectionJButton.addMouseListener(new MouseListener(){
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -214,10 +218,9 @@ public class DBSAToolBar extends JToolBar{
 					// TODO Auto-generated method stub
 					
 				}
-			});		
+			});
 		}
-		return checkConnectionButton;
-
+		return checkConnectionJButton;
 	}
-	
+
 }
