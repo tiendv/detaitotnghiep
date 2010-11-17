@@ -307,6 +307,7 @@ public class ACMFetcher {
 			if(bibtexAddr.find()){
 				URL bibtexUrl = new URL(startUrl + bibtexAddr.group(1));
 				
+				System.out.println(bibtexAddr);
 				BufferedReader in = new BufferedReader(new InputStreamReader(bibtexUrl.openStream()));
 				
 				ParserResult result = BibtexParser.parse(in);

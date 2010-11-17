@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.BibtexEntryType;
@@ -43,7 +45,7 @@ public class IEEEXploreFetcher {
      * http://ieeexplore.ieee.org/search/freesearchresult.jsp?newsearch=true&queryText=database&x=0&y=0
      */
     
-    //Cac pattern tim kiem cac thong tin ve so ket qua tra ve, ket qua lon nhat, fiel bibtex,abtract cua bai bao va referent cua bai bao
+    //Cac pattern tim kiem cac thong tin ve so ket qua tra ve, ket qua lon nhat, file bibtex,abtract cua bai bao va referent cua bai bao
     // Tim kiem so ket qua tra ve tu page
     private final static Pattern hitsPattern = Pattern.compile("([0-9,]+) results");
     // Tim kiem loai cua tai lieu
@@ -89,18 +91,18 @@ public class IEEEXploreFetcher {
              * Dua thong bao ra man hinh.
              */
         	
-            if (page.indexOf("You have entered an invalid search") >= 0) {
-            	System.out.print("You have entered an invalid search ");
+            if (page.indexOf(DBSAResourceBundle.res.getString("search.fail.message")) >= 0) {
+            	System.out.print(DBSAResourceBundle.res.getString("search.fail.message"));
                 return ;
             }
             
-            if (page.indexOf("Bad request") >= 0) {
-            	System.out.print("Bad Request");
+            if (page.indexOf(DBSAResourceBundle.res.getString("bad.request")) >= 0) {
+            	System.out.print(DBSAResourceBundle.res.getString("bad.request"));
             	return ;
             }
             
-            if (page.indexOf("No results were found.") >= 0) {
-            	System.out.print("No entries found for the search string");
+            if (page.indexOf(DBSAResourceBundle.res.getString("no.results.found")) >= 0) {
+            	System.out.print(DBSAResourceBundle.res.getString("no.entries.found"));
                 return ;
             }
             
@@ -135,7 +137,7 @@ public class IEEEXploreFetcher {
             e.printStackTrace();
         } catch (ConnectException e) {
         	// Dua ra thong bao loi ket noi internet cua chuong trinh.
-        	System.out.print("Loi trong qua trinh connection voi IEEE");
+        	System.out.print(DBSAResourceBundle.res.getString("connection.fail.to.ieee.dls"));
         } catch (IOException e) {
         	 e.printStackTrace();
         }
@@ -195,39 +197,39 @@ public class IEEEXploreFetcher {
     	if (entry == null)
     		return null;
     	// clean up author
-    	String author = (String)entry.getField("author");
+    	String author = (String)entry.getField(DBSAApplicationConst.AUTHOR);
     	if (author != null) {
 	    	author = author.replaceAll("\\.", ". ");
 	    	author = author.replaceAll("  ", " ");
 	    	author = author.replaceAll("\\. -", ".-");
 	    	author = author.replaceAll("; ", " and ");
 	    	author = author.replaceAll("[,;]$", "");
-	    	entry.setField("author", author);
+	    	entry.setField(DBSAApplicationConst.AUTHOR, author);
     	}
     	
-    	String title = (String)entry.getField("title");
+    	String title = (String)entry.getField(DBSAApplicationConst.TITLE);
     	if (title != null) {
     		title = title.replaceAll("span class='snippet'>","");
-	    	entry.setField("title", title);
+	    	entry.setField(DBSAApplicationConst.TITLE, title);
     	}
     	// clean up publication field
     	BibtexEntryType type = entry.getType();
     	String sourceField = "";
-		if (type.getName() == "Article") {
-        	sourceField = "journal";
-			entry.clearField("booktitle");
-		} else if (type.getName() == "Inproceedings"){
-            sourceField = "booktitle";
+		if (type.getName() == DBSAApplicationConst.ARTICLE) {
+        	sourceField = DBSAApplicationConst.JOURNAL;
+			entry.clearField(DBSAApplicationConst.BOOKTITLE);
+		} else if (type.getName() == DBSAApplicationConst.INPROCEEDINGS){
+            sourceField = DBSAApplicationConst.BOOKTITLE;
 		}
         String fullName = entry.getField(sourceField);
         if (fullName != null) {
-	        if (type.getName() == "Article") {
-	        	int ind = fullName.indexOf(": Accepted for future publication");
+	        if (type.getName() == DBSAApplicationConst.ARTICLE) {
+	        	int ind = fullName.indexOf(DBSAResourceBundle.res.getString("accepted.for.future.publication"));
 				if (ind > 0) {
 					fullName = fullName.substring(0, ind);
-					entry.setField("year", "to be published");
-					entry.clearField("month");
-					entry.clearField("pages");
+					entry.setField(DBSAApplicationConst.YEAR, DBSAResourceBundle.res.getString("to.be.publised"));
+					entry.clearField(DBSAApplicationConst.MOTH);
+					entry.clearField(DBSAApplicationConst.PAGES);
 				}
 		        String[] parts = fullName.split("[\\[\\]]"); //[see also...], [legacy...]
 		        fullName = parts[0];
@@ -235,10 +237,12 @@ public class IEEEXploreFetcher {
 					fullName += parts[2];
 				}
 	        } else {
-	        	fullName = fullName.replace("Conference Proceedings", "Proceedings").replace("Proceedings of", "Proceedings").replace("Proceedings.", "Proceedings");
-	        	fullName = fullName.replaceAll("International", "Int.");
-	        	fullName = fullName.replaceAll("Symposium", "Symp.");
-	        	fullName = fullName.replaceAll("Conference", "Conf.");
+	        	fullName = fullName.replace(DBSAApplicationConst.CONF_PROCEEDINGS, DBSAApplicationConst.PROCEEDINGS).
+	        	replace(DBSAApplicationConst.PROCEEDINGS_OF, DBSAApplicationConst.PROCEEDINGS).
+	        	replace(DBSAApplicationConst.PROCEEDINGS_OF, DBSAApplicationConst.PROCEEDINGS);
+	        	fullName = fullName.replaceAll(DBSAApplicationConst.INTERNATIONAL, DBSAApplicationConst.INT);
+	        	fullName = fullName.replaceAll(DBSAApplicationConst.SYMPOSIUM, DBSAApplicationConst.SYMP);
+	        	fullName = fullName.replaceAll(DBSAApplicationConst.CONFERENCE, DBSAApplicationConst.CONF);
 	        	fullName = fullName.replaceAll(" on", " ").replace("  ", " ");
 	        }
 	        
@@ -264,7 +268,7 @@ public class IEEEXploreFetcher {
 					fullName = postfix + " " + prefix;
 				}
 			}
-			if (type.getName() == "Inproceedings") {
+			if (type.getName() == DBSAApplicationConst.INPROCEEDINGS) {
 	            Matcher m2 = proceedingPattern.matcher(fullName);
 				if (m2.find()) {
 					String prefix = m2.group(2); 
@@ -293,11 +297,11 @@ public class IEEEXploreFetcher {
 				fullName = fullName.trim();
 				
 				fullName = fullName.replaceAll("^[tT]he ", "").replaceAll("^\\d{4} ", "").replaceAll("[,.]$", "");
-				String year = entry.getField("year");
+				String year = entry.getField(DBSAApplicationConst.YEAR);
 				fullName = fullName.replaceAll(", " + year + "\\.?", "");
 				
-	        	if (fullName.contains("Abstract") == false && fullName.contains("Summaries") == false && fullName.contains("Conference Record") == false)
-	        		fullName = "Proc. " + fullName;
+	        	if (fullName.contains(DBSAApplicationConst.ABSTRACT) == false && fullName.contains(DBSAApplicationConst.SUMMARIES) == false && fullName.contains(DBSAApplicationConst.CONFERENCE_RECORD) == false)
+	        		fullName = DBSAApplicationConst.PROC + fullName;
 	        }
 			entry.setField(sourceField, fullName);
         }
@@ -314,13 +318,13 @@ public class IEEEXploreFetcher {
 	private static BibtexEntry parseNextEntry(String allText, int startIndex) {
         BibtexEntry entry = null;
         
-        fieldPatterns.put("title", "<a\\s*href=[^<]+>\\s*(.+)\\s*</a>");
-        fieldPatterns.put("author", "<p>\\s+(.+)");
-        fieldPatterns.put("volume", "Volume:\\s*(\\d+)");
-        fieldPatterns.put("number", "Issue:\\s*(\\d+)");
-        fieldPatterns.put("year", "Publication Year:\\s*(\\d{4})");
-        fieldPatterns.put("pages", "Page\\(s\\):\\s*(\\d+)\\s*-\\s*(\\d*)");
-        fieldPatterns.put("doi", "Digital Object Identifier:\\s*<a href=.*>(.+)</a>");
+        fieldPatterns.put(DBSAApplicationConst.TITLE, "<a\\s*href=[^<]+>\\s*(.+)\\s*</a>");
+        fieldPatterns.put(DBSAApplicationConst.AUTHOR, "<p>\\s+(.+)");
+        fieldPatterns.put(DBSAApplicationConst.VOLUME, "Volume:\\s*(\\d+)");
+        fieldPatterns.put(DBSAApplicationConst.NUMBER, "Issue:\\s*(\\d+)");
+        fieldPatterns.put(DBSAApplicationConst.YEAR, "Publication Year:\\s*(\\d{4})");
+        fieldPatterns.put(DBSAApplicationConst.PAGES, "Page\\(s\\):\\s*(\\d+)\\s*-\\s*(\\d*)");
+        fieldPatterns.put(DBSAApplicationConst.DOI, "Digital Object Identifier:\\s*<a href=.*>(.+)</a>");
         
      	int index = allText.indexOf("<div class=\"detail", piv);
         int endIndex = allText.indexOf("</div>", index);
@@ -340,27 +344,27 @@ public class IEEEXploreFetcher {
 	            if (typeName.equalsIgnoreCase("IEEE Journals") || typeName.equalsIgnoreCase("IEEE Early Access") ||
 	            		typeName.equalsIgnoreCase("IET Journals") || typeName.equalsIgnoreCase("AIP Journals") ||
 					   	typeName.equalsIgnoreCase("AVS Journals") || typeName.equalsIgnoreCase("IBM Journals")) {
-	                type = BibtexEntryType.getType("article");
-	                sourceField = "journal";
+	                type = BibtexEntryType.getType(DBSAApplicationConst.ARTICLE);
+	                sourceField = DBSAApplicationConst.JOURNAL;
 	            } else if (typeName.equalsIgnoreCase("IEEE Conferences") || typeName.equalsIgnoreCase("IET Conferences")) {
-	                type = BibtexEntryType.getType("inproceedings");
-	                sourceField = "booktitle";
+	                type = BibtexEntryType.getType(DBSAApplicationConst.INPROCEEDINGS);
+	                sourceField = DBSAApplicationConst.BOOKTITLE;
 		        } else if (typeName.equalsIgnoreCase("IEEE Standards")) {
-	                type = BibtexEntryType.getType("standard");
-	                sourceField = "number";
+	                type = BibtexEntryType.getType(DBSAApplicationConst.STANDARD);
+	                sourceField = DBSAApplicationConst.NUMBER;
 		        } else if (typeName.equalsIgnoreCase("IEEE Educational Courses")) {
-		        	type = BibtexEntryType.getType("Electronic");
-		        	sourceField = "note";
+		        	type = BibtexEntryType.getType(DBSAApplicationConst.ELECTRONIC);
+		        	sourceField = DBSAApplicationConst.NOTE;
 		        } else if (typeName.equalsIgnoreCase("IEEE Book Chapter")) {
-		        	type = BibtexEntryType.getType("inCollection");
-		        	sourceField = "booktitle";
+		        	type = BibtexEntryType.getType(DBSAApplicationConst.INCOLLECTION);
+		        	sourceField = DBSAApplicationConst.BOOKTITLE;
 		        }
             }
             
             if (type == null) {
-            	type = BibtexEntryType.getType("misc");
-            	sourceField = "note";
-                System.err.println("Type detection failed. Use MISC instead.");
+            	type = BibtexEntryType.getType(DBSAApplicationConst.MISC);
+            	sourceField = DBSAApplicationConst.NOTE;
+                System.err.println(DBSAResourceBundle.res.getString("type.detection.failed"));
                 unparseable++;
                 System.err.println(text);
             }
@@ -368,15 +372,15 @@ public class IEEEXploreFetcher {
             entry = new BibtexEntry(Util.createNeutralId(), type);
             
             if (typeName.equalsIgnoreCase("IEEE Standards")) {
-            	entry.setField("organization", "IEEE");
+            	entry.setField(DBSAApplicationConst.ORGANIZATION, DBSAApplicationConst.IEEE);
             }
             
             if (typeName.equalsIgnoreCase("IEEE Book Chapter")) {
-            	entry.setField("publisher", "IEEE");
+            	entry.setField(DBSAApplicationConst.PUBLISHER, DBSAApplicationConst.IEEE);
             }
             
             if (typeName.equalsIgnoreCase("IEEE Early Access")) {
-            	entry.setField("note", "Early Access");
+            	entry.setField(DBSAApplicationConst.NOTE, DBSAApplicationConst.EARLYACCESS);
             }
        
             Set<String> fields = fieldPatterns.keySet();
@@ -384,20 +388,20 @@ public class IEEEXploreFetcher {
             	Matcher fieldMatcher = Pattern.compile(fieldPatterns.get(field)).matcher(text);
             	if (fieldMatcher.find()) {
             		entry.setField(field, htmlConverter.format(fieldMatcher.group(1)));
-            		if (field.equals("title") && fieldMatcher.find()) {
+            		if (field.equals(DBSAApplicationConst.TITLE) && fieldMatcher.find()) {
             			String sec_title = htmlConverter.format(fieldMatcher.group(1));
-            			if (entry.getType() == BibtexEntryType.getStandardType("standard")) {
+            			if (entry.getType() == BibtexEntryType.getStandardType(DBSAApplicationConst.STANDARD)) {
             				sec_title = sec_title.replaceAll("IEEE Std", "");
             			}
             			entry.setField(sourceField, sec_title);
             		}
-            		if (field.equals("pages") && fieldMatcher.groupCount() == 2) {
+            		if (field.equals(DBSAApplicationConst.PAGES) && fieldMatcher.groupCount() == 2) {
             			entry.setField(field, fieldMatcher.group(1) + "-" + fieldMatcher.group(2));
             		}
             	}
             }
-           if (entry.getType() == BibtexEntryType.getStandardType("inproceedings") && entry.getField("author").equals("")) {
-            	entry.setType(BibtexEntryType.getStandardType("proceedings"));
+           if (entry.getType() == BibtexEntryType.getStandardType(DBSAApplicationConst.INPROCEEDINGS) && entry.getField(DBSAApplicationConst.AUTHOR).equals("")) {
+            	entry.setType(BibtexEntryType.getStandardType(DBSAApplicationConst.PROCEEDINGS));
             }
         
             if (includeAbstract) {
@@ -408,34 +412,29 @@ public class IEEEXploreFetcher {
 	            	text = allText.substring(index, endIndex);
 	            	Matcher absMatcher = absPattern.matcher(text);
 	            	if (absMatcher.find()) {
-	            		entry.setField("abstract", absMatcher.group(1).replaceAll("\\<.*?>",""));
+	            		entry.setField(DBSAApplicationConst.ABSTRACT, absMatcher.group(1).replaceAll("\\<.*?>",""));
 	            	}
 	            }
             }	
         }
         
         if (entry == null) {
-        	System.out.printf("Khong part duoc ");
+        	System.out.printf(DBSAResourceBundle.res.getString("parser.failed"));
         	return null;
         } else {
         	cleanup(entry);
-        	/*System.out.println("Title : " + entry.getField("title"));
-    		System.out.println("Authors : " + entry.getField("author"));
-    		System.out.println("Year : " + entry.getField("year"));
-    		System.out.println("Abstract : " + entry.getField("abstract"));
-    		System.out.println("Publisher : " + entry.getField("sourceField"));
-    		System.out.println("Doi : " + entry.getField("doi"));*/
+        	
     		
     		number ++;
 			resultFetch.setRowNumber(number);
-			resultFetch.setTitle(entry.getField("title"));
-			resultFetch.setAuthor(entry.getField("author"));
-			resultFetch.setYear(Integer.parseInt(entry.getField("year")));
-			resultFetch.setAbstract(entry.getField("abstract"));
-			if(entry.getField("publisher") != null)
-				resultFetch.setPublisher(entry.getField("publisher"));
+			resultFetch.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+			resultFetch.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			resultFetch.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+			resultFetch.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
+			if(entry.getField(DBSAApplicationConst.PUBLISHER) != null)
+				resultFetch.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
 			else
-				resultFetch.setPublisher("IEEE");
+				resultFetch.setPublisher(DBSAApplicationConst.IEEE);
 			resultFetch.getResultsJTable();
 			
             return entry;
@@ -451,7 +450,7 @@ public class IEEEXploreFetcher {
     	//System.out.println(page);
         if (ind < 0) {
         	//System.out.println(page);
-            throw new IOException("Could not parse number of hits");
+            throw new IOException(DBSAResourceBundle.res.getString("could.not.pare.number.of.hits"));
         }
         //System.out.println(ind);
         String substring = page.substring(ind, page.length());
@@ -459,7 +458,7 @@ public class IEEEXploreFetcher {
         if (m.find())
             return Integer.parseInt(m.group(1));
         else
-        	throw new IOException("Could not parse number of hits");
+        	throw new IOException(DBSAResourceBundle.res.getString("could.not.pare.number.of.hits"));
     }
 
     /**

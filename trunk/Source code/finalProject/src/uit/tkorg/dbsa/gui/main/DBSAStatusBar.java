@@ -59,7 +59,7 @@ public class DBSAStatusBar extends JPanel {
 	private JPanel getStatusJPanel() {
 		if (statusJPanel == null) {
 			statusJPanel = new JPanel();
-			statusJPanel.setBorder(BorderFactory.createTitledBorder(null, "Status", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			statusJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("status"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			statusJPanel.setLayout(new GroupLayout());
 			statusJPanel.add(dbsaProgressbar(), new Constraints(new Bilateral(97, 16, 285), new Leading(32, 18, 10, 10)));
@@ -70,13 +70,13 @@ public class DBSAStatusBar extends JPanel {
 	}
 
 	public void setStatusJLabel(String dbsaStatus){
-		statusJLabel.setText("Status: " + dbsaStatus );
+		statusJLabel.setText( DBSAResourceBundle.res.getString("status") + " : " + dbsaStatus );
 	}
 	
 	private JLabel getStatusJLabel() {
 		if (statusJLabel == null) {
 			statusJLabel = new JLabel();
-			this.setMessage("Copyright");
+			this.setMessage(DBSAResourceBundle.res.getString("copyright"));
 		}
 		return statusJLabel;
 	}
@@ -85,14 +85,14 @@ public class DBSAStatusBar extends JPanel {
 	@SuppressWarnings("static-access")
 	public void setLoadingStatusBar(boolean isLoading) {
 		if(isLoading) {
-			this.setMessage("Loading : ");
+			this.setMessage(DBSAResourceBundle.res.getString("loading") + " : ");
 			this.dbsaProgressbar.setIndeterminate(true);
 			this.dbsaProgressbar.setVisible(true);
 		}else {
 			this.setMessage((""));
 			this.dbsaProgressbar.setIndeterminate(false);
 			this.dbsaProgressbar.setVisible(false);
-			this.dbsaProgressMessage.setText("Copyright: TKORG - Text Knowlege Organization Research Group ");
+			this.dbsaProgressMessage.setText("Copyright: " + DBSAResourceBundle.res.getString("copyright"));
 		}
 	}
 	/**

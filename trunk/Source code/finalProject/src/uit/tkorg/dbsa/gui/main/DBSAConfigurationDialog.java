@@ -27,12 +27,15 @@ import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
-import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DBSAConfigurationDialog extends JDialog {
@@ -152,14 +155,21 @@ public class DBSAConfigurationDialog extends JDialog {
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
 		add(getConfigurationJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
-		setSize(375, 328);
+		initFontOptionsButtonGroup();
+		setSize(518, 400);
 		setLocation(xLocation, yLocation);
+	}
+
+	private void initFontOptionsButtonGroup() {
+		fontOptionsButtonGroup = new ButtonGroup();
+		fontOptionsButtonGroup.add(getTextCompJRadioButton());
+		fontOptionsButtonGroup.add(getMenuCompJRadioButton());
 	}
 
 	private JCheckBox getFontItalicJCheckBox() {
 		if (fontItalicJCheckBox == null) {
 			fontItalicJCheckBox = new JCheckBox();
-			fontItalicJCheckBox.setText("Italic");
+			fontItalicJCheckBox.setText(DBSAResourceBundle.res.getString("italic"));
 		}
 		return fontItalicJCheckBox;
 	}
@@ -167,7 +177,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JCheckBox getFontBoldJCheckBox() {
 		if (fontBoldJCheckBox == null) {
 			fontBoldJCheckBox = new JCheckBox();
-			fontBoldJCheckBox.setText("Bold");
+			fontBoldJCheckBox.setText(DBSAResourceBundle.res.getString("bold"));
 		}
 		return fontBoldJCheckBox;
 	}
@@ -194,7 +204,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JPanel getLanguageJPanel() {
 		if (languageJPanel == null) {
 			languageJPanel = new JPanel();
-			languageJPanel.setBorder(BorderFactory.createTitledBorder("Languages"));
+			languageJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("language")));
 			languageJPanel.setLayout(new GroupLayout());
 			languageJPanel.add(getLanguageJComboBox(), new Constraints(new Bilateral(7, 12, 60), new Leading(0, 12, 12)));
 		}
@@ -211,15 +221,15 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JComboBox getLanguageJComboBox() {
 		if (languageJComboBox == null) {
 			languageJComboBox = new JComboBox();
-			languageJComboBox.setModel(new DefaultComboBoxModel(new Object[] { "English", "Vietnamese" }));
+			languageJComboBox.setModel(new DefaultComboBoxModel(new Object[] { DBSAApplicationConst.ENGLISH, DBSAApplicationConst.VIETNAM}));
 			languageJComboBox.setDoubleBuffered(false);
 			languageJComboBox.setBorder(null);
 			
-			if(Locale.getDefault().toString().equalsIgnoreCase("vn_VN")
-					|| Locale.getDefault().toString().equalsIgnoreCase("VN")){
-				languageJComboBox.setSelectedItem("Vietnamese");
+			if(Locale.getDefault().toString().equalsIgnoreCase(DBSAApplicationConst.VN_VN)
+					|| Locale.getDefault().toString().equalsIgnoreCase(DBSAApplicationConst.VN)){
+				languageJComboBox.setSelectedItem(DBSAApplicationConst.VIETNAM);
 			}else{
-				languageJComboBox.setSelectedItem("English");
+				languageJComboBox.setSelectedItem(DBSAApplicationConst.ENGLISH);
 			}
 		}
 		return languageJComboBox;
@@ -248,7 +258,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JPanel getConfigurationJPanel() {
 		if (configurationJPanel == null) {
 			configurationJPanel = new JPanel();
-			configurationJPanel.setBorder(BorderFactory.createTitledBorder("System configuration"));
+			configurationJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("configuration.system")));
 			configurationJPanel.setLayout(new GroupLayout());
 			configurationJPanel.add(getAtionsJPanel(), new Constraints(new Bilateral(0, 0, 0), new Trailing(0, 63, 10, 10)));
 			configurationJPanel.add(getFontOptionJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(70, 69, 0)));
@@ -261,7 +271,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JPanel getLookAndFeelJPanel() {
 		if (lookAndFeelJPanel == null) {
 			lookAndFeelJPanel = new JPanel();
-			lookAndFeelJPanel.setBorder(BorderFactory.createTitledBorder("Look and feel"));
+			lookAndFeelJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("look.and.feel")));
 			lookAndFeelJPanel.setLayout(new GroupLayout());
 			lookAndFeelJPanel.add(getLookandFeelJComboBox(), new Constraints(new Bilateral(9, 12, 60), new Leading(0, 12, 12)));
 		}
@@ -304,10 +314,11 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JPanel getAtionsJPanel() {
 		if (ationsJPanel == null) {
 			ationsJPanel = new JPanel();
-			ationsJPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
+			ationsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			ationsJPanel.setLayout(new GroupLayout());
-			ationsJPanel.add(getCancelJButton(), new Constraints(new Leading(202, 10, 10), new Leading(0, 12, 12)));
-			ationsJPanel.add(getOkJButton(), new Constraints(new Leading(62, 73, 10, 10), new Leading(0, 12, 12)));
+			ationsJPanel.add(getCancelJButton(), new Constraints(new Trailing(12, 124, 147), new Leading(2, 10, 10)));
+			ationsJPanel.add(getOkJButton(), new Constraints(new Trailing(103, 73, 12, 12), new Leading(2, 12, 12)));
 		}
 		return ationsJPanel;
 	}
@@ -315,7 +326,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JToggleButton getOkJButton() {
 		if (okJButton == null) {
 			okJButton = new JToggleButton();
-			okJButton.setText("Ok");
+			okJButton.setText("  Ok  ");
 			okJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -331,7 +342,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JToggleButton getCancelJButton() {
 		if (cancelJButton == null) {
 			cancelJButton = new JToggleButton();
-			cancelJButton.setText("Cancel");
+			cancelJButton.setText(DBSAResourceBundle.res.getString("close"));
 		}
 		return cancelJButton;
 	}
@@ -361,11 +372,11 @@ public class DBSAConfigurationDialog extends JDialog {
 			 * Select languages
 			 */
 			String language = (String)this.languageJComboBox.getSelectedItem();
-			if(language.equalsIgnoreCase("Vietnamese")){
-				Locale.setDefault(new Locale("vn", "VN"));
+			if(language.equalsIgnoreCase(DBSAApplicationConst.VIETNAM)){
+				Locale.setDefault(new Locale(DBSAApplicationConst.vn, DBSAApplicationConst.VN));
 				DBSAResourceBundle.res = DBSAResourceBundle.initResources();
 				DBSAApplication.updateTextOfComponents();
-			}else if(language.equalsIgnoreCase("English")){
+			}else if(language.equalsIgnoreCase(DBSAApplicationConst.ENGLISH)){
 				Locale.setDefault(Locale.US);
 				DBSAResourceBundle.res = DBSAResourceBundle.initResources();
 				DBSAApplication.updateTextOfComponents();

@@ -36,7 +36,9 @@ import org.dyno.visual.swing.layouts.Trailing;
 import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.DBSAPublication;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherResultPanel extends JPanel {
@@ -215,7 +217,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getTitleJLabel() {
 		if (titleJLabel == null) {
 			titleJLabel = new JLabel();
-			titleJLabel.setText("  Title");
+			titleJLabel.setText("  " + DBSAResourceBundle.res.getString("title"));
 			titleJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return titleJLabel;
@@ -224,7 +226,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getPublisherJLabel() {
 		if (publisherJLabel == null) {
 			publisherJLabel = new JLabel();
-			publisherJLabel.setText("  Publisher");
+			publisherJLabel.setText("  " + DBSAResourceBundle.res.getString("publisher"));
 			publisherJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return publisherJLabel;
@@ -233,7 +235,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getAbstractJLabel() {
 		if (abstractJLabel == null) {
 			abstractJLabel = new JLabel();
-			abstractJLabel.setText("  Abstract");
+			abstractJLabel.setText("  " + DBSAResourceBundle.res.getString("abstract"));
 			abstractJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return abstractJLabel;
@@ -242,7 +244,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getYearJLabel() {
 		if (yearJLabel == null) {
 			yearJLabel = new JLabel();
-			yearJLabel.setText("  Year");
+			yearJLabel.setText("  " + DBSAResourceBundle.res.getString("year"));
 			yearJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return yearJLabel;
@@ -251,7 +253,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getAuthorsJLabel() {
 		if (authorsJLabel == null) {
 			authorsJLabel = new JLabel();
-			authorsJLabel.setText("  Authors");
+			authorsJLabel.setText("  " + DBSAResourceBundle.res.getString("authors"));
 			authorsJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return authorsJLabel;
@@ -380,13 +382,13 @@ public class FetcherResultPanel extends JPanel {
 				CheckExist check = new CheckExist();
 				
 				numberArray = (ArrayList<Integer>) check.CheckTitlePublications(dbsaPublication).clone();
-				System.out.println("trung lap " + numberArray.size());
+				//System.out.println("trung lap " + numberArray.size());
 				
 				for(int i = 0; i < numberArray.size(); i++)
 				{
 					resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
 					//resultsJTable.setValueAt(true, numberArray.get(i), 6);
-					System.out.println("trung lap gia tri " + numberArray.get(i));
+					//System.out.println("trung lap gia tri " + numberArray.get(i));
 					//setForeground(Color.red);
 				}
 			//	resultsJTable.repaint();
@@ -422,7 +424,10 @@ public class FetcherResultPanel extends JPanel {
 	 * @return String []
 	 */
 	private  String [] getColumnName(){
-		String [] columnNames = { "No.", "Title", "Authors", "Year", "Abstract", "Publisher", "Mark", };
+		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
+				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("year"),
+				DBSAResourceBundle.res.getString("abstract"), DBSAResourceBundle.res.getString("publisher"),
+				DBSAResourceBundle.res.getString("mark"), };
 			
 		return columnNames;
 	}
@@ -455,7 +460,7 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getEntryJPanel() {
 		if (entryJPanel == null) {
 			entryJPanel = new JPanel();
-			entryJPanel.setBorder(BorderFactory.createTitledBorder(null, "Entry detail", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			entryJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("entry.detail"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			entryJPanel.setLayout(new GroupLayout());
 			entryJPanel.add(getYearJLabel(), new Constraints(new Leading(8, 78, 12, 12), new Leading(80, 30, 10, 10)));
@@ -476,7 +481,7 @@ public class FetcherResultPanel extends JPanel {
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
-			saveJButton.setText("Save");
+			saveJButton.setText(DBSAResourceBundle.res.getString("save"));
 			saveJButton.setEnabled(false);
 			
 			saveJButton.addActionListener(new ActionListener(){
@@ -493,11 +498,11 @@ public class FetcherResultPanel extends JPanel {
 					
 					if(numberArray.size() > 0){
 						n = JOptionPane.showConfirmDialog(
-					    DBSAApplication.dbsaJFrame, "Do you want do delete article duplicate before save to database?",
+					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("notice.data.duplicate"),
 					    "An Question", JOptionPane.YES_NO_OPTION);
 					
 						if(n == JOptionPane.YES_OPTION){
-							JOptionPane.showMessageDialog(null, "Select rows which you want to delete, after press 'Delete' button");
+							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.select.rows.to.delete"));
 						}else if(n == JOptionPane.NO_OPTION){
 							checkInsert = insertToDatabase();
 						}
@@ -506,7 +511,7 @@ public class FetcherResultPanel extends JPanel {
 					}
 					
 					if(checkInsert == true){
-						JOptionPane.showMessageDialog(null, "Data is added successfully!");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("add.database.sucessfully"));
 					}
 				}
 				
@@ -544,7 +549,7 @@ public class FetcherResultPanel extends JPanel {
 	private JButton getDeleteJButton() {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
-			deleteJButton.setText("Delete");
+			deleteJButton.setText(DBSAResourceBundle.res.getString("delete"));
 			deleteJButton.setEnabled(false);
 			deleteJButton.addActionListener(new ActionListener(){
 
@@ -600,7 +605,7 @@ public class FetcherResultPanel extends JPanel {
 				}
 				
 				if(check == 0){
-					JOptionPane.showMessageDialog(null, "Ban chua chon bai bao can xoa!");
+					JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.choose.article.to.delete"));
 				}
 			}
 		}
@@ -609,7 +614,7 @@ public class FetcherResultPanel extends JPanel {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("Close");
+			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -626,7 +631,7 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 81, 12, 12), new Leading(0, 26, 10, 8)));
 			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(210, 80, 12, 12), new Leading(0, 12, 12)));
@@ -638,7 +643,7 @@ public class FetcherResultPanel extends JPanel {
 	public JScrollPane getResultsJScrollPane() {
 		if (resultsJScrollPane == null) {
 			resultsJScrollPane = new JScrollPane();
-			resultsJScrollPane.setBorder(BorderFactory.createTitledBorder("Results list"));
+			resultsJScrollPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("result.list")));
 			resultsJScrollPane.setViewportView(getResultsJTable());
 		}
 		return resultsJScrollPane;
@@ -665,7 +670,7 @@ public class FetcherResultPanel extends JPanel {
 			abstractJTextArea.setText(model.getValueAt(n, 4).toString());
 			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 5).toString());
 		}else if(n == -1){
-			JOptionPane.showMessageDialog(null, "No row is selected!");
+			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("no.row.isselected"));
 		}
 	}
 	

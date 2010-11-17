@@ -32,6 +32,7 @@ import net.sf.jabref.sql.DbImportAction;
 
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
 public class DBSAApplication extends JPanel {
@@ -177,7 +178,7 @@ public class DBSAApplication extends JPanel {
      {
              try {
                      //make a URL to a known source
-                     URL url = new URL("http://www.google.com");
+                     URL url = new URL(DBSAApplicationConst.GOOGLE_URL);
 
                      //open a connection to that source
                      HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
@@ -245,12 +246,12 @@ public class DBSAApplication extends JPanel {
 		if (editJMenu == null) {
 			editJMenu = new JMenu();
 			editJMenu.setText(DBSAResourceBundle.res.getString("edit"));
-			editJMenu.add(getCutJMenuItem());
-			editJMenu.add(getCopyJMenuItem());
-			editJMenu.add(getPasteJMenuItem());
-			editJMenu.add(getDeleteJMenuItem());
-			editJMenu.add(getMarkEntriesJMenuItem());
-			editJMenu.add(getUnmarkEntriesJMenuItem());
+			//editJMenu.add(getCutJMenuItem());
+			//editJMenu.add(getCopyJMenuItem());
+			//editJMenu.add(getPasteJMenuItem());
+			//editJMenu.add(getDeleteJMenuItem());
+		//	editJMenu.add(getMarkEntriesJMenuItem());
+			//editJMenu.add(getUnmarkEntriesJMenuItem());
 			editJMenu.add(getUnmarkAllJMenuItem());
 			editJMenu.add(getSelectAllJMenuItem());
 
