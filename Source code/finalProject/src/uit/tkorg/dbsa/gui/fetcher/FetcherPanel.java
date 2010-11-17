@@ -38,6 +38,7 @@ import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
 
 
@@ -97,7 +98,7 @@ public class FetcherPanel extends JPanel {
 		if (fetcherStatusJLabel == null) {
 			fetcherStatusJLabel = new JLabel();
 			fetcherStatusJLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			fetcherStatusJLabel.setText("Fetcher status");
+			fetcherStatusJLabel.setText(DBSAResourceBundle.res.getString("fetcher.status"));
 		}
 		return fetcherStatusJLabel;
 	}
@@ -105,7 +106,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getFetcherJPanel() {
 		if (fetcherJPanel == null) {
 			fetcherJPanel = new JPanel();
-			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, "Fetcher", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("fetcher"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			fetcherJPanel.setLayout(new GroupLayout());
 			fetcherJPanel.add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 61, 10, 10)));
@@ -118,7 +119,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(2, 12, 12)));
 			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(2, 12, 12)));
@@ -132,7 +133,7 @@ public class FetcherPanel extends JPanel {
 		
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
-			fetcherJButton.setText("Fetcher");
+			fetcherJButton.setText(DBSAResourceBundle.res.getString("fetcher"));
 			
 			fetcherJButton.addActionListener(new ActionListener(){
 
@@ -143,11 +144,11 @@ public class FetcherPanel extends JPanel {
 					
 					//boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
 					if(!DBSAApplication.isInternetReachable()){
-						JOptionPane.showMessageDialog(null, "Your system don't connect to the Internet. \nPlease check your internet!");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.internet.connection"));
 					}
 					
 					if(keywordJTextField.getText().replaceAll(" ", "").equals("")){
-						JOptionPane.showMessageDialog(null, "Please input keyword before press Fetch button!");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.input.keyword"));
 					}
 					else if(keywordJTextField.getText() != "" && DBSAApplication.isInternetReachable()){
 						if(fetchFromACMCheckBox.isSelected() == true) {
@@ -163,11 +164,11 @@ public class FetcherPanel extends JPanel {
 									setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
 									acmJProgressBar.setIndeterminate(true);
 									acmJProgressBar.setStringPainted(true);
-									acmJProgressBar.setString("Downloading Data from ACM Portal ...");
+									acmJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
 									try {
 										ACMFetcher(acmQuery);
 										acmJProgressBar.setIndeterminate(false);
-										acmJProgressBar.setString("Complete");	
+										acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));	
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										showResultJButton.setEnabled(true);
 									} catch (IOException e) {
@@ -193,11 +194,11 @@ public class FetcherPanel extends JPanel {
 										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
 										citeseerJProgressBar.setIndeterminate(true);
 										citeseerJProgressBar.setStringPainted(true);
-										citeseerJProgressBar.setString(" Downloading Data from Citeseer ...");
+										citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
 										CiteSeeXFetcher(citeseerQuery);	
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										citeseerJProgressBar.setIndeterminate(false);
-										citeseerJProgressBar.setString("Complete");
+										citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
 										showResultJButton.setEnabled(true);
 										
 									}
@@ -217,11 +218,11 @@ public class FetcherPanel extends JPanel {
 										setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
 										ieeeploreJProgressBar.setIndeterminate(true);
 										ieeeploreJProgressBar.setStringPainted(true);
-										ieeeploreJProgressBar.setString("Downloading Data from IEEEXPlore ...");
+										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
 										try {
 											IEEExploreFetch(ieeeQuery);
 											ieeeploreJProgressBar.setIndeterminate(false);
-											ieeeploreJProgressBar.setString("Complete");
+											ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
 											showResultJButton.setEnabled(true);
 											fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										} catch (IOException t) {
@@ -235,7 +236,7 @@ public class FetcherPanel extends JPanel {
 						}	
 						
 						if(!fetcherBoolean){
-							JOptionPane.showMessageDialog(null, "Ban chua chon thu vien so.");
+							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.choose.dl"));
 						}
 						/*
 						 * reset application Jpanel
@@ -254,7 +255,7 @@ public class FetcherPanel extends JPanel {
 	private JButton getShowResultJButton() {
 		if (showResultJButton == null) {
 			showResultJButton = new JButton();
-			showResultJButton.setText("Show results");
+			showResultJButton.setText(DBSAResourceBundle.res.getString("show.results"));
 			showResultJButton.isDefaultButton();
 			showResultJButton.setEnabled(false);
 			showResultJButton.addActionListener(new ActionListener(){
@@ -300,7 +301,7 @@ public class FetcherPanel extends JPanel {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("Close");
+			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.setAlignmentX(0.5f);
 			
 			closeJButton.addActionListener(new ActionListener(){
@@ -320,7 +321,7 @@ public class FetcherPanel extends JPanel {
 		if (ieeeploreJProgressBar == null) {
 			ieeeploreJProgressBar = new JProgressBar();
 			ieeeploreJProgressBar.setStringPainted(true);
-			ieeeploreJProgressBar.setString("IEEEXplore Digital");
+			ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("ieee.digital.library"));
 			
 		}
 		return ieeeploreJProgressBar;
@@ -337,7 +338,7 @@ public class FetcherPanel extends JPanel {
 		if (citeseerJProgressBar == null) {
 			citeseerJProgressBar = new JProgressBar();
 			citeseerJProgressBar.setStringPainted(true);
-			citeseerJProgressBar.setString("Citeseer Digital");
+			citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("citeseer.digital.library"));
 			
 		}
 		return citeseerJProgressBar;
@@ -347,7 +348,7 @@ public class FetcherPanel extends JPanel {
 		if (acmJProgressBar == null) {
 			acmJProgressBar = new JProgressBar();
 			acmJProgressBar.setStringPainted(true);
-			acmJProgressBar.setString("ACM Portal Digital");
+			acmJProgressBar.setString(DBSAResourceBundle.res.getString("acm.digital.library"));
 			
 		}
 		return acmJProgressBar;
@@ -364,7 +365,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getChooseJPanel() {
 		if (chooseJPanel == null) {
 			chooseJPanel = new JPanel();
-			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, "Choose DLs", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("choose.dls"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			chooseJPanel.setLayout(new GroupLayout());
 			chooseJPanel.add(getIeeexploreJSpinner1(), new Constraints(new Leading(399, 48, 12, 12), new Leading(97, 27, 10, 10)));
@@ -373,7 +374,7 @@ public class FetcherPanel extends JPanel {
 			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Trailing(289, 106, 12, 12), new Leading(12, 35, 12, 12)));
 			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(398, 50, 34, 407), new Leading(136, 26, 10, 10)));
 			chooseJPanel.add(getAcmJSpinner(), new Constraints(new Leading(399, 48, 34, 406), new Leading(54, 28, 12, 12)));
-			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(21, 294, 10, 10), new Leading(59, 23, 12, 12)));
+			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(21, 294, 10), new Leading(59, 28, 12, 12)));
 			chooseJPanel.add(getIeeexploreDLCheckBox(), new Constraints(new Leading(20, 12, 12), new Leading(94, 28, 12, 12)));
 			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(20, 34, 406), new Leading(134, 28, 12, 12)));
 			chooseJPanel.add(getAcmJProgressBar(), new Constraints(new Bilateral(521, 12, 382), new Leading(57, 25, 12, 12)));
@@ -390,10 +391,10 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(citeseerJSpinner2.getValue().toString()) < 1) {
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
 						citeseerJSpinner2.setValue(1);
 					} else if (Integer.parseInt(citeseerJSpinner2.getValue().toString()) > 50) {
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
 						citeseerJSpinner2.setValue(50);
 					}
 				}
@@ -406,7 +407,7 @@ public class FetcherPanel extends JPanel {
 		if (citeseerDLCheckBox == null) {
 			citeseerDLCheckBox = new JCheckBox();
 			citeseerDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
-			citeseerDLCheckBox.setText("Fetch from Citeseer digital library");
+			citeseerDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
 			citeseerDLCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return citeseerDLCheckBox;
@@ -420,10 +421,10 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) < 1) {
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
 						ieeexploreJSpinner1.setValue(1);
 					} else if (Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) > 50) {
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
 						ieeexploreJSpinner1.setValue(50);
 					}
 				}
@@ -440,10 +441,10 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1) {
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
 						acmJSpinner.setValue(1);
 					} else if (Integer.parseInt(acmJSpinner.getValue().toString()) > 50) {
-						JOptionPane.showMessageDialog(null, "Please input result number from 1 to 50! ");
+						JOptionPane.showMessageDialog(null,DBSAResourceBundle.res.getString("please.input.result.number"));
 						acmJSpinner.setValue(50);
 					}
 				}
@@ -456,7 +457,7 @@ public class FetcherPanel extends JPanel {
 		if (ieeexploreDLCheckBox == null) {
 			ieeexploreDLCheckBox = new JCheckBox();
 			ieeexploreDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
-			ieeexploreDLCheckBox.setText("Fetch from IEEExplore digital libary");
+			ieeexploreDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
 			ieeexploreDLCheckBox.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
 		return ieeexploreDLCheckBox;
@@ -466,7 +467,7 @@ public class FetcherPanel extends JPanel {
 		if (maxResultLabel == null) {
 			maxResultLabel = new JLabel();
 			maxResultLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			maxResultLabel.setText("Max result:");
+			maxResultLabel.setText(DBSAResourceBundle.res.getString("maxresult"));
 		}
 		return maxResultLabel;
 	}
@@ -475,7 +476,7 @@ public class FetcherPanel extends JPanel {
 		if (fetchFromACMCheckBox == null) {
 			fetchFromACMCheckBox = new JCheckBox();
 			fetchFromACMCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
-			fetchFromACMCheckBox.setText("Fetch from ACM digital library");
+			fetchFromACMCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
 			fetchFromACMCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return fetchFromACMCheckBox;
@@ -485,7 +486,7 @@ public class FetcherPanel extends JPanel {
 		if (fetchFromJLabel == null) {
 			fetchFromJLabel = new JLabel();
 			fetchFromJLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			fetchFromJLabel.setText("Fetch from:");
+			fetchFromJLabel.setText(DBSAResourceBundle.res.getString("fetch.from"));
 		}
 		return fetchFromJLabel;
 	}
@@ -524,14 +525,14 @@ public class FetcherPanel extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
-					dbsaStatus.setDBSAProgressMessage("Input keyword to fetcher");
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("request.input.keyword"));
 				}
 
 				@SuppressWarnings("static-access")
 				@Override
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
-					dbsaStatus.setDBSAProgressMessage("Copyright: TKORG - Text Knowlege Organization Research Group.");
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
 				}
 
 				@Override
@@ -557,7 +558,7 @@ public class FetcherPanel extends JPanel {
 			keywordJLabel = new JLabel();
 			keywordJLabel.setBackground(Color.white);
 			keywordJLabel.setFont(new Font("Dialog", Font.BOLD, 12));
-			keywordJLabel.setText("  Input keyword :");
+			keywordJLabel.setText(DBSAResourceBundle.res.getString("input.keyword") + " : ");
 			keywordJLabel.setBorder(new LineBorder(Color.lightGray, 1, false));
 			keywordJLabel.setAlignmentX(0.5f);
 		}

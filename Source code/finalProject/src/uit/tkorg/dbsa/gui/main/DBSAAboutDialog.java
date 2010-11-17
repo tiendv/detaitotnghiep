@@ -143,7 +143,7 @@ public class DBSAAboutDialog extends JDialog {
 	}
 
 	private void initComponents() {
-		setTitle("About IDRS");
+		setTitle(DBSAResourceBundle.res.getString("about.dbsa"));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(Color.white);
 		setResizable(false);

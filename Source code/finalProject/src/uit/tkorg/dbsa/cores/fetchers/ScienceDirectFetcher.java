@@ -4,6 +4,10 @@ import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.GUIGlobals;
 import net.sf.jabref.Globals;
 import javax.swing.*;
+
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -60,7 +64,7 @@ public class ScienceDirectFetcher {
             if (citations == null)
                 return ;
             if (citations.size() == 0){
-                System.out.printf("No entries found for the search string");    
+                System.out.printf(DBSAResourceBundle.res.getString("no.entries.fonud"));    
                 return;
             }
 
@@ -68,18 +72,18 @@ public class ScienceDirectFetcher {
                 if (stopFetching)
                     break;
                 BibtexEntry entry = BibsonomyScraper.getEntry(cit);
-                System.out.println("Title : " + entry.getField("title"));
-        		System.out.println("Authors : " + entry.getField("author"));
-        		System.out.println("Year : " + entry.getField("year"));
-        		System.out.println("Abstract : " + entry.getField("abstract"));
-        		System.out.println("Publisher : " + entry.getField("sourceField"));
-        		System.out.println("Doi : " + entry.getField("doi"));
+                System.out.println(DBSAResourceBundle.res.getString("title") + " : " + entry.getField(DBSAApplicationConst.TITLE));
+        		System.out.println(DBSAResourceBundle.res.getString("authors") + " : " + entry.getField(DBSAApplicationConst.AUTHOR));
+        		System.out.println(DBSAResourceBundle.res.getString("year") + " : " + entry.getField(DBSAApplicationConst.YEAR));
+        		System.out.println(DBSAResourceBundle.res.getString("abstract") + " : " + entry.getField(DBSAApplicationConst.ABSTRACT));
+        		System.out.println(DBSAResourceBundle.res.getString("publisher") +  " : " + entry.getField(DBSAApplicationConst.SOURCE_FIELD));
+        		System.out.println(DBSAResourceBundle.res.getString("doi") + " : " + entry.getField(DBSAApplicationConst.DOI));
                
             }
 
 
         } catch (IOException e) {
-        	System.out.printf("Error while fetching from ScienceDirect");
+        	System.out.printf(DBSAResourceBundle.res.getString("error.while.fetching.from.sciencedirect"));
         }
     }
 

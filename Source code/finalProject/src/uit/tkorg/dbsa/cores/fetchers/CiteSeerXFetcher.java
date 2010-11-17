@@ -20,6 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 /**
  * @author Tiger
  * @modify tiendv
@@ -98,10 +99,10 @@ public class CiteSeerXFetcher {
 	            	}	
 	            	
             		resultFetch.setRowNumber(1);
-            		resultFetch.setTitle(entry.getField("title"));
-            		resultFetch.setAuthor(entry.getField("author"));
-            		resultFetch.setYear(Integer.parseInt(entry.getField("year")));
-            		resultFetch.setAbstract(entry.getField("abstract"));
+            		resultFetch.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+            		resultFetch.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+            		resultFetch.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+            		resultFetch.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
             		
             		resultFetch.getResultsJTable();
             	}

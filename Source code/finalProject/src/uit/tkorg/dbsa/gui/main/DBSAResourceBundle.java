@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
+
 public class DBSAResourceBundle {
 
 	public static ResourceBundle res = null;
@@ -33,9 +35,9 @@ public class DBSAResourceBundle {
 	public static ResourceBundle initResources(){
 		try{
 			if(Locale.getDefault().equals(Locale.US)){
-				res = ResourceBundle.getBundle("uit/tkorg/dbsa/properties/files/DBSA_Resources_EN");
+				res = ResourceBundle.getBundle(DBSAApplicationConst.EN_RESOURCE_LINK);
 			}else{
-				res = ResourceBundle.getBundle("uit/tkorg/dbsa/properties/files/DBSA_Resources_VN");
+				res = ResourceBundle.getBundle(DBSAApplicationConst.VN_RESOURCE_LINK);
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
