@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.htmlparser.beans.StringBean;
+
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 
@@ -33,6 +35,15 @@ public class ACMFetcher {
 	private static String searchUrlPart = "results.cfm?query=";
 	private static String searchUrlPartII = "&dl=";
 	static String endUrl = "&coll=Portal&short=0";//&start=";
+	
+	
+	// Chuoi de lay thong tin :
+	private static String startGetBitex = "http://portal.acm.org/exportformats.cfm?id=";
+	private static String endGetBitex = "&expformat=bibtex";
+	
+	// Chuoi de lay abstract 
+	private static String startGetAbstract = " http://portal.acm.org/tab_abstract.cfm?id=";
+	private static String endGetAbstract= "&usebody=tabbody";
 	/**
 	 * Vi du:
 	 * Tu khoa: computer vision 
@@ -50,12 +61,19 @@ public class ACMFetcher {
     private static Pattern bibPattern = Pattern.compile(".*(popBibTex.cfm.*)','BibTex'.*");
     //Nhan dang URL cua mot bai bao khoa hoc trong file html
 	private static Pattern fullCitationPattern = Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
+	private static Pattern getIDBitex = Pattern.compile("(exportformats[.]cfm.+bibtex)");
 	//Nhan dang phan Abstract cua bai bao trong file html
 	private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
+	
 	
 	//Bien cho phep lua chon tiep tuc tim kiem hay không
 	public static boolean shouldContinue = true;
 	
+	//Lay thong tin file bitex : http://portal.acm.org/exportformats.cfm?id=152611&expformat=bibtex
+	//Lay thong tin cua abstract http://portal.acm.org/tab_abstract.cfm?id=152611&usebody=tabbody
+	//Lay id http://portal.acm.org/citation.cfm?id=152610.152611&coll=DL&dl=GUIDE&CFID=115229885&CFTOKEN=24731416
+	// citation.cfm?id=\d+\.\d+
+	private static Pattern idPaper = Pattern.compile("\\d+&");
 	private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
 	
 	public ACMFetcher(){
@@ -232,7 +250,6 @@ public class ACMFetcher {
         	
         	entryNumber++;  
         	
-        	FetcherPanel.setAcmProgressBar(entryNumber/fetcherNumber*100);
         	
             try {
             	Thread.sleep(10000);//wait between requests or you will be blocked by ACM
@@ -247,14 +264,18 @@ public class ACMFetcher {
 	 * @return BibTexEntry
 	 */
 	private static BibtexEntry parseNextEntry(String allText, int startIndex, int entryNumber){
+		//System.out.println("Tat ca string in ra "+ allText);
 		
 		String toFind = new StringBuffer().append("<strong>").append(entryNumber).append("</strong>").toString();
+		System.out.println("String to find "+ toFind);
 		
 		int index = allText.indexOf(toFind, startIndex);
+		System.out.println("index " + index+ "\n");
 		
 		int endIndex = allText.indexOf("</table>", index+1);
 		
 		endIndex = allText.length();
+		System.out.println("endIdext " + endIndex+ "\n");
 		
 		BibtexEntry entry = null;
 		
@@ -262,7 +283,11 @@ public class ACMFetcher {
 			piv = index + 1;
 			String text = allText.substring(index, endIndex);
 			
+			//System.out.printf("string text dung de tim kiem"+ text);
+			
 			Matcher fullCitition = fullCitationPattern.matcher(text);
+			
+		//	System.out.println("fullcition"+fullCitition.group(1));
 			
 			if(fullCitition.find()){
 				try {
@@ -292,51 +317,74 @@ public class ACMFetcher {
 	int number = 0;
 	@SuppressWarnings("static-access")
 	private static BibtexEntry parseEntryBibTeX(String fullCitation){
-		URL url;
-		
-		try {
-			url = new URL(startUrl + fullCitation);
-			String page = getFetcherResult(url);
+		URL url = null;
+		String  id = null;
+		BibtexEntry entry = null;
+			try {
+				url = new URL(startUrl + fullCitation);
+				System.out.println("URL de lay thong tin tung bai bao " + url.toString());
+				Matcher getdPaper = idPaper.matcher(url.toString());
+				
+				 if (!getdPaper.find()) {
+			        	System.out.println("Unmatched!");
+			        } else {
+			        		id = getdPaper.group(0);
+			        		id=id.replaceAll("&", ""); 
+			        }
+				 	
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			System.out.println("url = " + url);
+			try {
+				Thread.sleep(10000);
+				String urlGetBitex = startGetBitex+id+endGetBitex;
+				String bitex = getUrlContentsAsText(urlGetBitex);
+				System.out.printf("\n Noi dung cua bitex lay trong day :"+bitex);
+				/**
+				 * 
+				 *
+				* to get and add in bitex here 
+				* 
+				* */
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			Thread.sleep(10000); //wait between requests or you will be blocked by ACM
-			
-			Matcher bibtexAddr = bibPattern.matcher(page);
-			
-			if(bibtexAddr.find()){
-				URL bibtexUrl = new URL(startUrl + bibtexAddr.group(1));
-				
-				System.out.println(bibtexAddr);
-				BufferedReader in = new BufferedReader(new InputStreamReader(bibtexUrl.openStream()));
-				
-				ParserResult result = BibtexParser.parse(in);
-				
-				in.close();
-				Collection<BibtexEntry> item = result.getDatabase().getEntries();
-				
-				BibtexEntry entry = item.iterator().next();
-				
-				// get abstract
-				Matcher absMatch = absPattern.matcher(page);
-				if (absMatch.find()) {
-					String absBlock = absMatch.group(1);
-					entry.setField("abstract", convertHTMLChars(absBlock).trim());
-				} else {
-					System.out.println("No abstract matched.");
-					//System.out.println(page);
+			try {
+				Thread.sleep(10000);
+				String urlGetAbStract = startGetAbstract+id+endGetAbstract;
+				URL test = null;
+				try {
+					test = new URL(urlGetAbStract);
+					String abstr;
+					abstr = getFetcherResult(test);
+					System.out.printf("\n Noi dung cua abtract lay trong day :"+abstr);
+					/**
+					 * 
+					 * 
+					 * 
+					 */
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+
 				
-				Thread.sleep(1000);//wait between requests or you will be blocked by ACM
-				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+					
 				System.out.println("Title : " + entry.getField("title"));
 				System.out.println("Authors : " + entry.getField("author"));
 				System.out.println("Year : " + entry.getField("year"));
 				System.out.println("Abstract : " + entry.getField("abstract"));
 				System.out.println("Publisher : " + entry.getField("publisher"));
 				System.out.println("Volume : " + entry.getField("volume"));
-				
-				
 				
 				number ++;
 				resultFetch.setRowNumber(number);
@@ -347,24 +395,7 @@ public class ACMFetcher {
 				resultFetch.setPublisher(entry.getField("publisher"));
 
 				resultFetch.getResultsJTable();
-				
 				return entry;
-				
-			}else{
-				return null;
-			}
-			
-			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 	
 	/**
@@ -376,5 +407,13 @@ public class ACMFetcher {
 
         return htmlConverter.format(text);
     }
+    
+    public static  String getUrlContentsAsText(String url) { 
+        String content = ""; 
+        StringBean stringBean = new StringBean(); 
+        stringBean.setURL(url); 
+        content = stringBean.getStrings(); 
+        return content; 
+	} 
     
 }
