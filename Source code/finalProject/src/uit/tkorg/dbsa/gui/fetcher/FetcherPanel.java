@@ -156,10 +156,13 @@ public class FetcherPanel extends JPanel {
 							fetcherBoolean = true;
 							final String acmQuery = keywordJTextField.getText();
 						
-					//	Thread acmThread = new Thread (new Runnable(){
+
+						//Thread acmThread = new Thread (new Runnable(){
 						//	@Override
 						//	public void run() {
-								//{
+						//		{
+
+
 									uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
 									setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
 									acmJProgressBar.setIndeterminate(true);
@@ -175,9 +178,11 @@ public class FetcherPanel extends JPanel {
 										// TODO Auto-generated catch block
 										ex.printStackTrace();
 									}
-								//}
-							//}});
-						
+
+						//		}
+					//		}});
+		
+
 							//acmThread.start();
 							//acmThread.interrupt();
 						}
@@ -190,7 +195,6 @@ public class FetcherPanel extends JPanel {
 							Thread citeseerThread = new Thread (new Runnable(){
 								@Override
 								public void run() {
-									{
 										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
 										citeseerJProgressBar.setIndeterminate(true);
 										citeseerJProgressBar.setStringPainted(true);
@@ -199,9 +203,8 @@ public class FetcherPanel extends JPanel {
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										citeseerJProgressBar.setIndeterminate(false);
 										citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
-										showResultJButton.setEnabled(true);
-										
-									}
+										showResultJButton.setEnabled(true);	
+									
 								}});
 							citeseerThread.start();	
 							citeseerThread.interrupt();
@@ -214,7 +217,6 @@ public class FetcherPanel extends JPanel {
 							Thread ieeeThread = new Thread (new Runnable(){
 								@Override
 								public void run() {
-									{
 										setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
 										ieeeploreJProgressBar.setIndeterminate(true);
 										ieeeploreJProgressBar.setStringPainted(true);
@@ -229,11 +231,11 @@ public class FetcherPanel extends JPanel {
 			
 											t.printStackTrace();
 										}
-									}
-								}});
+									}});
 								ieeeThread.start();
 								ieeeThread.interrupt();
 						}	
+					
 						
 						if(!fetcherBoolean){
 							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.choose.dl"));
