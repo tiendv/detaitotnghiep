@@ -1,0 +1,4 @@
+ACMStartUrl http://portal.acm.org/
+ACMSearchUrlPart results.cfm?query=
+SearchUrlPartII &dl
+ACMEndUrl &coll=Portal&short=0

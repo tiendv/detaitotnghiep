@@ -20,9 +20,10 @@ public class FileLoadder {
 	/**
 	 * return Arraylist Stopword From list File
 	 */
-	public ArrayList<String>  loadListStopwordsList(){
+	public static ArrayList<String>  loadTextFile(String url){
+		//"src\\uit\\tkorg\\dbsa\\properties\\files\\ListStopWords.txt"
 		ArrayList<String> lst = new ArrayList<String>();
-		File file = new File("src\\uit\\tkorg\\dbsa\\properties\\files\\ListStopWords.txt");
+		File file = new File(url);
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
 		DataInputStream dis = null;

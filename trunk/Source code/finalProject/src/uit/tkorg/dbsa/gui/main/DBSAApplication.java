@@ -2,7 +2,7 @@ package uit.tkorg.dbsa.gui.main;
 
 /**
  *
- * @author Nguyen Phuoc Cuong
+ * @author cuongnp
  */
 
 import java.awt.BorderLayout;
@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -73,6 +74,8 @@ public class DBSAApplication extends JPanel {
 	
 	public static DBSAStatusBar dbsaStatusBar = null;
 
+	public static DBSAFetcherPattern dbsaFetcherPattern = null;
+	
 	private JFrame getDBSAJFrame(){
 	
 		if (dbsaJFrame == null) {
@@ -84,6 +87,8 @@ public class DBSAApplication extends JPanel {
 			
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
 			dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
+			dbsaFetcherPattern = new DBSAFetcherPattern();
+			
 			getDBSAContent();
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel(dbsaTabPanel);
@@ -94,6 +99,7 @@ public class DBSAApplication extends JPanel {
 					dbsaStatusBar.setStatusJLabel("");
 				dbsaStatusBar.repaint();
 			}
+			
 			dbsaJFrame.repaint();
 			
 		}
