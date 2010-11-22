@@ -11,6 +11,9 @@ import org.htmlparser.beans.StringBean;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAFetcherPattern;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.Globals;
@@ -24,9 +27,10 @@ public class ACMFetcher {
 	
 	private final static HTMLConverter htmlConverter = new HTMLConverter();
 	
-	//Cac chuoi tao cau query chua tu khoa can tim kiem
-	private static String startUrl = "http://portal.acm.org/";
-	private static String searchUrlPart = "results.cfm?query=";
+	//Cac chuoi tao cau query chua tu khoa can tim kiem\
+	
+	private static String startUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_URL);
+	private static String searchUrlPart = DBSAApplication.dbsaFetcherPattern.getPattern("ACMSearchUrlPart");
 	private static String searchUrlPartII = "&dl=";
 	static String endUrl = "&coll=Portal&short=0";//&start=";
 	
@@ -76,7 +80,7 @@ public class ACMFetcher {
 	public static void Fetcher(String keyword) throws IOException{
 		
 		keywordString = keyword; 
-		
+		System.out.println(startUrl);
 		//Tao URL tu keyword do nguoi dung nhap
 		URL url = MakeUrl(0);
 		

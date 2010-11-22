@@ -79,5 +79,14 @@ public class DBSAApplicationConst {
 	public static String vn = "vn";
 	public static String VN_VN = "vn_VN";
 	public static String EN_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Resources_EN";
-	public static String VN_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Resources_VN";	
+	public static String VN_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Resources_VN";
+	public static String PATTERN_RESOURCE = "uit/tokrg/dbsa/properties/files/DBSA_Define_Pattern";
+	
+	/*
+	 * Define ACM DLs fetcher pattern
+	 */
+	public static String ACM_START_URL = "ACMStartUrl";
+	public static String ACM_END_URL = "ACMEndUrl";
+	public static String ACM_SEARCH_URL_PART = "ACMSearchUrlPart";
+	public static String ACM_SEARCH_URL_PART_II = "ACMSearchUrlPartII";
 }
