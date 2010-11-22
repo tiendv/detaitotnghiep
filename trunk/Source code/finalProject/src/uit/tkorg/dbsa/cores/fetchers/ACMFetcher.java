@@ -1,16 +1,11 @@
 package uit.tkorg.dbsa.cores.fetchers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.table.DefaultTableModel;
 
 import org.htmlparser.beans.StringBean;
 
@@ -21,7 +16,6 @@ import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.Globals;
 import net.sf.jabref.imports.BibtexParser;
 import net.sf.jabref.imports.HTMLConverter;
-import net.sf.jabref.imports.ParserResult;
 
 public class ACMFetcher {
 	
@@ -58,7 +52,7 @@ public class ACMFetcher {
 	private static Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
     private static Pattern maxHitsPattern = Pattern.compile(".*Results \\d+ - \\d+ of (\\d+,*\\d*).*");
     //Nhan dang file BibTex trong file html
-    private static Pattern bibPattern = Pattern.compile(".*(popBibTex.cfm.*)','BibTex'.*");
+    private static Pattern bibPattern = Pattern.compile("(exportformats.cfm[.]+bibtex)");
     //Nhan dang URL cua mot bai bao khoa hoc trong file html
 	private static Pattern fullCitationPattern = Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
 	private static Pattern getIDBitex = Pattern.compile("(exportformats[.]cfm.+bibtex)");
@@ -338,10 +332,11 @@ public class ACMFetcher {
 			}
 			
 			try {
-				Thread.sleep(10000);
-				String urlGetBitex = startGetBitex+id+endGetBitex;
+				Thread.sleep(6000);
+				String urlGetBitex = startGetBitex + id + endGetBitex;
 				String bitex = getUrlContentsAsText(urlGetBitex);
-				System.out.printf("\n Noi dung cua bitex lay trong day :"+bitex);
+				entry = BibtexParser.singleFromString(bitex);
+				
 				/**
 				 * 
 				 *
@@ -353,16 +348,26 @@ public class ACMFetcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			try {
-				Thread.sleep(10000);
-				String urlGetAbStract = startGetAbstract+id+endGetAbstract;
+				Thread.sleep(6000);
+				String urlGetAbStract = startGetAbstract + id + endGetAbstract;
+				
 				URL test = null;
 				try {
 					test = new URL(urlGetAbStract);
 					String abstr;
 					abstr = getFetcherResult(test);
+					//System.out.println("abstract link" + test);
 					System.out.printf("\n Noi dung cua abtract lay trong day :"+abstr);
+					
+					abstr = abstr.replaceAll("\\<.*?>","");
+					
+				
+					abstr.trim();
+					entry.setField("abstract", abstr);
+
+					
 					/**
 					 * 
 					 * 
@@ -397,6 +402,7 @@ public class ACMFetcher {
 				resultFetch.getResultsJTable();
 				return entry;
 	}
+
 	
 	/**
      * This method must convert HTML style char sequences to normal characters.
