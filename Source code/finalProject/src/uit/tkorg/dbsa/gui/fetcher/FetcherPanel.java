@@ -156,10 +156,10 @@ public class FetcherPanel extends JPanel {
 							fetcherBoolean = true;
 							final String acmQuery = keywordJTextField.getText();
 						
-						Thread acmThread = new Thread (new Runnable(){
-							@Override
-							public void run() {
-								{
+					//	Thread acmThread = new Thread (new Runnable(){
+						//	@Override
+						//	public void run() {
+								//{
 									uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
 									setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
 									acmJProgressBar.setIndeterminate(true);
@@ -171,15 +171,15 @@ public class FetcherPanel extends JPanel {
 										acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));	
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 										showResultJButton.setEnabled(true);
-									} catch (IOException e) {
+									} catch (IOException ex) {
 										// TODO Auto-generated catch block
-										e.printStackTrace();
+										ex.printStackTrace();
 									}
-								}
-							}});
+								//}
+							//}});
 						
-							acmThread.start();
-							acmThread.interrupt();
+							//acmThread.start();
+							//acmThread.interrupt();
 						}
 						if(citeseerDLCheckBox.isSelected() == true){
 							fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
