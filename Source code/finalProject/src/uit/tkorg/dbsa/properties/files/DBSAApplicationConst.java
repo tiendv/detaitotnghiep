@@ -87,6 +87,6 @@ public class DBSAApplicationConst {
 	 */
 	public static String ACM_START_URL = "ACMStartUrl";
 	public static String ACM_END_URL = "ACMEndUrl";
-	public static String ACM_SEARCH_URL_PART = "ACMSearchUrlPart";
-	public static String ACM_SEARCH_URL_PART_II = "ACMSearchUrlPartII";
+	public static String ACM_SEARCH_URL_PART = "ACMSearchUrlPart1";
+	public static String ACM_SEARCH_URL_PART_II = "ACMSearchUrlPart2";
 }

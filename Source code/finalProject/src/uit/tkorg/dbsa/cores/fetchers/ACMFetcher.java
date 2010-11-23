@@ -30,9 +30,9 @@ public class ACMFetcher {
 	//Cac chuoi tao cau query chua tu khoa can tim kiem\
 	
 	private static String startUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_URL);
-	private static String searchUrlPart = DBSAApplication.dbsaFetcherPattern.getPattern("ACMSearchUrlPart");
-	private static String searchUrlPartII = "&dl=";
-	static String endUrl = "&coll=Portal&short=0";//&start=";
+	private static String searchUrlPart = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_SEARCH_URL_PART);
+	private static String searchUrlPartII = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_SEARCH_URL_PART_II);
+	static String endUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_END_URL);
 	
 	
 	// Chuoi de lay thong tin :
