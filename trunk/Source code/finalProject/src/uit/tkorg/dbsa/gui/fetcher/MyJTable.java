@@ -28,7 +28,7 @@ public class MyJTable extends JTable
   {
     super(md);
     CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
-    this.getColumnModel().getColumn(6).setCellRenderer(checkBoxRenderer);
+    this.getColumnModel().getColumn(7).setCellRenderer(checkBoxRenderer);
   }
 
   /**
