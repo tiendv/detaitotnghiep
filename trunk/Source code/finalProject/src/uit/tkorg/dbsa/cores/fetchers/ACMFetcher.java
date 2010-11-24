@@ -283,7 +283,7 @@ public class ACMFetcher {
 			
 			Matcher fullCitition = fullCitationPattern.matcher(text);
 			
-		//	System.out.println("fullcition"+fullCitition.group(1));
+			System.out.println("fullcition"+fullCitition.group(1));
 			
 			if(fullCitition.find()){
 				try {
