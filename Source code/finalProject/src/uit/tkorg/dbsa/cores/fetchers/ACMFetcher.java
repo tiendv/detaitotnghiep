@@ -36,12 +36,12 @@ public class ACMFetcher {
 	
 	
 	// Chuoi de lay thong tin :
-	private static String startGetBitex = "http://portal.acm.org/exportformats.cfm?id=";
-	private static String endGetBitex = "&expformat=bibtex";
+	private static String startGetBibtex = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_GET_BIBTEX);
+	private static String endGetBibtex = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_END_GET_BIBTEX);
 	
 	// Chuoi de lay abstract 
-	private static String startGetAbstract = " http://portal.acm.org/tab_abstract.cfm?id=";
-	private static String endGetAbstract= "&usebody=tabbody";
+	private static String startGetAbstract = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_GET_ABSTRACT);
+	private static String endGetAbstract = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_END_GET_ABSTRACT);
 	/**
 	 * Vi du:
 	 * Tu khoa: computer vision 
@@ -54,14 +54,14 @@ public class ACMFetcher {
 	
 	//Cac the dung de nhan dang noi dung file html vua thu thap
 	private static Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
-    private static Pattern maxHitsPattern = Pattern.compile(".*Results \\d+ - \\d+ of (\\d+,*\\d*).*");
+    private static Pattern maxHitsPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_MAX_HITS_PATTERN));
     //Nhan dang file BibTex trong file html
-    private static Pattern bibPattern = Pattern.compile("(exportformats.cfm[.]+bibtex)");
+    private static Pattern bibPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_BIB_PATTERN));
     //Nhan dang URL cua mot bai bao khoa hoc trong file html
 	private static Pattern fullCitationPattern = Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
-	private static Pattern getIDBitex = Pattern.compile("(exportformats[.]cfm.+bibtex)");
+	private static Pattern getIDBitex = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_GET_ID_BIBTEX));
 	//Nhan dang phan Abstract cua bai bao trong file html
-	private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
+	//private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
 	
 	
 	//Bien cho phep lua chon tiep tuc tim kiem hay không
@@ -181,16 +181,16 @@ public class ACMFetcher {
             		page = page.substring(index);
 			}
 			
-			try {
-				maxHits = getNumberOfHits(page, "Results", maxHitsPattern);	
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-			
-			if(hits > maxHits){
-				hits = MAX_FETCH;
-			}		
+//			try {
+//				maxHits = getNumberOfHits(page, "Results", maxHitsPattern);	
+//			} catch (IOException e) {
+//				
+//				e.printStackTrace();
+//			}
+//			
+//			if(hits > maxHits){
+//				hits = MAX_FETCH;
+//			}		
 	}
 	
 	/*
@@ -205,6 +205,8 @@ public class ACMFetcher {
 	            throw new IOException(Globals.lang("Could not parse number of hits"));
 	        }
 	        String substring = page.substring(ind, Math.min(ind + 42, page.length()));
+	        
+	        System.out.println("Sub = " + substring);
 	        Matcher m = pattern.matcher(substring);
 	        if (!m.find()) {
 	        	System.out.println("Unmatched!");
@@ -337,7 +339,7 @@ public class ACMFetcher {
 			
 			try {
 				Thread.sleep(6000);
-				String urlGetBitex = startGetBitex + id + endGetBitex;
+				String urlGetBitex = startGetBibtex + id + endGetBibtex;
 				String bitex = getUrlContentsAsText(urlGetBitex);
 				entry = BibtexParser.singleFromString(bitex);
 				
@@ -390,6 +392,7 @@ public class ACMFetcher {
 					
 				System.out.println("Title : " + entry.getField("title"));
 				System.out.println("Authors : " + entry.getField("author"));
+				System.out.println("Link : " + entry.getField("url"));
 				System.out.println("Year : " + entry.getField("year"));
 				System.out.println("Abstract : " + entry.getField("abstract"));
 				System.out.println("Publisher : " + entry.getField("publisher"));
@@ -399,6 +402,7 @@ public class ACMFetcher {
 				resultFetch.setRowNumber(number);
 				resultFetch.setTitle(entry.getField("title"));
 				resultFetch.setAuthor(entry.getField("author"));
+				resultFetch.setLink(entry.getField("url"));
 				resultFetch.setYear(Integer.parseInt(entry.getField("year")));
 				resultFetch.setAbstract(entry.getField("abstract"));
 				resultFetch.setPublisher(entry.getField("publisher"));

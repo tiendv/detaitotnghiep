@@ -21,7 +21,7 @@ public class DBSAFetcherPattern {
 		for(int i = 0; i < patternNameList.size(); i++){
 			if(patternNameList.get(i).substring(0, patternName.length()).equals(patternName)){
 				
-				patternContent = patternNameList.get(i).substring(patternName.length()).replaceAll(" ", "");
+				patternContent = patternNameList.get(i).substring(patternName.length() + 1);
 				System.out.println(patternContent + patternContent.length());
 				
 			}				

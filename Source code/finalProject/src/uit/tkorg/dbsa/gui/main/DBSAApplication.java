@@ -61,6 +61,8 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem unMarkAllJMenuItem = null;
 	private JMenuItem selectAllJMenuItem = null;
 	
+	private JMenuItem patternJMenuItem = null;
+	
 	private JMenuItem configurationJMenuItem = null;
 	
 	private JMenuItem helpJMenuItem = null;
@@ -398,12 +400,34 @@ public class DBSAApplication extends JPanel {
 		if (fetcherJMenu == null) {
 			fetcherJMenu = new JMenu();
 			fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
-//			fileJMenu.add(getSaveMenuItem());
+			fileJMenu.add(getPatternJMenuItem());
 //			fileJMenu.add(getExitMenuItem());
 		}
 		return fetcherJMenu;
 	}	
 
+	/**
+	 * This method initalizes unmarkAllJMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
+	 */
+	private JMenuItem getPatternJMenuItem(){
+		if(patternJMenuItem == null){
+			patternJMenuItem = new JMenuItem();
+			patternJMenuItem.setText("Change pattern");
+			patternJMenuItem.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					
+				}
+				
+			});
+		}
+		return unMarkAllJMenuItem;
+	}
+	
 	/**
 	 * This method initializes optionJMenu	
 	 * 	
