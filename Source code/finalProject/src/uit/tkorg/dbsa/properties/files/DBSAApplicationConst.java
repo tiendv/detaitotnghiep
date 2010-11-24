@@ -89,4 +89,14 @@ public class DBSAApplicationConst {
 	public static String ACM_END_URL = "ACMEndUrl";
 	public static String ACM_SEARCH_URL_PART = "ACMSearchUrlPart1";
 	public static String ACM_SEARCH_URL_PART_II = "ACMSearchUrlPart2";
+	public static String ACM_START_GET_BIBTEX = "ACMStartGetBibtex";
+	public static String ACM_END_GET_BIBTEX = "ACMEndGetBibtex";
+	public static String ACM_START_GET_ABSTRACT = "ACMStartGetAbstract";
+	public static String ACM_END_GET_ABSTRACT = "ACMEndGetAbstract";
+	public static String ACM_HITS_PATTERN = "ACMHitsPattern";
+	public static String ACM_MAX_HITS_PATTERN = "ACMMaxHitsPattern";
+	public static String ACM_BIB_PATTERN = "ACMBibPattern";
+	public static String ACM_FULL_CITATION_PATTERN = "ACMFullCitationPattern";
+	public static String ACM_GET_ID_BIBTEX = "ACMGetIDBibtex";
+	public static String ACM_ID_PAPER = "ACMIdPaper";
 }
