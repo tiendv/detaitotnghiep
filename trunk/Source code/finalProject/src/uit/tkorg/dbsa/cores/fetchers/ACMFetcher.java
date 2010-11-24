@@ -60,7 +60,7 @@ public class ACMFetcher {
 	private static Pattern fullCitationPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_FULL_CITATION_PATTERN));
 //	private static Pattern getIDBitex = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_GET_ID_BIBTEX));
 	//Nhan dang phan Abstract cua bai bao trong file html
-	//private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
+	private static Pattern absPattern = Pattern.compile("<div style=\"display:inline\">.*</div>");
 	
 	
 	//Bien cho phep lua chon tiep tuc tim kiem hay không
@@ -358,13 +358,17 @@ public class ACMFetcher {
 					test = new URL(urlGetAbStract);
 					String abstr;
 					abstr = getFetcherResult(test);
+					System.out.println(abstr);
+					Matcher getdAbstract = absPattern.matcher(abstr);
 					
-					abstr = abstr.replaceAll("\\<.*?>","");
+					 if (!getdAbstract.find()) {
+				        	System.out.println("Unmatched Abstract!");
+				        } else {
+				        		abstr = getdAbstract.group(0);
+								abstr = abstr.replaceAll("\\<.*?>","");
+								entry.setField("abstract", abstr);
+				        }
 					
-				
-					abstr.trim();
-					entry.setField("abstract", abstr);
-
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
