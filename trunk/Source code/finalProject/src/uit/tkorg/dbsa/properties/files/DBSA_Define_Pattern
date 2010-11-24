@@ -6,6 +6,8 @@ ACMStartGetBibtex http://portal.acm.org/exportformats.cfm?id=
 ACMEndGetBibtex &expformat=bibtex
 ACMStartGetAbstract http://portal.acm.org/tab_abstract.cfm?id=
 ACMEndGetAbstract &usebody=tabbody
-ACMMaxHitsPattern .*Results \\d+ - \\d+ of (\\d+,*\\d*).*
+ACMHitsPattern .*Found <b>(\d+,*\d*)</b> of.*
+ACMMaxHitsPattern .*Results \d+ - \d+ of (\d+,*\d*).*
 ACMBibPattern (exportformats.cfm[.]+bibtex)
+ACMFullCitationPattern <A HREF="(citation.cfm.*)" class.*
 ACMGetIDBibtex (exportformats[.]cfm.+bibtex)

@@ -12,20 +12,19 @@ import org.htmlparser.beans.StringBean;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
-import uit.tkorg.dbsa.gui.main.DBSAFetcherPattern;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.Globals;
 import net.sf.jabref.imports.BibtexParser;
-import net.sf.jabref.imports.HTMLConverter;
+//import net.sf.jabref.imports.HTMLConverter;
 
 public class ACMFetcher {
 	
 	//Tu khoa can tim kiem
 	private static String keywordString = null;
 	
-	private final static HTMLConverter htmlConverter = new HTMLConverter();
+//	private final static HTMLConverter htmlConverter = new HTMLConverter();
 	
 	//Cac chuoi tao cau query chua tu khoa can tim kiem\
 	
@@ -53,13 +52,13 @@ public class ACMFetcher {
 	private static int hits = 0; // so ket qua thu thap duoc
 	
 	//Cac the dung de nhan dang noi dung file html vua thu thap
-	private static Pattern hitsPattern = Pattern.compile(".*Found <b>(\\d+,*\\d*)</b> of.*");
-    private static Pattern maxHitsPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_MAX_HITS_PATTERN));
+	private static Pattern hitsPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_HITS_PATTERN));
+//    private static Pattern maxHitsPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_MAX_HITS_PATTERN));
     //Nhan dang file BibTex trong file html
-    private static Pattern bibPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_BIB_PATTERN));
+//    private static Pattern bibPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_BIB_PATTERN));
     //Nhan dang URL cua mot bai bao khoa hoc trong file html
-	private static Pattern fullCitationPattern = Pattern.compile("<A HREF=\"(citation.cfm.*)\" class.*");
-	private static Pattern getIDBitex = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_GET_ID_BIBTEX));
+	private static Pattern fullCitationPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_FULL_CITATION_PATTERN));
+//	private static Pattern getIDBitex = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_GET_ID_BIBTEX));
 	//Nhan dang phan Abstract cua bai bao trong file html
 	//private static Pattern absPattern = Pattern.compile(".*ABSTRACT</A></span>\\s+<p class=\"abstract\">\\s+(.*)");
 	
@@ -80,7 +79,7 @@ public class ACMFetcher {
 	public static void Fetcher(String keyword) throws IOException{
 		
 		keywordString = keyword; 
-		System.out.println(startUrl);
+	
 		//Tao URL tu keyword do nguoi dung nhap
 		URL url = MakeUrl(0);
 		
@@ -171,7 +170,7 @@ public class ACMFetcher {
 			}
 			
 			int index = page.indexOf("Found");
-			int maxHits = 0;
+//			int maxHits = 0;
 			
 			if (index >= 0) {
             	page = page.substring(index + 5);
@@ -206,7 +205,7 @@ public class ACMFetcher {
 	        }
 	        String substring = page.substring(ind, Math.min(ind + 42, page.length()));
 	        
-	        System.out.println("Sub = " + substring);
+//	        System.out.println("Sub = " + substring);
 	        Matcher m = pattern.matcher(substring);
 	        if (!m.find()) {
 	        	System.out.println("Unmatched!");
@@ -267,15 +266,12 @@ public class ACMFetcher {
 		//System.out.println("Tat ca string in ra "+ allText);
 		
 		String toFind = new StringBuffer().append("<strong>").append(entryNumber).append("</strong>").toString();
-		System.out.println("String to find "+ toFind);
 		
 		int index = allText.indexOf(toFind, startIndex);
-		System.out.println("index " + index+ "\n");
 		
 		int endIndex = allText.indexOf("</table>", index+1);
 		
 		endIndex = allText.length();
-		System.out.println("endIdext " + endIndex+ "\n");
 		
 		BibtexEntry entry = null;
 		
@@ -315,14 +311,12 @@ public class ACMFetcher {
 	 * @return BibTexEntry
 	 */
 	int number = 0;
-	@SuppressWarnings("static-access")
 	private static BibtexEntry parseEntryBibTeX(String fullCitation){
 		URL url = null;
 		String  id = null;
 		BibtexEntry entry = null;
 			try {
 				url = new URL(startUrl + fullCitation);
-				System.out.println("URL de lay thong tin tung bai bao " + url.toString());
 				Matcher getdPaper = idPaper.matcher(url.toString());
 				
 				 if (!getdPaper.find()) {
@@ -364,8 +358,6 @@ public class ACMFetcher {
 					test = new URL(urlGetAbStract);
 					String abstr;
 					abstr = getFetcherResult(test);
-					//System.out.println("abstract link" + test);
-					System.out.printf("\n Noi dung cua abtract lay trong day :"+abstr);
 					
 					abstr = abstr.replaceAll("\\<.*?>","");
 					
@@ -373,12 +365,6 @@ public class ACMFetcher {
 					abstr.trim();
 					entry.setField("abstract", abstr);
 
-					
-					/**
-					 * 
-					 * 
-					 * 
-					 */
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -394,7 +380,7 @@ public class ACMFetcher {
 				System.out.println("Authors : " + entry.getField("author"));
 				System.out.println("Link : " + entry.getField("url"));
 				System.out.println("Year : " + entry.getField("year"));
-				System.out.println("Abstract : " + entry.getField("abstract"));
+				//System.out.println("Abstract : " + entry.getField("abstract"));
 				System.out.println("Publisher : " + entry.getField("publisher"));
 				System.out.println("Volume : " + entry.getField("volume"));
 				
@@ -417,11 +403,11 @@ public class ACMFetcher {
      * @param text The text to handle.
      * @return The converted text.
      */
-    private static String convertHTMLChars(String text) {
-
-        return htmlConverter.format(text);
-    }
-    
+//    private static String convertHTMLChars(String text) {
+//
+//        return htmlConverter.format(text);
+//    }
+//    
     public static  String getUrlContentsAsText(String url) { 
         String content = ""; 
         StringBean stringBean = new StringBean(); 

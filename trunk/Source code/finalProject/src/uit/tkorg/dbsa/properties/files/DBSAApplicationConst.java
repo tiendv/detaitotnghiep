@@ -80,7 +80,7 @@ public class DBSAApplicationConst {
 	public static String VN_VN = "vn_VN";
 	public static String EN_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Resources_EN";
 	public static String VN_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Resources_VN";
-	public static String PATTERN_RESOURCE = "uit/tokrg/dbsa/properties/files/DBSA_Define_Pattern";
+	public static String PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Define_Pattern";
 	
 	/*
 	 * Define ACM DLs fetcher pattern
