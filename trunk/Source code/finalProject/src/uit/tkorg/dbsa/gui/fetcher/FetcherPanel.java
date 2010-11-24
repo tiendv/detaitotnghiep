@@ -157,10 +157,10 @@ public class FetcherPanel extends JPanel {
 							final String acmQuery = keywordJTextField.getText();
 						
 
-						//Thread acmThread = new Thread (new Runnable(){
-						//	@Override
-						//	public void run() {
-						//		{
+						Thread acmThread = new Thread (new Runnable(){
+							@Override
+							public void run() {
+								{
 
 
 									uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
@@ -179,11 +179,11 @@ public class FetcherPanel extends JPanel {
 										ex.printStackTrace();
 									}
 
-						//		}
-					//		}});
+								}
+							}});
 		
 
-							//acmThread.start();
+							acmThread.start();
 							//acmThread.interrupt();
 						}
 						if(citeseerDLCheckBox.isSelected() == true){

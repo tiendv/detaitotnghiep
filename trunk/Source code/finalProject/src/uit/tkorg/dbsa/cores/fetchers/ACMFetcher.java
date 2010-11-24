@@ -251,7 +251,7 @@ public class ACMFetcher {
         	
         	
             try {
-            	Thread.sleep(10000);//wait between requests or you will be blocked by ACM
+            	Thread.sleep(6000);//wait between requests or you will be blocked by ACM
             } catch (InterruptedException e) {
             	System.err.println(e.getStackTrace());
             }
@@ -283,11 +283,11 @@ public class ACMFetcher {
 			
 			Matcher fullCitition = fullCitationPattern.matcher(text);
 			
-			System.out.println("fullcition"+fullCitition.group(1));
+			//System.out.println("fullcition"+fullCitition.group(1));
 			
 			if(fullCitition.find()){
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(6000);
 					entry  = parseEntryBibTeX(fullCitition.group(1));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
