@@ -102,11 +102,8 @@ public class ACMFetcher {
         		
             if (!shouldContinue)
                 break;
-
-            parse(page, 0, firstEntry + 1);
-            
-            System.out.println("FirstEntry = " + firstEntry);
-            
+            parse(page, 0, firstEntry + 1);   
+            System.out.println("FirstEntry = " + firstEntry);     
             firstEntry += perPage;
          
         }
@@ -170,8 +167,6 @@ public class ACMFetcher {
 			}
 			
 			int index = page.indexOf("Found");
-//			int maxHits = 0;
-			
 			if (index >= 0) {
             	page = page.substring(index + 5);
             	
@@ -179,19 +174,8 @@ public class ACMFetcher {
 				if (index >= 0)
             		page = page.substring(index);
 			}
-			
-//			try {
-//				maxHits = getNumberOfHits(page, "Results", maxHitsPattern);	
-//			} catch (IOException e) {
-//				
-//				e.printStackTrace();
-//			}
-//			
-//			if(hits > maxHits){
-//				hits = MAX_FETCH;
-//			}		
+				
 	}
-	
 	/*
 	 * Ham tim 1 chuoi trong file html dua vao noi dung the (Pattern). 
 	 * The nay (Pattern) duoc dinh nghia bang cach su dung Regular Expressions.
@@ -204,8 +188,6 @@ public class ACMFetcher {
 	            throw new IOException(Globals.lang("Could not parse number of hits"));
 	        }
 	        String substring = page.substring(ind, Math.min(ind + 42, page.length()));
-	        
-//	        System.out.println("Sub = " + substring);
 	        Matcher m = pattern.matcher(substring);
 	        if (!m.find()) {
 	        	System.out.println("Unmatched!");
@@ -263,7 +245,6 @@ public class ACMFetcher {
 	 * @return BibTexEntry
 	 */
 	private static BibtexEntry parseNextEntry(String allText, int startIndex, int entryNumber){
-		//System.out.println("Tat ca string in ra "+ allText);
 		
 		String toFind = new StringBuffer().append("<strong>").append(entryNumber).append("</strong>").toString();
 		
@@ -277,13 +258,8 @@ public class ACMFetcher {
 		
 		if(index >= 0){
 			piv = index + 1;
-			String text = allText.substring(index, endIndex);
-			
-			//System.out.printf("string text dung de tim kiem"+ text);
-			
+			String text = allText.substring(index, endIndex);		
 			Matcher fullCitition = fullCitationPattern.matcher(text);
-			
-			//System.out.println("fullcition"+fullCitition.group(1));
 			
 			if(fullCitition.find()){
 				try {
@@ -306,11 +282,11 @@ public class ACMFetcher {
 		return null;
 	}
 	
-	static /*
+	/*
 	 * Ham phan tich cu phap va lay thong tin cua mot bai bao khoa hoc
 	 * @return BibTexEntry
 	 */
-	int number = 0;
+	static int number = 0;
 	private static BibtexEntry parseEntryBibTeX(String fullCitation){
 		URL url = null;
 		String  id = null;
@@ -327,7 +303,6 @@ public class ACMFetcher {
 			        }
 				 	
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -336,13 +311,6 @@ public class ACMFetcher {
 				String urlGetBitex = startGetBibtex + id + endGetBibtex;
 				String bitex = getUrlContentsAsText(urlGetBitex);
 				entry = BibtexParser.singleFromString(bitex);
-				
-				/**
-				 * 
-				 *
-				* to get and add in bitex here 
-				* 
-				* */
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -358,10 +326,11 @@ public class ACMFetcher {
 					test = new URL(urlGetAbStract);
 					String abstr;
 					abstr = getFetcherResult(test);
-					System.out.println(abstr);
+					abstr = abstr.replace("\r\n", " ").replace("\n", " "); // remove line break
 					Matcher getdAbstract = absPattern.matcher(abstr);
 					
 					 if (!getdAbstract.find()) {
+						 	entry.setField("abstract", " ");
 				        	System.out.println("Unmatched Abstract!");
 				        } else {
 				        		abstr = getdAbstract.group(0);
@@ -374,20 +343,11 @@ public class ACMFetcher {
 					e.printStackTrace();
 				}
 
-				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-					
-				System.out.println("Title : " + entry.getField("title"));
-				System.out.println("Authors : " + entry.getField("author"));
-				System.out.println("Link : " + entry.getField("url"));
-				System.out.println("Year : " + entry.getField("year"));
-				//System.out.println("Abstract : " + entry.getField("abstract"));
-				System.out.println("Publisher : " + entry.getField("publisher"));
-				System.out.println("Volume : " + entry.getField("volume"));
-				
+								
 				number ++;
 				resultFetch.setRowNumber(number);
 				resultFetch.setTitle(entry.getField("title"));
@@ -396,22 +356,14 @@ public class ACMFetcher {
 				resultFetch.setYear(Integer.parseInt(entry.getField("year")));
 				resultFetch.setAbstract(entry.getField("abstract"));
 				resultFetch.setPublisher(entry.getField("publisher"));
-
 				resultFetch.getResultsJTable();
 				return entry;
 	}
-
-	
 	/**
-     * This method must convert HTML style char sequences to normal characters.
-     * @param text The text to handle.
-     * @return The converted text.
-     */
-//    private static String convertHTMLChars(String text) {
-//
-//        return htmlConverter.format(text);
-//    }
-//    
+	 * 
+	 * @param url: URL to get Content 
+	 * @return : String HTML content
+	 */
     public static  String getUrlContentsAsText(String url) { 
         String content = ""; 
         StringBean stringBean = new StringBean(); 
