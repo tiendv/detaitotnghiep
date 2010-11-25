@@ -78,7 +78,7 @@ public class IEEEXploreFetcher {
         unparseable = 0;
         int pageNumber = 1;
         searchUrl = makeUrl(pageNumber);//start at page 1
-       // System.out.println(searchUrl);
+        // System.out.println(searchUrl);
         
         try {
         	URL url = new URL(searchUrl);
@@ -159,6 +159,7 @@ public class IEEEXploreFetcher {
         sb.append(terms.replaceAll(" ", "+"));
         sb.append(endUrl);
         sb.append(String.valueOf(startIndex));
+        System.out.println(sb.toString());
         return sb.toString();
     }
     /**
