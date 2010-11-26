@@ -45,7 +45,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private int height = 390;
 	private int xLocation;
 	private int yLocation;
-	private JFrame disaJFrame;
+	private JFrame dbsaJFrame;
 	private JToggleButton cancelJButton;
 	private JToggleButton okJButton;
 	private JPanel ationsJPanel;
@@ -69,9 +69,9 @@ public class DBSAConfigurationDialog extends JDialog {
 
 	public DBSAConfigurationDialog(JFrame mainFrame) {
 		super(mainFrame, true);
-		disaJFrame = mainFrame;
-		xLocation = disaJFrame.getX() + (disaJFrame.getWidth()-width)/2;
-		yLocation = disaJFrame.getY() + (disaJFrame.getHeight()-height)/2;
+		dbsaJFrame = mainFrame;
+		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth()-width)/2;
+		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight()-height)/2;
 		initComponents();
 	}
 
@@ -343,6 +343,15 @@ public class DBSAConfigurationDialog extends JDialog {
 		if (cancelJButton == null) {
 			cancelJButton = new JToggleButton();
 			cancelJButton.setText(DBSAResourceBundle.res.getString("close"));
+			cancelJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					dispose();
+				}
+				
+			});
 		}
 		return cancelJButton;
 	}
@@ -381,7 +390,7 @@ public class DBSAConfigurationDialog extends JDialog {
 				DBSAResourceBundle.res = DBSAResourceBundle.initResources();
 				DBSAApplication.updateTextOfComponents();
 			}
-			SwingUtilities.updateComponentTreeUI(disaJFrame);
+			SwingUtilities.updateComponentTreeUI(dbsaJFrame);
 			this.dispose();
 		}
 		catch (Exception ex){
