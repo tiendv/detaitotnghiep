@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAFetcherPattern;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
@@ -37,8 +39,9 @@ public class IEEEXploreFetcher {
   //Cac chuoi tao cau query chua tu khoa can tim kiem
     
     private static String terms;
-    private final static String startUrl = "http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=";
-    private final static String endUrl = "&rowsPerPage=" + Integer.toString(perPage) + "&pageNumber=";
+    private final static String startUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_START_URL);
+    private final static String endUrl1 = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_END_URL_1) + Integer.toString(perPage);
+    private final static String endUrl2 = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_END_URL_2);
     private static String searchUrl;
     /**
      * Kieu cau truy van sau khi duoc thanh lap:
@@ -47,23 +50,23 @@ public class IEEEXploreFetcher {
     
     //Cac pattern tim kiem cac thong tin ve so ket qua tra ve, ket qua lon nhat, file bibtex,abtract cua bai bao va referent cua bai bao
     // Tim kiem so ket qua tra ve tu page
-    private final static Pattern hitsPattern = Pattern.compile("([0-9,]+) results");
+    private final static Pattern hitsPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_HITS_PATTERN));
     // Tim kiem loai cua tai lieu
-    private final static Pattern typePattern = Pattern.compile("<span class=\"type\">\\s*(.+)");
+    private final static Pattern typePattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_TYPE_PATTERN));
     // Tim kiem abstract cua tai lieu
-    private final static Pattern absPattern = Pattern.compile("<p>\\s*(.+)");
+    private final static Pattern absPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ABS_PATTERN));
     // Map chua string ket qua tra ve va cac pattern de tim kiem cac truong thong tin tai lieu
     private static HashMap<String, String> fieldPatterns = new HashMap<String, String>();
 
-    Pattern stdEntryPattern = Pattern.compile(".*<strong>(.+)</strong><br>"+ "\\s+(.+)");
-    static Pattern publicationPattern = Pattern.compile("(.*), \\d*\\.*\\s?(.*)");
-    static Pattern proceedingPattern = Pattern.compile("(.*?)\\.?\\s?Proceedings\\s?(.*)");
-    Pattern abstractLinkPattern = Pattern.compile("<a href=\"(.+)\" class=\"bodyCopySpaced\">Abstract</a>");
-    static String abrvPattern = ".*[^,] '?\\d+\\)?";
+    Pattern stdEntryPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_STD_ENTRY_PATTERN));
+    static Pattern publicationPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_PUBLICATION_PATTERN));
+    static Pattern proceedingPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_PROCEEDING_PATTERN));
+    Pattern abstractLinkPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ABSTRACT_LINK_PATTREN));
+    static String abrvPattern = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ABRV_PATTERN);
 	
     private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
     
-    Pattern ieeeArticleNumberPattern = Pattern.compile("<a href=\".*arnumber=(\\d+).*\">");
+    Pattern ieeeArticleNumberPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ARTICLE_NUMBER_PATTERN));
     
     
     public IEEEXploreFetcher() {
@@ -157,7 +160,8 @@ public class IEEEXploreFetcher {
     private static String makeUrl(int startIndex) {
         StringBuffer sb = new StringBuffer(startUrl);
         sb.append(terms.replaceAll(" ", "+"));
-        sb.append(endUrl);
+        sb.append(endUrl1);
+        sb.append(endUrl2);
         sb.append(String.valueOf(startIndex));
         System.out.println(sb.toString());
         return sb.toString();
@@ -319,13 +323,13 @@ public class IEEEXploreFetcher {
 	private static BibtexEntry parseNextEntry(String allText, int startIndex) {
         BibtexEntry entry = null;
         
-        fieldPatterns.put(DBSAApplicationConst.TITLE, "<a\\s*href=[^<]+>\\s*(.+)\\s*</a>");
-        fieldPatterns.put(DBSAApplicationConst.AUTHOR, "<p>\\s+(.+)");
-        fieldPatterns.put(DBSAApplicationConst.VOLUME, "Volume:\\s*(\\d+)");
-        fieldPatterns.put(DBSAApplicationConst.NUMBER, "Issue:\\s*(\\d+)");
-        fieldPatterns.put(DBSAApplicationConst.YEAR, "Publication Year:\\s*(\\d{4})");
-        fieldPatterns.put(DBSAApplicationConst.PAGES, "Page\\(s\\):\\s*(\\d+)\\s*-\\s*(\\d*)");
-        fieldPatterns.put(DBSAApplicationConst.DOI, "Digital Object Identifier:\\s*<a href=.*>(.+)</a>");
+        fieldPatterns.put(DBSAApplicationConst.TITLE, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_TITLE));
+        fieldPatterns.put(DBSAApplicationConst.AUTHOR, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_AUTHOR));
+        fieldPatterns.put(DBSAApplicationConst.VOLUME, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_VOLUME));
+        fieldPatterns.put(DBSAApplicationConst.NUMBER, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ISSUE));
+        fieldPatterns.put(DBSAApplicationConst.YEAR, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_YEAR));
+        fieldPatterns.put(DBSAApplicationConst.PAGES, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_PAGE));
+        fieldPatterns.put(DBSAApplicationConst.DOI, DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_DOI));
         
      	int index = allText.indexOf("<div class=\"detail", piv);
         int endIndex = allText.indexOf("</div>", index);

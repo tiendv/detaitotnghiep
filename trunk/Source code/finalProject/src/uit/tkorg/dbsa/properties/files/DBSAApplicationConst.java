@@ -98,5 +98,30 @@ public class DBSAApplicationConst {
 	public static String ACM_BIB_PATTERN = "ACMBibPattern";
 	public static String ACM_FULL_CITATION_PATTERN = "ACMFullCitationPattern";
 	public static String ACM_GET_ID_BIBTEX = "ACMGetIDBibtex";
-	public static String ACM_ID_PAPER = "ACMIdPaper";
+	public static String ACM_ID_PAPER = "ACMIdPaperPattern";
+	public static String ACM_ABSTRACT_PATTERN = "ACMAbstractPattern";
+	
+	/*
+	 * Define IEEExplore DLs fetcher pattern
+	 */
+	public static String IEEE_START_URL = "IEEEStartUrl";
+	public static String IEEE_END_URL_1 = "IEEEEndUrl1";
+	public static String IEEE_END_URL_2 = "IEEEEndUrl2";
+	public static String IEEE_HITS_PATTERN = "IEEEHitsPattern";
+	public static String IEEE_TYPE_PATTERN = "IEEETypePattern";
+	public static String IEEE_ABS_PATTERN = "IEEEAbsPattern";
+	public static String IEEE_STD_ENTRY_PATTERN = "IEEEStdEntryPattern";
+	public static String IEEE_PUBLICATION_PATTERN = "IEEEPublicationPattern";
+	public static String IEEE_PROCEEDING_PATTERN = "IEEEProceedingPattern";
+	public static String IEEE_ABSTRACT_LINK_PATTREN = "IEEEAbstractLinkPattern";
+	public static String IEEE_ABRV_PATTERN = "IEEEAbrvPattern";
+	public static String IEEE_ARTICLE_NUMBER_PATTERN = "IEEEArticleNumberPattern";
+	public static String IEEE_TITLE = "IEEETitle";
+	public static String IEEE_AUTHOR = "IEEEPublicationAuthor";
+	public static String IEEE_VOLUME = "IEEEVolume";
+	public static String IEEE_ISSUE = "IEEEIssue";
+	public static String IEEE_YEAR = "IEEEYear";
+	public static String IEEE_PAGE = "IEEEPage";
+	public static String IEEE_DOI = "IEEEDoi";
+	
 }

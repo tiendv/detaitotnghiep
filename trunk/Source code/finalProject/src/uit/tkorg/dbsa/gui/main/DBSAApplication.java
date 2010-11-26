@@ -33,6 +33,7 @@ import net.sf.jabref.sql.DbImportAction;
 
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
+import uit.tkorg.dbsa.gui.fetcher.FetcherPatternDialog;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
@@ -400,7 +401,7 @@ public class DBSAApplication extends JPanel {
 		if (fetcherJMenu == null) {
 			fetcherJMenu = new JMenu();
 			fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
-			fileJMenu.add(getPatternJMenuItem());
+			fetcherJMenu.add(getPatternJMenuItem());
 //			fileJMenu.add(getExitMenuItem());
 		}
 		return fetcherJMenu;
@@ -420,12 +421,13 @@ public class DBSAApplication extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					
+					FetcherPatternDialog f = new FetcherPatternDialog(dbsaJFrame);	
+					f.setVisible(true);
 				}
 				
 			});
 		}
-		return unMarkAllJMenuItem;
+		return patternJMenuItem;
 	}
 	
 	/**

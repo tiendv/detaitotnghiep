@@ -60,7 +60,7 @@ public class ACMFetcher {
 	private static Pattern fullCitationPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_FULL_CITATION_PATTERN));
 //	private static Pattern getIDBitex = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_GET_ID_BIBTEX));
 	//Nhan dang phan Abstract cua bai bao trong file html
-	private static Pattern absPattern = Pattern.compile("<div style=\"display:inline\">.*</div>");
+	private static Pattern absPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_ABSTRACT_PATTERN));
 	
 	
 	//Bien cho phep lua chon tiep tuc tim kiem hay không
@@ -70,7 +70,7 @@ public class ACMFetcher {
 	//Lay thong tin cua abstract http://portal.acm.org/tab_abstract.cfm?id=152611&usebody=tabbody
 	//Lay id http://portal.acm.org/citation.cfm?id=152610.152611&coll=DL&dl=GUIDE&CFID=115229885&CFTOKEN=24731416
 	// citation.cfm?id=\d+\.\d+
-	private static Pattern idPaper = Pattern.compile("\\d+&");
+	private static Pattern idPaper = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_ID_PAPER));
 	private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
 	
 	public ACMFetcher(){
@@ -326,7 +326,9 @@ public class ACMFetcher {
 					test = new URL(urlGetAbStract);
 					String abstr;
 					abstr = getFetcherResult(test);
-					abstr = abstr.replace("\r\n", " ").replace("\n", " "); // remove line break
+					abstr = abstr.replace("\r\n", " ").replace("\n", " "); 
+					
+					// remove line break
 					Matcher getdAbstract = absPattern.matcher(abstr);
 					
 					 if (!getdAbstract.find()) {
