@@ -8,6 +8,9 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -16,16 +19,18 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -61,7 +66,14 @@ public class FetcherPatternDialog extends JDialog {
 	private JLabel patternValueJLabel;
 	private JLabel descriptionJLabel;
 	private JTextField descriptionJTextField;
+	
+	private static DefaultTableModel model;
+	private int number = 0;
+	private String patternName;
+	private String patternValue;
+	private String description;
 	private static final String PREFERRED_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
+	
 	public FetcherPatternDialog() {
 		initComponents();
 	}
@@ -237,6 +249,7 @@ public class FetcherPatternDialog extends JDialog {
 			chooseDLJPanel.setLayout(new GroupLayout());
 			chooseDLJPanel.add(getChooseDLJLabel(), new Constraints(new Leading(9, 181, 10, 10), new Leading(15, 26, 10, 10)));
 			chooseDLJPanel.add(getDigitalLibraryComboBox(), new Constraints(new Leading(202, 219, 12, 12), new Leading(16, 12, 12)));
+			
 		}
 		return chooseDLJPanel;
 	}
@@ -260,37 +273,129 @@ public class FetcherPatternDialog extends JDialog {
 		return fetcherJTableJScrollPane;
 	}
 
-	private JTable getPatternJTable() {
-		if (patternJTable == null) {
-			patternJTable = new JTable();
-			patternJTable.setModel(new DefaultTableModel(new Object[][] { { 1, "ten", "gia tri", "giai thich", }, }, new String[] { "No.", "Pattern name", "Pattern value", "Description", }) {
-				private static final long serialVersionUID = 1L;
-				Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class };
+
+	/*
+	 * Ham tao Jtable
+	 */
+	public JTable createPatternJTable(){
+		model = new DefaultTableModel(getTableData(getNumber(), getPatternName(), getPatternValue(), getPatternDescriptionn()), getColumnName()) {
+		private static final long serialVersionUID = 1L;
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class,  };
 	
-				public Class<?> getColumnClass(int columnIndex) {
-					return types[columnIndex];
-				}
-			});
-		}
-		patternJTable.setShowGrid(true);
-		patternJTable.setShowVerticalLines(true);
-		patternJTable.setShowHorizontalLines(true);
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+			
+		};
 		
+		JTable table = new JTable(model);
+		
+		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
+		//Cho phep sap xep theo tu cot rieng biet
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+		table.setRowSorter(sorter);
+		
+		/*
+		 * Set width of table column 
+		 */
+		table.setShowGrid(true);
+		table.setShowVerticalLines(true);
+		table.setShowHorizontalLines(true);
+			
 		for(int i = 0; i < 4; i++){
-			TableColumn col = patternJTable.getColumnModel().getColumn(i);
+			TableColumn col = table.getColumnModel().getColumn(i);
 			if(i == 0){
-				col.setPreferredWidth(1);
+				col.setPreferredWidth(40);
 			}else if(i == 1){
-				col.setPreferredWidth(33);
+				col.setPreferredWidth(320);
 			}else if(i == 2){
-				col.setPreferredWidth(33);
+				col.setPreferredWidth(320);
 			}else if(i == 3){
-				col.setPreferredWidth(33);
+				col.setPreferredWidth(320);
 			}
 		}
+		
+		return table;
+	}
+	
+	private JTable getPatternJTable() {
+		if (patternJTable == null) {
+			patternJTable = createPatternJTable();
+			
+		}else{
+			Object [] data = {patternJTable.getRowCount(), getPatternName(), getPatternValue(), getPatternDescriptionn()};
+			model.insertRow(patternJTable.getRowCount(), data );
+			
+		}
+		patternJTable.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int rowIsSelected = patternJTable.getSelectedRow();
+				patternNameJTextField.setText(model.getValueAt(rowIsSelected, 1).toString());
+				patternValueJTextField.setText(model.getValueAt(rowIsSelected, 2).toString());
+				descriptionJTextField.setText(model.getValueAt(rowIsSelected, 3).toString());
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		return patternJTable;
 	}
 
+	/*
+	 * Get Column name
+	 */
+	private  String [] getColumnName(){
+		String [] columnNames = { /*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("pattern.name"), 
+				/*DBSAResourceBundle.res.getString*/("pattern.value"), /*DBSAResourceBundle.res.getString*/("description"), };
+			
+		return columnNames;
+	}
+	
+	/*
+	 * Ham input data cho table
+	 * @return Object [][]
+	 */
+	public  Object [][] getTableData(int mNumber, String mPatternName, String mPatternValue, String mPatternDesciption){
+		
+		Object [][] data = {addTableData( mNumber, mPatternName, mPatternValue, mPatternDesciption)};
+		
+		return data;
+		
+	}
+	
+	public  Object [] addTableData(int mNumber, String mPatternName, String mPatternValue, String mPatternDesciption){
+		Object [] dataRow =  {getNumber(), getPatternName(), getPatternValue(), getPatternDescriptionn()};
+		
+		return dataRow;
+	}
+	
+	
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
@@ -339,9 +444,48 @@ public class FetcherPatternDialog extends JDialog {
 	private JComboBox getDigitalLibraryComboBox() {
 		if (digitalLibraryComboBox == null) {
 			digitalLibraryComboBox = new JComboBox();
-			digitalLibraryComboBox.setModel(new DefaultComboBoxModel(new Object[] { "ACM digital library", "Citeseer digital library", "IEEExplore digital library" }));
+			digitalLibraryComboBox.setModel(new DefaultComboBoxModel(
+					new Object[] { "ACM digital library", "IEEExplore digital library" }));
 			digitalLibraryComboBox.setDoubleBuffered(false);
 			digitalLibraryComboBox.setBorder(null);
+			digitalLibraryComboBox.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					if (digitalLibraryComboBox.getSelectedItem() == "ACM digital library") {
+						
+						for(int i = patternJTable.getRowCount() - 1; i >= 0; i--){
+							model.removeRow(i);
+						}
+						ArrayList<String> mpatternName = new ArrayList<String>();
+						mpatternName = DBSAApplication.dbsaFetcherPattern.getPatternName("ACM");
+						for (int i = 0; i < mpatternName.size(); i++) {
+							
+							String ptValue = DBSAApplication.dbsaFetcherPattern.getPatternValue(mpatternName.get(i));
+							String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDesciption(mpatternName.get(i));
+
+							Object []data = {patternJTable.getRowCount(), mpatternName.get(i), ptValue, ptDesciption};
+							model.insertRow(patternJTable.getRowCount(), data);
+						}
+					}
+					else if (digitalLibraryComboBox.getSelectedItem() == "IEEExplore digital library") {
+
+						for(int i = patternJTable.getRowCount() - 1; i >= 0; i--){
+							model.removeRow(i);
+						}
+						
+						ArrayList<String> ptName = new ArrayList<String>();
+						ptName = DBSAApplication.dbsaFetcherPattern.getPatternName("IEEE");
+						for (int i = 0; i < ptName.size(); i++) {
+							
+							String ptValue = DBSAApplication.dbsaFetcherPattern.getPatternValue(ptName.get(i));
+							String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDesciption(ptName.get(i));
+							
+							Object []data = {patternJTable.getRowCount(), ptName.get(i), ptValue, ptDesciption};
+							model.insertRow(patternJTable.getRowCount(), data);
+						}
+					}
+				}
+			});
 		}
 		return digitalLibraryComboBox;
 	}
@@ -358,27 +502,54 @@ public class FetcherPatternDialog extends JDialog {
 		}
 	}
 
-	/**
-	 * Main entry of the class.
-	 * Note: This class is only created so that you can easily preview the result at runtime.
-	 * It is not expected to be managed by the designer.
-	 * You can modify it as you like.
-	 */
-	public static void main(String[] args) {
-		installLnF();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				FetcherPatternDialog dialog = new FetcherPatternDialog();
-				dialog
-						.setDefaultCloseOperation(FetcherPatternDialog.DISPOSE_ON_CLOSE);
-				dialog.setTitle("FetcherPatternDialog");
-				dialog.setLocationRelativeTo(null);
-				dialog.getContentPane().setPreferredSize(dialog.getSize());
-				dialog.pack();
-				dialog.setVisible(true);
-			}
-		});
-	}
+//	/**
+//	 * Main entry of the class.
+//	 * Note: This class is only created so that you can easily preview the result at runtime.
+//	 * It is not expected to be managed by the designer.
+//	 * You can modify it as you like.
+//	 */
+//	public static void main(String[] args) {
+//		installLnF();
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				FetcherPatternDialog dialog = new FetcherPatternDialog();
+//				dialog
+//						.setDefaultCloseOperation(FetcherPatternDialog.DISPOSE_ON_CLOSE);
+//				dialog.setTitle("FetcherPatternDialog");
+//				dialog.setLocationRelativeTo(null);
+//				dialog.getContentPane().setPreferredSize(dialog.getSize());
+//				dialog.pack();
+//				dialog.setVisible(true);
+//			}
+//		});
+//	}
 
+	public void setNumber(int mNumber){
+		number = mNumber;
+	}
+	public int getNumber(){
+		return number;
+	}
+	
+	public void setPatternName(String ptName){
+		patternName = ptName;
+	}
+	public String getPatternName(){
+		return patternName;
+	}
+	
+	public void setPatternValue(String mPatternValue){
+		patternValue = mPatternValue;
+	}
+	public String getPatternValue(){
+		return patternValue;
+	}
+	
+	public void setPatternDescription(String mDescription){
+		description = mDescription;
+	}
+	public String getPatternDescriptionn(){
+		return description;
+	}
 }

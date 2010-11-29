@@ -29,8 +29,8 @@ public class ACMFetcher {
 	//Cac chuoi tao cau query chua tu khoa can tim kiem\
 	
 	private static String startUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_URL);
+	//private static String searchUrlPart = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_SEARCH_URL_PART);
 	private static String searchUrlPart = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_SEARCH_URL_PART);
-	private static String searchUrlPartII = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_SEARCH_URL_PART_II);
 	static String endUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_END_URL);
 	
 	
@@ -47,7 +47,7 @@ public class ACMFetcher {
 	 * Câu query: http://portal.acm.org/results.cfm?query=computer20%vision&dl=ACM&coll=Portal&short=0
 	 */
 	
-	private static int MAX_FETCH = 20; // ket qua thu thap toi da
+	private static int MAX_FETCH = 50; // ket qua thu thap toi da
 	private static int perPage = MAX_FETCH;
 	private static int hits = 0; // so ket qua thu thap duoc
 	
@@ -114,10 +114,9 @@ public class ACMFetcher {
 	 * va tu khoa do nguoi dung nhap.
 	 */
 	public static URL MakeUrl(int startIndex){
-		StringBuffer sb = new StringBuffer(startUrl); 
-		sb.append(searchUrlPart);		
+		StringBuffer sb = new StringBuffer(startUrl); 	
 		sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
-		sb.append(searchUrlPartII);
+		sb.append(searchUrlPart);
 		sb.append("ACM");
 		sb.append(endUrl);
 		
@@ -188,6 +187,7 @@ public class ACMFetcher {
 	            throw new IOException(Globals.lang("Could not parse number of hits"));
 	        }
 	        String substring = page.substring(ind, Math.min(ind + 42, page.length()));
+	        
 	        Matcher m = pattern.matcher(substring);
 	        if (!m.find()) {
 	        	System.out.println("Unmatched!");
