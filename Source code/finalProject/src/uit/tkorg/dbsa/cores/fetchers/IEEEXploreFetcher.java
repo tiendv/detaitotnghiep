@@ -64,7 +64,7 @@ public class IEEEXploreFetcher {
     Pattern abstractLinkPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ABSTRACT_LINK_PATTREN));
     static String abrvPattern = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ABRV_PATTERN);
 	
-    private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
+    //private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
     
     Pattern ieeeArticleNumberPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ARTICLE_NUMBER_PATTERN));
     
@@ -431,16 +431,16 @@ public class IEEEXploreFetcher {
         	
     		
     		number ++;
-			resultFetch.setRowNumber(number);
-			resultFetch.setTitle(entry.getField(DBSAApplicationConst.TITLE));
-			resultFetch.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
-			resultFetch.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
-			resultFetch.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
+			DBSAApplication.fetcherResultPanel.setRowNumber(number);
+			DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+			DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+			DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
 			if(entry.getField(DBSAApplicationConst.PUBLISHER) != null)
-				resultFetch.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
+				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
 			else
-				resultFetch.setPublisher(DBSAApplicationConst.IEEE);
-			resultFetch.getResultsJTable();
+				DBSAApplication.fetcherResultPanel.setPublisher(DBSAApplicationConst.IEEE);
+			DBSAApplication.fetcherResultPanel.getResultsJTable();
 			
             return entry;
         }

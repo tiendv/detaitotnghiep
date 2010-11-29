@@ -34,6 +34,7 @@ import net.sf.jabref.sql.DbImportAction;
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPatternDialog;
+import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
@@ -78,6 +79,7 @@ public class DBSAApplication extends JPanel {
 	public static DBSAStatusBar dbsaStatusBar = null;
 
 	public static DBSAFetcherPattern dbsaFetcherPattern = null;
+	public static FetcherResultPanel fetcherResultPanel = null;
 	
 	private JFrame getDBSAJFrame(){
 	
@@ -91,6 +93,7 @@ public class DBSAApplication extends JPanel {
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
 			dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
 			dbsaFetcherPattern = new DBSAFetcherPattern();
+			fetcherResultPanel = new FetcherResultPanel();
 			
 			getDBSAContent();
 			if(fetcherPanel == null){
