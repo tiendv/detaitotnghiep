@@ -20,6 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 /**
  * @author Tiger
@@ -30,8 +31,6 @@ public class CiteSeerXFetcher {
 	
 	private static boolean shouldContinue = true;
 	public static final String baseURL="http://citeseerx.ist.psu.edu/search?q=";
-	
-    private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
     
 	 /* search title, author ,table
 	 * doc
@@ -98,13 +97,13 @@ public class CiteSeerXFetcher {
 	            		System.out.println(f+":"+entry.getField(f));
 	            	}	
 	            	
-            		resultFetch.setRowNumber(1);
-            		resultFetch.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
-            		resultFetch.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
-            		resultFetch.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
-            		resultFetch.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
+	            	DBSAApplication.fetcherResultPanel.setRowNumber(1);
+	            	DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
+	            	DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+	            	DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+	            	DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
             		
-            		resultFetch.getResultsJTable();
+	            	DBSAApplication.fetcherResultPanel.getResultsJTable();
             	}
             }
             

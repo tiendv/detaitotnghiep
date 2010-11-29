@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -82,8 +83,6 @@ public class FetcherResultPanel extends JPanel {
 	
 	private static ArrayList<Integer> numberArray = new ArrayList<Integer>();
 	
-	private boolean checkClickOnJTabel = false; 
-	
 	public FetcherResultPanel() {
 		initComponents();
 	
@@ -99,6 +98,15 @@ public class FetcherResultPanel extends JPanel {
 		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 338, 10, 142)));
 		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 141), new Trailing(61, 277, 10, 146)));
 		setSize(649, 484);
+		
+//		if(resultsJTable!= null){
+//			titleJTextArea.setText(model.getValueAt(0, 1).toString());
+//			authorsJTextArea.setText(model.getValueAt(0, 2).toString());
+//			linkJTextArea.setText(model.getValueAt(0, 3).toString());
+//			yearJTextArea.setText(model.getValueAt(0, 4).toString());
+//			abstractJTextArea.setText(model.getValueAt(0, 5).toString());
+//			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(0, 6).toString());
+//		}
 	}
 
 	private JScrollPane getJScrollPane0() {
@@ -412,23 +420,48 @@ public class FetcherResultPanel extends JPanel {
 				model.removeRow(0);
 			}
 		}
-			
-		resultsJTable.addMouseListener(new MouseAdapter() {			
-			public void mousePressed(MouseEvent event) {
-				if(event.getClickCount()==1)
-					resultJTableMousePressed();
-				checkClickOnJTabel = true;
+		
+		resultsJTable.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int n  = resultsJTable.getSelectedRow();
+					
+				titleJTextArea.setText(model.getValueAt(n, 1).toString());
+				authorsJTextArea.setText(model.getValueAt(n, 2).toString());
+				linkJTextArea.setText(model.getValueAt(n, 3).toString());
+				yearJTextArea.setText(model.getValueAt(n, 4).toString());
+				abstractJTextArea.setText(model.getValueAt(n, 5).toString());
+				publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 6).toString());
+				
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		});
-		
-//		if(resultsJTable.getRowCount() > 0){
-//			titleJTextArea.setText(resultsJTable.getModel().getValueAt(0, 1).toString());
-//			authorsJTextArea.setText(resultsJTable.getModel().getValueAt(0, 2).toString());
-//			yearJTextArea.setText(resultsJTable.getModel().getValueAt(0, 3).toString());
-//			abstractJTextArea.setText(resultsJTable.getModel().getValueAt(0, 4).toString());
-//			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(0, 5).toString());		
-//		}
-		
 		return resultsJTable;
 	}
 	
@@ -667,32 +700,6 @@ public class FetcherResultPanel extends JPanel {
 		return resultsJScrollPane;
 	}
 
-	private  void resultJTableMousePressed() {
-		/*
-		 * get row number is selected
-		 */
-		//rowNumberSelected
-		int n  = resultsJTable.getSelectedRow();
-		System.out.println( "row is selected " + n + "\n + Row number " + resultsJTable.getRowCount());
-		
-		//if(model.getValueAt(n, 6).toString().equals("true")){
-			deleteJButton.setEnabled(true);
-	//	}
-		
-		if(n >= 0 && checkClickOnJTabel == true){
-			checkClickOnJTabel = false;
-			
-			titleJTextArea.setText(model.getValueAt(n, 1).toString());
-			authorsJTextArea.setText(model.getValueAt(n, 2).toString());
-			linkJTextArea.setText(model.getValueAt(n, 3).toString());
-			yearJTextArea.setText(model.getValueAt(n, 4).toString());
-			abstractJTextArea.setText(model.getValueAt(n, 5).toString());
-			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 6).toString());
-		}else if(n == -1){
-			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("no.row.isselected"));
-		}
-	}
-	
 	/*
 	 * 
 	 * set & get paper bibliography 

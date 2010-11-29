@@ -71,7 +71,6 @@ public class ACMFetcher {
 	//Lay id http://portal.acm.org/citation.cfm?id=152610.152611&coll=DL&dl=GUIDE&CFID=115229885&CFTOKEN=24731416
 	// citation.cfm?id=\d+\.\d+
 	private static Pattern idPaper = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_ID_PAPER));
-	private static FetcherResultPanel resultFetch = new FetcherResultPanel(1);
 	
 	public ACMFetcher(){
 		
@@ -351,14 +350,14 @@ public class ACMFetcher {
 			}
 								
 				number ++;
-				resultFetch.setRowNumber(number);
-				resultFetch.setTitle(entry.getField("title"));
-				resultFetch.setAuthor(entry.getField("author"));
-				resultFetch.setLink(entry.getField("url"));
-				resultFetch.setYear(Integer.parseInt(entry.getField("year")));
-				resultFetch.setAbstract(entry.getField("abstract"));
-				resultFetch.setPublisher(entry.getField("publisher"));
-				resultFetch.getResultsJTable();
+				DBSAApplication.fetcherResultPanel.setRowNumber(number);
+				DBSAApplication.fetcherResultPanel.setTitle(entry.getField("title"));
+				DBSAApplication.fetcherResultPanel.setAuthor(entry.getField("author"));
+				DBSAApplication.fetcherResultPanel.setLink(entry.getField("url"));
+				DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField("year")));
+				DBSAApplication.fetcherResultPanel.setAbstract(entry.getField("abstract"));
+				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField("publisher"));
+				DBSAApplication.fetcherResultPanel.getResultsJTable();
 				return entry;
 	}
 	/**
