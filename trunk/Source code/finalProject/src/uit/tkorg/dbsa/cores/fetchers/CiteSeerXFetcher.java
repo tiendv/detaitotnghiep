@@ -67,7 +67,7 @@ public class CiteSeerXFetcher {
 				
 		String queryString = baseURL+keyword+feedAction+feedAtom+"&sort=rel";
 		List<BibtexEntry> entries = new ArrayList<BibtexEntry>();
-		
+		System.out.println(queryString);
 		try {
 			URL citeseerUrl = new URL(queryString);
 			HttpURLConnection citeseerConnection = (HttpURLConnection) citeseerUrl.openConnection();
@@ -99,7 +99,7 @@ public class CiteSeerXFetcher {
 	            	}	
 	            	
             		resultFetch.setRowNumber(1);
-            		resultFetch.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+            		resultFetch.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
             		resultFetch.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
             		resultFetch.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
             		resultFetch.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));

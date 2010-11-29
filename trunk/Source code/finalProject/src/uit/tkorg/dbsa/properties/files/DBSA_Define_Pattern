@@ -1,34 +1,33 @@
-ACMStartUrl http://portal.acm.org/
-ACMSearchUrlPart1 results.cfm?query=
-ACMSearchUrlPart2 &dl=
-ACMEndUrl &coll=Portal&short=0
-ACMStartGetBibtex http://portal.acm.org/exportformats.cfm?id=
-ACMEndGetBibtex &expformat=bibtex
-ACMStartGetAbstract http://portal.acm.org/tab_abstract.cfm?id=
-ACMEndGetAbstract &usebody=tabbody
-ACMHitsPattern .*Found <b>(\d+,*\d*)</b> of.*
-ACMMaxHitsPattern .*Results \d+ - \d+ of (\d+,*\d*).*
-ACMBibPattern (exportformats.cfm[.]+bibtex)
-ACMFullCitationPattern <A HREF="(citation.cfm.*)" class.*
-ACMGetIDBibtex (exportformats[.]cfm.+bibtex)
-ACMIdPaperPattern \d+&
-ACMAbstractPattern <div style="display:inline">.*</div>
-IEEEStartUrl http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=
-IEEEEndUrl1 &rowsPerPage=
-IEEEEndUrl2 &pageNumber=
-IEEEHitsPattern ([0-9,]+) results
-IEEETypePattern <span class="type">\s*(.+)
-IEEEAbsPattern <p>\s*(.+)
-IEEEStdEntryPattern .*<strong>(.+)</strong><br>"+ "\s+(.+)
-IEEEPublicationPattern (.*), \d*\.*\s?(.*)
-IEEEProceedingPattern (.*?)\.?\s?Proceedings\s?(.*)
-IEEEAbstractLinkPattern <a href="(.+)" class="bodyCopySpaced">Abstract</a>
-IEEEAbrvPattern ".*[^,] '?\d+\)?
-IEEEArticleNumberPattern <a href=".*arnumber=(\d+).*">
-IEEETitle <a\s*href=[^<]+>\s*(.+)\s*</a>
-IEEEPublicationAuthor <p>\s+(.+)
-IEEEVolume Volume:\s*(\d+)
-IEEEIssue Issue:\s*(\d+)
-IEEEYear Publication Year:\s*(\d{4})
-IEEEPage Page\(s\):\s*(\d+)\s*-\s*(\d*)
-IEEEDoi Digital Object Identifier:\s*<a href=.*>(.+)</a>
+ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%
+ACMSearchUrlPart###&dl=%%%waefawef
+ACMEndUrl###&coll=Portal&short=0%%%jkghj
+ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%awefaw
+ACMEndGetBibtex###&expformat=bibtex%%%awfawef
+ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%awef
+ACMEndGetAbstract###&usebody=tabbody%%%awefaw
+ACMHitsPattern###.*Found <b>(\d+,\d+,*\d*)</b> of.*%%%hgkjhk
+ACMMaxHitsPattern###.*Results \d+ - \d+ of (\d+,*\d*).*%%%fwaef
+ACMBibPattern###(exportformats.cfm[.]+bibtex)%%%awfaw
+ACMFullCitationPattern###<A HREF="(citation.cfm.*)" class.*%%%afawf
+ACMGetIDBibtex###(exportformats[.]cfm.+bibtex)%%%waf
+ACMIdPaperPattern###\d+&%%%
+ACMAbstractPattern###<div style="display:inline">.*</div>%%%
+IEEEStartUrl###http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=%%%
+IEEEEndUrl1###&rowsPerPage=%%%
+IEEEEndUrl2###&pageNumber=%%%
+IEEEHitsPattern###([0-9,]+) results%%%
+IEEETypePattern###<span class="type">\s*(.+)%%%
+IEEEAbsPattern###<p>\s*(.+)%%%
+IEEEStdEntryPattern###.*<strong>(.+)</strong><br>"+ "\s+(.+)%%%
+IEEEPublicationPattern###(.*), \d*\.*\s?(.*)%%%
+IEEEProceedingPattern###(.*?)\.?\s?Proceedings\s?(.*)%%%
+IEEEAbstractLinkPattern###<a href="(.+)" class="bodyCopySpaced">Abstract</a>%%%
+IEEEAbrvPattern###.*[^,] '?\d+\)?%%%
+IEEEArticleNumberPattern###<a href=".*arnumber=(\d+).*">%%%
+IEEETitle###<a\s*href=[^<]+>\s*(.+)\s*</a>%%%
+IEEEPublicationAuthor###<p>\s+(.+)%%%
+IEEEVolume###Volume:\s*(\d+)%%%
+IEEEIssue###Issue:\s*(\d+)%%%
+IEEEYear###Publication Year:\s*(\d{4})%%%
+IEEEPage###Page\(s\):\s*(\d+)\s*-\s*(\d*)%%%
+IEEEDoi###Digital Object Identifier:\s*<a href=.*>(.+)</a>%%%

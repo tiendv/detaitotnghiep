@@ -111,11 +111,11 @@ public class DatabaseManagementPanel extends JPanel {
 		for(int i = 0; i < 3; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
 			if(i == 0){
-				col.setPreferredWidth(5);
+				col.setPreferredWidth(100);
 			}else if(i == 1){
-				col.setPreferredWidth(5);
+				col.setPreferredWidth(300);
 			}else if(i == 2){
-				col.setPreferredWidth(90);
+				col.setPreferredWidth(600);
 			}
 		}
 		
