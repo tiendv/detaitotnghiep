@@ -75,6 +75,47 @@ public class CheckExist {
 	}
 	/**
 	 * 
+	 * @param pub : arraylist pub to check
+	 * @return list : pub exit
+	 */
+	public ArrayList<Integer> CheckTitleSignaturePublications(ArrayList<DBSAPublication> pub) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		for(int i =0; i<pub.size();i++){
+			if(CheckTitileSignaturePublication(pub.get(i).getTitle()) == true || CheckPublicationInDBSA(pub.get(i))== true) {
+				result.add(i);
+			}
+		}
+		return result;	
+	}
+	
+	/**
+	 * 
+	 * @param titleSignature : tua de cua bai bao khong co cac ki tu dac biet bao gom:
+	 *  \ \\ . , ? - ' sau do chuyen sang chu thuong va loai bo khoang trang
+	 * @return
+	 */
+	
+	private static Boolean CheckTitileSignaturePublication(String titleSignature) {
+		try
+		{
+		titleSignature = titleSignature.replace(",", "").replace(".","").replace("?","").replace("!","").replace("\\", "").replace("'", "").replace("-", "").replace("\\", "").toLowerCase().replaceAll("\\s+", "");
+		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		  session = sessionFactory.openSession();
+		  org.hibernate.Query q = session.createQuery("from Publication pub where pub.titleSignature = :var");
+	      q.setString("var", titleSignature);
+	      List result = q.list();
+	      if(result.isEmpty())
+	    	  return false;// bai bao khong co trong dblp
+	      
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			session.close();
+			}
+		return true;//// bai bao co trong dblp
+	}
+	/**
+	 * 
 	 * @param publ: danh sach cac bai trong co titile ton tai trong dblp
 	 * @return: true neu bai bao do co cung title va  nam xuat ban trong dblp
 	 *  neu co gia tri false thi gia tri do la bai bao co cung ten nhung 
