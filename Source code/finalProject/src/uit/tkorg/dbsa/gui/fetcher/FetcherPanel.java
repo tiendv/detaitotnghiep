@@ -161,8 +161,6 @@ public class FetcherPanel extends JPanel {
 							@Override
 							public void run() {
 								{
-
-
 									uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
 									setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
 									acmJProgressBar.setIndeterminate(true);
@@ -243,7 +241,7 @@ public class FetcherPanel extends JPanel {
 						/*
 						 * reset application Jpanel
 						 */
-						keywordJTextField.setEnabled(false);
+						//keywordJTextField.setEnabled(false);
 						fetcherBoolean = false;
 					}
 				}
@@ -560,7 +558,7 @@ public class FetcherPanel extends JPanel {
 			keywordJLabel = new JLabel();
 			keywordJLabel.setBackground(Color.white);
 			keywordJLabel.setFont(new Font("Dialog", Font.BOLD, 12));
-			keywordJLabel.setText(DBSAResourceBundle.res.getString("input.keyword") + " : ");
+			keywordJLabel.setText("  " + DBSAResourceBundle.res.getString("input.keyword") + " : ");
 			keywordJLabel.setBorder(new LineBorder(Color.lightGray, 1, false));
 			keywordJLabel.setAlignmentX(0.5f);
 		}

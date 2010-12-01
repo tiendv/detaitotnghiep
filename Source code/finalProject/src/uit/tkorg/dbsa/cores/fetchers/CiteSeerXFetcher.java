@@ -100,6 +100,7 @@ public class CiteSeerXFetcher {
 	            	DBSAApplication.fetcherResultPanel.setRowNumber(1);
 	            	DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
 	            	DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+	            	DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.CITESEERURL));
 	            	DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
 	            	DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
             		
