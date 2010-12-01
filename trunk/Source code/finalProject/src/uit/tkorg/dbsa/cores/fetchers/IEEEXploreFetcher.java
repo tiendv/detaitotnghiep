@@ -434,6 +434,7 @@ public class IEEEXploreFetcher {
 			DBSAApplication.fetcherResultPanel.setRowNumber(number);
 			DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE));
 			DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.DOI));
 			DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
 			DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
 			if(entry.getField(DBSAApplicationConst.PUBLISHER) != null)

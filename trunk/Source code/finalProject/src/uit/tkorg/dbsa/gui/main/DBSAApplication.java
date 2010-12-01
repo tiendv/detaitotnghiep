@@ -6,6 +6,7 @@ package uit.tkorg.dbsa.gui.main;
  */
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -89,7 +90,7 @@ public class DBSAApplication extends JPanel {
 			dbsaJFrame.setJMenuBar(getJMenuBar());
 			//dbsaJFrame.setSize(640, 480);
 			dbsaJFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			
+			dbsaJFrame.setBackground(Color.white);
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
 			dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
 			dbsaFetcherPattern = new DBSAFetcherPattern();
@@ -629,7 +630,7 @@ public class DBSAApplication extends JPanel {
 					Locale locale = Locale.US;
 					Locale.setDefault(locale);	
 					DBSAResourceBundle.res = DBSAResourceBundle.initResources();
-					UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 					DBSAApplication DBSAApplication = new DBSAApplication();
 					//updateTextOfComponents();
 					DBSAApplication.getDBSAJFrame().setVisible(true);

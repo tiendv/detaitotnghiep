@@ -1,5 +1,7 @@
 package uit.tkorg.dbsa.gui.main;
 
+import java.awt.Color;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -26,17 +28,18 @@ public class DBSATabPanel extends JTabbedPane {
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder("Functions"));
+		setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
+		setBackground(Color.white);
 		addTab("Fetcher", getFetcherJPanel());
 		addTab("Classification", getClassificationJPanel());
 		addTab("Database management", getDatabaseManagementJPanel());
-		setSize(755, 437);
+		setSize(900, 500);
 	}
 
 	private JTabbedPane getDbsaJTabbedPane() {
 		if (dbsaJTabbedPane == null) {
 			dbsaJTabbedPane = new JTabbedPane();
-			dbsaJTabbedPane.setBorder(BorderFactory.createTitledBorder("Functions"));
+			dbsaJTabbedPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
 		}
 		addTab("Fetcher", getFetcherJPanel());
 		addTab("Fetcher result",getFetcherResultPanel());	

@@ -19,12 +19,12 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -59,7 +59,7 @@ public class FetcherPatternDialog extends JDialog {
 	private int yLocation;
 	private int width = 900;
 	private int height = 700;
-	private JPanel jPanel0;
+	private JPanel mainJPanel;
 	private JLabel patternNameJLabel;
 	private JTextField patternNameJTextField;
 	private JTextField patternValueJTextField;
@@ -72,8 +72,8 @@ public class FetcherPatternDialog extends JDialog {
 	private String patternName;
 	private String patternValue;
 	private String description;
+	private JButton setDefaultJButton;
 	private static final String PREFERRED_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
-	
 	public FetcherPatternDialog() {
 		initComponents();
 	}
@@ -168,15 +168,23 @@ public class FetcherPatternDialog extends JDialog {
 		setLayout(new GroupLayout());
 		add(getDialogNameJLabel(), new Constraints(new Bilateral(335, 331, 220), new Leading(24, 34, 227, 618)));
 		add(getActionsJPanel(), new Constraints(new Bilateral(12, 12, 288), new Trailing(10, 70, 10, 581)));
-		add(getJPanel0(), new Constraints(new Bilateral(12, 12, 880), new Bilateral(64, 92, 10, 505)));
+		add(getMainJPanel(), new Constraints(new Bilateral(12, 12, 880), new Bilateral(64, 92, 10, 505)));
 		setSize(width, height);
 		setLocation(xLocation, yLocation);
+	}
+
+	private JButton getSetDefaultJButton() {
+		if (setDefaultJButton == null) {
+			setDefaultJButton = new JButton();
+			setDefaultJButton.setText("Set Default");
+		}
+		return setDefaultJButton;
 	}
 
 	private JTextField getDescriptionJTextField() {
 		if (descriptionJTextField == null) {
 			descriptionJTextField = new JTextField();
-			descriptionJTextField.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			descriptionJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
 		return descriptionJTextField;
 	}
@@ -202,7 +210,8 @@ public class FetcherPatternDialog extends JDialog {
 	private JTextField getPatternValueJTextField() {
 		if (patternValueJTextField == null) {
 			patternValueJTextField = new JTextField();
-			patternValueJTextField.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			patternValueJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			patternValueJTextField.setEditable(false);
 		}
 		return patternValueJTextField;
 	}
@@ -210,7 +219,8 @@ public class FetcherPatternDialog extends JDialog {
 	private JTextField getPatternNameJTextField() {
 		if (patternNameJTextField == null) {
 			patternNameJTextField = new JTextField();
-			patternNameJTextField.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			patternNameJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			patternNameJTextField.setEditable(false);
 		}
 		return patternNameJTextField;
 	}
@@ -224,22 +234,22 @@ public class FetcherPatternDialog extends JDialog {
 		return patternNameJLabel;
 	}
 
-	private JPanel getJPanel0() {
-		if (jPanel0 == null) {
-			jPanel0 = new JPanel();
-			jPanel0.setBorder(BorderFactory.createTitledBorder(null, "Border Title", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+	private JPanel getMainJPanel() {
+		if (mainJPanel == null) {
+			mainJPanel = new JPanel();
+			mainJPanel.setBorder(BorderFactory.createTitledBorder(null, "Border Title", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
-			jPanel0.setLayout(new GroupLayout());
-			jPanel0.add(getChooseDLJPanel(), new Constraints(new Leading(12, 846, 12, 12), new Leading(12, 60, 47, 438)));
-			jPanel0.add(getPatternNameJLabel(), new Constraints(new Leading(12, 132, 28, 87), new Leading(361, 29, 12, 12)));
-			jPanel0.add(getPatternNameJTextField(), new Constraints(new Bilateral(159, 12, 4), new Leading(361, 28, 12, 12)));
-			jPanel0.add(getPatternValueJTextField(), new Constraints(new Leading(159, 699, 12, 12), new Leading(401, 28, 12, 12)));
-			jPanel0.add(getPatternValueJLabel(), new Constraints(new Leading(12, 132, 12, 12), new Leading(401, 28, 12, 12)));
-			jPanel0.add(getDescriptionJLabel(), new Constraints(new Leading(12, 132, 12, 12), new Leading(441, 28, 12, 12)));
-			jPanel0.add(getDescriptionJTextField(), new Constraints(new Leading(159, 699, 12, 12), new Leading(441, 28, 12, 12)));
-			jPanel0.add(getFetcherJTableJScrollPane(), new Constraints(new Bilateral(12, 12, 846), new Leading(76, 267, 12, 12)));
+			mainJPanel.setLayout(new GroupLayout());
+			mainJPanel.add(getChooseDLJPanel(), new Constraints(new Leading(12, 846, 12, 12), new Leading(12, 60, 47, 438)));
+			mainJPanel.add(getPatternNameJLabel(), new Constraints(new Leading(12, 132, 28, 87), new Leading(361, 29, 12, 12)));
+			mainJPanel.add(getPatternNameJTextField(), new Constraints(new Bilateral(159, 12, 4), new Leading(361, 28, 12, 12)));
+			mainJPanel.add(getPatternValueJTextField(), new Constraints(new Leading(159, 699, 12, 12), new Leading(401, 28, 12, 12)));
+			mainJPanel.add(getPatternValueJLabel(), new Constraints(new Leading(12, 132, 12, 12), new Leading(401, 28, 12, 12)));
+			mainJPanel.add(getDescriptionJLabel(), new Constraints(new Leading(12, 132, 12, 12), new Leading(441, 28, 12, 12)));
+			mainJPanel.add(getDescriptionJTextField(), new Constraints(new Leading(159, 699, 12, 12), new Leading(441, 28, 12, 12)));
+			mainJPanel.add(getFetcherJTableJScrollPane(), new Constraints(new Bilateral(12, 12, 846), new Leading(76, 267, 12, 12)));
 		}
-		return jPanel0;
+		return mainJPanel;
 	}
 
 	private JPanel getChooseDLJPanel() {
@@ -404,6 +414,7 @@ public class FetcherPatternDialog extends JDialog {
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 118, 12, 12), new Leading(6, 29, 10, 10)));
 			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(148, 118, 12, 12), new Leading(6, 29, 12, 12)));
+			actionsJPanel.add(getSetDefaultJButton(), new Constraints(new Trailing(284, 118, 12, 12), new Leading(6, 29, 12, 12)));
 		}
 		return actionsJPanel;
 	}
