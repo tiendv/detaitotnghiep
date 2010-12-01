@@ -33,6 +33,15 @@ public class ACMFetcher {
 	private static String searchUrlPart = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_SEARCH_URL_PART);
 	static String endUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_END_URL);
 	
+	//Cac chuoi tao cau query cho advancde search chua tu tim kiem node trong cay phan lop ACM can tim kiem\
+	
+	private static String startAdvancedSearchNodeUrl ="http://portal.acm.org/results.cfm?CFID=113292600&CFTOKEN=55934314&adv=1&COLL=DL&DL=ACM&termzone=all&allofem=&anyofem=&noneofem=&peoplezone=Name&people=&peoplehow=and&keyword=&keywordhow=AND&affil=&affilhow=AND&pubin=&pubinhow=and&pubby=&pubbyhow=OR&since_year=&before_year=&pubashow=OR&sponsor=&sponsorhow=AND&confdate=&confdatehow=OR&confloc=&conflochow=OR&isbnhow=OR&isbn=&doi=&ccs=";
+	private static String endAdvancedSearchNodeUrl = "&subj=&hasft=on&hasabs=on&hasrev=on&Go.x=34&Go.y=11";
+	
+	// Cac chuoi tao cau query cho  advancde search cho subject 
+	
+	private static String startAdvancedSearchSubjectUrl ="http://portal.acm.org/results.cfm?CFID=113292600&CFTOKEN=55934314&adv=1&COLL=DL&DL=ACM&termzone=all&allofem=&anyofem=&noneofem=&peoplezone=Name&people=&peoplehow=and&keyword=&keywordhow=AND&affil=&affilhow=AND&pubin=&pubinhow=and&pubby=&pubbyhow=OR&since_year=&before_year=&pubashow=OR&sponsor=&sponsorhow=AND&confdate=&confdatehow=OR&confloc=&conflochow=OR&isbnhow=OR&isbn=&doi=&ccs=+&subj=";
+	private static String endAdvancedSearchSubjectUrl = "&hasft=on&hasabs=on&hasrev=on&Go.x=12&Go.y=10";
 	
 	// Chuoi de lay thong tin :
 	private static String startGetBibtex = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_GET_BIBTEX);
@@ -113,7 +122,7 @@ public class ACMFetcher {
 	 * va tu khoa do nguoi dung nhap.
 	 */
 	public static URL MakeUrl(int startIndex){
-		StringBuffer sb = new StringBuffer(startUrl); 	
+		StringBuffer sb = new StringBuffer(startUrl); 
 		sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
 		sb.append(searchUrlPart);
 		sb.append("ACM");
