@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 import org.htmlparser.beans.StringBean;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
@@ -122,19 +124,35 @@ public class ACMFetcher {
 	 * va tu khoa do nguoi dung nhap.
 	 */
 	public static URL MakeUrl(int startIndex){
-		StringBuffer sb = new StringBuffer(startUrl); 
-		sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
-		sb.append(searchUrlPart);
-		sb.append("ACM");
-		sb.append(endUrl);
 		
-		URL urlSearch = null;		
-		try {
-			//Tao URL tu chuoi tren
-			urlSearch = new URL(sb.toString());
-		} catch (MalformedURLException e) {			
-			e.printStackTrace();
+		URL urlSearch = null;	
+		
+		if(FetcherPanel.checkSearchByAll){
+			StringBuffer sb = new StringBuffer(startUrl); 
+			sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
+			sb.append(searchUrlPart);
+			sb.append("ACM");
+			sb.append(endUrl);
+			
+				
+			try {
+				//Tao URL tu chuoi tren
+				urlSearch = new URL(sb.toString());
+			} catch (MalformedURLException e) {			
+				e.printStackTrace();
+			}
+		}else{
+			StringBuffer sb = new StringBuffer(startAdvancedSearchSubjectUrl);
+			sb.append(keywordString.replaceAll(" ", "+"));
+			sb.append(endAdvancedSearchSubjectUrl);
+			try {
+				urlSearch = new URL(sb.toString());
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		
 		return urlSearch;
 	}
@@ -194,12 +212,12 @@ public class ACMFetcher {
 	        	System.out.println(page);
 	            throw new IOException(Globals.lang("Could not parse number of hits"));
 	        }
-	        String substring = page.substring(ind, Math.min(ind + 42, page.length()));
+	        String subString = page.substring(ind, Math.min(ind + 42, page.length()));
 	        
-	        Matcher m = pattern.matcher(substring);
+	        Matcher m = pattern.matcher(subString);
 	        if (!m.find()) {
 	        	System.out.println("Unmatched!");
-	        	System.out.println(substring);
+	        	System.out.println(subString);
 	        } else {
 	            try {
 	            	String number = m.group(1);
