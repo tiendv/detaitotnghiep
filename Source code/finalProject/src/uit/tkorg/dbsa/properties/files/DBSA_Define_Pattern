@@ -5,7 +5,7 @@ ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%awefaw
 ACMEndGetBibtex###&expformat=bibtex%%%awfawef
 ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%awef
 ACMEndGetAbstract###&usebody=tabbody%%%awefaw
-ACMHitsPattern###.*Found <b>(\d+,\d+,*\d*)</b> of.*%%%hgkjhk
+ACMHitsPattern###.*Found <b>(\d+,*\d*,*\d*,*\d*)</b> of.*%%%hgkjhk
 ACMMaxHitsPattern###.*Results \d+ - \d+ of (\d+,*\d*).*%%%fwaef
 ACMBibPattern###(exportformats.cfm[.]+bibtex)%%%awfaw
 ACMFullCitationPattern###<A HREF="(citation.cfm.*)" class.*%%%afawf
