@@ -630,7 +630,7 @@ public class DBSAApplication extends JPanel {
 					Locale locale = Locale.US;
 					Locale.setDefault(locale);	
 					DBSAResourceBundle.res = DBSAResourceBundle.initResources();
-					UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+					UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
 					DBSAApplication DBSAApplication = new DBSAApplication();
 					//updateTextOfComponents();
 					DBSAApplication.getDBSAJFrame().setVisible(true);

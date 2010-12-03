@@ -98,10 +98,25 @@ public class CiteSeerXFetcher {
 	            	}	
 	            	
 	            	DBSAApplication.fetcherResultPanel.setRowNumber(1);
+	            	if(entry.getField(DBSAApplicationConst.TITLE) == null){
+	            		entry.setField((DBSAApplicationConst.TITLE), "");
+	            	}
 	            	DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
+	            	if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
+	            		entry.setField((DBSAApplicationConst.AUTHOR), "");
+	            	}
 	            	DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+	            	if(entry.getField(DBSAApplicationConst.CITESEERURL) == null){
+	            		entry.setField((DBSAApplicationConst.CITESEERURL), "");
+	            	}
 	            	DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.CITESEERURL));
+	            	if(entry.getField(DBSAApplicationConst.YEAR) == null){
+	            		entry.setField((DBSAApplicationConst.YEAR), "");
+	            	}
 	            	DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+	            	if(entry.getField(DBSAApplicationConst.ABSTRACT) == null){
+	            		entry.setField((DBSAApplicationConst.ABSTRACT), "");
+	            	}
 	            	DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
             		
 	            	DBSAApplication.fetcherResultPanel.getResultsJTable();

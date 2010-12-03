@@ -402,7 +402,7 @@ public class FetcherResultPanel extends JPanel {
 			if(resultsJTable.getRowCount() >= maxResult){
 				CheckExist check = new CheckExist();
 				
-				numberArray = (ArrayList<Integer>) check.CheckTitlePublications(dbsaPublication).clone();
+				numberArray = (ArrayList<Integer>) check.CheckTitleSignaturePublications(dbsaPublication).clone();
 				//System.out.println("trung lap " + numberArray.size());
 				
 				for(int i = 0; i < numberArray.size(); i++)

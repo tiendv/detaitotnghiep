@@ -378,11 +378,29 @@ public class ACMFetcher {
 								
 				number ++;
 				DBSAApplication.fetcherResultPanel.setRowNumber(number);
+				if(entry.getField("title") == null){
+					entry.setField("title", "");
+				}
 				DBSAApplication.fetcherResultPanel.setTitle(entry.getField("title"));
+				if(entry.getField("author") == null){
+					entry.setField("author", "");
+				}
 				DBSAApplication.fetcherResultPanel.setAuthor(entry.getField("author"));
+				if(entry.getField("url") == null){
+					entry.setField("url", "");
+				}
 				DBSAApplication.fetcherResultPanel.setLink(entry.getField("url"));
+				if(entry.getField("year") == null){
+					entry.setField("year", "");
+				}
 				DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField("year")));
+				if(entry.getField("abstract") == null){
+					entry.setField("abstract", "");
+				}
 				DBSAApplication.fetcherResultPanel.setAbstract(entry.getField("abstract"));
+				if(entry.getField("publisher") == null){
+					entry.setField("publisher", "");
+				}
 				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField("publisher"));
 				DBSAApplication.fetcherResultPanel.getResultsJTable();
 				return entry;
