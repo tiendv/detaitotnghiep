@@ -3,6 +3,7 @@
  */
 package uit.tkorg.dbsa.actions.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -18,13 +19,13 @@ import uit.tkorg.dbsa.model.DBSAPublication;
  */
 public class LoadPublicationsFromDBSA {
 	 
-	public static List<DBSAPublication> getPaper (){
+	public static ArrayList<DBSAPublication> getPaper (){
 		Session session = null;
 		try {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		session = sessionFactory.openSession();
 		org.hibernate.Query q = session.createQuery("from DBSAPublication");
-		List<DBSAPublication>   result = q.list();
+		ArrayList<DBSAPublication>   result = (ArrayList<DBSAPublication>) q.list();
 		if(result.isEmpty())
 			return null;
 		
@@ -34,15 +35,15 @@ public class LoadPublicationsFromDBSA {
 		}
 	}
 
-	/*public static void main(String[] args) {
-	 	List<DBSAPublication> test = getPaper();
-	 	if(test.isEmpty())
-	 	System.out.print("romg");
-	 	else {
-	 		DBSAPublication test1 = test.get(0);
-	 		System.out.println("Tua de bai bao:"+ test1.getTitle());
-	 		System.out.println("Abstract bai bao:"+ test1.getAbstractPub());
-	 		
-	 	}
-	}*/
+//	public static void main(String[] args) {
+//	 	ArrayList<DBSAPublication> test =  getPaper();
+//	 	if(test.isEmpty())
+//	 	System.out.print("romg");
+//	 	else {
+//	 		DBSAPublication test1 = test.get(0);
+//	 		System.out.println("Tua de bai bao:"+ test1.getTitle());
+//	 		System.out.println("Abstract bai bao:"+ test1.getAbstractPub());
+//	 		
+//	 	}
+//	}
 }

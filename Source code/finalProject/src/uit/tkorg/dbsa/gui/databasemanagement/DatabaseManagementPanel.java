@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -24,15 +26,18 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+
 import uit.tkorg.dbsa.actions.database.InsertSubject;
+import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.model.Subject;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DatabaseManagementPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable jTable0;
+	private JTable databaseJTable;
 	private JScrollPane databaseJTaqbleInJScrollPane;
 
 	private static DefaultTableModel model;
@@ -57,6 +62,10 @@ public class DatabaseManagementPanel extends JPanel {
 	private static int subjectNumberRow = 0;
 	private static int subjectID = 0;
 	private static String subjectName = "";
+
+	private boolean checkRemoveRow = false;
+	
+	private ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
 	
 	public DatabaseManagementPanel() {
 		initComponents();
@@ -282,7 +291,7 @@ public class DatabaseManagementPanel extends JPanel {
 			databaseJTaqbleInJScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Database", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			databaseJTaqbleInJScrollPane.setAlignmentX(1.0f);
-			databaseJTaqbleInJScrollPane.setViewportView(getJTable0());
+			databaseJTaqbleInJScrollPane.setViewportView(getDatabaseJTable());
 		}
 		return databaseJTaqbleInJScrollPane;
 	}
@@ -370,13 +379,34 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 	
 	
-	private JTable getJTable0() {
-		if (jTable0 == null) {
-			jTable0 =  createDatabaseJTable();
+	private JTable getDatabaseJTable() {
+		if (databaseJTable == null) {
+			databaseJTable =  createDatabaseJTable();
+		}else{
+			
 		}
-		return jTable0;
+		
+		dbsaPublicationList = LoadPublicationsFromDBSA.getPaper();
+		if(dbsaPublicationList != null){
+			for(int i = 0; i < dbsaPublicationList.size(); i++){
+				model.insertRow(databaseJTable.getRowCount(), addDataToJTable(dbsaPublicationList.get(i)));
+				//System.out.println(dbsaPublicationList.get(i).getTitle());
+			}
+			if(checkRemoveRow == false){
+				checkRemoveRow = true;
+				model.removeRow(0);
+			}
+		}
+		return databaseJTable;
 	}
 
+	private Object[] addDataToJTable(DBSAPublication dbsaPublication){
+		Object []data = {databaseJTable.getRowCount(), dbsaPublication.getTitle(), dbsaPublication.getAuthors(), dbsaPublication.getLinks(),
+				dbsaPublication.getYear(), dbsaPublication.getAbstractPub(), dbsaPublication.getPublisher(),};
+		
+		return data;
+	}
+	
 	/*
 	 * 
 	 * set & get paper bibliography 

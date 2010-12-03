@@ -352,6 +352,8 @@ public class FetcherResultPanel extends JPanel {
 	 * @return JTable
 	 */
 	boolean checkRemovedFirst = false;
+	int checkEnable = 0;
+	
 	public JTable getResultsJTable() {
 		
 		if (resultsJTable == null) {
@@ -397,6 +399,8 @@ public class FetcherResultPanel extends JPanel {
 			
 			if(!saveJButton.isEnabled())
 				saveJButton.setEnabled(true);
+			
+			
 			int maxResult = FetcherPanel.getAcmResultNumber() + FetcherPanel.getCiteResultNumber() + FetcherPanel.getIeeeResultNumber();
 			
 			if(resultsJTable.getRowCount() >= maxResult){
@@ -412,13 +416,24 @@ public class FetcherResultPanel extends JPanel {
 					//System.out.println("trung lap gia tri " + numberArray.get(i));
 					//setForeground(Color.red);
 				}
-			//	resultsJTable.repaint();
+				
+				if(resultsJTable.getRowCount() > 1){
+					
+					titleJTextArea.setText("abc");
+					//authorsJTextArea.setText(model.getValueAt(1, 2).toString());
+					//linkJTextArea.setText(model.getValueAt(1, 3).toString());
+					//yearJTextArea.setText(model.getValueAt(1, 4).toString());
+					//abstractJTextArea.setText(model.getValueAt(1, 5).toString());
+					//publisherJTextArea.setText(resultsJTable.getModel().getValueAt(1, 6).toString());
+				}
 			}
 			
 			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
 				checkRemovedFirst =  true;
+				
 				model.removeRow(0);
-			}
+							
+			}		
 		}
 		
 		resultsJTable.addMouseListener(new MouseListener(){
@@ -434,6 +449,18 @@ public class FetcherResultPanel extends JPanel {
 				yearJTextArea.setText(model.getValueAt(n, 4).toString());
 				abstractJTextArea.setText(model.getValueAt(n, 5).toString());
 				publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 6).toString());
+				
+				
+				for(int i = 0; i < resultsJTable.getRowCount();i++){
+					if(model.getValueAt(i, 7).toString().equals("true")){
+						checkEnable++;
+						deleteJButton.setEnabled(true);
+					}
+						
+					if(checkEnable == 0){
+						deleteJButton.setEnabled(false);
+					}
+				}
 				
 			}
 
