@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,6 +28,8 @@ import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.database.InsertSubject;
 import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
+import uit.tkorg.dbsa.actions.database.LoadSubject;
+import uit.tkorg.dbsa.gui.fetcher.MyJTable;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.model.Subject;
@@ -40,7 +41,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JTable databaseJTable;
 	private JScrollPane databaseJTaqbleInJScrollPane;
 
-	private static DefaultTableModel model;
+	private static DefaultTableModel publicationModel;
 	private static DefaultTableModel subjectModel;
 	private static int rowNumber = 0;
 	private static String title = "";
@@ -53,7 +54,7 @@ public class DatabaseManagementPanel extends JPanel {
 	
 	private JButton closeJButton;
 	private JButton updateJButton;
-	private JButton deleteJButton;
+	private static JButton deleteJButton;
 	private static JButton addJButton;
 	private JPanel actionsJPanel;
 	private JTable subjectJTable;
@@ -64,9 +65,10 @@ public class DatabaseManagementPanel extends JPanel {
 	private static String subjectName = "";
 
 	private boolean checkRemoveRow = false;
+//	private boolean checkRemoveSubjectRow = false;
 	
 	private ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
-	
+	private ArrayList<Subject> dbsaSubjectList = new ArrayList<Subject>();
 	public DatabaseManagementPanel() {
 		initComponents();
 	}
@@ -155,27 +157,40 @@ public class DatabaseManagementPanel extends JPanel {
 		return columnNames;
 	}
 	
+	private Object[] addDataToSubjectTable(Subject subject){
+		Object []subjectData = {subjectJTable.getRowCount(), subject.getId(), subject.getSbj_name()};
+		
+		return subjectData;
+	}
 	private JTable getSubjectJTable() {
 		if (subjectJTable == null) {
 			subjectJTable = createSubjectJTable();
+		}
+		
+		dbsaSubjectList = LoadSubject.getSubject();
+		if(dbsaSubjectList != null){
+			for(int i = 0; i < dbsaSubjectList.size(); i++){
+				subjectModel.insertRow(subjectJTable.getRowCount(), addDataToSubjectTable(dbsaSubjectList.get(i)));
+			}
 		}
 		subjectJTable.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				int n = subjectJTable.getSelectedRow();
-				if(n == 0)
-					addJButton.setEnabled(true);
-				else
-					addJButton.setEnabled(false);
+				if(subjectJTable != null){
+					int n = subjectJTable.getSelectedRow();
+					if(n == 0)
+						addJButton.setEnabled(true);
+					else
+						addJButton.setEnabled(false);
+				}
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				int n = subjectJTable.getSelectedRow();
-				System.out.println(subjectModel.getValueAt(n, 2));
+			
 			}
 
 			@Override
@@ -227,8 +242,8 @@ public class DatabaseManagementPanel extends JPanel {
 					// TODO Auto-generated method stub
 					
 					//int n = subjectJTable.getSelectedRow();
-					//if(subjectModel.getValueAt(0, 0).toString().replaceAll(" ", "").equals(0)){
-						//addJButton.setEnabled(true);
+					if(subjectModel.getValueAt(0, 0).toString().replaceAll(" ", "").equals(0)){
+						addJButton.setEnabled(true);
 					
 					int i = subjectModel.getRowCount();
 					Object []data = {i , i, subjectModel.getValueAt(0, 2).toString()};
@@ -241,7 +256,7 @@ public class DatabaseManagementPanel extends JPanel {
 					insert.InsertSubjectOfPublication(sb);
 					
 					System.out.println(subjectModel.getRowCount());
-					//}
+					}
 					
 				}
 				
@@ -297,12 +312,12 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 
 	public DefaultTableModel getDefaultTableModel(){
-		return model;
+		return publicationModel;
 	}
 	
-	private JTable createDatabaseJTable(){
+	private MyJTable createDatabaseJTable(){
 	
-		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getLinks(), getYear(), getAbstract(), getPublisher(), getMark()), getDatabaseColumnName()) {
+		publicationModel  = new DefaultTableModel(getTableDatabase(getRowNumber(), getTitle(), getAuthor(), getLinks(), getYear(), getAbstract(), getPublisher(), getMark()), getDatabaseColumnName()) {
 		private static final long serialVersionUID = 1L;
 			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class,  String.class, Integer.class, String.class, String.class, Boolean.class, };
 
@@ -311,7 +326,7 @@ public class DatabaseManagementPanel extends JPanel {
 			}
 		};
 		
-		JTable table = new JTable(model);
+		MyJTable table = new MyJTable(publicationModel);
 		
 		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
 		//Cho phep sap xep theo tu cot rieng biet
@@ -364,15 +379,15 @@ public class DatabaseManagementPanel extends JPanel {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(int rowNumber, String title, String author, String links, int year, String abstracts, String publisher, boolean isMark){
+	public  Object [][] getTableDatabase(int rowNumber, String title, String author, String links, int year, String abstracts, String publisher, boolean isMark){
 		
-		Object [][] data = {addTableData(rowNumber, title, author, links, year, abstracts, publisher, isMark)};
+		Object [][] data = {addTableDatabase(rowNumber, title, author, links, year, abstracts, publisher, isMark)};
 		
 		return data;
 		
 	}
 	
-	public  Object [] addTableData(int rowNumber, String title, String author, String links, int year, String abstracts, String publisher, boolean isMark){
+	public  Object [] addTableDatabase(int rowNumber, String title, String author, String links, int year, String abstracts, String publisher, boolean isMark){
 		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getLinks(), getYear(), getAbstract(), getPublisher(), getMark()};
 		
 		return dataRow;
@@ -382,25 +397,71 @@ public class DatabaseManagementPanel extends JPanel {
 	private JTable getDatabaseJTable() {
 		if (databaseJTable == null) {
 			databaseJTable =  createDatabaseJTable();
-		}else{
-			
 		}
-		
 		dbsaPublicationList = LoadPublicationsFromDBSA.getPaper();
 		if(dbsaPublicationList != null){
 			for(int i = 0; i < dbsaPublicationList.size(); i++){
-				model.insertRow(databaseJTable.getRowCount(), addDataToJTable(dbsaPublicationList.get(i)));
-				//System.out.println(dbsaPublicationList.get(i).getTitle());
+				publicationModel.insertRow(databaseJTable.getRowCount(), addDataToDatabaseJTable(dbsaPublicationList.get(i)));
+				
 			}
 			if(checkRemoveRow == false){
 				checkRemoveRow = true;
-				model.removeRow(0);
+				publicationModel.removeRow(0);
 			}
 		}
+		
+		
+		
+		
+		databaseJTable.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int check = 0;
+				if(databaseJTable != null){
+					for(int i = 0; i < databaseJTable.getRowCount(); i++)
+					if(publicationModel.getValueAt(i, 7).toString().equals("true")){
+						check ++;
+						deleteJButton.setEnabled(true);
+					}
+					
+					if(check == 0){
+						deleteJButton.setEnabled(false);
+					}
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		return databaseJTable;
 	}
 
-	private Object[] addDataToJTable(DBSAPublication dbsaPublication){
+	private Object[] addDataToDatabaseJTable(DBSAPublication dbsaPublication){
 		Object []data = {databaseJTable.getRowCount(), dbsaPublication.getTitle(), dbsaPublication.getAuthors(), dbsaPublication.getLinks(),
 				dbsaPublication.getYear(), dbsaPublication.getAbstractPub(), dbsaPublication.getPublisher(),};
 		
