@@ -3,6 +3,7 @@
  */
 package uit.tkorg.dbsa.actions.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -13,7 +14,7 @@ import uit.tkorg.dbsa.model.Subject;
 
 /**
  * @author tiendv
- *
+ * @modifer cuongnp
  */
 public class LoadSubject {
 	/**
@@ -21,13 +22,13 @@ public class LoadSubject {
 	 * @return List subject in DBLP
 	 */
 	
-	public static List<Subject> getSubject (){
+	public static ArrayList<Subject> getSubject (){
 		Session session = null;
 		try {
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		session = sessionFactory.openSession();
 		org.hibernate.Query q = session.createQuery("from Subject");
-		List<Subject>   result = q.list();
+		ArrayList<Subject>   result = (ArrayList<Subject>) q.list();
 		if(result.isEmpty())
 			return null;
 		
