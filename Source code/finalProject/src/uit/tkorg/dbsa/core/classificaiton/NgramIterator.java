@@ -3,6 +3,13 @@ package uit.tkorg.dbsa.core.classificaiton;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+/**
+ * 
+ * @author tiendv
+ *
+ *To Token a string by use n gram
+ */
+
 
 class NgramIterator implements Iterator<String> {
 
@@ -29,6 +36,16 @@ class NgramIterator implements Iterator<String> {
     public void remove() {
         throw new UnsupportedOperationException();
     }
+    /**
+     * 
+     * @param n : the mount of charactor want to token
+     * @param str : a string to token
+     * @return
+     * ex: string "this is my car"
+     *  n = 2
+     *  return: this is, is my, my car
+     */
+    
     public static List<String> ngrams(int n, String str) {
         List<String> ngrams = new ArrayList<String>();
         String[] words = str.split(" ");
