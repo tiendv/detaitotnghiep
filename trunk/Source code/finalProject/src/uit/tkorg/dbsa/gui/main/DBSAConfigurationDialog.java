@@ -240,11 +240,11 @@ public class DBSAConfigurationDialog extends JDialog {
 			lookAndFeelJComboBox = new JComboBox();
 			lookAndFeelJComboBox.setModel(new DefaultComboBoxModel(
 						new Object[] { 
-								DBSAResourceBundle.res.getString("windows"), 
-								DBSAResourceBundle.res.getString("metal"), 
-								DBSAResourceBundle.res.getString("motif"), 
-								DBSAResourceBundle.res.getString("windows.classic"), 
-								DBSAResourceBundle.res.getString("macOS") 
+								DBSAResourceBundle.swingRes.getString("swing.installedlaf.motif.name"), 
+								DBSAResourceBundle.swingRes.getString("swing.installedlaf.metal.name"), 
+								DBSAResourceBundle.swingRes.getString("swing.installedlaf.windows.name"), 
+								DBSAResourceBundle.swingRes.getString("swing.installedlaf.mac.name"),
+								DBSAResourceBundle.swingRes.getString("swing.installedlaf.liquid.name")
 						}));
 			lookAndFeelJComboBox.setDoubleBuffered(false);
 			lookAndFeelJComboBox.setBorder(null);
@@ -361,21 +361,26 @@ public class DBSAConfigurationDialog extends JDialog {
 		{
 		
 			String lookAndFeel = (String) this.lookAndFeelJComboBox.getSelectedItem();
-			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("metal"))) {
-				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.metal.name"))) {
+				UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.metal.class"));
 			}
-			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("motif"))){
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.motif.name"))){
+				UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.motif.class"));
 			}
-			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("windows"))){
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			}
-			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("windows.classic"))){
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.windows.name"))){
+				UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.windows.class"));
 			}
 			
-			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.res.getString("macOS"))){
-				 UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.mac.name"))){
+				 UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.mac.class"));
+			}
+			
+			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.liquid.name"))){
+				
+				 UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.liquid.class"));
+				 com.birosoft.liquid.LiquidLookAndFeel.setLiquidDecorations(true);
+				 com.birosoft.liquid.LiquidLookAndFeel.setShowTableGrids(true);
+				 com.birosoft.liquid.LiquidLookAndFeel.setToolbarFlattedButtons(true);
 			}
 			/**
 			 * Select languages

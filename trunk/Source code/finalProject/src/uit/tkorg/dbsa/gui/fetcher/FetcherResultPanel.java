@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -121,6 +122,7 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getLinkJTextArea() {
 		if (linkJTextArea == null) {
 			linkJTextArea = new JTextArea();
+			linkJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 		}
 		return linkJTextArea;
 	}
@@ -128,7 +130,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getLinkJLabel() {
 		if (linkJLabel == null) {
 			linkJLabel = new JLabel();
-			linkJLabel.setText("  " + DBSAResourceBundle.res.getString("link"));
+			linkJLabel.setText("  " + /*DBSAResourceBundle.res.getString*/("link"));
 			linkJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return linkJLabel;
@@ -146,6 +148,7 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getPublisherJTextArea() {
 		if (publisherJTextArea == null) {
 			publisherJTextArea = new JTextArea();
+			publisherJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 		}
 		return publisherJTextArea;
 	}
@@ -162,12 +165,13 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getAbstractJTextArea() {
 		if (abstractJTextArea == null) {
 			abstractJTextArea = new JTextArea();
+			abstractJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 			abstractJTextArea.addMouseListener(new MouseAdapter() {
 	
-				public void mouseReleased(MouseEvent event) {
+				public void mouseExited(MouseEvent event) {
 				}
 	
-				public void mouseExited(MouseEvent event) {
+				public void mouseReleased(MouseEvent event) {
 				}
 	
 				public void mouseEntered(MouseEvent event) {
@@ -195,6 +199,7 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getYearJTextArea() {
 		if (yearJTextArea == null) {
 			yearJTextArea = new JTextArea();
+			yearJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 		}
 		return yearJTextArea;
 	}
@@ -211,6 +216,7 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getAuthorsJTextArea() {
 		if (authorsJTextArea == null) {
 			authorsJTextArea = new JTextArea();
+			authorsJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 		}
 		return authorsJTextArea;
 	}
@@ -227,6 +233,8 @@ public class FetcherResultPanel extends JPanel {
 	private JTextArea getTitleJTextArea() {
 		if (titleJTextArea == null) {
 			titleJTextArea = new JTextArea();
+			titleJTextArea.setLineWrap(true);
+			titleJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 		}
 		return titleJTextArea;
 	}
@@ -234,7 +242,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getTitleJLabel() {
 		if (titleJLabel == null) {
 			titleJLabel = new JLabel();
-			titleJLabel.setText("  " + DBSAResourceBundle.res.getString("title"));
+			titleJLabel.setText("  " + /*DBSAResourceBundle.res.getString*/("title"));
 			titleJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return titleJLabel;

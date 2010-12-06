@@ -432,15 +432,36 @@ public class IEEEXploreFetcher {
     		
     		number ++;
 			DBSAApplication.fetcherResultPanel.setRowNumber(number);
+			if(entry.getField(DBSAApplicationConst.TITLE) == null){
+				entry.setField(DBSAApplicationConst.TITLE, "");
+			}
 			DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+			
+			if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
+				entry.setField(DBSAApplicationConst.AUTHOR, "");
+			}
 			DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			
+			if(entry.getField(DBSAApplicationConst.DOI) == null){
+				entry.setField(DBSAApplicationConst.DOI, "");
+			}
 			DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.DOI));
+			
+			if(entry.getField(DBSAApplicationConst.YEAR) == null){
+				entry.setField(DBSAApplicationConst.YEAR, "");
+			}
 			DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+			
+			if(entry.getField(DBSAApplicationConst.ABSTRACT) == null){
+				entry.setField(DBSAApplicationConst.ABSTRACT, "");
+			}
 			DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
+			
 			if(entry.getField(DBSAApplicationConst.PUBLISHER) != null)
 				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
 			else
 				DBSAApplication.fetcherResultPanel.setPublisher(DBSAApplicationConst.IEEE);
+			
 			DBSAApplication.fetcherResultPanel.getResultsJTable();
 			
             return entry;

@@ -14,7 +14,7 @@ import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 public class DBSAResourceBundle {
 
 	public static ResourceBundle res = null;
-	
+	public static ResourceBundle swingRes = null;
 	private DBSAResourceBundle(){
 	}
 	
@@ -43,5 +43,33 @@ public class DBSAResourceBundle {
 			ex.printStackTrace();
 		}
 		return res;
+	}
+	
+	/*
+	 * 
+	 */
+	public static ResourceBundle getSwingInstance(){
+		if(swingRes == null){
+			try{
+				
+				swingRes =  initSwingResources();
+			}catch(MissingResourceException ex){
+				ex.printStackTrace();
+				System.exit(0);
+			}
+		}
+		
+		return swingRes;
+	}
+	
+	public static ResourceBundle initSwingResources(){
+		try{
+			
+				swingRes = ResourceBundle.getBundle(DBSAApplicationConst.SWING_RESOURCE_LINK);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return swingRes;
 	}
 }

@@ -630,7 +630,14 @@ public class DBSAApplication extends JPanel {
 					Locale locale = Locale.US;
 					Locale.setDefault(locale);	
 					DBSAResourceBundle.res = DBSAResourceBundle.initResources();
-					UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+					DBSAResourceBundle.swingRes = DBSAResourceBundle.initSwingResources();
+					UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.liquid.class"));
+					//com.birosoft.liquid.LiquidLookAndFeel.setLiquidDecorations(true, "mac");
+					com.birosoft.liquid.LiquidLookAndFeel.setLiquidDecorations(true);
+					com.birosoft.liquid.LiquidLookAndFeel.setShowTableGrids(true);
+					com.birosoft.liquid.LiquidLookAndFeel.setToolbarFlattedButtons(true);
+					
+				//	com.birosoft.liquid.LiquidLookAndFeel.set
 					DBSAApplication DBSAApplication = new DBSAApplication();
 					//updateTextOfComponents();
 					DBSAApplication.getDBSAJFrame().setVisible(true);

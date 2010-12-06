@@ -211,7 +211,7 @@ public class FetcherPatternDialog extends JDialog {
 		if (patternValueJTextField == null) {
 			patternValueJTextField = new JTextField();
 			patternValueJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			patternValueJTextField.setEditable(false);
+			//patternValueJTextField.setEditable(false);
 		}
 		return patternValueJTextField;
 	}
