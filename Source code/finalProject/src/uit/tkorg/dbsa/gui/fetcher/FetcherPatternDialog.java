@@ -31,12 +31,17 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.TableView.TableRow;
+
+import net.sf.jabref.util.TBuildInfo;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
+
+import com.sun.rowset.internal.Row;
 
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 
@@ -311,6 +316,7 @@ public class FetcherPatternDialog extends JDialog {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
+		//table.setRowHeight(25);
 			
 		for(int i = 0; i < 4; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);

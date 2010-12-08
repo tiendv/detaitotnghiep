@@ -386,10 +386,12 @@ public class ACMFetcher {
 					entry.setField("author", "");
 				}
 				DBSAApplication.fetcherResultPanel.setAuthor(entry.getField("author"));
+				
 				if(entry.getField("url") == null){
 					entry.setField("url", "");
 				}
 				DBSAApplication.fetcherResultPanel.setLink(entry.getField("url"));
+			
 				if(entry.getField("year") == null){
 					entry.setField("year", "");
 				}

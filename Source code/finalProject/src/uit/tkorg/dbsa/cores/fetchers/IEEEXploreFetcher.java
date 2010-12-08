@@ -445,7 +445,8 @@ public class IEEEXploreFetcher {
 			if(entry.getField(DBSAApplicationConst.DOI) == null){
 				entry.setField(DBSAApplicationConst.DOI, "");
 			}
-			DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.DOI));
+			DBSAApplication.fetcherResultPanel.setLink(DBSAApplicationConst.ARTICLE_IEEE_URL + entry.getField(DBSAApplicationConst.DOI));
+			
 			
 			if(entry.getField(DBSAApplicationConst.YEAR) == null){
 				entry.setField(DBSAApplicationConst.YEAR, "");
