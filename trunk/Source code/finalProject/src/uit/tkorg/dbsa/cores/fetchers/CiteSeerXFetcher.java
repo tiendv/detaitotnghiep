@@ -110,6 +110,7 @@ public class CiteSeerXFetcher {
 	            		entry.setField((DBSAApplicationConst.CITESEERURL), "");
 	            	}
 	            	DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.CITESEERURL));
+	            	
 	            	if(entry.getField(DBSAApplicationConst.YEAR) == null){
 	            		entry.setField((DBSAApplicationConst.YEAR), "");
 	            	}

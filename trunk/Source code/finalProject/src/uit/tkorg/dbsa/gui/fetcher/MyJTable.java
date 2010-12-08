@@ -5,6 +5,7 @@ import javax.swing.table.*;
 
 import org.pdfbox.util.operator.SetHorizontalTextScaling;
 
+import java.net.URL;
 import java.util.Hashtable;
 import java.awt.Color;
 /*
@@ -29,6 +30,17 @@ public class MyJTable extends JTable
     super(md);
     CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
     this.getColumnModel().getColumn(7).setCellRenderer(checkBoxRenderer);
+    this.getColumnModel().getColumn(8).setCellRenderer(checkBoxRenderer);
+   
+    URLRenderer urlRenderer = new URLRenderer();
+    this.getColumnModel().getColumn(3).setCellRenderer(urlRenderer);
+   
+    this.setDefaultRenderer(URL.class, urlRenderer);
+    
+    TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(this.getModel());
+	this.setRowSorter(sorter);
+	
+    this.setRowHeight(25);
   }
 
   /**
@@ -51,6 +63,7 @@ public class MyJTable extends JTable
   public void addRowToPaint(int row, Color bgColor)
   {
     rowsToPaint.put(new Integer(row), bgColor);
+    
     this.repaint();// you need to repaint the table for each you put in the hashtable.
   }
 

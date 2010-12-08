@@ -3,6 +3,8 @@
  */
 package uit.tkorg.dbsa.model;
 
+import java.net.URL;
+
 /**
  * @author tiendv
  *
@@ -62,8 +64,10 @@ public class DBSAPublication {
 	public String getLinks() {
 		return links;
 	}
-	public void setLinks(String links) {
-		this.links = links;
+	public void setLinks(String string) {
+		links = string;
+		
 	}
+
 }
 

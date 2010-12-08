@@ -373,6 +373,7 @@ public class DBSAConfigurationDialog extends JDialog {
 			
 			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.mac.name"))){
 				 UIManager.setLookAndFeel(DBSAResourceBundle.swingRes.getString("swing.installedlaf.mac.class"));
+			
 			}
 			
 			if (lookAndFeel.equalsIgnoreCase(DBSAResourceBundle.swingRes.getString("swing.installedlaf.liquid.name"))){

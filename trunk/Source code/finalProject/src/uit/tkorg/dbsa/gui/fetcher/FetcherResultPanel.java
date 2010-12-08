@@ -7,11 +7,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -77,12 +79,16 @@ public class FetcherResultPanel extends JPanel {
 	private static String abstracts = "";
 	private static String publisher = "";
 	private static boolean mark = false;
+	private static URL hyperlink = null;
 	
 	private static DefaultTableModel model;
 	
 	private static ArrayList<DBSAPublication> dbsaPublication = new ArrayList<DBSAPublication>();
 	
 	private static ArrayList<Integer> numberArray = new ArrayList<Integer>();
+	
+	private static boolean isDuplicate = false;
+	private static boolean duplicationArtilce = false;
 	
 	public FetcherResultPanel() {
 		initComponents();
@@ -119,9 +125,10 @@ public class FetcherResultPanel extends JPanel {
 		return jScrollPane0;
 	}
 
-	private JTextArea getLinkJTextArea() {
+	private JEditorPane getLinkJTextArea() {
 		if (linkJTextArea == null) {
-			linkJTextArea = new JTextArea();
+			linkJTextArea = new JEditorPane("text/html","");
+			linkJTextArea.setEditable(false);
 			linkJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 		}
 		return linkJTextArea;
@@ -130,7 +137,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getLinkJLabel() {
 		if (linkJLabel == null) {
 			linkJLabel = new JLabel();
-			linkJLabel.setText("  " + /*DBSAResourceBundle.res.getString*/("link"));
+			linkJLabel.setText("  " + DBSAResourceBundle.res.getString("link"));
 			linkJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return linkJLabel;
@@ -242,7 +249,7 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getTitleJLabel() {
 		if (titleJLabel == null) {
 			titleJLabel = new JLabel();
-			titleJLabel.setText("  " + /*DBSAResourceBundle.res.getString*/("title"));
+			titleJLabel.setText("  " + DBSAResourceBundle.res.getString("title"));
 			titleJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return titleJLabel;
@@ -295,9 +302,9 @@ public class FetcherResultPanel extends JPanel {
 	 * Ham tao Jtable
 	 */
 	public MyJTable createResultJTable(){
-		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getLink(), getYear(), getAbstract(), getPublisher(), getMark()), getColumnName()) {
+		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, Integer.class, String.class, String.class, Boolean.class, };
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, Integer.class, String.class, String.class, Boolean.class, Boolean.class};
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
@@ -310,7 +317,6 @@ public class FetcherResultPanel extends JPanel {
 		};
 		
 		MyJTable table = new MyJTable(model);
-		
 		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
 		//Cho phep sap xep theo tu cot rieng biet
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
@@ -322,13 +328,18 @@ public class FetcherResultPanel extends JPanel {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
-		
+		table.setRowHeight(25);
+		//table.getColumn("links")//;
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();    
 		dtcr.setHorizontalAlignment(SwingConstants.CENTER);  
 		
 		TableCellRenderer tcr = table.getDefaultRenderer(Integer.class);
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)tcr; 
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);  
+		
+		table.getColumn(DBSAResourceBundle.res.getString("duplicate")).setWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("duplicate")).setMinWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("duplicate")).setMaxWidth(0);
 		
 		for(int i = 0; i < 8; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -371,37 +382,22 @@ public class FetcherResultPanel extends JPanel {
 			
 			for(int i = 0; i < getRowNumber(); i++){				
 				if((i + 1) == getRowNumber()){
-					//
-					if(resultsJTable.getRowCount() == 1 && checkRemovedFirst == false){
-						Object [] data = {resultsJTable.getRowCount(), getTitle(), getAuthor(), getLink(), getYear(), getAbstract(), getPublisher(), getMark()};
-						model.insertRow(resultsJTable.getRowCount(), data );
-						
-						DBSAPublication dbsa = new DBSAPublication();
-						dbsa.setId(resultsJTable.getRowCount());
-						dbsa.setTitle(getTitle());
-						dbsa.setAuthors(getAuthor());
-						dbsa.setLinks(getLink());
-						dbsa.setYear(getYear());
-						dbsa.setAbstractPub(getAbstract());
-						dbsa.setPublisher(getPublisher());
-						
-						dbsaPublication.add(dbsa);
-						
-					}else{
-						Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), getYear(), getAbstract(), getPublisher(), getMark()};
-						model.insertRow(resultsJTable.getRowCount(), data );
-						//resultsJTable.addRowToPaint(10, Color.red);
-						
-						DBSAPublication dbsa = new DBSAPublication();
-						dbsa.setId(resultsJTable.getRowCount() + 1);
-						dbsa.setTitle(getTitle());
-						dbsa.setAuthors(getAuthor());
-						dbsa.setLinks(getLink());
-						dbsa.setYear(getYear());
-						dbsa.setAbstractPub(getAbstract());
-						dbsa.setPublisher(getPublisher());
-						dbsaPublication.add(dbsa);
-					}			
+					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), getYear(), getAbstract(), getPublisher(), getMark()};
+					model.insertRow(resultsJTable.getRowCount(), data );
+				
+					DBSAPublication dbsa = new DBSAPublication();
+					dbsa.setId(resultsJTable.getRowCount() + 1);
+					dbsa.setTitle(getTitle());
+					dbsa.setAuthors(getAuthor());
+					dbsa.setLinks(getLink());
+					setHyperLink(dbsa.getLinks());
+					dbsa.setYear(getYear());
+					dbsa.setAbstractPub(getAbstract());
+					dbsa.setPublisher(getPublisher());
+					setIsDuplicate(false);
+					
+					dbsaPublication.add(dbsa);
+							
 				}				
 			}	
 			
@@ -412,18 +408,7 @@ public class FetcherResultPanel extends JPanel {
 			int maxResult = FetcherPanel.getAcmResultNumber() + FetcherPanel.getCiteResultNumber() + FetcherPanel.getIeeeResultNumber();
 			
 			if(resultsJTable.getRowCount() >= maxResult){
-				CheckExist check = new CheckExist();
-				
-				numberArray = (ArrayList<Integer>) check.CheckTitleSignaturePublications(dbsaPublication).clone();
-				//System.out.println("trung lap " + numberArray.size());
-				
-				for(int i = 0; i < numberArray.size(); i++)
-				{
-					resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
-					//resultsJTable.setValueAt(true, numberArray.get(i), 6);
-					//System.out.println("trung lap gia tri " + numberArray.get(i));
-					//setForeground(Color.red);
-				}
+				checkArticleIsDuplicated();
 				
 				if(resultsJTable.getRowCount() > 1){
 					
@@ -448,11 +433,11 @@ public class FetcherResultPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+			
 				int n  = resultsJTable.getSelectedRow();
 					
 				titleJTextArea.setText(model.getValueAt(n, 1).toString());
-				authorsJTextArea.setText(model.getValueAt(n, 2).toString());
+				authorsJTextArea.setText(model.getValueAt(n, 2).toString());				
 				linkJTextArea.setText(model.getValueAt(n, 3).toString());
 				yearJTextArea.setText(model.getValueAt(n, 4).toString());
 				abstractJTextArea.setText(model.getValueAt(n, 5).toString());
@@ -469,35 +454,37 @@ public class FetcherResultPanel extends JPanel {
 						deleteJButton.setEnabled(false);
 					}
 				}
-				
 			}
-
-			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void mouseReleased(MouseEvent e) {		
 			}
 			
 		});
 		return resultsJTable;
+	}
+	/*
+	 * check article is duplicated
+	 */
+	
+	@SuppressWarnings("unchecked")
+	public boolean checkArticleIsDuplicated(){
+		CheckExist check = new CheckExist();
+		
+		numberArray = (ArrayList<Integer>) check.CheckTitleSignaturePublications(dbsaPublication).clone();
+		//System.out.println("trung lap " + numberArray.size());
+		duplicationArtilce = false;
+		for(int i = 0; i < numberArray.size(); i++)
+		{
+			model.setValueAt(true, numberArray.get(i), 8);
+			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
+			duplicationArtilce = true;
+		}
+		return duplicationArtilce;
 	}
 	
 	/*
@@ -508,7 +495,8 @@ public class FetcherResultPanel extends JPanel {
 		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
 				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
 				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
-				DBSAResourceBundle.res.getString("publisher"),DBSAResourceBundle.res.getString("mark"), };
+				DBSAResourceBundle.res.getString("publisher"),DBSAResourceBundle.res.getString("mark"), 
+				DBSAResourceBundle.res.getString("duplicate")};
 			
 		return columnNames;
 	}
@@ -517,9 +505,9 @@ public class FetcherResultPanel extends JPanel {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(int rowNumber, String title, String author, String link, int year, String abstracts, String publisher, boolean isMark){
+	public  Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate){
 		
-		Object [][] data = {addTableData(rowNumber, title, author, link, year, abstracts, publisher, isMark)};
+		Object [][] data = {addTableData(rowNumber, title, author, hyperLink, year, abstracts, publisher, isMark, duplicate)};
 		
 		return data;
 		
@@ -531,9 +519,8 @@ public class FetcherResultPanel extends JPanel {
 //		
 //	}
 	
-	
-	public  Object [] addTableData(int rowNumber, String title, String author, String link, int year, String abstracts, String publisher, boolean isMark){
-		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getLink(), getYear(), getAbstract(), getPublisher(), getMark()};
+	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate){
+		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate()};
 		
 		return dataRow;
 	}
@@ -541,7 +528,7 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getEntryJPanel() {
 		if (entryJPanel == null) {
 			entryJPanel = new JPanel();
-			entryJPanel.setBorder(BorderFactory.createTitledBorder(null, "entry.detail", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			entryJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("entry.detail"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			entryJPanel.setLayout(new GroupLayout());
 			entryJPanel.add(getAuthorsJLabel(), new Constraints(new Leading(8, 78, 45, 26), new Leading(45, 30, 12, 12)));
@@ -562,7 +549,7 @@ public class FetcherResultPanel extends JPanel {
 
 	boolean abc = false;
 	private JLabel linkJLabel;
-	private JTextArea linkJTextArea;
+	private JEditorPane linkJTextArea;
 	private JScrollPane jScrollPane0;
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
@@ -658,38 +645,24 @@ public class FetcherResultPanel extends JPanel {
 		int check = 0;
 		for(int i = resultsJTable.getRowCount()-1; i >= 0; i--){
 			
-			if(resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
+			if(resultsJTable.getModel().getValueAt(i, 7) != null
+				&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
+				
 				check ++;
-				//System.out.println(resultsJTable.getModel().getValueAt(i, 7).toString());
+				
 				model.removeRow(i);
 				
-				resultsJTable.addRowToPaint(i, Color.white);
+				for(int j = 0; j < resultsJTable.getRowCount(); j++){
+					resultsJTable.addRowToPaint(j, Color.white);
+					resultsJTable.getModel().setValueAt(j+1, j, 0);
+					
+					if(resultsJTable.getModel().getValueAt(j, 8) != null
+						&&resultsJTable.getModel().getValueAt(j, 8).toString().equals("true")){
 				
-				System.out.println(numberArray.size());
-				System.out.println("i " + i);
-				for(int j = 0; j < numberArray.size(); j++){
-					
-					if(numberArray.get(j) > i){
-						
-						resultsJTable.addRowToPaint(numberArray.get(j), Color.white);
-						resultsJTable.addRowToPaint(numberArray.get(j) - 1, Color.red);
-						numberArray.set(j, numberArray.get(j) - 1);
-						
-					}else if(numberArray.get(j) == i){
-					
-						numberArray.remove(j);
-						for(int k = 0; k < numberArray.size(); k++){
-							if(numberArray.get(k) > j){
-								resultsJTable.addRowToPaint(numberArray.get(k), Color.white);
-								resultsJTable.addRowToPaint(numberArray.get(k) - 1, Color.red);
-								numberArray.set(k, numberArray.get(k) - 1);
-							}
-						}
+						resultsJTable.addRowToPaint(j, Color.red);
 					}
-					
-					
 				}
-				
+			
 				if(check == 0){
 					JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.choose.article.to.delete"));
 				}
@@ -802,5 +775,26 @@ public class FetcherResultPanel extends JPanel {
 	
 	public  boolean getMark(){
 		return mark;
+	}
+	
+	public void setHyperLink(String hyperLink){
+		try {
+			this.hyperlink = new URL(hyperLink);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public URL getHyperLink(){
+		return hyperlink;
+	}
+	
+	public void setIsDuplicate(boolean duplicate){
+		isDuplicate = duplicate;
+	}
+	
+	public boolean getIsDuplicate(){
+		return isDuplicate;
 	}
 }

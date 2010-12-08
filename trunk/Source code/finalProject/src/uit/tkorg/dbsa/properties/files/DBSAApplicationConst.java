@@ -53,6 +53,7 @@ public class DBSAApplicationConst {
 	public static String HREF = "href";
 	public static String IEEE = "IEEE";
 	public static String GOOGLE_URL = "http://www.google.com"; 
+	public static String ARTICLE_IEEE_URL = "http://doi.ieeecomputersociety.org/";
 	/*
 	 * 
 	 */
