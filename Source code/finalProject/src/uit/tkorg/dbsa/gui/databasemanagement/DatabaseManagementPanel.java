@@ -31,6 +31,7 @@ import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.actions.database.LoadSubject;
 import uit.tkorg.dbsa.gui.fetcher.MyJTable;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.model.Subject;
 
@@ -76,7 +77,7 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(null, "database.management", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("database.management"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
 				12), new Color(51, 51, 51)));
 		setLayout(new GroupLayout());
 		add(getSubjectActionsJPanel(), new Constraints(new Bilateral(0, 1, 608), new Trailing(7, 10, 10)));
@@ -89,7 +90,8 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getDeleteSubjectJButton() {
 		if (deleteSubjectJButton == null) {
 			deleteSubjectJButton = new JButton();
-			deleteSubjectJButton.setText("Delete Sub");
+			deleteSubjectJButton.setText(("delete.sub"));
+			deleteSubjectJButton.setEnabled(false);
 		}
 		return deleteSubjectJButton;
 	}
@@ -97,7 +99,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getUpdateDataJButton() {
 		if (updateDataJButton == null) {
 			updateDataJButton = new JButton();
-			updateDataJButton.setText("Update");
+			updateDataJButton.setText(DBSAResourceBundle.res.getString("update"));
 		}
 		return updateDataJButton;
 	}
@@ -105,7 +107,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JPanel getPublicationActionsJPanel() {
 		if (publicationActionsJPanel == null) {
 			publicationActionsJPanel = new JPanel();
-			publicationActionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "Publication actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+			publicationActionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("publication.actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			publicationActionsJPanel.setLayout(new GroupLayout());
 			publicationActionsJPanel.add(getUpdateDataJButton(), new Constraints(new Trailing(12, 97, 771, 774), new Leading(0, 29, 12, 12)));
@@ -118,7 +120,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JScrollPane getSubjectContentJScrollPane() {
 		if (subjectContentJScrollPane == null) {
 			subjectContentJScrollPane = new JScrollPane();
-			subjectContentJScrollPane.setBorder(BorderFactory.createTitledBorder(null, /*DBSAResourceBundle.res.getString*/("subject.table"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			subjectContentJScrollPane.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("subject.table"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			subjectContentJScrollPane.setViewportView(getSubjectJTable());
 		}
@@ -149,9 +151,9 @@ public class DatabaseManagementPanel extends JPanel {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
-//		table.getColumn(/*DBSAResourceBundle.res.getString*/("subject.mark")).setWidth(0);
-//		table.getColumn(/*DBSAResourceBundle.res.getString*/("subject.mark")).setMaxWidth(0);
-//		table.getColumn(/*DBSAResourceBundle.res.getString*/("subject.mark")).setMinWidth(0);
+//		table.getColumn(DBSAResourceBundle.res.getString("subject.mark")).setWidth(0);
+//		table.getColumn(DBSAResourceBundle.res.getString("subject.mark")).setMaxWidth(0);
+//		table.getColumn(DBSAResourceBundle.res.getString("subject.mark")).setMinWidth(0);
 //		
 		for(int i = 0; i < 3; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -186,8 +188,8 @@ public class DatabaseManagementPanel extends JPanel {
 	 * @return String []
 	 */
 	private  String [] getSubjectColumnName(){
-		String [] columnNames = {/*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("subject.id"), 
-				/*DBSAResourceBundle.res.getString*/("subject.name"), /*DBSAResourceBundle.res.getString*/("subject.mark")};
+		String [] columnNames = {DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("subject.id"), 
+				DBSAResourceBundle.res.getString("subject.name"), DBSAResourceBundle.res.getString("subject.mark")};
 			
 		return columnNames;
 	}
@@ -229,7 +231,7 @@ public class DatabaseManagementPanel extends JPanel {
 						}
 					}
 				}
-				if(checkMarkSubject > 0){
+				if(checkMarkSubject != 0){
 					deleteSubjectJButton.setEnabled(true);
 				}else{
 					deleteSubjectJButton.setEnabled(false);
@@ -251,7 +253,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JPanel getSubjectActionsJPanel() {
 		if (subjectActionsJPanel == null) {
 			subjectActionsJPanel = new JPanel();
-			subjectActionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "Subject actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font(
+			subjectActionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("subject.actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font(
 					"Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			subjectActionsJPanel.setLayout(new GroupLayout());
 			subjectActionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 99, 776, 781), new Leading(0, 29, 12, 12)));
@@ -265,7 +267,7 @@ public class DatabaseManagementPanel extends JPanel {
 		if (addJButton == null) {
 			addJButton = new JButton();
 			addJButton.setEnabled(false);
-			addJButton.setText(/*DBSAResourceBundle.res.getString*/("add.subject"));
+			addJButton.setText(DBSAResourceBundle.res.getString("add.subject"));
 			addJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -297,7 +299,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getDeleteJButton() {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
-			deleteJButton.setText("Delete Pub");
+			deleteJButton.setText(DBSAResourceBundle.res.getString("delete.pub"));
 			deleteJButton.setEnabled(false);
 			deleteJButton.addActionListener(new ActionListener() {
 	
@@ -333,7 +335,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getResetShowDataJButton() {
 		if (resetShowDataJButton == null) {
 			resetShowDataJButton = new JButton();
-			resetShowDataJButton.setText("Reset Data");
+			resetShowDataJButton.setText(DBSAResourceBundle.res.getString("reset.data"));
 			resetShowDataJButton.addActionListener(new ActionListener() {
 	
 				public void actionPerformed(ActionEvent event) {
@@ -364,7 +366,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("   " + /*DBSAResourceBundle.res.getString*/("close") + "   ");
+			closeJButton.setText("   " + DBSAResourceBundle.res.getString("close") + "   ");
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -381,7 +383,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JScrollPane getDatabaseJTaqbleInJScrollPane() {
 		if (databaseJTaqbleInJScrollPane == null) {
 			databaseJTaqbleInJScrollPane = new JScrollPane();
-			databaseJTaqbleInJScrollPane.setBorder(BorderFactory.createTitledBorder(null, /*DBSAResourceBundle.res.getString*/("database"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+			databaseJTaqbleInJScrollPane.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("database"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			databaseJTaqbleInJScrollPane.setAlignmentX(1.0f);
 			databaseJTaqbleInJScrollPane.setViewportView(getDatabaseJTable());
@@ -417,9 +419,9 @@ public class DatabaseManagementPanel extends JPanel {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
-		table.getColumn(/*DBSAResourceBundle.res.getString*/("id")).setWidth(0);
-		table.getColumn(/*DBSAResourceBundle.res.getString*/("id")).setMinWidth(0);
-		table.getColumn(/*DBSAResourceBundle.res.getString*/("id")).setMaxWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("id")).setWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("id")).setMinWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("id")).setMaxWidth(0);
 		
 		for(int i = 0; i < 6; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -450,11 +452,11 @@ public class DatabaseManagementPanel extends JPanel {
 	 * @return String []
 	 */
 	private  String [] getDatabaseColumnName(){
-		String [] columnNames = {/*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("title"), 
-				/*DBSAResourceBundle.res.getString*/("authors"), /*DBSAResourceBundle.res.getString*/("link"),
-				/*DBSAResourceBundle.res.getString*/("year"),/*DBSAResourceBundle.res.getString*/("abstract"), 
-				/*DBSAResourceBundle.res.getString*/("publisher"),/*DBSAResourceBundle.res.getString*/("mark"), 
-				/*DBSAResourceBundle.res.getString*/("id")};
+		String [] columnNames = {DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
+				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
+				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
+				DBSAResourceBundle.res.getString("publisher"),DBSAResourceBundle.res.getString("mark"), 
+				DBSAResourceBundle.res.getString("id")};
 		
 		return columnNames;
 	}
