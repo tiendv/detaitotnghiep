@@ -618,7 +618,7 @@ public class DBSAApplication extends JPanel {
 	 * @return null
 	 */
 	public static void updateTextOfComponents(){
-		dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.title"));
+		dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
 	}
 	/**
 	 * @param args
