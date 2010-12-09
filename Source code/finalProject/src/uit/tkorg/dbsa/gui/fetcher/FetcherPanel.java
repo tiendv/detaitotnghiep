@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -125,7 +124,9 @@ public class FetcherPanel extends JPanel {
 				}
 			}else{
 				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("subject.does.not.exist"));
-				keywordJComboBox.addMouseListener(new MouseListener(){
+				
+			}
+			keywordJComboBox.addMouseListener(new MouseListener(){
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -153,7 +154,6 @@ public class FetcherPanel extends JPanel {
 				}
 				
 			});
-			}
 		}
 		return keywordJComboBox;
 	}
@@ -225,12 +225,12 @@ public class FetcherPanel extends JPanel {
 	private JPanel getFetcherJPanel() {
 		if (fetcherJPanel == null) {
 			fetcherJPanel = new JPanel();
-			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("fetcher"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, "fetcher", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			fetcherJPanel.setLayout(new GroupLayout());
-			fetcherJPanel.add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 61, 10, 10)));
 			fetcherJPanel.add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 513), new Trailing(0, 68, 278, 278)));
 			fetcherJPanel.add(getChooseJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
+			fetcherJPanel.add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 66, 10, 10)));
 		}
 		return fetcherJPanel;
 	}
@@ -238,16 +238,16 @@ public class FetcherPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
-			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(2, 12, 12)));
-			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(2, 12, 12)));
-			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(2, 12, 12)));
+			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(-1, 36, 12, 12)));
+			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(0, 35, 12, 12)));
+			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(-1, 36, 12, 12)));
 		}
 		return actionsJPanel;
 	}
-	
-	
+
 	private JButton getFetcherJButton() {
 		
 		if (fetcherJButton == null) {
@@ -624,8 +624,8 @@ public class FetcherPanel extends JPanel {
 			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, " ", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			inputJPanel.setLayout(new GroupLayout());
-			inputJPanel.add(getKeywordJComboBox(), new Constraints(new Bilateral(120, 12, 783), new Bilateral(0, 7, 10, 28)));
-			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(0, 108, 10, 10), new Bilateral(0, 7, 10, 28)));
+			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(4, 108, 10, 10), new Leading(-3, 36, 10, 10)));
+			inputJPanel.add(getKeywordJComboBox(), new Constraints(new Bilateral(120, 12, 783), new Leading(-3, 36, 12, 12)));
 		}
 		return inputJPanel;
 	}
