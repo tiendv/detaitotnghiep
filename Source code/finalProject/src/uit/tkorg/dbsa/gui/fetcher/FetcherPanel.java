@@ -118,14 +118,14 @@ public class FetcherPanel extends JPanel {
 			ArrayList<Subject> dbsaSubjectList = new ArrayList<Subject>();
 			dbsaSubjectList = LoadSubject.getSubject();
 			keywordJComboBox.addItem("");
+
 			if(dbsaSubjectList != null){
 				for(int i = 0; i < dbsaSubjectList.size(); i++){
 					keywordJComboBox.addItem(dbsaSubjectList.get(i).getSbj_name());
 				}
 			}else{
 				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("subject.does.not.exist"));
-			}
-			keywordJComboBox.addMouseListener(new MouseListener(){
+				keywordJComboBox.addMouseListener(new MouseListener(){
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -153,6 +153,7 @@ public class FetcherPanel extends JPanel {
 				}
 				
 			});
+			}
 		}
 		return keywordJComboBox;
 	}
