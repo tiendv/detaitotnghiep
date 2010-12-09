@@ -25,6 +25,8 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 
 import uit.tkorg.dbsa.actions.database.DeletePublicaitonInDBSA;
 import uit.tkorg.dbsa.actions.database.InsertSubject;
@@ -32,6 +34,7 @@ import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.actions.database.LoadSubject;
 import uit.tkorg.dbsa.gui.fetcher.MyJTable;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.model.Subject;
 
@@ -76,7 +79,7 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(null, "Database management", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("database.management"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
 				12), new Color(51, 51, 51)));
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(0, 1, 608), new Trailing(7, 76, 10, 10)));
@@ -88,7 +91,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JScrollPane getSubjectContentJScrollPane() {
 		if (subjectContentJScrollPane == null) {
 			subjectContentJScrollPane = new JScrollPane();
-			subjectContentJScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Subject table", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			subjectContentJScrollPane.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("subject.table"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			subjectContentJScrollPane.setViewportView(getSubjectJTable());
 		}
@@ -154,7 +157,8 @@ public class DatabaseManagementPanel extends JPanel {
 	 * @return String []
 	 */
 	private  String [] getSubjectColumnName(){
-		String [] columnNames = {"No.", "Subject ID", "Subject name"};
+		String [] columnNames = {DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("subject.id"), 
+				DBSAResourceBundle.res.getString("subject.name")};
 			
 		return columnNames;
 	}
@@ -179,7 +183,7 @@ public class DatabaseManagementPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				if(subjectJTable != null){
 					int n = subjectJTable.getSelectedRow();
 					if(n == 0)
@@ -188,29 +192,13 @@ public class DatabaseManagementPanel extends JPanel {
 						addJButton.setEnabled(false);
 				}
 			}
-
-			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-			
 			}
-
-			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 		});
@@ -221,7 +209,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "Actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 12, 12), new Leading(7, 10, 10)));
@@ -236,7 +224,7 @@ public class DatabaseManagementPanel extends JPanel {
 		if (addJButton == null) {
 			addJButton = new JButton();
 			addJButton.setEnabled(false);
-			addJButton.setText(" Add Subject");
+			addJButton.setText(DBSAResourceBundle.res.getString("add.subject"));
 			addJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -271,10 +259,9 @@ public class DatabaseManagementPanel extends JPanel {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
 			deleteJButton.setEnabled(false);
-			deleteJButton.setText("   Delete    ");
+			deleteJButton.setText("   " + DBSAResourceBundle.res.getString("delete") +"    ");
 			deleteJButton.addActionListener(new ActionListener(){
 
-				@SuppressWarnings("static-access")
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
@@ -302,7 +289,10 @@ public class DatabaseManagementPanel extends JPanel {
 							publicationModel.removeRow(i);
 						}
 						
-						
+					}
+					
+					for(int j = 0; j < databaseJTable.getRowCount(); j++){
+						databaseJTable.getModel().setValueAt(j + 1, j, 0);
 					}
 				}
 				
@@ -314,16 +304,44 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getUpdateJButton() {
 		if (updateJButton == null) {
 			updateJButton = new JButton();
-			updateJButton.setEnabled(false);
-			updateJButton.setText("   Update   ");
+			//updateJButton.setEnabled(false);
+			updateJButton.setText("   " + DBSAResourceBundle.res.getString("update") + "   ");
+			updateJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//delete data on table
+					deleteDataOnTable(databaseJTable, publicationModel);
+					ArrayList<DBSAPublication> updateDatabase = new ArrayList<DBSAPublication>();
+					updateDatabase = LoadPublicationsFromDBSA.getPaper();
+					
+					if(updateDatabase != null){
+						for(int i = 0; i < updateDatabase.size(); i++){
+							publicationModel.insertRow(databaseJTable.getRowCount(), addDataToDatabaseJTable(updateDatabase.get(i)));
+							
+						}
+						if(checkRemoveRow == false){
+							checkRemoveRow = true;
+							publicationModel.removeRow(0);
+						}
+					}
+				}
+				
+			});
 		}
 		return updateJButton;
 	}
 
+	public void deleteDataOnTable(JTable table, DefaultTableModel model){
+		table = new JTable(model);
+		for(int i = table.getRowCount() - 1; i >= 0; i--){
+			model.removeRow(i);
+		}
+	}
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("   Close   ");
+			closeJButton.setText("   " + DBSAResourceBundle.res.getString("close") + "   ");
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -340,7 +358,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JScrollPane getDatabaseJTaqbleInJScrollPane() {
 		if (databaseJTaqbleInJScrollPane == null) {
 			databaseJTaqbleInJScrollPane = new JScrollPane();
-			databaseJTaqbleInJScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Database", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+			databaseJTaqbleInJScrollPane.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("database"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			databaseJTaqbleInJScrollPane.setAlignmentX(1.0f);
 			databaseJTaqbleInJScrollPane.setViewportView(getDatabaseJTable());
@@ -376,9 +394,9 @@ public class DatabaseManagementPanel extends JPanel {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
-		table.getColumn("ID").setWidth(0);
-		table.getColumn("ID").setMinWidth(0);
-		table.getColumn("ID").setMaxWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("id")).setWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("id")).setMinWidth(0);
+		table.getColumn(DBSAResourceBundle.res.getString("id")).setMaxWidth(0);
 		
 		for(int i = 0; i < 6; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -409,8 +427,12 @@ public class DatabaseManagementPanel extends JPanel {
 	 * @return String []
 	 */
 	private  String [] getDatabaseColumnName(){
-		String [] columnNames = {"No.", "Title", "Authors", "Link", "Year", "Abstract", "Publisher", "Mark", "ID"};
-			
+		String [] columnNames = {DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
+				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
+				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
+				DBSAResourceBundle.res.getString("publisher"),DBSAResourceBundle.res.getString("mark"), 
+				DBSAResourceBundle.res.getString("id")};
+		
 		return columnNames;
 	}
 	
@@ -453,7 +475,6 @@ public class DatabaseManagementPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 				if(databaseJTable != null){
 					for(int i = 0; i < databaseJTable.getRowCount(); i++){
@@ -471,28 +492,13 @@ public class DatabaseManagementPanel extends JPanel {
 				}
 			}
 
-			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-
-			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 		});
@@ -603,6 +609,6 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 	
 	public  void setID(int id){
-		id = id;
+		this.id = id;
 	}
 }

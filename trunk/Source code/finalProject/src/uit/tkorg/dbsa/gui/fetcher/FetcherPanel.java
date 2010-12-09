@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -104,24 +105,54 @@ public class FetcherPanel extends JPanel {
 		initAcmSearchRadioButtonGroup();
 		setSize(935, 477);
 	}
-
+	
+	@SuppressWarnings("static-access")
 	private JComboBox getKeywordJComboBox() {
 		if (keywordJComboBox == null) {
 			keywordJComboBox = new JComboBox();
 			keywordJComboBox.setEditable(true);
-//			keywordJComboBox.setModel(new DefaultComboBoxModel(new Object[] { "", "Mathematical logic", "Automata theory", "Number theory", "Graph theory",
-//					"Type theory" }));
+
 			keywordJComboBox.setDoubleBuffered(false);
-			//keywordJComboBox.setBorder(new LineBorder(Color.lightGray, 1, true));
 			keywordJComboBox.setRequestFocusEnabled(false);
 			
 			ArrayList<Subject> dbsaSubjectList = new ArrayList<Subject>();
 			dbsaSubjectList = LoadSubject.getSubject();
 			keywordJComboBox.addItem("");
-			for(int i = 0; i < dbsaSubjectList.size(); i++){
-				keywordJComboBox.addItem(dbsaSubjectList.get(i).getSbj_name());
+			if(dbsaSubjectList != null){
+				for(int i = 0; i < dbsaSubjectList.size(); i++){
+					keywordJComboBox.addItem(dbsaSubjectList.get(i).getSbj_name());
+				}
+			}else{
+				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("subject.does.not.exist"));
 			}
-			
+			keywordJComboBox.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					
+					dbsaStatus.setDBSAProgressMessage("Please choose or enter keyword to fetch!");
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+				}
+				
+			});
 		}
 		return keywordJComboBox;
 	}
@@ -403,7 +434,7 @@ public class FetcherPanel extends JPanel {
 			ieeeploreJProgressBar.setDoubleBuffered(true);
 			ieeeploreJProgressBar.setOpaque(false);
 			ieeeploreJProgressBar.setStringPainted(true);
-			ieeeploreJProgressBar.setString("ieee.digital.library");
+			ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("ieee.digital.library"));
 		}
 		return ieeeploreJProgressBar;
 	}
@@ -446,7 +477,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getChooseJPanel() {
 		if (chooseJPanel == null) {
 			chooseJPanel = new JPanel();
-			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, "choose.dls", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("choose.dls"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			chooseJPanel.setLayout(new GroupLayout());
 			chooseJPanel.add(getFetchFromJLabel(), new Constraints(new Leading(23, 89, 10, 10), new Leading(12, 33, 12, 12)));
@@ -651,11 +682,5 @@ public class FetcherPanel extends JPanel {
 	public static int getCiteResultNumber() {
 		return citeResultNumber;
 	}
-
-	private void keywordJTextFieldMouseMousePressed(MouseEvent event) {
-		fetcherJButton.setEnabled(true);
-	}
-	
-	
 	
 }
