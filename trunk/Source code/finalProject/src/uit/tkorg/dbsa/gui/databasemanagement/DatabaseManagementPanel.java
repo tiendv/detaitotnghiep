@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -29,6 +30,7 @@ import uit.tkorg.dbsa.actions.database.DeletePublicaitonInDBSA;
 import uit.tkorg.dbsa.actions.database.InsertSubject;
 import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.actions.database.LoadSubject;
+import uit.tkorg.dbsa.actions.database.UpdatePublicaitonsInDBSA;
 import uit.tkorg.dbsa.gui.fetcher.MyJTable;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
@@ -71,6 +73,8 @@ public class DatabaseManagementPanel extends JPanel {
 //	private boolean checkRemoveSubjectRow = false;
 	DeletePublicaitonInDBSA deletePublication = new DeletePublicaitonInDBSA();
 	private ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
+	ArrayList<DBSAPublication> dbsaPublicationUpdateList = new ArrayList<DBSAPublication>();
+	
 	private ArrayList<Subject> dbsaSubjectList = new ArrayList<Subject>();
 	public DatabaseManagementPanel() {
 		initComponents();
@@ -90,8 +94,9 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getDeleteSubjectJButton() {
 		if (deleteSubjectJButton == null) {
 			deleteSubjectJButton = new JButton();
-			deleteSubjectJButton.setText(("delete.sub"));
+			deleteSubjectJButton.setText(DBSAResourceBundle.res.getString("delete.sub"));
 			deleteSubjectJButton.setEnabled(false);
+			
 		}
 		return deleteSubjectJButton;
 	}
@@ -100,10 +105,51 @@ public class DatabaseManagementPanel extends JPanel {
 		if (updateDataJButton == null) {
 			updateDataJButton = new JButton();
 			updateDataJButton.setText(DBSAResourceBundle.res.getString("update"));
+			updateDataJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {	
+					
+					UpdatePublicaitonsInDBSA.updateListData(UpdatePublicationDatabase());
+					JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("update.database.is.successfull"));
+				}
+				
+			});
 		}
 		return updateDataJButton;
 	}
 
+	/*
+	 * Ham update data tu JTable xuong database
+	 * @return DBSA Publication List
+	 */
+	public ArrayList<DBSAPublication> UpdatePublicationDatabase(){
+		
+		
+		
+		
+		for(int i = 0; i < databaseJTable.getRowCount(); i++){
+			DBSAPublication dbsaPublication = new DBSAPublication();
+			
+			dbsaPublication.setId(Integer.parseInt(databaseJTable.getModel().getValueAt(i, 8).toString()));
+			dbsaPublication.setTitle(databaseJTable.getModel().getValueAt(i, 1).toString());
+			dbsaPublication.setAuthors(databaseJTable.getModel().getValueAt(i, 2).toString());
+			dbsaPublication.setLinks(databaseJTable.getModel().getValueAt(i, 3).toString());
+			dbsaPublication.setYear(Integer.parseInt(databaseJTable.getModel().getValueAt(i, 4).toString()));
+			dbsaPublication.setAbstractPub(databaseJTable.getModel().getValueAt(i, 5).toString());
+			dbsaPublication.setPublisher(databaseJTable.getModel().getValueAt(i, 6).toString());
+			System.out.println(dbsaPublication.getAuthors());
+			
+			dbsaPublicationUpdateList.add(dbsaPublication);
+		}
+		
+//		for(int j = 0; j < dbsaPublicationUpdateList.size(); j++){
+//			System.out.println(dbsaPublicationUpdateList.get(j).getAuthors());
+//		}
+		return dbsaPublicationUpdateList;
+	}
+	
+	
 	private JPanel getPublicationActionsJPanel() {
 		if (publicationActionsJPanel == null) {
 			publicationActionsJPanel = new JPanel();

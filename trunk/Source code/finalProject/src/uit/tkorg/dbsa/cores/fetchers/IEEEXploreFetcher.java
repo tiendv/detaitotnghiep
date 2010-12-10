@@ -28,7 +28,7 @@ public class IEEEXploreFetcher {
 
 	OutputPrinter status;
     final static HTMLConverter htmlConverter = new HTMLConverter();  
-    private static final int MAX_FETCH = 50;//100
+    private static final int MAX_FETCH = 1000;//100
     private static int perPage = MAX_FETCH;
 	static int hits = 0;
 	static int unparseable = 0;

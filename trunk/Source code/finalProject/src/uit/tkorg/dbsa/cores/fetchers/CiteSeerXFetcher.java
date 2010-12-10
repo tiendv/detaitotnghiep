@@ -61,13 +61,16 @@ public class CiteSeerXFetcher {
 	
 	public boolean processQuery(String keyword/*, String type, String feedType*/){
 	
+		shouldContinue = true;
 		//replace all white-space to '+'
 		keyword = keyword.replaceAll("\\s", "+");
 				
 		String queryString = baseURL+keyword+feedAction+feedAtom+"&sort=rel";
 		List<BibtexEntry> entries = new ArrayList<BibtexEntry>();
 		System.out.println(queryString);
+		
 		try {
+			
 			URL citeseerUrl = new URL(queryString);
 			HttpURLConnection citeseerConnection = (HttpURLConnection) citeseerUrl.openConnection();
 			InputStream inputStream = citeseerConnection.getInputStream();
@@ -93,11 +96,13 @@ public class CiteSeerXFetcher {
             		
 	            	
 	            	Set<String> fields = entry.getAllFields();
+	            	
 	            	for(String f:fields){
 	            		System.out.println(f+":"+entry.getField(f));
 	            	}	
 	            	
 	            	DBSAApplication.fetcherResultPanel.setRowNumber(1);
+	            	
 	            	if(entry.getField(DBSAApplicationConst.TITLE) == null){
 	            		entry.setField((DBSAApplicationConst.TITLE), "");
 	            	}

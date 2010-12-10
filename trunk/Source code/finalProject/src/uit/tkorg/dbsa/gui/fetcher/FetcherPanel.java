@@ -59,9 +59,11 @@ public class FetcherPanel extends JPanel {
 	private JLabel maxResultLabel;
 	private JCheckBox ieeexploreDLCheckBox;
 	private JSpinner acmJSpinner;
-	private JSpinner ieeexploreJSpinner1;
+	private JSpinner ieeexploreJSpinner;
+	private final int IEEE_MAX_RESULT = 1000;
 	private JCheckBox citeseerDLCheckBox;
-	private JSpinner citeseerJSpinner2;
+	private JSpinner citeseerJSpinner;
+	private final int CITESEER_MAX_RESULT = 100;
 	private JPanel chooseJPanel;
 	private JProgressBar acmJProgressBar;
 	private JProgressBar citeseerJProgressBar;
@@ -312,7 +314,7 @@ public class FetcherPanel extends JPanel {
 							Thread citeseerThread = new Thread (new Runnable(){
 								@Override
 								public void run() {
-										setCiteResultNumber(Integer.parseInt(citeseerJSpinner2.getValue().toString()));
+										setCiteResultNumber(Integer.parseInt(citeseerJSpinner.getValue().toString()));
 										citeseerJProgressBar.setIndeterminate(true);
 										citeseerJProgressBar.setStringPainted(true);
 										citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
@@ -334,7 +336,7 @@ public class FetcherPanel extends JPanel {
 							Thread ieeeThread = new Thread (new Runnable(){
 								@Override
 								public void run() {
-										setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner1.getValue().toString()));
+										setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner.getValue().toString()));
 										ieeeploreJProgressBar.setIndeterminate(true);
 										ieeeploreJProgressBar.setStringPainted(true);
 										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
@@ -500,22 +502,22 @@ public class FetcherPanel extends JPanel {
 	}
 
 	private JSpinner getCiteseerJSpinner2() {
-		if (citeseerJSpinner2 == null) {
-			citeseerJSpinner2 = new JSpinner();
-			citeseerJSpinner2.addChangeListener(new ChangeListener() {
+		if (citeseerJSpinner == null) {
+			citeseerJSpinner = new JSpinner();
+			citeseerJSpinner.addChangeListener(new ChangeListener() {
 	
 				public void stateChanged(ChangeEvent event) {
-					if (Integer.parseInt(citeseerJSpinner2.getValue().toString()) < 1) {
+					if (Integer.parseInt(citeseerJSpinner.getValue().toString()) < 1) {
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
-						citeseerJSpinner2.setValue(1);
-					} else if (Integer.parseInt(citeseerJSpinner2.getValue().toString()) > 50) {
+						citeseerJSpinner.setValue(1);
+					} else if (Integer.parseInt(citeseerJSpinner.getValue().toString()) > CITESEER_MAX_RESULT) {
 						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
-						citeseerJSpinner2.setValue(50);
+						citeseerJSpinner.setValue(CITESEER_MAX_RESULT);
 					}
 				}
 			});
 		}
-		return citeseerJSpinner2;
+		return citeseerJSpinner;
 	}
 
 	private JCheckBox getCiteseerDLCheckBox() {
@@ -529,23 +531,23 @@ public class FetcherPanel extends JPanel {
 	}
 
 	private JSpinner getIeeexploreJSpinner1() {
-		if (ieeexploreJSpinner1 == null) {
-			ieeexploreJSpinner1 = new JSpinner();
+		if (ieeexploreJSpinner == null) {
+			ieeexploreJSpinner = new JSpinner();
 			
-			ieeexploreJSpinner1.addChangeListener(new ChangeListener() {
+			ieeexploreJSpinner.addChangeListener(new ChangeListener() {
 	
 				public void stateChanged(ChangeEvent event) {
-					if (Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) < 1) {
+					if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) < 1) {
 						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
-						ieeexploreJSpinner1.setValue(1);
-					} else if (Integer.parseInt(ieeexploreJSpinner1.getValue().toString()) > 50) {
+						ieeexploreJSpinner.setValue(1);
+					} else if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) > IEEE_MAX_RESULT) {
 						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
-						ieeexploreJSpinner1.setValue(50);
+						ieeexploreJSpinner.setValue(IEEE_MAX_RESULT);
 					}
 				}
 			});
 		}
-		return ieeexploreJSpinner1;
+		return ieeexploreJSpinner;
 	}
 
 	private JSpinner getAcmJSpinner() {

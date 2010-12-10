@@ -127,7 +127,7 @@ public class DBSAAboutDialog extends JDialog {
 	
 	public static void updateTextsOfComponents() {
 		String textContent = "";
-		textContent +=DBSAResourceBundle.res.getString("application.title") + "\n\n";
+		textContent +=DBSAResourceBundle.res.getString("application.name") + "\n\n";
 		textContent += DBSAResourceBundle.res.getString("version") + "\n\n";
 		textContent += DBSAResourceBundle.res.getString("copyright") + "\n\n";
 		
