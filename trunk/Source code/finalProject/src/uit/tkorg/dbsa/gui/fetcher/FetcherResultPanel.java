@@ -1,13 +1,17 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -24,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -128,12 +134,48 @@ public class FetcherResultPanel extends JPanel {
 	}
 
 	private JEditorPane getLinkJTextArea() {
-		if (linkJTextArea == null) {
-			linkJTextArea = new JEditorPane("text/html","");
-			linkJTextArea.setEditable(false);
-			linkJTextArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
+		if (linkJEditorPane == null) {
+			linkJEditorPane = new JEditorPane("text/html","");
+			linkJEditorPane.setEditable(false);
+			linkJEditorPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
+			linkJEditorPane.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					try {
+						URL url = new URL(linkJEditorPane.getText().replaceAll("\\<.*?>",""));
+						URI uri = url.toURI();
+						Desktop.getDesktop().browse(uri);
+						
+					}catch (URISyntaxException ex) {
+						// TODO Auto-generated catch block
+						ex.printStackTrace();
+					} catch (IOException ex2) {
+						// TODO Auto-generated catch block
+						ex2.printStackTrace();
+					}
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {	
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {	
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {	}
+				
+			});
+			
 		}
-		return linkJTextArea;
+		return linkJEditorPane;
 	}
 
 	private JLabel getLinkJLabel() {
@@ -440,7 +482,7 @@ public class FetcherResultPanel extends JPanel {
 					
 				titleJTextArea.setText(model.getValueAt(n, 1).toString());
 				authorsJTextArea.setText(model.getValueAt(n, 2).toString());				
-				linkJTextArea.setText(model.getValueAt(n, 3).toString());
+				linkJEditorPane.setText("<html><body><a href='" + "'>" + model.getValueAt(n, 3).toString() + "</><hr></body></html>");
 				yearJTextArea.setText(model.getValueAt(n, 4).toString());
 				abstractJTextArea.setText(model.getValueAt(n, 5).toString());
 				publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 6).toString());
@@ -470,6 +512,7 @@ public class FetcherResultPanel extends JPanel {
 		});
 		return resultsJTable;
 	}
+	
 	/*
 	 * check article is duplicated
 	 */
@@ -553,7 +596,7 @@ public class FetcherResultPanel extends JPanel {
 
 	boolean abc = false;
 	private JLabel linkJLabel;
-	private JEditorPane linkJTextArea;
+	private JEditorPane linkJEditorPane;
 	private JScrollPane jScrollPane0;
 	
 	private JButton getSaveJButton() {
@@ -573,7 +616,7 @@ public class FetcherResultPanel extends JPanel {
 					//default icon, custom title
 					int n = 0;
 					boolean checkInsert = false;
-					System.out.println("numberarray size = " + duplicateNumber);
+					//System.out.println("numberarray size = " + duplicateNumber);
 					if(duplicateNumber > 0){
 						n = JOptionPane.showConfirmDialog(
 					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("notice.data.duplicate"),
@@ -588,18 +631,17 @@ public class FetcherResultPanel extends JPanel {
 					
 					if(duplicateNumber == 0){
 						int k = JOptionPane.showConfirmDialog(
-							    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("notice.save.data"),
-							    "An Question", JOptionPane.YES_NO_OPTION);
+					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("notice.save.data"),
+					    "An Question", JOptionPane.YES_NO_OPTION);
+					
+				
+						if(k == JOptionPane.YES_OPTION){
+							//insert data to database
+							checkInsert = insertToDatabase();
+						}else if(k == JOptionPane.NO_OPTION){
 							
-						
-								if(k == JOptionPane.YES_OPTION){
-									//insert data to database
-									checkInsert = insertToDatabase();
-								}else if(k == JOptionPane.NO_OPTION){
-									
-									//JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.save.data"));
-								}
-						
+							//JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.save.data"));
+						}
 					}
 					
 					if(checkInsert == true){
@@ -642,7 +684,7 @@ public class FetcherResultPanel extends JPanel {
 			
 			for(int k = 0; k < dbsaPublicationCheckList.size(); k++){
 				dbsaPublicationCheckList.remove(k);
-				System.out.println("dbsaPublicationCheckList" + dbsaPublicationCheckList.size());
+//				System.out.println("dbsaPublicationCheckList" + dbsaPublicationCheckList.size());
 			}
 			
 			titleJTextArea.setText("");
@@ -671,8 +713,7 @@ public class FetcherResultPanel extends JPanel {
 					// TODO Auto-generated method stub
 					removeRowsIsSelected();
 					
-				}
-				
+				}	
 			});
 		}
 		return deleteJButton;
@@ -687,9 +728,7 @@ public class FetcherResultPanel extends JPanel {
 			
 			if(resultsJTable.getModel().getValueAt(i, 7) != null
 				&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
-				
-				//check ++;
-				// --;
+			
 				model.removeRow(i);
 				
 				duplicateNumber = 0;
@@ -794,6 +833,7 @@ public class FetcherResultPanel extends JPanel {
 		return link;
 	}
 	
+	@SuppressWarnings("static-access")
 	public  void setYear(int year){
 		this.year = year;
 	}
@@ -826,6 +866,7 @@ public class FetcherResultPanel extends JPanel {
 		return mark;
 	}
 	
+	@SuppressWarnings("static-access")
 	public void setHyperLink(String hyperLink){
 		try {
 			this.hyperlink = new URL(hyperLink);
