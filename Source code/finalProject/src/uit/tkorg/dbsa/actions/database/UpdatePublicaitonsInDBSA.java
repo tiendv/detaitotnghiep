@@ -24,7 +24,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 		 * 
 		 * @param updateList : list DBSAPublication for update
 		 */
-		public void updateListData (List<DBSAPublication> updateList) {
+		public static void updateListData (List<DBSAPublication> updateList) {
 			for(int i =0 ; i < updateList.size();i++) {
 				updatePublication(updateList.get(i));
 			}
@@ -34,7 +34,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 		 * 
 		 * @param pubUpdate : Publication for update 
 		 */
-		public void updatePublication (DBSAPublication pubUpdate) {
+		public static void updatePublication (DBSAPublication pubUpdate) {
 			Session session = null;
 			try
 			{
@@ -42,6 +42,9 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 				session = sessionFactory.openSession();
 				Transaction tx = session.beginTransaction();
 				DBSAPublication temp = (DBSAPublication) session.get(DBSAPublication.class , pubUpdate.getId());
+				if(temp == null){
+					System.out.println("temp = null");
+				}
 				temp.setAuthors(pubUpdate.getAuthors());
 				temp.setAbstractPub(pubUpdate.getAbstractPub());
 				temp.setPublisher(pubUpdate.getPublisher());
