@@ -21,9 +21,11 @@ public class URLRenderer extends DefaultTableCellRenderer implements
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		super.getTableCellRendererComponent(table, value, isSelected, false,
 				row, column);
-		
-		setText("<html><body><a href='" + "'>"+  value.toString() + "</><hr></body></html>" );
-		
+		if(value != null) {
+			setText("<html><body><a href='" + "'>"+  value.toString() + "</><hr></body></html>" );
+		}else{
+			setText("");
+		}
 		return this;
 	}
 
