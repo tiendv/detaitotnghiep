@@ -7,7 +7,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -30,8 +33,11 @@ import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 public class CiteSeerXFetcher {
 	
 	private static boolean shouldContinue = true;
-	public static final String baseURL="http://citeseerx.ist.psu.edu/search?q=";
-    
+	public static String baseURL = "http://citeseerx.ist.psu.edu/search?q=";
+	public static String startSearchYearPub = "http://citeseer.ist.psu.edu/search?q=";
+	public static String endSearchYearPub = "&submit=Search&sort=rlv";
+	private static Pattern searchPattern = Pattern.compile("\\d+");
+	
 	 /* search title, author ,table
 	 * doc
 	 * auth
@@ -65,13 +71,17 @@ public class CiteSeerXFetcher {
 		//replace all white-space to '+'
 		keyword = keyword.replaceAll("\\s", "+");
 				
-		String queryString = baseURL+keyword+feedAction+feedAtom+"&sort=rel";
+		String queryString = baseURL + keyword + feedAction + feedAtom + "&sort=rel";
 		List<BibtexEntry> entries = new ArrayList<BibtexEntry>();
 		System.out.println(queryString);
 		
 		try {
 			
 			URL citeseerUrl = new URL(queryString);
+			String yearURL = startSearchYearPub + keyword + endSearchYearPub;
+			URL url1 = new URL(yearURL);
+			String pages = getResults(url1);
+			
 			HttpURLConnection citeseerConnection = (HttpURLConnection) citeseerUrl.openConnection();
 			InputStream inputStream = citeseerConnection.getInputStream();
 			
@@ -110,6 +120,27 @@ public class CiteSeerXFetcher {
 	            	if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
 	            		entry.setField((DBSAApplicationConst.AUTHOR), "");
 	            	}
+	            	//System.out.println("by " + entry.getField(DBSAApplicationConst.AUTHOR));
+	            	//System.out.println(pages);
+	            	String searchString = (entry.getField(DBSAApplicationConst.AUTHOR));
+	            	int ind = pages.indexOf(searchString);
+	            	String number = "0";
+	            	
+	            	if(ind != -1){
+		            	String subString = pages.substring(ind, Math.min(ind + 200, pages.length()));
+		    	        
+		    	        
+		    	        String temp = subString.replaceAll("&#8212;"," ");
+		    	        
+		    	        System.out.println(temp);
+		    	        Matcher m = searchPattern.matcher(temp);
+		    	        
+		    	        if(m.find()){
+		    	        	number = m.group(0);
+			            	System.out.println(number);
+			            	
+		    	        }
+	            	}
 	            	DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
 	            	if(entry.getField(DBSAApplicationConst.CITESEERURL) == null){
 	            		entry.setField((DBSAApplicationConst.CITESEERURL), "");
@@ -117,9 +148,9 @@ public class CiteSeerXFetcher {
 	            	DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.CITESEERURL));
 	            	
 	            	if(entry.getField(DBSAApplicationConst.YEAR) == null){
-	            		entry.setField((DBSAApplicationConst.YEAR), "");
+	            		entry.setField(number, "");
 	            	}
-	            	DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+	            	DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(number));
 	            	if(entry.getField(DBSAApplicationConst.ABSTRACT) == null){
 	            		entry.setField((DBSAApplicationConst.ABSTRACT), "");
 	            	}
@@ -146,10 +177,19 @@ public class CiteSeerXFetcher {
 		return true;
 	}
 	
-/*	public static void main(String [] args) {
-		String keyword = "Controlled,   Systematic, and Efficient Code Replacement for Running Java Programs";
-		CiteSeerXFetcher fetcher = new CiteSeerXFetcher();
-		fetcher.processQuery(keyword);
-	}*/
+	
+	public static String getResults(URL source) throws IOException {
+        
+        InputStream in = source.openStream();
+        StringBuffer sb = new StringBuffer();
+        byte[] buffer = new byte[256];
+        while(true) {
+            int bytesRead = in.read(buffer);
+            if(bytesRead == -1) break;
+            for (int i=0; i<bytesRead; i++)
+                sb.append((char)buffer[i]);
+        }
+        return sb.toString();
+    }
 	
 }

@@ -132,6 +132,7 @@ public class DBSAToolBar extends JPanel {
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
 			fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_BUTTON_TOOLBAR_ICON)));
+			fetcherJButton.setOpaque(false);
 			fetcherJButton.addMouseListener(new MouseListener(){
 
 				@Override
@@ -174,6 +175,7 @@ public class DBSAToolBar extends JPanel {
 			//checkConnectionJButton.setEnabled(false);
 			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 			checkConnectionJButton.setToolTipText("Check Connection");
+			checkConnectionJButton.setOpaque(true);
 			checkConnectionJButton.addMouseListener(new MouseListener(){
 
 				@Override
