@@ -120,8 +120,7 @@ public class CiteSeerXFetcher {
 	            	if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
 	            		entry.setField((DBSAApplicationConst.AUTHOR), "");
 	            	}
-	            	//System.out.println("by " + entry.getField(DBSAApplicationConst.AUTHOR));
-	            	//System.out.println(pages);
+	            
 	            	String searchString = (entry.getField(DBSAApplicationConst.AUTHOR));
 	            	int ind = pages.indexOf(searchString);
 	            	String number = "0";
@@ -129,10 +128,8 @@ public class CiteSeerXFetcher {
 	            	if(ind != -1){
 		            	String subString = pages.substring(ind, Math.min(ind + 200, pages.length()));
 		    	        
-		    	        
 		    	        String temp = subString.replaceAll("&#8212;"," ");
 		    	        
-		    	        System.out.println(temp);
 		    	        Matcher m = searchPattern.matcher(temp);
 		    	        
 		    	        if(m.find()){
