@@ -35,9 +35,10 @@ public class CiteSeerXFetcher {
 	private static boolean shouldContinue = true;
 	public static String baseURL = "http://citeseerx.ist.psu.edu/search?q=";
 	public static String startSearchYearPub = "http://citeseer.ist.psu.edu/search?q=";
-	public static String endSearchYearPub = "&submit=Search&sort=rlv";
+	public static String endSearchYearPub = "&submit=Search&sort=rlv&start=";
+	private static int resultNumber = 0;
 	private static Pattern searchPattern = Pattern.compile("\\d+");
-	
+	private static String pages = null;
 	 /* search title, author ,table
 	 * doc
 	 * auth
@@ -78,9 +79,6 @@ public class CiteSeerXFetcher {
 		try {
 			
 			URL citeseerUrl = new URL(queryString);
-			String yearURL = startSearchYearPub + keyword + endSearchYearPub;
-			URL url1 = new URL(yearURL);
-			String pages = getResults(url1);
 			
 			HttpURLConnection citeseerConnection = (HttpURLConnection) citeseerUrl.openConnection();
 			InputStream inputStream = citeseerConnection.getInputStream();
@@ -94,8 +92,19 @@ public class CiteSeerXFetcher {
             
             int checkResult = 0;
             for(BibtexEntry entry : entries){
-
             	
+            	if(checkResult == 0){
+            		String yearURL = startSearchYearPub + keyword + endSearchYearPub ;
+	    			URL url1 = new URL(yearURL);
+	    			System.out.println(url1);
+	    			pages = getResults(url1);
+            	}else if(checkResult%10 == 0){
+            		resultNumber += 10;
+	    			String yearURL = startSearchYearPub + keyword + endSearchYearPub + resultNumber;
+	    			URL url1 = new URL(yearURL);
+	    			System.out.println(url1);
+	    			pages = getResults(url1);
+            	}
             	if(checkResult >= FetcherPanel.getCiteResultNumber()){
             		shouldContinue = false;
             		break;
@@ -122,11 +131,12 @@ public class CiteSeerXFetcher {
 	            	}
 	            
 	            	String searchString = (entry.getField(DBSAApplicationConst.AUTHOR));
+	            	
 	            	int ind = pages.indexOf(searchString);
 	            	String number = "0";
 	            	
 	            	if(ind != -1){
-		            	String subString = pages.substring(ind, Math.min(ind + 200, pages.length()));
+		            	String subString = pages.substring(ind, ind + searchString.length() + 100);
 		    	        
 		    	        String temp = subString.replaceAll("&#8212;"," ");
 		    	        
@@ -158,16 +168,16 @@ public class CiteSeerXFetcher {
             }
             
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

@@ -434,7 +434,7 @@ public class FetcherResultPanel extends JPanel {
 					dbsa.setTitle(getTitle());
 					dbsa.setAuthors(getAuthor());
 					dbsa.setLinks(getLink());
-					setHyperLink(dbsa.getLinks());
+					//setHyperLink(dbsa.getLinks());
 					dbsa.setYear(getYear());
 					dbsa.setAbstractPub(getAbstract());
 					dbsa.setPublisher(getPublisher());

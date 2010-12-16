@@ -508,11 +508,13 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(citeseerJSpinner.getValue().toString()) < 1) {
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
 						citeseerJSpinner.setValue(1);
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
+						
 					} else if (Integer.parseInt(citeseerJSpinner.getValue().toString()) > CITESEER_MAX_RESULT) {
-						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
 						citeseerJSpinner.setValue(CITESEER_MAX_RESULT);
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
+						
 					}
 				}
 			});
@@ -538,11 +540,13 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) < 1) {
-						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
 						ieeexploreJSpinner.setValue(1);
-					} else if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) > IEEE_MAX_RESULT) {
 						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
+						
+					} else if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) > IEEE_MAX_RESULT) {
 						ieeexploreJSpinner.setValue(IEEE_MAX_RESULT);
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
+						
 					}
 				}
 			});
@@ -558,11 +562,13 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1) {
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
 						acmJSpinner.setValue(1);
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
+						
 					} else if (Integer.parseInt(acmJSpinner.getValue().toString()) > 50) {
-						JOptionPane.showMessageDialog(null,DBSAResourceBundle.res.getString("please.input.result.number"));
 						acmJSpinner.setValue(50);
+						JOptionPane.showMessageDialog(null,DBSAResourceBundle.res.getString("please.input.result.number"));
+						
 					}
 				}
 			});
