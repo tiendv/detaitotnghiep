@@ -124,9 +124,6 @@ public class FetcherPanel extends JPanel {
 				for(int i = 0; i < dbsaSubjectList.size(); i++){
 					keywordJComboBox.addItem(dbsaSubjectList.get(i).getSbj_name());
 				}
-			}else{
-				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("subject.does.not.exist"));
-				
 			}
 			keywordJComboBox.addMouseListener(new MouseListener(){
 

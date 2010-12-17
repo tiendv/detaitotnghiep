@@ -27,6 +27,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.database.DeletePublicaitonInDBSA;
+import uit.tkorg.dbsa.actions.database.DeleteSubject;
 import uit.tkorg.dbsa.actions.database.InsertSubject;
 import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.actions.database.LoadSubject;
@@ -70,8 +71,10 @@ public class DatabaseManagementPanel extends JPanel {
 	private static boolean subjectMark = false;
 	
 	private boolean checkRemoveRow = false;
-//	private boolean checkRemoveSubjectRow = false;
 	DeletePublicaitonInDBSA deletePublication = new DeletePublicaitonInDBSA();
+	
+	DeleteSubject deleteSubject = new DeleteSubject();
+	
 	private ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
 	ArrayList<DBSAPublication> dbsaPublicationUpdateList = new ArrayList<DBSAPublication>();
 	
@@ -96,6 +99,30 @@ public class DatabaseManagementPanel extends JPanel {
 			deleteSubjectJButton = new JButton();
 			deleteSubjectJButton.setText(DBSAResourceBundle.res.getString("delete.sub"));
 			deleteSubjectJButton.setEnabled(false);
+			
+			deleteSubjectJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					for (int i = subjectJTable.getRowCount() - 1; i > 0; i--) {
+						ArrayList<Subject> subjectList = new ArrayList<Subject>();
+						if (subjectModel.getValueAt(i, 3) != null && subjectModel.getValueAt(i, 3).toString().equals("true")) {
+							Subject subject = new Subject();
+							subject.setId(Integer.parseInt(subjectModel.getValueAt(i, 1).toString()));
+							
+							subjectList.add(subject);
+							deleteSubject.deleteSubject(subject);
+							
+							subjectModel.removeRow(i);
+						}
+					}
+					for (int j = 0; j < subjectJTable.getRowCount(); j++) {
+						subjectJTable.getModel().setValueAt(j + 1, j, 0);
+					}
+				}
+				
+			});
 			
 		}
 		return deleteSubjectJButton;
