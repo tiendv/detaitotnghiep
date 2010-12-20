@@ -5,6 +5,8 @@ package uit.tkorg.dbsa.actions.searchs;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import uit.tkorg.dbsa.core.searchengines.GoogleSearchEngine;
 
 /**
@@ -85,7 +87,7 @@ public class SearchAuthorHomePage {
 		
 		// title: name's Homepage
 		
-		String authorHomepage3 = authorname+"'s"+" "+"Homepage";
+		String authorHomepage3 = authorname+"&#39;s"+" "+"Homepage";
 		
 		//System.out.println("Chuoi so sanh"+ authorHomepage2);
 		
@@ -115,6 +117,7 @@ public class SearchAuthorHomePage {
 	}
 	
 	public static void main(String[] args) {
+
 		String url =getHomePage("Weiyi Meng");
 		if(url != null)
 			System.out.println("Home page la:"+url);
