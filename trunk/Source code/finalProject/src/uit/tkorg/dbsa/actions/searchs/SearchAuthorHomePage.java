@@ -26,10 +26,11 @@ public class SearchAuthorHomePage {
 		Boolean flag = false;
 		ArrayList<String> listResult = new ArrayList<String>();
 		ArrayList<String> listResult2 = new ArrayList<String>();
+		ArrayList<String> listResult3 = new ArrayList<String>();
 		GoogleSearchEngine search = new GoogleSearchEngine();
 		String query = "\"home page\","+"\""+authorname+"\""; // search "homepage","authorname"
 		String query2 = authorname;// make query only authorname
-		System.out.printf("String truy van "+query+"\n");
+		String query3 = authorname +","+"home page";
 		
 		listResult = search.makeQuery(query, 20);
 		if(listResult.isEmpty()) {
@@ -57,6 +58,24 @@ public class SearchAuthorHomePage {
 				for(int i =0;i < listResult2.size();i++) {
 					if (processResult(listResult2.get(i),authorname) == true) {
 						String[] tempArr = listResult2.get(i).split("<br>");
+						url = tempArr[0];
+						flag=true;
+						break;
+					} 
+						
+				}
+			}
+		}
+		if(flag == false) {
+			listResult3 = search.makeQuery(query3, 20);
+			if(listResult3.isEmpty()) {
+				flag = false;
+				return "";
+			}
+			else {
+				for(int i =0;i < listResult3.size();i++) {
+					if (processResult(listResult3.get(i),authorname) == true) {
+						String[] tempArr = listResult3.get(i).split("<br>");
 						url = tempArr[0];
 						flag=true;
 						break;
@@ -106,19 +125,22 @@ public class SearchAuthorHomePage {
 		// title : name's Home page
 		
 		String authorHomepage6 = authorname+"&#39;s"+" "+"Home page";
+		
+		// title : name - Homepage
+		String authorHomepage7 = authorname+" "+ "-"+ " "+"Homepage";
 	
 		//System.out.println("duoi" + authorHompage);
 		if(authorHomepage.equals( tempArr[1] )== true || authorname.equals(tempArr[1])==true|| authorPersonal.equals(tempArr[1])==true 
 				||authorHomepage2.equals(tempArr[1])==true ||authorHomepage3.equals(tempArr[1])==true || authorHomepage4.equals(tempArr[1])==true
-				||authorHomePage5.equals(tempArr[1])==true || authorHomepage6.equals(tempArr[1])==true)
+				||authorHomePage5.equals(tempArr[1])==true || authorHomepage6.equals(tempArr[1])==true || authorHomepage7.equals(tempArr[1])==true)
 			return true;
 		
 		return false;
 	}
 	
 	public static void main(String[] args) {
-
 		String url =getHomePage("Weiyi Meng");
+
 		if(url != null)
 			System.out.println("Home page la:"+url);
 		else
