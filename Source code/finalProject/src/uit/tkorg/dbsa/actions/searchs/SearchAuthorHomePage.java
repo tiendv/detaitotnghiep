@@ -75,18 +75,47 @@ public class SearchAuthorHomePage {
 		//http://wwwinfo.deis.unical.it/trunfio/<br>Paolo Trunfio - Home page
 		String[] tempArr = urlWithTitle.split("<br>");
 		System.out.println( tempArr[1]);
-		String authorHompage = authorname+" "+ "-"+ " "+"Home page";
-		// - Personal Page
+		//title : name - Home Page
+		
+		String authorHomepage = authorname+" "+ "-"+ " "+"Home page";
+		
+		// title : name's Home Page
+		
+		String authorHomepage2 = authorname+"&#39;s"+" "+"Home Page";
+		
+		// title: name's Homepage
+		
+		String authorHomepage3 = authorname+"'s"+" "+"Homepage";
+		
+		//System.out.println("Chuoi so sanh"+ authorHomepage2);
+		
+		//title name's - Homepage
+		
+		String authorHomepage4 = authorname+" "+ "-"+ " "+"Homepage";
+		
+		// title: name - Personal Page
+		
 		String authorPersonal = authorname+" "+ "-"+ " "+"Personal Page";
+		
+		//title: Home Page of name
+		
+		String authorHomePage5 = "Home Page of"+" " + authorname;
+		
+		// title : name's Home page
+		
+		String authorHomepage6 = authorname+"&#39;s"+" "+"Home page";
+	
 		//System.out.println("duoi" + authorHompage);
-		if(authorHompage.equals( tempArr[1] )== true || authorname.equals(tempArr[1])|| authorPersonal.equals(tempArr[1]))
+		if(authorHomepage.equals( tempArr[1] )== true || authorname.equals(tempArr[1])==true|| authorPersonal.equals(tempArr[1])==true 
+				||authorHomepage2.equals(tempArr[1])==true ||authorHomepage3.equals(tempArr[1])==true || authorHomepage4.equals(tempArr[1])==true
+				||authorHomePage5.equals(tempArr[1])==true || authorHomepage6.equals(tempArr[1])==true)
 			return true;
 		
 		return false;
 	}
 	
 	public static void main(String[] args) {
-		String url =getHomePage("Amelia Carlson");
+		String url =getHomePage("Weiyi Meng");
 		if(url != null)
 			System.out.println("Home page la:"+url);
 		else
