@@ -7,14 +7,14 @@
 package uit.tkorg.dbsa.gui.main;
 
 import java.awt.Color;
-import java.awt.Frame;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -39,6 +39,7 @@ public class AboutFrame extends JFrame {
 	private int xLocation;
 	private int yLocation;
 	private JFrame disaJFrame;
+	private JSpinner jSpinner0;
 
 	public AboutFrame() {
 		initComponents();
@@ -54,6 +55,26 @@ public class AboutFrame extends JFrame {
 		setSize(375, 328);
 		setLocation(xLocation, yLocation);
 	}
+	private JPanel getJPanel0() {
+		if (jPanel0 == null) {
+			jPanel0 = new JPanel();
+			jPanel0.setBackground(new Color(255, 255, 128));
+			jPanel0.setLayout(new GroupLayout());
+			jPanel0.add(getJSpinner0(), new Constraints(new Leading(94, 69, 10, 10), new Leading(127, 45, 10, 10)));
+		}
+		return jPanel0;
+	}
+
+
+	private JSpinner getJSpinner0() {
+		if (jSpinner0 == null) {
+			jSpinner0 = new JSpinner();
+			jSpinner0.setModel(new SpinnerNumberModel(1, 1, 100, 6));
+		}
+		return jSpinner0;
+	}
+
+
 	public AboutFrame(JFrame mainFrame) {
 		super();
 		disaJFrame = mainFrame;
@@ -133,15 +154,6 @@ public class AboutFrame extends JFrame {
 			jTextArea0.setText(temp);
 		}
 		return jTextArea0;
-	}
-
-	private JPanel getJPanel0() {
-		if (jPanel0 == null) {
-			jPanel0 = new JPanel();
-			jPanel0.setBackground(new Color(255, 255, 128));
-			jPanel0.setLayout(new GroupLayout());
-		}
-		return jPanel0;
 	}
 
 }

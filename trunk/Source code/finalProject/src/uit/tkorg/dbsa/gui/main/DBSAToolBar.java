@@ -2,6 +2,7 @@ package uit.tkorg.dbsa.gui.main;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
@@ -37,14 +37,15 @@ public class DBSAToolBar extends JPanel {
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(null, null, TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(
-				51, 51, 51)));
+		setBorder(BorderFactory.createTitledBorder(null, "Toolbar", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+				12), new Color(51, 51, 51)));
+		setPreferredSize(new Dimension(320, 80));
 		setLayout(new GroupLayout());
-		add(getResultJButton(), new Constraints(new Leading(291, 12, 12), new Bilateral(12, 12, 10)));
-		add(getDatabaseJButton(), new Constraints(new Leading(198, 12, 12), new Bilateral(12, 12, 10)));
-		add(getFetcherJButton(), new Constraints(new Leading(105, 12, 12), new Bilateral(12, 12, 10)));
-		add(getCheckConnectionJButton(), new Constraints(new Leading(12, 12, 12), new Bilateral(12, 12, 10)));
-		setSize(555, 144);
+		add(getCheckConnectionJButton(), new Constraints(new Leading(12, 49, 12, 12), new Leading(0, 50, 12, 12)));
+		add(getFetcherJButton(), new Constraints(new Leading(73, 47, 12, 12), new Leading(0, 50, 12, 12)));
+		add(getDatabaseJButton(), new Constraints(new Leading(132, 49, 12, 12), new Leading(0, 50, 12, 12)));
+		add(getResultJButton(), new Constraints(new Leading(193, 48, 12, 12), new Leading(0, 50, 12, 12)));
+		//setSize(320, 240);
 	}
 
 	private JButton getResultJButton() {
@@ -172,10 +173,11 @@ public class DBSAToolBar extends JPanel {
 	private JButton getCheckConnectionJButton() {
 		if (checkConnectionJButton == null) {
 			checkConnectionJButton = new JButton();
+			//checkConnectionJButton.setVisible(false);
 			//checkConnectionJButton.setEnabled(false);
 			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 			checkConnectionJButton.setToolTipText("Check Connection");
-			checkConnectionJButton.setOpaque(true);
+			checkConnectionJButton.setOpaque(true);checkConnectionJButton.setSize(new Dimension(0,0));
 			checkConnectionJButton.addMouseListener(new MouseListener(){
 
 				@Override

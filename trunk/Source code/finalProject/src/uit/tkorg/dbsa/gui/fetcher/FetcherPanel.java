@@ -25,6 +25,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -59,6 +61,7 @@ public class FetcherPanel extends JPanel {
 	private JLabel maxResultLabel;
 	private JCheckBox ieeexploreDLCheckBox;
 	private JSpinner acmJSpinner;
+	private final int ACM_MAX_RESULT = 100;
 	private JSpinner ieeexploreJSpinner;
 	private final int IEEE_MAX_RESULT = 1000;
 	private JCheckBox citeseerDLCheckBox;
@@ -104,6 +107,7 @@ public class FetcherPanel extends JPanel {
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
 		initAcmSearchRadioButtonGroup();
+		
 		setSize(935, 477);
 	}
 	
@@ -489,7 +493,7 @@ public class FetcherPanel extends JPanel {
 			chooseJPanel.add(getIeeeploreJProgressBar(), new Constraints(new Bilateral(519, 14, 10), new Leading(53, 28, 12, 12)));
 			chooseJPanel.add(getIeeexploreJSpinner1(), new Constraints(new Leading(404, 48, 10, 10), new Leading(53, 27, 12, 12)));
 			chooseJPanel.add(getIeeexploreDLCheckBox(), new Constraints(new Leading(23, 30, 168), new Leading(53, 28, 12, 12)));
-			chooseJPanel.add(getCiteseerJSpinner2(), new Constraints(new Leading(404, 48, 29, 167), new Leading(98, 26, 12, 12)));
+			chooseJPanel.add(getCiteseerJSpinner(), new Constraints(new Leading(404, 48, 29, 167), new Leading(98, 26, 12, 12)));
 			chooseJPanel.add(getAcmJSpinner(), new Constraints(new Leading(404, 48, 35, 407), new Leading(138, 28, 12, 12)));
 			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(23, 29, 167), new Leading(97, 28, 12, 12)));
 			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(23, 35, 407), new Leading(138, 28, 12, 12)));
@@ -498,19 +502,21 @@ public class FetcherPanel extends JPanel {
 		return chooseJPanel;
 	}
 
-	private JSpinner getCiteseerJSpinner2() {
+	private JSpinner getCiteseerJSpinner() {
 		if (citeseerJSpinner == null) {
 			citeseerJSpinner = new JSpinner();
+			citeseerJSpinner.setModel(new SpinnerNumberModel(0, 0, CITESEER_MAX_RESULT, 1));
+			
 			citeseerJSpinner.addChangeListener(new ChangeListener() {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(citeseerJSpinner.getValue().toString()) < 1) {
 						citeseerJSpinner.setValue(1);
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number") + CITESEER_MAX_RESULT);
 						
 					} else if (Integer.parseInt(citeseerJSpinner.getValue().toString()) > CITESEER_MAX_RESULT) {
 						citeseerJSpinner.setValue(CITESEER_MAX_RESULT);
-						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number") + CITESEER_MAX_RESULT);
 						
 					}
 				}
@@ -532,17 +538,17 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getIeeexploreJSpinner1() {
 		if (ieeexploreJSpinner == null) {
 			ieeexploreJSpinner = new JSpinner();
-			
+			ieeexploreJSpinner.setModel(new SpinnerNumberModel(0, 0, IEEE_MAX_RESULT, 1));
 			ieeexploreJSpinner.addChangeListener(new ChangeListener() {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) < 1) {
 						ieeexploreJSpinner.setValue(1);
-						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number") + IEEE_MAX_RESULT);
 						
 					} else if (Integer.parseInt(ieeexploreJSpinner.getValue().toString()) > IEEE_MAX_RESULT) {
 						ieeexploreJSpinner.setValue(IEEE_MAX_RESULT);
-						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number"));
+						JOptionPane.showMessageDialog(null,  DBSAResourceBundle.res.getString("please.input.result.number") + IEEE_MAX_RESULT);
 						
 					}
 				}
@@ -554,19 +560,18 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getAcmJSpinner() {
 		if (acmJSpinner == null) {
 			acmJSpinner = new JSpinner();
+			acmJSpinner.setModel(new SpinnerNumberModel(0, 0, ACM_MAX_RESULT, 1));
 			
 			acmJSpinner.addChangeListener(new ChangeListener() {
 	
 				public void stateChanged(ChangeEvent event) {
-					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1) {
+					
+					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1 || Integer.parseInt(acmJSpinner.getValue().toString()) > 50) {
 						acmJSpinner.setValue(1);
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number"));
-						
-					} else if (Integer.parseInt(acmJSpinner.getValue().toString()) > 50) {
-						acmJSpinner.setValue(50);
-						JOptionPane.showMessageDialog(null,DBSAResourceBundle.res.getString("please.input.result.number"));
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number") + ACM_MAX_RESULT);
 						
 					}
+					
 				}
 			});
 		}
