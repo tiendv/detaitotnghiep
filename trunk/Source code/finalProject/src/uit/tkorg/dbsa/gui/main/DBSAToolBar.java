@@ -119,7 +119,7 @@ public class DBSAToolBar extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					dbsaTabFrame.setSelectedIndex(3);
+					dbsaTabFrame.setSelectedIndex(2);
 				}
 				
 			});
