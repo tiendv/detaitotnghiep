@@ -556,7 +556,7 @@ public class DBSAApplication extends JPanel {
 	
 	private static DBSAToolBar getDBSAToolBar(){
 		if(dbsaToolbar == null){
-			dbsaToolbar = new DBSAToolBar();
+			dbsaToolbar = new DBSAToolBar(getDBSATabpanel());
 		}
 		return dbsaToolbar;
 	}
