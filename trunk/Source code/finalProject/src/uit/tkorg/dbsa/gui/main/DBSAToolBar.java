@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -12,12 +14,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 
+import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.properties.files.GUIProperties;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -28,12 +32,15 @@ public class DBSAToolBar extends JPanel {
 	private JButton fetcherJButton;
 	private JButton databaseJButton;
 	private JButton resultJButton;
-	//private JFrame dbsaJFrame = null;
+	private JTabbedPane dbsaTabFrame = null;
 
-	public DBSAToolBar() {
+	private DBSAStatusBar statusMessage = new DBSAStatusBar();
+	
+	public DBSAToolBar(JTabbedPane dbsa) {
 		super();
 		
 		initComponents();
+		this.dbsaTabFrame = dbsa;
 	}
 
 	private void initComponents() {
@@ -43,8 +50,8 @@ public class DBSAToolBar extends JPanel {
 		setLayout(new GroupLayout());
 		add(getCheckConnectionJButton(), new Constraints(new Leading(12, 49, 12, 12), new Leading(0, 50, 12, 12)));
 		add(getFetcherJButton(), new Constraints(new Leading(73, 47, 12, 12), new Leading(0, 50, 12, 12)));
-		add(getDatabaseJButton(), new Constraints(new Leading(132, 49, 12, 12), new Leading(0, 50, 12, 12)));
-		add(getResultJButton(), new Constraints(new Leading(193, 48, 12, 12), new Leading(0, 50, 12, 12)));
+		add(getResultJButton(), new Constraints(new Leading(132, 49, 12, 12), new Leading(0, 50, 12, 12)));
+		add(getDatabaseJButton(), new Constraints(new Leading(193, 48, 12, 12), new Leading(0, 50, 12, 12)));
 		//setSize(320, 240);
 	}
 
@@ -52,6 +59,16 @@ public class DBSAToolBar extends JPanel {
 		if (resultJButton == null) {
 			resultJButton = new JButton();
 			resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_BUTTON_TOOLBAR_ICON)));
+			resultJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					
+					dbsaTabFrame.setSelectedIndex(1);
+				}
+				
+			});
+		
 			resultJButton.addMouseListener(new MouseListener(){
 
 				@Override
@@ -60,9 +77,11 @@ public class DBSAToolBar extends JPanel {
 					
 				}
 
-				@Override
+								@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
+					resultJButton.setToolTipText("Show fetcher results");
+					statusMessage.setDBSAProgressMessage("Show fetcher results");
 					resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.PRESSED_RESULT_BUTTON_TOOLBAR_ICON)));
 				}
 
@@ -70,6 +89,7 @@ public class DBSAToolBar extends JPanel {
 				public void mouseExited(MouseEvent e) {
 					// TODO Auto-generated method stub
 					resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_BUTTON_TOOLBAR_ICON)));
+					statusMessage.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
 				}
 
 				@Override
@@ -93,6 +113,16 @@ public class DBSAToolBar extends JPanel {
 			databaseJButton = new JButton();
 			databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_BUTTON_TOOLBAR_ICON)));
 			databaseJButton.setToolTipText("Database Manager");
+			
+			databaseJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					dbsaTabFrame.setSelectedIndex(3);
+				}
+				
+			});
 			databaseJButton.addMouseListener(new MouseListener(){
 
 				@Override
@@ -104,12 +134,15 @@ public class DBSAToolBar extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					// TODO Auto-generated method stub
+					databaseJButton.setToolTipText("Database management");
+					statusMessage.setDBSAProgressMessage("Database management");
 					databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.PRESSED_DATABASE_BUTTON_TOOLBAR_ICON)));
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
+					
+					statusMessage.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
 					databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_BUTTON_TOOLBAR_ICON)));
 				}
 
@@ -138,7 +171,7 @@ public class DBSAToolBar extends JPanel {
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					// TODO Auto-generated method stub
+					
 					
 				}
 
@@ -178,6 +211,15 @@ public class DBSAToolBar extends JPanel {
 			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
 			checkConnectionJButton.setToolTipText("Check Connection");
 			checkConnectionJButton.setOpaque(true);checkConnectionJButton.setSize(new Dimension(0,0));
+			checkConnectionJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+				
+			});
+			
 			checkConnectionJButton.addMouseListener(new MouseListener(){
 
 				@Override

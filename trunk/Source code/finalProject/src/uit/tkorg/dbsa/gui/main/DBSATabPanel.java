@@ -31,7 +31,7 @@ public class DBSATabPanel extends JTabbedPane {
 		setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
 		setBackground(Color.white);
 		addTab("Fetcher", getFetcherJPanel());
-		addTab("Classification", getClassificationJPanel());
+		//addTab("Classification", getClassificationJPanel());
 		addTab("Database management", getDatabaseManagementJPanel());
 		setSize(900, 500);
 	}
@@ -43,7 +43,7 @@ public class DBSATabPanel extends JTabbedPane {
 		}
 		addTab("Fetcher", getFetcherJPanel());
 		addTab("Fetcher result",getFetcherResultPanel());	
-		addTab("Classification", getClassificationJPanel());
+		//addTab("Classification", getClassificationJPanel());
 		addTab("Database management",getDatabaseManagementJPanel());
 
 		return dbsaJTabbedPane;
