@@ -457,23 +457,23 @@ public class FetcherResultPanel extends JPanel {
 			
 			if(resultsJTable.getRowCount() >= maxResult){
 				checkArticleIsDuplicated();
-				int n = 0;
-				System.out.println(FetcherPanel.fetched);
-				if(FetcherPanel.fetched){
-					System.out.println(FetcherPanel.fetched);
-					JOptionPane.showMessageDialog(null, "agfaweg");
-					
-					n = JOptionPane.showConfirmDialog(DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("do.you.want.to.show.fetcher.result"),
-						    "An Question", JOptionPane.YES_NO_OPTION);
-					
-					if(n == JOptionPane.YES_OPTION){
-						dbsaTabFrame.setSelectedIndex(1);
-						
-					}else if(n == JOptionPane.NO_OPTION){
-						
-					}
-					FetcherPanel.fetched = false;
-				}
+//				int n = 0;
+//				System.out.println(FetcherPanel.fetched);
+//				if(FetcherPanel.fetched){
+//					System.out.println(FetcherPanel.fetched);
+//					JOptionPane.showMessageDialog(null, "agfaweg");
+//					
+//					n = JOptionPane.showConfirmDialog(DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("do.you.want.to.show.fetcher.result"),
+//						    "An Question", JOptionPane.YES_NO_OPTION);
+//					
+//					if(n == JOptionPane.YES_OPTION){
+//						dbsaTabFrame.setSelectedIndex(1);
+//						
+//					}else if(n == JOptionPane.NO_OPTION){
+//						
+//					}
+//					FetcherPanel.fetched = false;
+//				}
 				if(resultsJTable.getRowCount() > 1){
 					
 					titleJTextArea.setText("abc");
