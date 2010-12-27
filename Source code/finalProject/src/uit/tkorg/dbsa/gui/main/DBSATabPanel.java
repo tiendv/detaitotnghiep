@@ -72,7 +72,7 @@ public class DBSATabPanel extends JTabbedPane {
 	
 	private FetcherResultPanel getFetcherResultPanel(){
 		if(fetcherResultPanel == null){
-			fetcherResultPanel = new FetcherResultPanel();
+			fetcherResultPanel = new FetcherResultPanel(this);
 		}
 		return fetcherResultPanel;
 	}

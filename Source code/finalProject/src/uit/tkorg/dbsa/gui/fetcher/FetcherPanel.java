@@ -97,6 +97,8 @@ public class FetcherPanel extends JPanel {
 	
 	private static DBSAStatusBar dbsaStatus = new DBSAStatusBar();
 	
+	public static boolean fetched = false;
+	
 	public FetcherPanel(JTabbedPane dbsa) {
 		initComponents();
 		this.dbsaTabFrame = dbsa;
@@ -260,7 +262,9 @@ public class FetcherPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					fetched = true;
 					fetcherFunction(fetcherJButton);
+					
 				}
 				
 			});
@@ -696,5 +700,6 @@ public class FetcherPanel extends JPanel {
 	public static int getCiteResultNumber() {
 		return citeResultNumber;
 	}
-
+	
+	//public void set
 }

@@ -94,7 +94,7 @@ public class DBSAApplication extends JPanel {
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
 			dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
 			dbsaFetcherPattern = new DBSAFetcherPattern();
-			fetcherResultPanel = new FetcherResultPanel();
+			fetcherResultPanel = new FetcherResultPanel(dbsaTabPanel);
 			
 			getDBSAContent();
 			if(fetcherPanel == null){

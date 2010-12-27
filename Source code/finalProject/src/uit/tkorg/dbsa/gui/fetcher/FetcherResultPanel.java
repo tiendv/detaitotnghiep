@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
@@ -47,6 +48,7 @@ import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.gui.main.DBSATabPanel;
 import uit.tkorg.dbsa.model.DBSAPublication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -97,9 +99,11 @@ public class FetcherResultPanel extends JPanel {
 	private static int duplicateNumber = 0;
 	private static boolean isDuplicate = false;
 	private static boolean duplicationArtilce = false;
+	private JTabbedPane dbsaTabFrame = null;
 	
-	public FetcherResultPanel() {
+	public FetcherResultPanel(DBSATabPanel dbsa) {
 		initComponents();
+		dbsaTabFrame = dbsa;
 	
 	}
 
@@ -453,7 +457,23 @@ public class FetcherResultPanel extends JPanel {
 			
 			if(resultsJTable.getRowCount() >= maxResult){
 				checkArticleIsDuplicated();
-				
+				int n = 0;
+				System.out.println(FetcherPanel.fetched);
+				if(FetcherPanel.fetched){
+					System.out.println(FetcherPanel.fetched);
+					JOptionPane.showMessageDialog(null, "agfaweg");
+					
+					n = JOptionPane.showConfirmDialog(DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("do.you.want.to.show.fetcher.result"),
+						    "An Question", JOptionPane.YES_NO_OPTION);
+					
+					if(n == JOptionPane.YES_OPTION){
+						dbsaTabFrame.setSelectedIndex(1);
+						
+					}else if(n == JOptionPane.NO_OPTION){
+						
+					}
+					FetcherPanel.fetched = false;
+				}
 				if(resultsJTable.getRowCount() > 1){
 					
 					titleJTextArea.setText("abc");
@@ -531,6 +551,7 @@ public class FetcherResultPanel extends JPanel {
 			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
 			duplicationArtilce = true;
 		}
+		
 		return duplicationArtilce;
 	}
 	
