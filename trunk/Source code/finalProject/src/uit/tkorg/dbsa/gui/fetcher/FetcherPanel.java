@@ -263,7 +263,110 @@ public class FetcherPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					fetched = true;
-					fetcherFunction(fetcherJButton);
+					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					
+					
+					//boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
+					if(!DBSAApplication.isInternetReachable()){
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.internet.connection"));
+					}
+					
+					if(keywordJComboBox.getSelectedItem().toString().replaceAll(" ", "").equals("")){
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.input.keyword"));
+					}
+					else if(keywordJComboBox.getSelectedItem().toString() != "" && DBSAApplication.isInternetReachable()){
+						if(fetchFromACMCheckBox.isSelected() == true) {
+							fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							fetcherBoolean = true;
+							final String acmQuery = keywordJComboBox.getSelectedItem().toString();
+						
+
+						Thread acmThread = new Thread (new Runnable(){
+							@Override
+							public void run() {
+								uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
+								setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
+								acmJProgressBar.setIndeterminate(true);
+								acmJProgressBar.setStringPainted(true);
+								acmJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
+								try {
+									ACMFetcher(acmQuery);
+									acmJProgressBar.setIndeterminate(false);
+									acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));	
+									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+									showResultJButton.setEnabled(true);
+								} catch (IOException ex) {
+									// TODO Auto-generated catch block
+									ex.printStackTrace();
+								}
+
+							}
+						});
+
+
+						acmThread.start();
+							//acmThread.interrupt();
+					}
+					if(citeseerDLCheckBox.isSelected() == true){
+						fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						
+						fetcherBoolean = true;
+						
+						final String citeseerQuery = keywordJComboBox.getSelectedItem().toString();
+						Thread citeseerThread = new Thread (new Runnable(){
+							@Override
+							public void run() {
+									setCiteResultNumber(Integer.parseInt(citeseerJSpinner.getValue().toString()));
+									citeseerJProgressBar.setIndeterminate(true);
+									citeseerJProgressBar.setStringPainted(true);
+									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
+									CiteSeeXFetcher(citeseerQuery);	
+									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+									citeseerJProgressBar.setIndeterminate(false);
+									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+									showResultJButton.setEnabled(true);	
+								
+							}});
+						citeseerThread.start();	
+						citeseerThread.interrupt();
+					}
+						
+					if(ieeexploreDLCheckBox.isSelected() == true){
+						fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						fetcherBoolean = true;
+						final String ieeeQuery = keywordJComboBox.getSelectedItem().toString();
+						Thread ieeeThread = new Thread (new Runnable(){
+							@Override
+							public void run() {
+									setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner.getValue().toString()));
+									ieeeploreJProgressBar.setIndeterminate(true);
+									ieeeploreJProgressBar.setStringPainted(true);
+									ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
+									try {
+										IEEExploreFetch(ieeeQuery);
+										ieeeploreJProgressBar.setIndeterminate(false);
+										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+										showResultJButton.setEnabled(true);
+										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+									} catch (IOException t) {
+
+										t.printStackTrace();
+									}
+								}});
+							ieeeThread.start();
+							ieeeThread.interrupt();
+					}	
+				
+					
+					if(!fetcherBoolean){
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.choose.dl"));
+					}
+						/*
+						 * reset application Jpanel
+						 */
+						//keywordJTextField.setEnabled(false);
+						fetcherBoolean = false;
+					}
 					
 				}
 				
@@ -275,110 +378,7 @@ public class FetcherPanel extends JPanel {
 		
 	public void fetcherFunction(final JButton fetchJButton){
 
-		fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		
-		
-		//boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
-		if(!DBSAApplication.isInternetReachable()){
-			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.internet.connection"));
-		}
-		
-		if(keywordJComboBox.getSelectedItem().toString().replaceAll(" ", "").equals("")){
-			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.input.keyword"));
-		}
-		else if(keywordJComboBox.getSelectedItem().toString() != "" && DBSAApplication.isInternetReachable()){
-			if(fetchFromACMCheckBox.isSelected() == true) {
-				fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				fetcherBoolean = true;
-				final String acmQuery = keywordJComboBox.getSelectedItem().toString();
-			
-
-			Thread acmThread = new Thread (new Runnable(){
-				@Override
-				public void run() {
-					uit.tkorg.dbsa.cores.fetchers.ACMFetcher.shouldContinue = true;
-					setAcmResultNumber(Integer.parseInt(acmJSpinner.getValue().toString()));
-					acmJProgressBar.setIndeterminate(true);
-					acmJProgressBar.setStringPainted(true);
-					acmJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
-					try {
-						ACMFetcher(acmQuery);
-						acmJProgressBar.setIndeterminate(false);
-						acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));	
-						fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-						showResultJButton.setEnabled(true);
-					} catch (IOException ex) {
-						// TODO Auto-generated catch block
-						ex.printStackTrace();
-					}
-
-				}
-			});
-
-
-			acmThread.start();
-				//acmThread.interrupt();
-		}
-		if(citeseerDLCheckBox.isSelected() == true){
-			fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			
-			fetcherBoolean = true;
-			
-			final String citeseerQuery = keywordJComboBox.getSelectedItem().toString();
-			Thread citeseerThread = new Thread (new Runnable(){
-				@Override
-				public void run() {
-						setCiteResultNumber(Integer.parseInt(citeseerJSpinner.getValue().toString()));
-						citeseerJProgressBar.setIndeterminate(true);
-						citeseerJProgressBar.setStringPainted(true);
-						citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
-						CiteSeeXFetcher(citeseerQuery);	
-						fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-						citeseerJProgressBar.setIndeterminate(false);
-						citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
-						showResultJButton.setEnabled(true);	
-					
-				}});
-			citeseerThread.start();	
-			citeseerThread.interrupt();
-		}
-			
-		if(ieeexploreDLCheckBox.isSelected() == true){
-			fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			fetcherBoolean = true;
-			final String ieeeQuery = keywordJComboBox.getSelectedItem().toString();
-			Thread ieeeThread = new Thread (new Runnable(){
-				@Override
-				public void run() {
-						setIeeeResultNumber(Integer.parseInt(ieeexploreJSpinner.getValue().toString()));
-						ieeeploreJProgressBar.setIndeterminate(true);
-						ieeeploreJProgressBar.setStringPainted(true);
-						ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
-						try {
-							IEEExploreFetch(ieeeQuery);
-							ieeeploreJProgressBar.setIndeterminate(false);
-							ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
-							showResultJButton.setEnabled(true);
-							fetchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-						} catch (IOException t) {
-
-							t.printStackTrace();
-						}
-					}});
-				ieeeThread.start();
-				ieeeThread.interrupt();
-		}	
-	
-		
-		if(!fetcherBoolean){
-			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.choose.dl"));
-		}
-			/*
-			 * reset application Jpanel
-			 */
-			//keywordJTextField.setEnabled(false);
-			fetcherBoolean = false;
-		}
 	
 	}
 	private JButton getShowResultJButton() {
