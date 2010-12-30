@@ -21,7 +21,7 @@ public class GUIProperties {
 	public static final String PRESSED_RESULT_BUTTON_TOOLBAR_ICON = FileLocationProperties.ICON_LOCATION + "PRESSED_RESULT_BUTTON_TOOLBAR.png";
 	public static final String DATABASE_BUTTON_TOOLBAR_ICON = FileLocationProperties.ICON_LOCATION + "DATABASE_BUTTON_TOOLBAR.png";
 	public static final String PRESSED_DATABASE_BUTTON_TOOLBAR_ICON = FileLocationProperties.ICON_LOCATION + "PRESSED_DATABASE_BUTTON_TOOLBAR.png";
-	
+	public static final String ABOUT_IMAGE = FileLocationProperties.ICON_LOCATION + "ABOUT_IMAGE.png";
 	/*
 	 * Write constant text define for ID of Panel. 
 	 */
