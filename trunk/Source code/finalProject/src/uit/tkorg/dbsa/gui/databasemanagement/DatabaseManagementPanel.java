@@ -20,7 +20,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import org.apache.tools.ant.taskdefs.Exit;
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
@@ -272,16 +271,20 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 	
 	int checkMarkSubject = 0;
-	private JTable getSubjectJTable() {
+	public JTable getSubjectJTable() {
 		if (subjectJTable == null) {
 			subjectJTable = createSubjectJTable();
 		}
 		
 		dbsaSubjectList = LoadSubject.getSubject();
+		
 		if(dbsaSubjectList != null){
+		
 			for(int i = 0; i < dbsaSubjectList.size(); i++){
 				subjectModel.insertRow(subjectJTable.getRowCount(), addDataToSubjectTable(dbsaSubjectList.get(i)));
 			}
+			
+			subjectModel.removeRow(0);
 		}
 		subjectJTable.addMouseListener(new MouseListener(){
 
@@ -289,11 +292,6 @@ public class DatabaseManagementPanel extends JPanel {
 			public void mouseClicked(MouseEvent arg0) {
 				checkMarkSubject = 0;
 				if(subjectJTable != null){
-					int n = subjectJTable.getSelectedRow();
-					if(n == 0)
-						addSubjectJButton.setEnabled(true);
-					else
-						addSubjectJButton.setEnabled(false);
 					
 					for(int j = 0; j < subjectJTable.getRowCount(); j++){
 						if(subjectJTable.getModel().getValueAt(j, 3) != null
@@ -320,6 +318,11 @@ public class DatabaseManagementPanel extends JPanel {
 	
 		return subjectJTable;
 	}
+	
+	public void InsertSubject(int rowCount, int id, String subjectName){
+		Object []data = {rowCount + 1, id, subjectName};
+		subjectModel.insertRow(rowCount , data);
+	}
 
 	private JPanel getSubjectActionsJPanel() {
 		if (subjectActionsJPanel == null) {
@@ -337,35 +340,19 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton getAddJButton() {
 		if (addSubjectJButton == null) {
 			addSubjectJButton = new JButton();
-			addSubjectJButton.setEnabled(false);
+			//addSubjectJButton.setEnabled(false);
 			addSubjectJButton.setText(DBSAResourceBundle.res.getString("add.subject"));
 			addSubjectJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					
-					//subjectJTable.setEditingRow(2);
-					if(subjectModel.getValueAt(0, 0).toString().replaceAll(" ", "").equals("0")){
-						addSubjectJButton.setEnabled(true);
-						
-						int i = subjectModel.getRowCount();
-						if(subjectModel.getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
-							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.input.subject.name"));
-							
-						}else{
-							Object []data = {i , i, subjectModel.getValueAt(0, 2).toString()};
-							subjectModel.insertRow(i, data);
-							
-							Subject sb = new Subject();
-							sb.setSbj_name(subjectModel.getValueAt(0, 2).toString());
-							
-							InsertSubject insert  = new InsertSubject();
-							insert.InsertSubjectOfPublication(sb);
-							
-							subjectModel.setValueAt("", 0, 2);
-							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("subject.is.inputed.successful"));
-						}
-					}
+					InsertSubjectFrame insertSubjectFrame = new InsertSubjectFrame(DBSAApplication.dbsaJFrame);
+					
+					System.out.println(subjectJTable.getRowCount());
+					insertSubjectFrame.setTextfieldValue(subjectJTable.getModel().getRowCount() + 1, Integer.parseInt(subjectJTable.getModel().getValueAt(subjectJTable.getRowCount() - 1, 1).toString()) + 1);
+					insertSubjectFrame.setVisible(true);
+
 				}
 			});
 		}
