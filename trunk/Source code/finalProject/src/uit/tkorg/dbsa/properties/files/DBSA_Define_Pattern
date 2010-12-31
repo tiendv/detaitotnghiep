@@ -1,6 +1,6 @@
 ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%
-ACMSearchUrlPart###&dl=%%%waefawef
-ACMEndUrl###&coll=Portal&short=0%%%jkghj
+ACMSearchUrlPart###&start=%%%waefawef
+ACMEndUrl###&dl=ACM&coll=Portal&short=0%%%jkghj
 ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%awefaw
 ACMEndGetBibtex###&expformat=bibtex%%%awfawef
 ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%awef
