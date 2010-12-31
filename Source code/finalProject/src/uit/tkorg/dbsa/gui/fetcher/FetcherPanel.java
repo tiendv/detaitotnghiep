@@ -292,7 +292,11 @@ public class FetcherPanel extends JPanel {
 								try {
 									ACMFetcher(acmQuery);
 									acmJProgressBar.setIndeterminate(false);
-									acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));	
+									acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+									fetchFromACMCheckBox.setSelected(false);
+									//Check duplicate
+									if((citeseerDLCheckBox.isSelected() != true) && (ieeexploreDLCheckBox.isSelected() != true) )
+										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									showResultJButton.setEnabled(true);
 								} catch (IOException ex) {
@@ -308,6 +312,7 @@ public class FetcherPanel extends JPanel {
 							//acmThread.interrupt();
 					}
 					if(citeseerDLCheckBox.isSelected() == true){
+						
 						fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 						
 						fetcherBoolean = true;
@@ -324,6 +329,10 @@ public class FetcherPanel extends JPanel {
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									citeseerJProgressBar.setIndeterminate(false);
 									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+									citeseerDLCheckBox.setSelected(false);
+									//check duplicate
+									if((ieeexploreDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
+										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
 									showResultJButton.setEnabled(true);	
 								
 							}});
@@ -346,6 +355,10 @@ public class FetcherPanel extends JPanel {
 										IEEExploreFetch(ieeeQuery);
 										ieeeploreJProgressBar.setIndeterminate(false);
 										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+										ieeexploreDLCheckBox.setSelected(false);
+										//check duplicate
+										if((citeseerDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
+											DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
 										showResultJButton.setEnabled(true);
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									} catch (IOException t) {
@@ -573,7 +586,7 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					
-					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1 || Integer.parseInt(acmJSpinner.getValue().toString()) > 50) {
+					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1 || Integer.parseInt(acmJSpinner.getValue().toString()) > 100) {
 						acmJSpinner.setValue(1);
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number") + ACM_MAX_RESULT);
 						

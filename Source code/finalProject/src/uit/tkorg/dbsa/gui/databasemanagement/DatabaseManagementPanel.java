@@ -28,7 +28,6 @@ import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.database.DeletePublicaitonInDBSA;
 import uit.tkorg.dbsa.actions.database.DeleteSubject;
-import uit.tkorg.dbsa.actions.database.InsertSubject;
 import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.actions.database.LoadSubject;
 import uit.tkorg.dbsa.actions.database.UpdatePublicaitonsInDBSA;
@@ -42,7 +41,7 @@ import uit.tkorg.dbsa.model.Subject;
 public class DatabaseManagementPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable databaseJTable;
+	private static JTable publicationJTable;
 	private JScrollPane databaseJTaqbleInJScrollPane;
 
 	private static DefaultTableModel publicationModel;
@@ -58,10 +57,10 @@ public class DatabaseManagementPanel extends JPanel {
 	
 	private JButton closeJButton;
 	private JButton resetShowDataJButton;
-	private static JButton deleteJButton;
+	private static JButton deletePublicationJButton;
 	private static JButton addSubjectJButton;
 	private JPanel subjectActionsJPanel;
-	private JTable subjectJTable;
+	private static JTable subjectJTable;
 	private JScrollPane subjectContentJScrollPane;
 	
 	private static int subjectNumberRow = 0;
@@ -105,7 +104,7 @@ public class DatabaseManagementPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					for (int i = subjectJTable.getRowCount() - 1; i > 0; i--) {
+					for (int i = subjectJTable.getRowCount() - 1; i >= 0; i--) {
 						ArrayList<Subject> subjectList = new ArrayList<Subject>();
 						if (subjectModel.getValueAt(i, 3) != null && subjectModel.getValueAt(i, 3).toString().equals("true")) {
 							Subject subject = new Subject();
@@ -152,16 +151,16 @@ public class DatabaseManagementPanel extends JPanel {
 	 */
 	public ArrayList<DBSAPublication> UpdatePublicationDatabase(){
 	
-		for(int i = 0; i < databaseJTable.getRowCount(); i++){
+		for(int i = 0; i < publicationJTable.getRowCount(); i++){
 			DBSAPublication dbsaPublication = new DBSAPublication();
 			
-			dbsaPublication.setId(Integer.parseInt(databaseJTable.getModel().getValueAt(i, 8).toString()));
-			dbsaPublication.setTitle(databaseJTable.getModel().getValueAt(i, 1).toString());
-			dbsaPublication.setAuthors(databaseJTable.getModel().getValueAt(i, 2).toString());
-			dbsaPublication.setLinks(databaseJTable.getModel().getValueAt(i, 3).toString());
-			dbsaPublication.setYear(Integer.parseInt(databaseJTable.getModel().getValueAt(i, 4).toString()));
-			dbsaPublication.setAbstractPub(databaseJTable.getModel().getValueAt(i, 5).toString());
-			dbsaPublication.setPublisher(databaseJTable.getModel().getValueAt(i, 6).toString());
+			dbsaPublication.setId(Integer.parseInt(publicationJTable.getModel().getValueAt(i, 8).toString()));
+			dbsaPublication.setTitle(publicationJTable.getModel().getValueAt(i, 1).toString());
+			dbsaPublication.setAuthors(publicationJTable.getModel().getValueAt(i, 2).toString());
+			dbsaPublication.setLinks(publicationJTable.getModel().getValueAt(i, 3).toString());
+			dbsaPublication.setYear(Integer.parseInt(publicationJTable.getModel().getValueAt(i, 4).toString()));
+			dbsaPublication.setAbstractPub(publicationJTable.getModel().getValueAt(i, 5).toString());
+			dbsaPublication.setPublisher(publicationJTable.getModel().getValueAt(i, 6).toString());
 			System.out.println(dbsaPublication.getAuthors());
 			
 			dbsaPublicationUpdateList.add(dbsaPublication);
@@ -182,7 +181,7 @@ public class DatabaseManagementPanel extends JPanel {
 			publicationActionsJPanel.setLayout(new GroupLayout());
 			publicationActionsJPanel.add(getUpdateDataJButton(), new Constraints(new Trailing(12, 97, 771, 774), new Leading(0, 29, 12, 12)));
 			publicationActionsJPanel.add(getResetShowDataJButton(), new Constraints(new Trailing(127, 99, 656, 660), new Leading(0, 30, 12, 12)));
-			publicationActionsJPanel.add(getDeleteJButton(), new Constraints(new Trailing(244, 99, 12, 12), new Leading(-1, 30, 12, 12)));
+			publicationActionsJPanel.add(getDeletePublicationJButton(), new Constraints(new Trailing(244, 99, 12, 12), new Leading(-1, 30, 12, 12)));
 		}
 		return publicationActionsJPanel;
 	}
@@ -359,40 +358,34 @@ public class DatabaseManagementPanel extends JPanel {
 		return addSubjectJButton;
 	}
 
-	private JButton getDeleteJButton() {
-		if (deleteJButton == null) {
-			deleteJButton = new JButton();
-			deleteJButton.setText(DBSAResourceBundle.res.getString("delete.pub"));
-			deleteJButton.setEnabled(false);
-			deleteJButton.addActionListener(new ActionListener() {
+	private JButton getDeletePublicationJButton() {
+		if (deletePublicationJButton == null) {
+			deletePublicationJButton = new JButton();
+			deletePublicationJButton.setText(DBSAResourceBundle.res.getString("delete.pub"));
+			deletePublicationJButton.setEnabled(false);
+			deletePublicationJButton.addActionListener(new ActionListener() {
 	
 				public void actionPerformed(ActionEvent event) {
-					for (int i = databaseJTable.getRowCount() - 1; i >= 0; i--) {
+					
+					for (int i = publicationJTable.getRowCount() - 1; i >= 0; i--){
 						ArrayList<DBSAPublication> deletePublicationList = new ArrayList<DBSAPublication>();
 						if (publicationModel.getValueAt(i, 7) != null && publicationModel.getValueAt(i, 7).toString().equals("true")) {
 							DBSAPublication dbsaPublication = new DBSAPublication();
 							dbsaPublication.setId(Integer.parseInt(publicationModel.getValueAt(i, 8).toString()));
-							dbsaPublication.setTitle(publicationModel.getValueAt(i, 1).toString());
-							dbsaPublication.setAuthors(publicationModel.getValueAt(i, 2).toString());
-							dbsaPublication.setLinks(publicationModel.getValueAt(i, 3).toString());
-							dbsaPublication.setYear(Integer.parseInt(publicationModel.getValueAt(i, 4).toString()));
-							dbsaPublication.setAbstractPub(publicationModel.getValueAt(i, 5).toString());
-							if (publicationModel.getValueAt(i, 6) == null) {
-								dbsaPublication.setPublisher("");
-							} else
-								dbsaPublication.setPublisher(publicationModel.getValueAt(i, 6).toString());
+							
+							publicationModel.removeRow(i);
+							
 							deletePublicationList.add(dbsaPublication);
 							deletePublication.deletePublication(dbsaPublication);
-							publicationModel.removeRow(i);
 						}
 					}
-					for (int j = 0; j < databaseJTable.getRowCount(); j++) {
-						databaseJTable.getModel().setValueAt(j + 1, j, 0);
+					for (int j = 0; j < publicationJTable.getRowCount(); j++) {
+						publicationJTable.getModel().setValueAt(j + 1, j, 0);
 					}
 				}
 			});
 		}
-		return deleteJButton;
+		return deletePublicationJButton;
 	}
 
 	private JButton getResetShowDataJButton() {
@@ -402,12 +395,12 @@ public class DatabaseManagementPanel extends JPanel {
 			resetShowDataJButton.addActionListener(new ActionListener() {
 	
 				public void actionPerformed(ActionEvent event) {
-					deleteDataOnTable(databaseJTable, publicationModel);
+					deleteDataOnTable(publicationJTable, publicationModel);
 					ArrayList<DBSAPublication> updateDatabase = new ArrayList<DBSAPublication>();
 					updateDatabase = LoadPublicationsFromDBSA.getPaper();
 					if (updateDatabase != null) {
 						for (int i = 0; i < updateDatabase.size(); i++) {
-							publicationModel.insertRow(databaseJTable.getRowCount(), addDataToDatabaseJTable(updateDatabase.get(i)));
+							publicationModel.insertRow(publicationJTable.getRowCount(), addDataToDatabaseJTable(updateDatabase.get(i)));
 						}
 						if (checkRemoveRow == false) {
 							checkRemoveRow = true;
@@ -547,13 +540,13 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton updateDataJButton;
 	private JButton deleteSubjectJButton;
 	private JTable getDatabaseJTable() {
-		if (databaseJTable == null) {
-			databaseJTable =  createDatabaseJTable();
+		if (publicationJTable == null) {
+			publicationJTable =  createDatabaseJTable();
 		}
 		dbsaPublicationList = LoadPublicationsFromDBSA.getPaper();
 		if(dbsaPublicationList != null){
 			for(int i = 0; i < dbsaPublicationList.size(); i++){
-				publicationModel.insertRow(databaseJTable.getRowCount(), addDataToDatabaseJTable(dbsaPublicationList.get(i)));
+				publicationModel.insertRow(publicationJTable.getRowCount(), addDataToDatabaseJTable(dbsaPublicationList.get(i)));
 				
 			}
 			if(checkRemoveRow == false){
@@ -562,13 +555,13 @@ public class DatabaseManagementPanel extends JPanel {
 			}
 		}
 		
-		databaseJTable.addMouseListener(new MouseListener(){
+		publicationJTable.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				check = 0;
-				if(databaseJTable != null){
-					for(int i = 0; i < databaseJTable.getRowCount(); i++){
+				if(publicationJTable != null){
+					for(int i = 0; i < publicationJTable.getRowCount(); i++){
 						
 						if(publicationModel.getValueAt(i, 7) != null 
 						&& publicationModel.getValueAt(i, 7).toString().equals("true")){
@@ -578,9 +571,9 @@ public class DatabaseManagementPanel extends JPanel {
 					}
 					
 					if(check == 0){
-						deleteJButton.setEnabled(false);
+						deletePublicationJButton.setEnabled(false);
 					}else{
-						deleteJButton.setEnabled(true);
+						deletePublicationJButton.setEnabled(true);
 					}
 				}
 			}
@@ -596,11 +589,11 @@ public class DatabaseManagementPanel extends JPanel {
 			
 		});
 		
-		return databaseJTable;
+		return publicationJTable;
 	}
 
 	private Object[] addDataToDatabaseJTable(DBSAPublication dbsaPublication){
-		Object []data = {databaseJTable.getRowCount(), dbsaPublication.getTitle(), dbsaPublication.getAuthors(), dbsaPublication.getLinks(),
+		Object []data = {publicationJTable.getRowCount(), dbsaPublication.getTitle(), dbsaPublication.getAuthors(), dbsaPublication.getLinks(),
 				dbsaPublication.getYear(), dbsaPublication.getAbstractPub(), dbsaPublication.getPublisher(),false ,dbsaPublication.getId()};
 		
 		return data;

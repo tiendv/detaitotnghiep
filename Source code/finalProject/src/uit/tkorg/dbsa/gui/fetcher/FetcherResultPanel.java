@@ -452,29 +452,7 @@ public class FetcherResultPanel extends JPanel {
 			if(!saveJButton.isEnabled())
 				saveJButton.setEnabled(true);
 			
-			
-			int maxResult = FetcherPanel.getAcmResultNumber() + FetcherPanel.getCiteResultNumber() + FetcherPanel.getIeeeResultNumber();
-			
-			if(resultsJTable.getRowCount() >= maxResult){
-				checkArticleIsDuplicated();
-//				int n = 0;
-//				System.out.println(FetcherPanel.fetched);
-//				if(FetcherPanel.fetched){
-//					System.out.println(FetcherPanel.fetched);
-//					JOptionPane.showMessageDialog(null, "agfaweg");
-//					
-//					n = JOptionPane.showConfirmDialog(DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("do.you.want.to.show.fetcher.result"),
-//						    "An Question", JOptionPane.YES_NO_OPTION);
-//					
-//					if(n == JOptionPane.YES_OPTION){
-//						dbsaTabFrame.setSelectedIndex(1);
-//						
-//					}else if(n == JOptionPane.NO_OPTION){
-//						
-//					}
-//					FetcherPanel.fetched = false;
-//				}
-				if(resultsJTable.getRowCount() > 1){
+			if(resultsJTable.getRowCount() > 1){
 					
 					titleJTextArea.setText("abc");
 					//authorsJTextArea.setText(model.getValueAt(1, 2).toString());
@@ -482,7 +460,6 @@ public class FetcherResultPanel extends JPanel {
 					//yearJTextArea.setText(model.getValueAt(1, 4).toString());
 					//abstractJTextArea.setText(model.getValueAt(1, 5).toString());
 					//publisherJTextArea.setText(resultsJTable.getModel().getValueAt(1, 6).toString());
-				}
 			}
 			
 			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
@@ -538,7 +515,7 @@ public class FetcherResultPanel extends JPanel {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public boolean checkArticleIsDuplicated(){
+	public static boolean checkArticleIsDuplicated(){
 		CheckExist check = new CheckExist();
 		
 		numberArray = (ArrayList<Integer>) check.CheckTitleSignaturePublications(dbsaPublicationCheckList).clone();
@@ -548,6 +525,7 @@ public class FetcherResultPanel extends JPanel {
 		for(int i = 0; i < numberArray.size(); i++)
 		{
 			model.setValueAt(true, numberArray.get(i), 8);
+			model.setValueAt(true, numberArray.get(i), 7);
 			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
 			duplicationArtilce = true;
 		}
@@ -580,12 +558,6 @@ public class FetcherResultPanel extends JPanel {
 		return data;
 		
 	}
-	
-//	public  void getRowData(int rowNumber, String title, String author, String year, String abstracts, String publisher, boolean isMark){
-//		
-//		model.insertRow(rowNumber,  addTableData(rowNumber, title, author, year, abstracts, publisher, isMark));	
-//		
-//	}
 	
 	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate){
 		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate()};

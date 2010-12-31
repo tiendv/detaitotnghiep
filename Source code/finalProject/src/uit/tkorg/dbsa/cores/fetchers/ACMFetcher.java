@@ -6,6 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
+
+import org.apache.xerces.impl.xpath.regex.ParseException;
 import org.htmlparser.beans.StringBean;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
@@ -54,7 +58,7 @@ public class ACMFetcher {
 	 * Câu query: http://portal.acm.org/results.cfm?query=computer20%vision&dl=ACM&coll=Portal&short=0
 	 */
 	
-	private static int MAX_FETCH = 50; // ket qua thu thap toi da
+	private static int MAX_FETCH = 100; // ket qua thu thap toi da
 	private static int perPage = MAX_FETCH;
 	private static int hits = 0; // so ket qua thu thap duoc
 	
@@ -86,33 +90,28 @@ public class ACMFetcher {
 		
 		keywordString = keyword; 
 	
-		//Tao URL tu keyword do nguoi dung nhap
-		URL url = MakeUrl(0);
+		int entryNumber = 0;
 		
-		//Thu thap trang html dau tien sau khi gui tu khoa len thu vien so.
-		System.out.println("Url = " + url);
-		String page = getFetcherResult(url);
-		
-		//lay so ket qua tu 
-		GetResultNumber(page);
-		
-		//lay thong tin cua bai bao khoa hoc tu trang html
-		parse(page, 0, 1);
-		
-		int firstEntry = perPage;
-		
-		System.out.println("Hits = " + hits);
-		
-        while (shouldContinue && (firstEntry < hits)) {            
-        	page = getFetcherResult(MakeUrl(firstEntry));
-        		
-            if (!shouldContinue)
-                break;
-            parse(page, 0, firstEntry + 1);   
-            System.out.println("FirstEntry = " + firstEntry);     
-            firstEntry += perPage;
-         
-        }
+		while(shouldContinue != false){
+			
+			if(entryNumber%20 == 0){
+				URL url = MakeUrl(entryNumber);
+				System.out.println("Url = " + url);
+				
+				String page = getFetcherResult(url);
+				GetResultNumber(page);
+				entryNumber = parse(page, 0, entryNumber + 1);
+				System.out.println("entryNumber " + entryNumber);
+			}
+			
+			int fetcherNumber = FetcherPanel.getAcmResultNumber();
+
+			if(entryNumber >= fetcherNumber){
+        		System.out.println("fetcherNumber " + fetcherNumber);
+        		shouldContinue = false;
+        		break;
+        	}
+		}
 	}
 	
 	/*
@@ -127,7 +126,7 @@ public class ACMFetcher {
 			StringBuffer sb = new StringBuffer(startUrl); 
 			sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
 			sb.append(searchUrlPart);
-			sb.append("ACM");
+			sb.append(startIndex + 1);
 			sb.append(endUrl);
 			
 				
@@ -235,31 +234,28 @@ public class ACMFetcher {
 	 */
 	static int piv = 0;
 	
-	private static void parse(String text, int startIndex, int firstEntryNumber) {
+	private static int parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
-        int fetcherNumber = FetcherPanel.getAcmResultNumber() + firstEntryNumber;
+        int maxNumber = FetcherPanel.getAcmResultNumber();
+        
+        int fetcherNumber = firstEntryNumber + 20;
+        
+        if(firstEntryNumber + 20 > maxNumber)
+        	fetcherNumber = maxNumber + 1;
         
         int entryNumber = firstEntryNumber;
          
-        while ((shouldContinue)) {
-        	
-        	if(entryNumber >= fetcherNumber){
-        		
-        		shouldContinue = false;
-        		break;
-        	}
-        	
-        	parseNextEntry(text, piv, entryNumber);
-        	
-        	entryNumber++;  
-        	
-        	
-            try {
-            	Thread.sleep(6000);//wait between requests or you will be blocked by ACM
-            } catch (InterruptedException e) {
-            	System.err.println(e.getStackTrace());
-            }
+    	for(int i = firstEntryNumber; i < fetcherNumber; i++){
+    		parseNextEntry(text, piv, entryNumber);
+    		entryNumber++;  
+    	}
+    	
+        try {
+        	Thread.sleep(6000);//wait between requests or you will be blocked by ACM
+        } catch (InterruptedException e) {
+        	System.err.println(e.getStackTrace());
         }
+        return entryNumber - 1;
     }
 	
 	/*
@@ -332,7 +328,13 @@ public class ACMFetcher {
 				Thread.sleep(6000);
 				String urlGetBitex = startGetBibtex + id + endGetBibtex;
 				String bitex = getUrlContentsAsText(urlGetBitex);
-				entry = BibtexParser.singleFromString(bitex);
+				System.out.println(bitex.length());
+
+				if(bitex.length() > 90){
+					entry = BibtexParser.singleFromString(bitex);
+				}else{
+					FetcherPanel.setAcmResultNumber(FetcherPanel.getAcmResultNumber() - 1);
+				}
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -353,14 +355,14 @@ public class ACMFetcher {
 					// remove line break
 					Matcher getdAbstract = absPattern.matcher(abstr);
 					
-					 if (!getdAbstract.find()) {
-						 	entry.setField("abstract", " ");
-				        	System.out.println("Unmatched Abstract!");
-				        } else {
-				        		abstr = getdAbstract.group(0);
-								abstr = abstr.replaceAll("\\<.*?>","");
-								entry.setField("abstract", abstr);
-				        }
+					if (!getdAbstract.find() && entry != null) {
+						 entry.setField("abstract", " ");
+				        System.out.println("Unmatched Abstract!");
+				    }else if(entry != null){
+				        abstr = getdAbstract.group(0);
+						abstr = abstr.replaceAll("\\<.*?>","");
+						entry.setField("abstract", abstr);
+				    }
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -371,7 +373,7 @@ public class ACMFetcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-								
+			if(entry != null){				
 				number ++;
 				DBSAApplication.fetcherResultPanel.setRowNumber(number);
 				if(entry.getField("title") == null){
@@ -401,7 +403,8 @@ public class ACMFetcher {
 				}
 				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField("publisher"));
 				DBSAApplication.fetcherResultPanel.getResultsJTable();
-				return entry;
+		}
+		return entry;
 	}
 	/**
 	 * 
