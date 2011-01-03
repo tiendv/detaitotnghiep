@@ -83,6 +83,8 @@ public class DBSAApplicationConst {
 	public static String VN_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Resources_VN";
 	public static String SWING_RESOURCE_LINK = "uit/tkorg/dbsa/properties/files/DBSA_Swing_Resources";
 	public static String PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Define_Pattern";
+	public static String IEEE_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_IEEE_Default_Pattern";
+	public static String ACM_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_ACM_Default_Pattern";
 	
 	/*
 	 * Define ACM DLs fetcher pattern
