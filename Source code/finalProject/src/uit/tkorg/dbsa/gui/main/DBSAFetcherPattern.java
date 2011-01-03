@@ -2,17 +2,16 @@ package uit.tkorg.dbsa.gui.main;
 
 import java.util.ArrayList;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.FileLoadder;
+import uit.tkorg.dbsa.properties.files.MyFileWriter;
 
 public class DBSAFetcherPattern {
 
 	private static ArrayList<String> patternNameList = new ArrayList<String>();
 	private String patternName;
 	private String patternValue;
-	private String patternDesciption;
+	private String patternDescription;
 	
 	/*
 	 * mot doi tuong cua PatternNameList co dang nhu sau ACMEndUrl###&coll=Portal&short=0%%%
@@ -23,8 +22,7 @@ public class DBSAFetcherPattern {
 	 */
 	public DBSAFetcherPattern(){
 		
-		patternNameList = FileLoadder.loadTextFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK);
-		
+		patternNameList = FileLoadder.loadTextFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK);	
 	}
 	
 	public String getPattern(String patternName){
@@ -47,11 +45,11 @@ public class DBSAFetcherPattern {
 
 		return patternContent;
 	}
-	/*
+	/***
 	 * ham lay danh sach cac ten pattern cua cac thu vien so
 	 * @return ArrayList<String>
 	 */
-	public ArrayList<String> getPatternName(String digitalLibrary){
+	public ArrayList<String> getPatternNameList(String digitalLibrary){
 		ArrayList<String> ptName = new ArrayList<String>();;
 		
 		for(int i = 0; i < patternNameList.size(); i++){
@@ -64,6 +62,51 @@ public class DBSAFetcherPattern {
 		}
 		
 		return ptName;
+	}
+	
+	/***
+	 * 
+	 * @param number 
+	 * @return String patternName
+	 */
+	
+	public String getPatternName(int number){
+		String pattName;
+		int index = patternNameList.get(number).indexOf("###");
+		
+		pattName = patternNameList.get(number).substring(0, index);
+		
+		return pattName;
+	}
+	
+	/***
+	 * 
+	 * @param pattName
+	 * @param pattValue
+	 * @param pattDescription
+	 */
+	
+	public void changePatternInfo(String pattName, String pattValue, String pattDescription){
+		
+		for(int i = 0; i < patternNameList.size(); i++){
+			
+			if (getPatternName(i).equals(pattName)) {
+				patternNameList.set(i, pattName + "###" + pattValue + "%%%" + pattDescription);
+				
+			}
+		}
+		
+	}
+
+	public void savePatternFile() {
+		String temp = "";
+		for(int i = 0; i < patternNameList.size(); i++){
+			temp += patternNameList.get(i);
+			temp += "\n";
+			System.out.println(patternNameList.get(i));
+		}	
+		
+		MyFileWriter.writeToFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK, temp);
 	}
 	
 	/*
@@ -88,10 +131,11 @@ public class DBSAFetcherPattern {
 	}
 	
 	
-	/*
+	/***
 	 * ham lay phan chu thich cua moi pattern
 	 */
-	public String getPatternDesciption(String patternName){
+	
+	public String getPatternDescription(String patternName){
 				
 		for(int i = 0; i < patternNameList.size(); i++){
 			if(patternNameList.get(i).substring(0, patternName.length()).equals(patternName)){
@@ -100,13 +144,25 @@ public class DBSAFetcherPattern {
 				int endIndex = patternNameList.get(i).indexOf("%%%");
 
 				//lay noi dung gia tri cua mot pattern
-				setPatternDesciption(patternNameList.get(i).substring(endIndex + 3));	
+				setPatternDescription(patternNameList.get(i).substring(endIndex + 3));	
 			}
 		}
 				
-		return getPatternDesciption();
+		return getPatternDescription();
 	}
 	
+	/***
+	 * 
+	 */
+	
+	public void editPattern(String patternName, String patternvalue, String patternDescription){
+		
+	}
+	
+	/***
+	 * 
+	 * @param mPatternName
+	 */
 	public void setPatternName(String mPatternName){
 		patternName = mPatternName;
 	}
@@ -123,11 +179,11 @@ public class DBSAFetcherPattern {
 		return patternValue;
 	}
 	
-	public void setPatternDesciption(String mPatternDescription){
-		patternDesciption  = mPatternDescription;
+	public void setPatternDescription(String mPatternDescription){
+		patternDescription  = mPatternDescription;
 	}
 	
-	public String getPatternDesciption(){
-		return patternDesciption;
+	public String getPatternDescription(){
+		return patternDescription;
 	}
 }
