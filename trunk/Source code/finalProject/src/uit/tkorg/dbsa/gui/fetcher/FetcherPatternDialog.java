@@ -1,11 +1,7 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,7 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -31,17 +26,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.TableView.TableRow;
-
-import net.sf.jabref.util.TBuildInfo;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
-
-import com.sun.rowset.internal.Row;
 
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 
@@ -69,16 +59,16 @@ public class FetcherPatternDialog extends JDialog {
 	private JTextField patternNameJTextField;
 	private JTextField patternValueJTextField;
 	private JLabel patternValueJLabel;
-	private JLabel descriptionJLabel;
-	private JTextField descriptionJTextField;
+	private JLabel patternDescriptionJLabel;
+	private JTextField patternDescriptionJTextField;
 	
 	private static DefaultTableModel model;
 	private int number = 0;
 	private String patternName;
 	private String patternValue;
-	private String description;
+	private String patternDescription;
 	private JButton setDefaultJButton;
-	private static final String PREFERRED_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
+	
 	public FetcherPatternDialog() {
 		initComponents();
 	}
@@ -88,80 +78,6 @@ public class FetcherPatternDialog extends JDialog {
 		dbsaJFrame = mainFrame;
 		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth()-width)/2;
 		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight()-height)/2;
-		initComponents();
-	}
-	
-	public FetcherPatternDialog(Frame parent, boolean modal) {
-		super(parent, modal);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Frame parent, String title) {
-		super(parent, title);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Frame parent, String title, boolean modal) {
-		super(parent, title, modal);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Frame parent, String title, boolean modal,
-			GraphicsConfiguration arg) {
-		super(parent, title, modal, arg);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Dialog parent) {
-		super(parent);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Dialog parent, boolean modal) {
-		super(parent, modal);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Dialog parent, String title) {
-		super(parent, title);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Dialog parent, String title, boolean modal) {
-		super(parent, title, modal);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Dialog parent, String title, boolean modal,
-			GraphicsConfiguration arg) {
-		super(parent, title, modal, arg);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Window parent) {
-		super(parent);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Window parent, ModalityType modalityType) {
-		super(parent, modalityType);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Window parent, String title) {
-		super(parent, title);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Window parent, String title,
-			ModalityType modalityType) {
-		super(parent, title, modalityType);
-		initComponents();
-	}
-
-	public FetcherPatternDialog(Window parent, String title,
-			ModalityType modalityType, GraphicsConfiguration arg) {
-		super(parent, title, modalityType, arg);
 		initComponents();
 	}
 
@@ -174,7 +90,7 @@ public class FetcherPatternDialog extends JDialog {
 		add(getDialogNameJLabel(), new Constraints(new Bilateral(335, 331, 220), new Leading(24, 34, 227, 618)));
 		add(getActionsJPanel(), new Constraints(new Bilateral(12, 12, 288), new Trailing(10, 70, 10, 581)));
 		add(getMainJPanel(), new Constraints(new Bilateral(12, 12, 880), new Bilateral(64, 92, 10, 505)));
-		setSize(width, height);
+		setSize(905, 700);
 		setLocation(xLocation, yLocation);
 	}
 
@@ -187,20 +103,21 @@ public class FetcherPatternDialog extends JDialog {
 	}
 
 	private JTextField getDescriptionJTextField() {
-		if (descriptionJTextField == null) {
-			descriptionJTextField = new JTextField();
-			descriptionJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		if (patternDescriptionJTextField == null) {
+			patternDescriptionJTextField = new JTextField();
+			patternDescriptionJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			
 		}
-		return descriptionJTextField;
+		return patternDescriptionJTextField;
 	}
 
 	private JLabel getDescriptionJLabel() {
-		if (descriptionJLabel == null) {
-			descriptionJLabel = new JLabel();
-			descriptionJLabel.setText("Description");
-			descriptionJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+		if (patternDescriptionJLabel == null) {
+			patternDescriptionJLabel = new JLabel();
+			patternDescriptionJLabel.setText("Description");
+			patternDescriptionJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
-		return descriptionJLabel;
+		return patternDescriptionJLabel;
 	}
 
 	private JLabel getPatternValueJLabel() {
@@ -338,9 +255,26 @@ public class FetcherPatternDialog extends JDialog {
 		if (patternJTable == null) {
 			patternJTable = createPatternJTable();
 			
+			for(int i = patternJTable.getRowCount() - 1; i >= 0; i--){
+				model.removeRow(i);
+			}
+			
+			ArrayList<String> mpatternName = new ArrayList<String>();
+			mpatternName = DBSAApplication.dbsaFetcherPattern.getPatternNameList("ACM");
+			for (int i = 0; i < mpatternName.size(); i++) {
+				
+				String ptValue = DBSAApplication.dbsaFetcherPattern.getPatternValue(mpatternName.get(i));
+				String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDescription(mpatternName.get(i));
+
+				Object []data1 = {patternJTable.getRowCount(), mpatternName.get(i), ptValue, ptDesciption};
+				model.insertRow(patternJTable.getRowCount(), data1);
+			}
+			
 		}else{
 			Object [] data = {patternJTable.getRowCount(), getPatternName(), getPatternValue(), getPatternDescriptionn()};
 			model.insertRow(patternJTable.getRowCount(), data );
+			
+			
 			
 		}
 		patternJTable.addMouseListener(new MouseListener(){
@@ -351,30 +285,26 @@ public class FetcherPatternDialog extends JDialog {
 				int rowIsSelected = patternJTable.getSelectedRow();
 				patternNameJTextField.setText(model.getValueAt(rowIsSelected, 1).toString());
 				patternValueJTextField.setText(model.getValueAt(rowIsSelected, 2).toString());
-				descriptionJTextField.setText(model.getValueAt(rowIsSelected, 3).toString());
+				patternDescriptionJTextField.setText(model.getValueAt(rowIsSelected, 3).toString());
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -429,6 +359,19 @@ public class FetcherPatternDialog extends JDialog {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
 			saveJButton.setText("Save changes");
+			saveJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					
+					DBSAApplication.dbsaFetcherPattern.changePatternInfo(patternNameJTextField.getText(),
+							patternValueJTextField.getText(),
+							patternDescriptionJTextField.getText());
+					
+					DBSAApplication.dbsaFetcherPattern.savePatternFile();
+				}
+				
+			});
 		}
 		return saveJButton;
 	}
@@ -441,7 +384,7 @@ public class FetcherPatternDialog extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+					
 					dispose();
 				}
 				
@@ -465,6 +408,7 @@ public class FetcherPatternDialog extends JDialog {
 					new Object[] { "ACM digital library", "IEEExplore digital library" }));
 			digitalLibraryComboBox.setDoubleBuffered(false);
 			digitalLibraryComboBox.setBorder(null);
+			
 			digitalLibraryComboBox.addActionListener(new ActionListener() {
 	
 				public void actionPerformed(ActionEvent event) {
@@ -474,11 +418,11 @@ public class FetcherPatternDialog extends JDialog {
 							model.removeRow(i);
 						}
 						ArrayList<String> mpatternName = new ArrayList<String>();
-						mpatternName = DBSAApplication.dbsaFetcherPattern.getPatternName("ACM");
+						mpatternName = DBSAApplication.dbsaFetcherPattern.getPatternNameList("ACM");
 						for (int i = 0; i < mpatternName.size(); i++) {
 							
 							String ptValue = DBSAApplication.dbsaFetcherPattern.getPatternValue(mpatternName.get(i));
-							String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDesciption(mpatternName.get(i));
+							String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDescription(mpatternName.get(i));
 
 							Object []data = {patternJTable.getRowCount(), mpatternName.get(i), ptValue, ptDesciption};
 							model.insertRow(patternJTable.getRowCount(), data);
@@ -491,11 +435,11 @@ public class FetcherPatternDialog extends JDialog {
 						}
 						
 						ArrayList<String> ptName = new ArrayList<String>();
-						ptName = DBSAApplication.dbsaFetcherPattern.getPatternName("IEEE");
+						ptName = DBSAApplication.dbsaFetcherPattern.getPatternNameList("IEEE");
 						for (int i = 0; i < ptName.size(); i++) {
 							
 							String ptValue = DBSAApplication.dbsaFetcherPattern.getPatternValue(ptName.get(i));
-							String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDesciption(ptName.get(i));
+							String ptDesciption = DBSAApplication.dbsaFetcherPattern.getPatternDescription(ptName.get(i));
 							
 							Object []data = {patternJTable.getRowCount(), ptName.get(i), ptValue, ptDesciption};
 							model.insertRow(patternJTable.getRowCount(), data);
@@ -506,41 +450,6 @@ public class FetcherPatternDialog extends JDialog {
 		}
 		return digitalLibraryComboBox;
 	}
-
-	private static void installLnF() {
-		try {
-			String lnfClassname = PREFERRED_LOOK_AND_FEEL;
-			if (lnfClassname == null)
-				lnfClassname = UIManager.getCrossPlatformLookAndFeelClassName();
-			UIManager.setLookAndFeel(lnfClassname);
-		} catch (Exception e) {
-			System.err.println("Cannot install " + PREFERRED_LOOK_AND_FEEL
-					+ " on this platform:" + e.getMessage());
-		}
-	}
-
-//	/**
-//	 * Main entry of the class.
-//	 * Note: This class is only created so that you can easily preview the result at runtime.
-//	 * It is not expected to be managed by the designer.
-//	 * You can modify it as you like.
-//	 */
-//	public static void main(String[] args) {
-//		installLnF();
-//		SwingUtilities.invokeLater(new Runnable() {
-//			@Override
-//			public void run() {
-//				FetcherPatternDialog dialog = new FetcherPatternDialog();
-//				dialog
-//						.setDefaultCloseOperation(FetcherPatternDialog.DISPOSE_ON_CLOSE);
-//				dialog.setTitle("FetcherPatternDialog");
-//				dialog.setLocationRelativeTo(null);
-//				dialog.getContentPane().setPreferredSize(dialog.getSize());
-//				dialog.pack();
-//				dialog.setVisible(true);
-//			}
-//		});
-//	}
 
 	public void setNumber(int mNumber){
 		number = mNumber;
@@ -564,9 +473,9 @@ public class FetcherPatternDialog extends JDialog {
 	}
 	
 	public void setPatternDescription(String mDescription){
-		description = mDescription;
+		patternDescription = mDescription;
 	}
 	public String getPatternDescriptionn(){
-		return description;
+		return patternDescription;
 	}
 }
