@@ -1,0 +1,19 @@
+IEEEStartUrl###http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=%%%
+IEEEEndUrl1###&rowsPerPage=%%%
+IEEEEndUrl2###&pageNumber=%%%
+IEEEHitsPattern###([0-9,]+) results%%%
+IEEETypePattern###<span class="type">\s*(.+)%%%
+IEEEAbsPattern###<p>\s*(.+)%%%
+IEEEStdEntryPattern###.*<strong>(.+)</strong><br>"+ "\s+(.+)%%%
+IEEEPublicationPattern###(.*), \d*\.*\s?(.*)%%%
+IEEEProceedingPattern###(.*?)\.?\s?Proceedings\s?(.*)%%%
+IEEEAbstractLinkPattern###<a href="(.+)" class="bodyCopySpaced">Abstract</a>%%%
+IEEEAbrvPattern###.*[^,] '?\d+\)?%%%
+IEEEArticleNumberPattern###<a href=".*arnumber=(\d+).*">%%%
+IEEETitle###<a\s*href=[^<]+>\s*(.+)\s*</a>%%%
+IEEEPublicationAuthor###<p>\s+(.+)%%%
+IEEEVolume###Volume:\s*(\d+)%%%
+IEEEIssue###Issue:\s*(\d+)%%%
+IEEEYear###Publication Year:\s*(\d{4})%%%
+IEEEPage###Page\(s\):\s*(\d+)\s*-\s*(\d*)%%%
+IEEEDoi###Digital Object Identifier:\s*<a href=.*>(.+)</a>%%%
