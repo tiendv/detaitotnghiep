@@ -2,6 +2,8 @@ package uit.tkorg.dbsa.gui.main;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.FileLoadder;
 import uit.tkorg.dbsa.properties.files.MyFileWriter;
@@ -9,6 +11,8 @@ import uit.tkorg.dbsa.properties.files.MyFileWriter;
 public class DBSAFetcherPattern {
 
 	private static ArrayList<String> patternNameList = new ArrayList<String>();
+	private static ArrayList<String> acm_Default_Pattern_List = new ArrayList<String>();
+	private static ArrayList<String> ieee_Default_Pattern_List = new ArrayList<String>();
 	private String patternName;
 	private String patternValue;
 	private String patternDescription;
@@ -107,6 +111,10 @@ public class DBSAFetcherPattern {
 		}	
 		
 		MyFileWriter.writeToFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK, temp);
+		
+		patternNameList.clear();
+		patternNameList = FileLoadder.loadTextFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK);
+		
 	}
 	
 	/*
@@ -159,6 +167,29 @@ public class DBSAFetcherPattern {
 		
 	}
 	
+	public void setDefaultPattern(){
+		acm_Default_Pattern_List = FileLoadder.loadTextFile(DBSAApplicationConst.ACM_PATTERN_RESOURCE_LINK);
+		ieee_Default_Pattern_List = FileLoadder.loadTextFile(DBSAApplicationConst.IEEE_PATTERN_RESOURCE_LINK);
+		String acm_Default_Pattern = "";
+		String ieee_Default_Pattern = "";
+		for(int i = 0; i < acm_Default_Pattern_List.size(); i++){
+			acm_Default_Pattern += acm_Default_Pattern_List.get(i).toString();
+			acm_Default_Pattern += "\n";
+		}
+		
+		for(int i = 0; i < ieee_Default_Pattern_List.size(); i++){
+			ieee_Default_Pattern += ieee_Default_Pattern_List.get(i).toString();
+			ieee_Default_Pattern += "\n";
+		}
+		
+		String defaulrParttern = acm_Default_Pattern + ieee_Default_Pattern;
+			
+		MyFileWriter.writeToFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK, defaulrParttern);
+		patternNameList.clear();
+		patternNameList = FileLoadder.loadTextFile(DBSAApplicationConst.PATTERN_RESOURCE_LINK);
+		
+		JOptionPane.showMessageDialog(null, "Set default pattern is successful!");
+	}
 	/***
 	 * 
 	 * @param mPatternName

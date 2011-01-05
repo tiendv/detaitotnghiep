@@ -525,7 +525,6 @@ public class FetcherResultPanel extends JPanel {
 		for(int i = 0; i < numberArray.size(); i++)
 		{
 			model.setValueAt(true, numberArray.get(i), 8);
-			model.setValueAt(true, numberArray.get(i), 7);
 			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
 			duplicationArtilce = true;
 		}
@@ -711,12 +710,15 @@ public class FetcherResultPanel extends JPanel {
 		}
 		return deleteJButton;
 	}
-
 	
-
+	int nam2010 = 0;
+	int truocNam2005 = 0;
+	int sauNam2005 = 0;
+	
 	private void removeRowsIsSelected() {
 		// TODO Auto-generated method stub
 		//int check = 0;
+				
 		for(int i = resultsJTable.getRowCount()-1; i >= 0; i--){
 			
 			if(resultsJTable.getModel().getValueAt(i, 7) != null
@@ -734,9 +736,20 @@ public class FetcherResultPanel extends JPanel {
 					}
 				}
 					
+				nam2010 = 0;
+				truocNam2005 = 0;
+				sauNam2005 = 0;
+				
 				for(int j = 0; j < resultsJTable.getRowCount(); j++){
 					resultsJTable.addRowToPaint(j, Color.white);
 					resultsJTable.getModel().setValueAt(j+1, j, 0);
+					
+					if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 2010)
+						nam2010 ++;
+					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) >= 2005)
+						sauNam2005 ++;
+					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) < 2005)
+						truocNam2005++;
 					
 					if(resultsJTable.getModel().getValueAt(j, 8) != null
 						&&resultsJTable.getModel().getValueAt(j, 8).toString().equals("true")){
@@ -744,6 +757,8 @@ public class FetcherResultPanel extends JPanel {
 						resultsJTable.addRowToPaint(j, Color.red);
 					}
 				}
+				
+				System.out.println("truoc nam 2005 " + truocNam2005 + " tu nam 2005 -> 2010 " + sauNam2005 + " nam 2010 " + nam2010);
 			}
 		}
 //		if(check == 0){
