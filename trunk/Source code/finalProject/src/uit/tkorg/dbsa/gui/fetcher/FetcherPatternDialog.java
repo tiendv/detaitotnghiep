@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,6 +35,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherPatternDialog extends JDialog {
@@ -68,6 +70,7 @@ public class FetcherPatternDialog extends JDialog {
 	private String patternValue;
 	private String patternDescription;
 	private JButton setDefaultJButton;
+	private int rowIsSelected = 0;
 	
 	public FetcherPatternDialog() {
 		initComponents();
@@ -98,6 +101,16 @@ public class FetcherPatternDialog extends JDialog {
 		if (setDefaultJButton == null) {
 			setDefaultJButton = new JButton();
 			setDefaultJButton.setText("Set Default");
+			setDefaultJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					DBSAApplication.dbsaFetcherPattern.setDefaultPattern();
+					digitalLibraryComboBox.setSelectedItem(digitalLibraryComboBox.getSelectedItem());
+				}
+				
+			});
 		}
 		return setDefaultJButton;
 	}
@@ -133,7 +146,7 @@ public class FetcherPatternDialog extends JDialog {
 		if (patternValueJTextField == null) {
 			patternValueJTextField = new JTextField();
 			patternValueJTextField.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			//patternValueJTextField.setEditable(false);
+			patternValueJTextField.setText("");
 		}
 		return patternValueJTextField;
 	}
@@ -190,7 +203,7 @@ public class FetcherPatternDialog extends JDialog {
 		if (dialogNameJLabel == null) {
 			dialogNameJLabel = new JLabel();
 			dialogNameJLabel.setFont(new Font("Dialog", Font.BOLD, 18));
-			dialogNameJLabel.setText("   Change fetcher pattern");
+			dialogNameJLabel.setText("   Change  fetcher pattern");
 			dialogNameJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return dialogNameJLabel;
@@ -282,10 +295,24 @@ public class FetcherPatternDialog extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				int rowIsSelected = patternJTable.getSelectedRow();
-				patternNameJTextField.setText(model.getValueAt(rowIsSelected, 1).toString());
-				patternValueJTextField.setText(model.getValueAt(rowIsSelected, 2).toString());
-				patternDescriptionJTextField.setText(model.getValueAt(rowIsSelected, 3).toString());
+				
+				if(patternValueJTextField.getText().equals("")){
+					
+				}
+				else {
+					
+					patternJTable.getModel().setValueAt(patternValueJTextField.getText(), getRowIsSelected(), 2);
+					patternJTable.getModel().setValueAt(patternDescriptionJTextField.getText(), getRowIsSelected(), 3);
+					DBSAApplication.dbsaFetcherPattern.changePatternInfo(patternNameJTextField.getText(),
+							patternValueJTextField.getText(),
+							patternDescriptionJTextField.getText());
+				}
+				saveJButton.setEnabled(true);
+				setRowIsSelected(patternJTable.getSelectedRow());
+				patternNameJTextField.setText(model.getValueAt(getRowIsSelected(), 1).toString());
+				patternValueJTextField.setText(model.getValueAt(getRowIsSelected(), 2).toString());
+				patternDescriptionJTextField.setText(model.getValueAt(getRowIsSelected(), 3).toString());
+				
 			}
 
 			@Override
@@ -359,16 +386,27 @@ public class FetcherPatternDialog extends JDialog {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
 			saveJButton.setText("Save changes");
+			saveJButton.setEnabled(false);
 			saveJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					
 					DBSAApplication.dbsaFetcherPattern.changePatternInfo(patternNameJTextField.getText(),
 							patternValueJTextField.getText(),
 							patternDescriptionJTextField.getText());
 					
-					DBSAApplication.dbsaFetcherPattern.savePatternFile();
+					int k = JOptionPane.showConfirmDialog(
+					    DBSAApplication.dbsaJFrame, "Data pattern is changed! \n Do you want to save it?",
+					    "An Question", JOptionPane.YES_NO_OPTION);
+									
+						if(k == JOptionPane.YES_OPTION){
+						
+							DBSAApplication.dbsaFetcherPattern.savePatternFile();
+							saveJButton.setEnabled(false);
+						}else if(k == JOptionPane.NO_OPTION){
+							
+						}
+						
 				}
 				
 			});
@@ -384,8 +422,20 @@ public class FetcherPatternDialog extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					int k = JOptionPane.showConfirmDialog(
+						    DBSAApplication.dbsaJFrame, "Do you want to save the changes to pattern file?",
+						    "An Question", JOptionPane.YES_NO_OPTION);
+										
+							if(k == JOptionPane.YES_OPTION){
+								DBSAApplication.dbsaFetcherPattern.savePatternFile();
+								saveJButton.setEnabled(false);
+								dispose();
+								
+							}else if(k == JOptionPane.NO_OPTION){
+								dispose();
+							
+							}
 					
-					dispose();
 				}
 				
 			});
@@ -477,5 +527,13 @@ public class FetcherPatternDialog extends JDialog {
 	}
 	public String getPatternDescriptionn(){
 		return patternDescription;
+	}
+	
+	private void setRowIsSelected(int rowIsSelected){
+		this.rowIsSelected = rowIsSelected;
+	}
+	
+	private int getRowIsSelected(){
+		return rowIsSelected;
 	}
 }

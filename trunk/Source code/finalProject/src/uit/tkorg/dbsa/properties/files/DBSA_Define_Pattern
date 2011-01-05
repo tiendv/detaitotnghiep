@@ -1,6 +1,6 @@
-ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%start url search for aacm digital library
-ACMSearchUrlPart###&start=%%%waefawef
-ACMEndUrl###&dl=ACM&coll=Portal&short=0%%%jkghj
+ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%
+ACMSearchUrlPart###&dl=%%%waefawef
+ACMEndUrl###&coll=Portal&short=0%%%jkghj
 ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%awefaw
 ACMEndGetBibtex###&expformat=bibtex%%%awfawef
 ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%awef
@@ -12,10 +12,10 @@ ACMFullCitationPattern###<A HREF="(citation.cfm.*)" class.*%%%afawf
 ACMGetIDBibtex###(exportformats[.]cfm.+bibtex)%%%waf
 ACMIdPaperPattern###\d+&%%%
 ACMAbstractPattern###<div style="display:inline">.*</div>%%%
-IEEEStartUrl###http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=%%%Search pattern of ieee
+IEEEStartUrl###http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=%%%
 IEEEEndUrl1###&rowsPerPage=%%%
 IEEEEndUrl2###&pageNumber=%%%
-IEEEHitsPattern###([0-9,]+) results%%%search paper number
+IEEEHitsPattern###([0-9,]+) results%%%
 IEEETypePattern###<span class="type">\s*(.+)%%%
 IEEEAbsPattern###<p>\s*(.+)%%%
 IEEEStdEntryPattern###.*<strong>(.+)</strong><br>"+ "\s+(.+)%%%
