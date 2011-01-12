@@ -35,9 +35,9 @@ public class DBSAResourceBundle {
 	public static ResourceBundle initResources(){
 		try{
 			if(Locale.getDefault().equals(Locale.US)){
-				res = ResourceBundle.getBundle(DBSAApplicationConst.EN_RESOURCE_LINK);
-			}else{
 				res = ResourceBundle.getBundle(DBSAApplicationConst.VN_RESOURCE_LINK);
+			}else{
+				res = ResourceBundle.getBundle(DBSAApplicationConst.EN_RESOURCE_LINK);
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();

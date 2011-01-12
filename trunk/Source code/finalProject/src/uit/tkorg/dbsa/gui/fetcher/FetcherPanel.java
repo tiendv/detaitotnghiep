@@ -229,7 +229,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getFetcherJPanel() {
 		if (fetcherJPanel == null) {
 			fetcherJPanel = new JPanel();
-			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, "fetcher", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("fetcher"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			fetcherJPanel.setLayout(new GroupLayout());
 			fetcherJPanel.add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 513), new Trailing(0, 68, 278, 278)));
@@ -242,7 +242,7 @@ public class FetcherPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(-1, 36, 12, 12)));
