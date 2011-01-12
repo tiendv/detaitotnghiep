@@ -58,6 +58,7 @@ public class DatabaseManagementPanel extends JPanel {
 	private JButton closeJButton;
 	private JButton resetShowDataJButton;
 	private static JButton deletePublicationJButton;
+	private static JButton insertPublicationJButton;
 	private static JButton addSubjectJButton;
 	private JPanel subjectActionsJPanel;
 	private static JTable subjectJTable;
@@ -91,6 +92,14 @@ public class DatabaseManagementPanel extends JPanel {
 		add(getPublicationActionsJPanel(), new Constraints(new Bilateral(0, 1, 905), new Trailing(213, 10, 129)));
 		add(getDatabaseJTaqbleInJScrollPane(), new Constraints(new Bilateral(1, 2, 706), new Bilateral(0, 282, 10, 123)));
 		setSize(916, 431);
+	}
+
+	private JButton getInsertPublicationJButton() {
+		if (insertPublicationJButton == null) {
+			insertPublicationJButton = new JButton();
+			insertPublicationJButton.setText(DBSAResourceBundle.res.getString("insert"));
+		}
+		return insertPublicationJButton;
 	}
 
 	private JButton getDeleteSubjectJButton() {
@@ -182,6 +191,7 @@ public class DatabaseManagementPanel extends JPanel {
 			publicationActionsJPanel.add(getUpdateDataJButton(), new Constraints(new Trailing(12, 97, 771, 774), new Leading(0, 29, 12, 12)));
 			publicationActionsJPanel.add(getResetShowDataJButton(), new Constraints(new Trailing(127, 99, 656, 660), new Leading(0, 30, 12, 12)));
 			publicationActionsJPanel.add(getDeletePublicationJButton(), new Constraints(new Trailing(244, 99, 12, 12), new Leading(-1, 30, 12, 12)));
+			publicationActionsJPanel.add(getInsertPublicationJButton(), new Constraints(new Trailing(361, 97, 12, 12), new Leading(0, 29, 12, 12)));
 		}
 		return publicationActionsJPanel;
 	}
@@ -539,8 +549,9 @@ public class DatabaseManagementPanel extends JPanel {
 	private JPanel publicationActionsJPanel;
 	private JButton updateDataJButton;
 	private JButton deleteSubjectJButton;
+	
 	private JTable getDatabaseJTable() {
-		if (publicationJTable == null) {
+		if(publicationJTable == null) {
 			publicationJTable =  createDatabaseJTable();
 		}
 		dbsaPublicationList = LoadPublicationsFromDBSA.getPaper();

@@ -59,7 +59,7 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(null, "insert.artilce.to.datatbase", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("insert.artilce.to.datatbase"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 0), new Trailing(10, 66, 10, 205)));
@@ -165,7 +165,7 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JPanel getInputJPanel() {
 		if (inputJPanel == null) {
 			inputJPanel = new JPanel();
-			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, "input.data", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input.data"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			inputJPanel.setLayout(new GroupLayout());
 			inputJPanel.add(getTitleJTextField(), new Constraints(new Bilateral(122, 12, 4), new Leading(0, 26, 10, 10)));
