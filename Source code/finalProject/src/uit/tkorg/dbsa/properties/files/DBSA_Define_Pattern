@@ -1,5 +1,5 @@
 ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%
-ACMSearchUrlPart###&dl=%%%waefawef
+ACMSearchUrlPart###&dl=ACM&start=%%%waefawef
 ACMEndUrl###&coll=Portal&short=0%%%jkghj
 ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%awefaw
 ACMEndGetBibtex###&expformat=bibtex%%%awfawef

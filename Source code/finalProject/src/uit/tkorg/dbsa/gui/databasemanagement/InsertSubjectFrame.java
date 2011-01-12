@@ -23,6 +23,7 @@ import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.database.InsertSubject;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.Subject;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -69,7 +70,7 @@ public class InsertSubjectFrame extends JDialog {
 	private JPanel getBodyJPanel() {
 		if (bodyJPanel == null) {
 			bodyJPanel = new JPanel();
-			bodyJPanel.setBorder(BorderFactory.createTitledBorder(null, "Body", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+			bodyJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("body"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
 					12), new Color(51, 51, 51)));
 			bodyJPanel.setLayout(new GroupLayout());
 			bodyJPanel.add(getSubjectIDJTextField(), new Constraints(new Trailing(12, 170, 65, 108), new Leading(33, 22, 12, 12)));
@@ -101,7 +102,7 @@ public class InsertSubjectFrame extends JDialog {
 	private JPanel getActionJPanel() {
 		if (actionJPanel == null) {
 			actionJPanel = new JPanel();
-			actionJPanel.setBorder(BorderFactory.createTitledBorder(null, "Actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			actionJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionJPanel.setLayout(new GroupLayout());
 			actionJPanel.add(getCancelJButton(), new Constraints(new Trailing(12, 12, 12), new Leading(0, 12, 12)));
@@ -113,19 +114,19 @@ public class InsertSubjectFrame extends JDialog {
 	private JButton getInsertJButton() {
 		if (insertJButton == null) {
 			insertJButton = new JButton();
-			insertJButton.setText("Insert");
+			insertJButton.setText(DBSAResourceBundle.res.getString("insert"));
 			insertJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					Subject sub =  new Subject();
 					if(subjectNameJTextField.getText().replaceAll(" ", "").equals("")){
-						JOptionPane.showMessageDialog(null, "Input subject name.");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("insert.subject.name"));
 					}else{sub.setSbj_name(
 						subjectNameJTextField.getText());
 						InsertSubject insertSub = new InsertSubject();
 						insertSub.InsertSubjectOfPublication(sub);
-						JOptionPane.showMessageDialog(null, "Insert is successful");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("insert.subject.is.successful"));
 						DBSAApplication.databaseManagementPanel.InsertSubject(Integer.parseInt(numberJTextField.getText()) - 1 ,sub.getId(), subjectNameJTextField.getText());
 						
 						
@@ -146,7 +147,7 @@ public class InsertSubjectFrame extends JDialog {
 	private JButton getCancelJButton() {
 		if (cancelJButton == null) {
 			cancelJButton = new JButton();
-			cancelJButton.setText("Cancel");
+			cancelJButton.setText(DBSAResourceBundle.res.getString("close"));
 			cancelJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -163,7 +164,7 @@ public class InsertSubjectFrame extends JDialog {
 	private JLabel getSubjectIDJLabel() {
 		if (subjectIDJLabel == null) {
 			subjectIDJLabel = new JLabel();
-			subjectIDJLabel.setText("Subject ID :");
+			subjectIDJLabel.setText(DBSAResourceBundle.res.getString("subject.id") + " : ");
 		}
 		return subjectIDJLabel;
 	}
@@ -171,7 +172,7 @@ public class InsertSubjectFrame extends JDialog {
 	private JLabel getSubjectNameJLabel() {
 		if (subjectNameJLabel == null) {
 			subjectNameJLabel = new JLabel();
-			subjectNameJLabel.setText("Subject name :");
+			subjectNameJLabel.setText(DBSAResourceBundle.res.getString("subject.name") + " : ");
 		}
 		return subjectNameJLabel;
 	}
@@ -179,7 +180,7 @@ public class InsertSubjectFrame extends JDialog {
 	private JLabel getNoJLabel() {
 		if (NoJLabel == null) {
 			NoJLabel = new JLabel();
-			NoJLabel.setText("No.");
+			NoJLabel.setText(DBSAResourceBundle.res.getString("no") + " : ");
 		}
 		return NoJLabel;
 	}

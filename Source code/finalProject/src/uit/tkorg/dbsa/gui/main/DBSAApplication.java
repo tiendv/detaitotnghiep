@@ -136,7 +136,7 @@ public class DBSAApplication extends JPanel {
 			jMenuBar.add(getFileJMenu());
 			jMenuBar.add(getEditJMenu());
 			jMenuBar.add(getFetcherJMenu());
-			jMenuBar.add(getClassificationJMenu());
+			//jMenuBar.add(getClassificationJMenu());
 			jMenuBar.add(getOptionJMenu());
 			jMenuBar.add(getHelpJMenu());
 		}
@@ -176,9 +176,9 @@ public class DBSAApplication extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					if(isInternetReachable() == true){
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.ok"));
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("internet.connection.is.availble"));
 					}else{
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.false"));
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("internet.connection.is.failed"));
 					}
 				}
 				

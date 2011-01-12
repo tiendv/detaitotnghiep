@@ -666,7 +666,7 @@ public class FetcherResultPanel extends JPanel {
 			}
 			
 			InsertDBSAPublication insert = new InsertDBSAPublication();
-			insert.InsertPublication(dbsaPublicationList);
+			insert.InsertPublicationList(dbsaPublicationList);
 			
 			//System.out.println(resultsJTable.getRowCount());
 			
@@ -714,6 +714,7 @@ public class FetcherResultPanel extends JPanel {
 	int nam2010 = 0;
 	int truocNam2005 = 0;
 	int sauNam2005 = 0;
+	int koxacdinh = 0;
 	
 	private void removeRowsIsSelected() {
 		// TODO Auto-generated method stub
@@ -739,6 +740,7 @@ public class FetcherResultPanel extends JPanel {
 				nam2010 = 0;
 				truocNam2005 = 0;
 				sauNam2005 = 0;
+				koxacdinh = 0;
 				
 				for(int j = 0; j < resultsJTable.getRowCount(); j++){
 					resultsJTable.addRowToPaint(j, Color.white);
@@ -746,6 +748,8 @@ public class FetcherResultPanel extends JPanel {
 					
 					if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 2010)
 						nam2010 ++;
+					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 0)
+						koxacdinh++;
 					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) >= 2005)
 						sauNam2005 ++;
 					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) < 2005)
@@ -758,7 +762,7 @@ public class FetcherResultPanel extends JPanel {
 					}
 				}
 				
-				System.out.println("truoc nam 2005 " + truocNam2005 + " tu nam 2005 -> 2010 " + sauNam2005 + " nam 2010 " + nam2010);
+				System.out.println("truoc nam 2005 " + truocNam2005 + " tu nam 2005 -> 2010 " + sauNam2005 + " nam 2010 " + nam2010 + " ko xac dinh" + koxacdinh);
 			}
 		}
 //		if(check == 0){

@@ -13,12 +13,14 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 
 /**
  * @author tiendv
+ *
  * Luu cac bai bao xuong database. 
  * Bai bao duoc luu la cac bai bao duoc nguoi dung chon de luu xuong database
- *
+ * @modifer cuongnp
+ * add insertPublication function
  */
 public class InsertDBSAPublication {
-	public static void InsertPublication(ArrayList<DBSAPublication> pub) {
+	public static void InsertPublicationList(ArrayList<DBSAPublication> pub) {
 		Session session = null;
 		try
 		{
@@ -43,26 +45,34 @@ public class InsertDBSAPublication {
 			
 			}
 	}
-
-	/*public static void main(String[] args) {
-		 	Session session = null;
-	        DBSAPublication test = new DBSAPublication();
-	       // test.setId(2);
-	        test.setTitle(" the Design and Implementation of Object Databases.");
-	        test.setYear(2000);
-	        try {
-	        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-			session = sessionFactory.openSession();
-			Transaction tx = session.beginTransaction();
-			session.save(test);
-			 tx.commit();
-			System.out.println(test.getId());
-	        }finally {
-	        	session.flush();
-				session.close();
-	        }
+	
+	/***
+	 * insert one paper to database
+	 * @param pub
+	 */
+	public void InsertPublication(DBSAPublication pub) {
+		Session session = null;
+		try
+		{
 			
-	    }*/
-
-
+		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		  session = sessionFactory.openSession();
+		  
+		  Transaction tx = session.beginTransaction();
+		  session.save(pub);
+		  tx.commit();
+		  
+		  
+		  // Show thanh cong cho nguoi dung biet
+		 
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally{
+			// Actual Public insertion will happen at this step
+			session.flush();
+			session.close();
+			
+			}
+	}
+	
 }
