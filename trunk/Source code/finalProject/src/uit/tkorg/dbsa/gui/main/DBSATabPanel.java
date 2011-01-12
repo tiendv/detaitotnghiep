@@ -6,8 +6,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
+import uit.tkorg.dbsa.gui.databasemanagement.InsertArticleToDatabasePanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 
@@ -17,7 +17,7 @@ public class DBSATabPanel extends JTabbedPane {
 	private static final long serialVersionUID = 1L;
 	private FetcherPanel fetcherJPanel = null;
 	private FetcherResultPanel fetcherResultPanel = null;
-	private ClassificationPanel classificationJPanel = null;
+	private InsertArticleToDatabasePanel insertArticleToDatabase = null;
 	private JPanel databaseManagementJPanel = null;
 	private JTabbedPane dbsaJTabbedPane = null;
 
@@ -31,8 +31,8 @@ public class DBSATabPanel extends JTabbedPane {
 		setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
 		setBackground(Color.white);
 		addTab("Fetcher", getFetcherJPanel());
-		//addTab("Classification", getClassificationJPanel());
 		addTab("Database management", getDatabaseManagementJPanel());
+		addTab("Insert article", getInsertArticleToDatabaseJPanel());
 		setSize(900, 500);
 	}
 
@@ -43,8 +43,8 @@ public class DBSATabPanel extends JTabbedPane {
 		}
 		addTab("Fetcher", getFetcherJPanel());
 		addTab("Fetcher result",getFetcherResultPanel());	
-		//addTab("Classification", getClassificationJPanel());
 		addTab("Database management",getDatabaseManagementJPanel());
+		addTab("Insert article", getInsertArticleToDatabaseJPanel());
 
 		return dbsaJTabbedPane;
 	}
@@ -56,11 +56,11 @@ public class DBSATabPanel extends JTabbedPane {
 		return databaseManagementJPanel;
 	}
 
-	private ClassificationPanel getClassificationJPanel() {
-		if (classificationJPanel == null) {
-			classificationJPanel = new ClassificationPanel();
+	private InsertArticleToDatabasePanel getInsertArticleToDatabaseJPanel() {
+		if (insertArticleToDatabase == null) {
+			insertArticleToDatabase = new InsertArticleToDatabasePanel();
 		}
-		return classificationJPanel;
+		return insertArticleToDatabase;
 	}
 
 	private FetcherPanel getFetcherJPanel() {
