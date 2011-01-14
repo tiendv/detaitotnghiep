@@ -272,7 +272,7 @@ public class FetcherPanel extends JPanel {
 					}
 					
 					if(keywordJComboBox.getSelectedItem().toString().replaceAll(" ", "").equals("")){
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.input.keyword"));
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("message.request.input.keyword"));
 					}
 					else if(keywordJComboBox.getSelectedItem().toString() != "" && DBSAApplication.isInternetReachable()){
 						if(fetchFromACMCheckBox.isSelected() == true) {
@@ -372,7 +372,7 @@ public class FetcherPanel extends JPanel {
 				
 					
 					if(!fetcherBoolean){
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("messeage.request.choose.dl"));
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("message.request.choose.dl"));
 					}
 						/*
 						 * reset application Jpanel
