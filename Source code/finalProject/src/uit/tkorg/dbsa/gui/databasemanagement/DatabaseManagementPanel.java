@@ -230,10 +230,7 @@ public class DatabaseManagementPanel extends JPanel {
 		table.setShowGrid(true);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
-//		table.getColumn(DBSAResourceBundle.res.getString("subject.mark")).setWidth(0);
-//		table.getColumn(DBSAResourceBundle.res.getString("subject.mark")).setMaxWidth(0);
-//		table.getColumn(DBSAResourceBundle.res.getString("subject.mark")).setMinWidth(0);
-//		
+		
 		for(int i = 0; i < 3; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
 			if(i == 0){
@@ -274,27 +271,28 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 	
 	private Object[] addDataToSubjectTable(Subject subject){
-		Object []subjectData = {subjectJTable.getRowCount(), subject.getId(), subject.getSbj_name()};
+		Object []subjectData = {subjectJTable.getRowCount() + 1, subject.getId(), subject.getSbj_name()};
 		
 		return subjectData;
 	}
 	
 	int checkMarkSubject = 0;
 	public JTable getSubjectJTable() {
-		if (subjectJTable == null) {
-			subjectJTable = createSubjectJTable();
-		}
 		
 		dbsaSubjectList = LoadSubject.getSubject();
-		
-		if(dbsaSubjectList != null){
-		
+		if (subjectJTable == null) {
+			subjectJTable = createSubjectJTable();
+			subjectModel.removeRow(0);
+		}
+		else if(dbsaSubjectList != null){
 			for(int i = 0; i < dbsaSubjectList.size(); i++){
+		
 				subjectModel.insertRow(subjectJTable.getRowCount(), addDataToSubjectTable(dbsaSubjectList.get(i)));
 			}
 			
-			subjectModel.removeRow(0);
+			
 		}
+		
 		subjectJTable.addMouseListener(new MouseListener(){
 
 			@Override
