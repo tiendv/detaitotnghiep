@@ -37,8 +37,8 @@ public class LoadSubject {
 			session.close();
 		}
 	}
-	/*
-	public static void main(String[] args) {
+	
+	/*public static void main(String[] args) {
 	 	List<Subject> test = getSubject();
 	 	if(test.isEmpty())
 	 	System.out.print("romg");
@@ -49,6 +49,6 @@ public class LoadSubject {
 	 		
 	 	}
 	}
-	*/
-
+	
+*/
 }

@@ -8,7 +8,8 @@ import org.hibernate.SessionFactory;
 import uit.tkorg.dbsa.cores.hibernate.HibernateUtil;
 
 public class Test {
-/*
+	/* 
+
     public static void main(String[] args) {
         test1();
     }
@@ -33,7 +34,7 @@ public class Test {
 		}
     }
 
-  public static void test2() {
+ public static void test2() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         // get author with name = Philip K. Chan

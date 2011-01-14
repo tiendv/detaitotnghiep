@@ -139,7 +139,7 @@ public class SearchAuthorHomePage {
 	}
 	
 	public static void main(String[] args) {
-		String url =getHomePage("Weiyi Meng");
+		String url =getHomePage("Adrien Escande");
 
 		if(url != null)
 			System.out.println("Home page la:"+url);
