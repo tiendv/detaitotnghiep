@@ -1,6 +1,5 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -69,7 +68,6 @@ public class FetcherPatternDialog extends JDialog {
 	private String patternDescription;
 	private JButton setDefaultJButton;
 	private int rowIsSelected = 0;
-	private JPanel jContentPane = null;
 	
 	public FetcherPatternDialog() {
 		initComponents();
@@ -384,7 +382,7 @@ public class FetcherPatternDialog extends JDialog {
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
-			saveJButton.setText("Save changes");
+			saveJButton.setText(DBSAResourceBundle.res.getString("save.change"));
 			saveJButton.setEnabled(false);
 			saveJButton.addActionListener(new ActionListener(){
 
@@ -416,7 +414,7 @@ public class FetcherPatternDialog extends JDialog {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("Close");
+			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -536,16 +534,5 @@ public class FetcherPatternDialog extends JDialog {
 		return rowIsSelected;
 	}
 
-	/**
-	 * This method initializes jContentPane	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-		}
-		return jContentPane;
-	}
+
 }
