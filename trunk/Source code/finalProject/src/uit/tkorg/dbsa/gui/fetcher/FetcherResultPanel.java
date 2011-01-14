@@ -117,15 +117,6 @@ public class FetcherResultPanel extends JPanel {
 		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 338, 10, 142)));
 		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 141), new Trailing(61, 277, 10, 146)));
 		setSize(649, 484);
-		
-//		if(resultsJTable!= null){
-//			titleJTextArea.setText(model.getValueAt(0, 1).toString());
-//			authorsJTextArea.setText(model.getValueAt(0, 2).toString());
-//			linkJTextArea.setText(model.getValueAt(0, 3).toString());
-//			yearJTextArea.setText(model.getValueAt(0, 4).toString());
-//			abstractJTextArea.setText(model.getValueAt(0, 5).toString());
-//			publisherJTextArea.setText(resultsJTable.getModel().getValueAt(0, 6).toString());
-//		}
 	}
 
 	private JScrollPane getJScrollPane0() {
@@ -430,7 +421,13 @@ public class FetcherResultPanel extends JPanel {
 			
 			for(int i = 0; i < getRowNumber(); i++){				
 				if((i + 1) == getRowNumber()){
-					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate()};
+					String year;
+					if(getYear() == 0){
+						year = "";
+					}else{
+						year = getYear() + "";
+					}
+					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate()};
 					model.insertRow(resultsJTable.getRowCount(), data );
 				
 					DBSAPublication dbsa = new DBSAPublication();
@@ -451,17 +448,7 @@ public class FetcherResultPanel extends JPanel {
 			
 			if(!saveJButton.isEnabled())
 				saveJButton.setEnabled(true);
-			
-			if(resultsJTable.getRowCount() > 1){
-					
-					titleJTextArea.setText("abc");
-					//authorsJTextArea.setText(model.getValueAt(1, 2).toString());
-					//linkJTextArea.setText(model.getValueAt(1, 3).toString());
-					//yearJTextArea.setText(model.getValueAt(1, 4).toString());
-					//abstractJTextArea.setText(model.getValueAt(1, 5).toString());
-					//publisherJTextArea.setText(resultsJTable.getModel().getValueAt(1, 6).toString());
-			}
-			
+
 			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
 				checkRemovedFirst =  true;
 				
