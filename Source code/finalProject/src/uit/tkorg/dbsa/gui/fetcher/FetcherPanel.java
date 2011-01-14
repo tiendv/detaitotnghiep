@@ -501,12 +501,11 @@ public class FetcherPanel extends JPanel {
 	private JPanel getChooseJPanel() {
 		if (chooseJPanel == null) {
 			chooseJPanel = new JPanel();
-			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("choose.dls"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, "choose.dls", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			chooseJPanel.setLayout(new GroupLayout());
 			chooseJPanel.add(getFetchFromJLabel(), new Constraints(new Leading(23, 89, 10, 10), new Leading(12, 33, 12, 12)));
 			chooseJPanel.add(getMaxResultLabel(), new Constraints(new Leading(389, 96, 10, 10), new Leading(12, 32, 12, 12)));
-			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Trailing(289, 106, 12, 12), new Leading(12, 35, 12, 12)));
 			chooseJPanel.add(getCiteseerJProgressBar(), new Constraints(new Bilateral(519, 13, 383), new Leading(97, 26, 12, 12)));
 			chooseJPanel.add(getSearchByAllRadioButton(), new Constraints(new Leading(45, 10, 10), new Leading(171, 8, 8)));
 			chooseJPanel.add(getSearchBySubjectJRadioButton(), new Constraints(new Leading(44, 8, 8), new Leading(204, 10, 10)));
@@ -518,6 +517,7 @@ public class FetcherPanel extends JPanel {
 			chooseJPanel.add(getCiteseerDLCheckBox(), new Constraints(new Leading(23, 29, 167), new Leading(97, 28, 12, 12)));
 			chooseJPanel.add(getFetchFromACMCheckBox(), new Constraints(new Leading(23, 35, 407), new Leading(138, 28, 12, 12)));
 			chooseJPanel.add(getAcmJProgressBar(), new Constraints(new Bilateral(520, 13, 382), new Leading(138, 28, 12, 12)));
+			chooseJPanel.add(getFetcherStatusJLabel(), new Constraints(new Leading(520, 252, 10, 10), new Leading(12, 35, 12, 12)));
 		}
 		return chooseJPanel;
 	}
