@@ -32,6 +32,7 @@ import javax.swing.event.ChangeListener;
 
 import net.sf.jabref.sql.DbImportAction;
 
+import uit.tkorg.dbsa.actions.database.CheckDatabaseConection;
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
@@ -227,6 +228,22 @@ public class DBSAApplication extends JPanel {
 		if(checkMySQLConnectionJMenuItem == null){
 			checkMySQLConnectionJMenuItem = new JMenuItem();
 			checkMySQLConnectionJMenuItem.setText(DBSAResourceBundle.res.getString("check.database.connection"));
+			checkMySQLConnectionJMenuItem.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					boolean temp = false;
+					CheckDatabaseConection checkDataConnection = new CheckDatabaseConection();
+					temp = checkDataConnection.testConnection();
+					
+					if(temp){
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("database.connection.is.availble"));
+					}else{
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("database.connection.is.failed"));
+					}
+				}
+				
+			});
 		}
 		return checkMySQLConnectionJMenuItem;
 	}	
