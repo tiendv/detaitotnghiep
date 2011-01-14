@@ -35,15 +35,15 @@ public class LoadPublicationsFromDBSA {
 		}
 	}
 
-//	public static void main(String[] args) {
-//	 	ArrayList<DBSAPublication> test =  getPaper();
-//	 	if(test.isEmpty())
-//	 	System.out.print("romg");
-//	 	else {
-//	 		DBSAPublication test1 = test.get(0);
-//	 		System.out.println("Tua de bai bao:"+ test1.getTitle());
-//	 		System.out.println("Abstract bai bao:"+ test1.getAbstractPub());
-//	 		
-//	 	}
-//	}
+/*	public static void main(String[] args) {
+	 	ArrayList<DBSAPublication> test =  getPaper();
+	 	if(test.isEmpty())
+	 	System.out.print("romg");
+	 	else {
+	 		DBSAPublication test1 = test.get(0);
+	 		System.out.println("Tua de bai bao:"+ test1.getTitle());
+	 		System.out.println("Abstract bai bao:"+ test1.getAbstractPub());
+	 		
+	 	}
+	}*/
 }
