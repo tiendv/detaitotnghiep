@@ -288,9 +288,7 @@ public class DatabaseManagementPanel extends JPanel {
 			for(int i = 0; i < dbsaSubjectList.size(); i++){
 		
 				subjectModel.insertRow(subjectJTable.getRowCount(), addDataToSubjectTable(dbsaSubjectList.get(i)));
-			}
-			
-			
+			}	
 		}
 		
 		subjectJTable.addMouseListener(new MouseListener(){
