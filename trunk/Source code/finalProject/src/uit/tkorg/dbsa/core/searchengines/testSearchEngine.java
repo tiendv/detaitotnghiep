@@ -14,7 +14,7 @@ public class testSearchEngine {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		ArrayList<String> result = new ArrayList<String>();
 		GoogleSearchEngine test = new GoogleSearchEngine();
 		String query = "\"home page\",\"Paolo Trunfio\"";
@@ -25,6 +25,6 @@ public class testSearchEngine {
 			System.out.println("Gia tri "+i+".."+result.get(i).toString()+"\n");
 		}
 
-	}
+	}*/
 
 }
