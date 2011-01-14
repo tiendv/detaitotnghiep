@@ -71,12 +71,12 @@ public class CheckDatabaseConection {
 		      }
 		    }
 		  }
-	 public static void main(String[] args) {
+/*	 public static void main(String[] args) {
 		Boolean test = testConnection();
 		if(test == true)
 		System.out.printf("ok");
 		else
 			System.out.printf("die");	
-	 }
+	 }*/
 
 }

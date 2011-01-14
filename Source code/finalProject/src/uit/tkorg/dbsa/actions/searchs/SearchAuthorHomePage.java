@@ -138,7 +138,7 @@ public class SearchAuthorHomePage {
 		return false;
 	}
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		String url =getHomePage("Adrien Escande");
 
 		if(url != null)
@@ -146,6 +146,6 @@ public class SearchAuthorHomePage {
 		else
 			System.out.println("Khogn tim thay home page");
 	}
-
+*/
 
 }
