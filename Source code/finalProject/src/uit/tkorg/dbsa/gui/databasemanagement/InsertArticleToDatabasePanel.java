@@ -22,8 +22,10 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.core.databasemanagement.InsertArtcileToDatabase;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.model.DBSAPublication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class InsertArticleToDatabasePanel extends JPanel {
@@ -307,55 +309,87 @@ public class InsertArticleToDatabasePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					if(titleJTextField.getText().equals("") || authorJTextField.getText().equals("") || yearJTextField.getText().equals("") ){
-						
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.article.info"));
-					}else if(linkJTextField.getText().equals(null)){
-						linkJTextField.setText("");
-					
-					}else if(abstracJTextField.getText().equals(null)){
-						abstracJTextField.setText("");
-						
-					}else if(publisherJTextField.getText().equals(null)){
-						publisherJTextField.setText("");
-						
-					}else{
-					
-						if(yearJTextField.getText().length() != 4){
-							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.year.again"));
-						}else{
-							try{
-								
-								int checkYear = Integer.parseInt(yearJTextField.getText().trim());
-								Calendar cal = Calendar.getInstance();
-								
-								if(checkYear > 1899 && checkYear <= cal.get(Calendar.YEAR)){
-									insertArticle.insertArtcile(titleJTextField.getText(), 
-											authorJTextField.getText(), linkJTextField.getText(), 
-											Integer.parseInt(yearJTextField.getText()), 
-											abstracJTextField.getText(), publisherJTextField.getText());
-									
-									titleJTextField.setText("");
-									authorJTextField.setText("");
-									linkJTextField.setText("");
-									yearJTextField.setText("");
-									abstracJTextField.setText("");
-									publisherJTextField.setText("");
-								}
-								else{
-									JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.year.again"));
-								}
-							}catch(NumberFormatException ex){
-								JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.year.again"));
-							}
-						}
-						
-					}
+					checkAndInsertToDatabase();
 				}
 				
 			});
 		}
 		return insertJButton;
+	}
+	
+	private void checkAndInsertToDatabase(){
+		if(titleJTextField.getText().equals("") || authorJTextField.getText().equals("") || yearJTextField.getText().equals("") ){
+			
+			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.article.info"));
+		}else if(linkJTextField.getText().equals(null)){
+			linkJTextField.setText("");
+		
+		}else if(abstracJTextField.getText().equals(null)){
+			abstracJTextField.setText("");
+			
+		}else if(publisherJTextField.getText().equals(null)){
+			publisherJTextField.setText("");
+			
+		}else{
+		
+			if(yearJTextField.getText().length() != 4){
+				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.year.again"));
+			}else{
+				try{
+					
+					int checkYear = Integer.parseInt(yearJTextField.getText().trim());
+					Calendar cal = Calendar.getInstance();
+					
+					if(checkYear > 1899 && checkYear <= cal.get(Calendar.YEAR)){
+						
+						DBSAPublication dbsaPublication = new DBSAPublication();
+						
+						dbsaPublication.setTitle(titleJTextField.getText());
+						dbsaPublication.setAuthors(authorJTextField.getText());
+						dbsaPublication.setYear(Integer.parseInt(yearJTextField.getText()));
+						
+						boolean checkExist = false;
+						checkExist = checkPublicationDuplicate(dbsaPublication);
+						
+						if(!checkExist){
+							insertArticle.insertArtcile(titleJTextField.getText(), 
+									authorJTextField.getText(), linkJTextField.getText(), 
+									Integer.parseInt(yearJTextField.getText()), 
+									abstracJTextField.getText(), publisherJTextField.getText());
+							
+						}else{
+							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("article.is.duplicated"));
+						}
+							
+							titleJTextField.setText("");
+							authorJTextField.setText("");
+							linkJTextField.setText("");
+							yearJTextField.setText("");
+							abstracJTextField.setText("");
+							publisherJTextField.setText("");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.year.again"));
+					}
+				}catch(NumberFormatException ex){
+					JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("requirement.input.year.again"));
+				}
+			}
+		}
+	}
+	
+	/***
+	 * 
+	 * @param dbsaPublication
+	 * @return
+	 */
+	private boolean checkPublicationDuplicate(DBSAPublication dbsaPublication){
+		boolean check = false;
+		
+		CheckExist checkPubIsExist = new CheckExist();
+		check = checkPubIsExist.CheckPublicationInDBSA(dbsaPublication);
+		
+		return check;
 	}
 
 }

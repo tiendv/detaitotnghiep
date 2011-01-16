@@ -35,6 +35,7 @@ import net.sf.jabref.sql.DbImportAction;
 import uit.tkorg.dbsa.actions.database.CheckDatabaseConection;
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
+import uit.tkorg.dbsa.gui.databasemanagement.InsertArticleToDatabasePanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPatternDialog;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
@@ -84,6 +85,7 @@ public class DBSAApplication extends JPanel {
 	public static DBSAFetcherPattern dbsaFetcherPattern = null;
 	public static FetcherResultPanel fetcherResultPanel = null;
 	public static DatabaseManagementPanel databaseManagementPanel = null;
+	public static InsertArticleToDatabasePanel insertArticleToDatabasePanel = null;
 	
 	private JFrame getDBSAJFrame(){
 	
@@ -99,9 +101,9 @@ public class DBSAApplication extends JPanel {
 			dbsaFetcherPattern = new DBSAFetcherPattern();
 			
 			fetcherResultPanel = new FetcherResultPanel(dbsaTabPanel);
-			databaseManagementPanel = new DatabaseManagementPanel();
+			databaseManagementPanel = new DatabaseManagementPanel(dbsaTabPanel);
+			insertArticleToDatabasePanel =  new InsertArticleToDatabasePanel();
 			
-			getDBSAContent();
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel(dbsaTabPanel);
 			}else{
@@ -111,6 +113,8 @@ public class DBSAApplication extends JPanel {
 					dbsaStatusBar.setStatusJLabel("");
 				dbsaStatusBar.repaint();
 			}
+			
+			getDBSAContent();
 			
 			dbsaJFrame.repaint();
 			

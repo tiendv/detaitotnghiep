@@ -18,7 +18,7 @@ public class DBSATabPanel extends JTabbedPane {
 	private FetcherPanel fetcherJPanel = null;
 	private FetcherResultPanel fetcherResultPanel = null;
 	private InsertArticleToDatabasePanel insertArticleToDatabase = null;
-	private JPanel databaseManagementJPanel = null;
+	private DatabaseManagementPanel databaseManagementJPanel = null;
 	private JTabbedPane dbsaJTabbedPane = null;
 
 	public DBSATabPanel() {
@@ -31,6 +31,7 @@ public class DBSATabPanel extends JTabbedPane {
 		setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
 		setBackground(Color.white);
 		addTab(DBSAResourceBundle.res.getString("fetcher"), getFetcherJPanel());
+		addTab(DBSAResourceBundle.res.getString("fetcher.results"), getFetcherResultPanel());
 		addTab(DBSAResourceBundle.res.getString("database.management"), getDatabaseManagementJPanel());
 		addTab(DBSAResourceBundle.res.getString("insert.article"), getInsertArticleToDatabaseJPanel());
 		setSize(900, 500);
@@ -49,9 +50,9 @@ public class DBSATabPanel extends JTabbedPane {
 		return dbsaJTabbedPane;
 	}
 
-	private JPanel getDatabaseManagementJPanel() {
+	private DatabaseManagementPanel getDatabaseManagementJPanel() {
 		if (databaseManagementJPanel == null) {
-			databaseManagementJPanel = new DatabaseManagementPanel();
+			databaseManagementJPanel = new DatabaseManagementPanel(this);
 		}
 		return databaseManagementJPanel;
 	}

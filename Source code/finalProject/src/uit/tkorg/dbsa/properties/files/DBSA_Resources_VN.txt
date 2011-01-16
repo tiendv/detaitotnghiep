@@ -12,6 +12,7 @@ application.name = Xây dựng kho dữ liệu chỉ mục bài báo dùng Webcr
 authors = Các tác giả
 authors.and.email = Các tác giả và thư điện tử:\n
 authors.in.about = 1)Huỳnh Ngọc Tín \n     tinhn@uit.edu.vn\n\n2) Nguyễn Phước Cường\n     cuongnp.se@gmail.com\n\n3) Đỗ Văn Tiến \n     tiendo.vn@gmail.com\n\n
+article.is.duplicated = Bài báo đã tồn tại trong cơ sở dữ liệu.\nVui lòng nhập lại bài báo khác.
 bad.request = Bad request
 body = Nội dung
 bold = In đậm

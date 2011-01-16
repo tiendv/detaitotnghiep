@@ -525,7 +525,7 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getCiteseerJSpinner() {
 		if (citeseerJSpinner == null) {
 			citeseerJSpinner = new JSpinner();
-			citeseerJSpinner.setModel(new SpinnerNumberModel(0, 0, CITESEER_MAX_RESULT, 1));
+			citeseerJSpinner.setModel(new SpinnerNumberModel(1, 1, CITESEER_MAX_RESULT, 1));
 			
 			citeseerJSpinner.addChangeListener(new ChangeListener() {
 	
@@ -558,7 +558,7 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getIeeexploreJSpinner1() {
 		if (ieeexploreJSpinner == null) {
 			ieeexploreJSpinner = new JSpinner();
-			ieeexploreJSpinner.setModel(new SpinnerNumberModel(0, 0, IEEE_MAX_RESULT, 1));
+			ieeexploreJSpinner.setModel(new SpinnerNumberModel(1, 1, IEEE_MAX_RESULT, 1));
 			ieeexploreJSpinner.addChangeListener(new ChangeListener() {
 	
 				public void stateChanged(ChangeEvent event) {
@@ -580,7 +580,7 @@ public class FetcherPanel extends JPanel {
 	private JSpinner getAcmJSpinner() {
 		if (acmJSpinner == null) {
 			acmJSpinner = new JSpinner();
-			acmJSpinner.setModel(new SpinnerNumberModel(0, 0, ACM_MAX_RESULT, 1));
+			acmJSpinner.setModel(new SpinnerNumberModel(1, 1, ACM_MAX_RESULT, 1));
 			
 			acmJSpinner.addChangeListener(new ChangeListener() {
 	

@@ -174,7 +174,7 @@ public class CheckExist {
 	 * @return true neu bai bao da ton tai trong du lieu DBSA roi.
 	 * 			false neu bai bao chua ton tai trong DBSA
 	 */
-	private static Boolean CheckPublicationInDBSA(DBSAPublication publ) {
+	public static Boolean CheckPublicationInDBSA(DBSAPublication publ) {
 		try
 		{
 		//System.out.printf(publ.getTitle());
