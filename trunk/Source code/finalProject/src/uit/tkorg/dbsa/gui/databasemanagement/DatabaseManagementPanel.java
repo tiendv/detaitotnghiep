@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -79,8 +80,12 @@ public class DatabaseManagementPanel extends JPanel {
 	ArrayList<DBSAPublication> dbsaPublicationUpdateList = new ArrayList<DBSAPublication>();
 	
 	private ArrayList<Subject> dbsaSubjectList = new ArrayList<Subject>();
-	public DatabaseManagementPanel() {
+	
+	public JTabbedPane dbsaTabFrame = null;
+	
+	public DatabaseManagementPanel(JTabbedPane dbsa) {
 		initComponents();
+		this.dbsaTabFrame = dbsa;
 	}
 
 	private void initComponents() {
@@ -98,6 +103,15 @@ public class DatabaseManagementPanel extends JPanel {
 		if (insertPublicationJButton == null) {
 			insertPublicationJButton = new JButton();
 			insertPublicationJButton.setText(DBSAResourceBundle.res.getString("insert"));
+			insertPublicationJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					dbsaTabFrame.setSelectedIndex(3);
+				}
+				
+			});
 		}
 		return insertPublicationJButton;
 	}
@@ -128,6 +142,9 @@ public class DatabaseManagementPanel extends JPanel {
 					for (int j = 0; j < subjectJTable.getRowCount(); j++) {
 						subjectJTable.getModel().setValueAt(j + 1, j, 0);
 					}
+					
+					deleteSubjectJButton.setEnabled(false);
+				
 				}
 				
 			});
@@ -388,6 +405,9 @@ public class DatabaseManagementPanel extends JPanel {
 							deletePublication.deletePublication(dbsaPublication);
 						}
 					}
+					if(publicationJTable.getRowCount() == 0){
+						deletePublicationJButton.setEnabled(false);
+					}
 					for (int j = 0; j < publicationJTable.getRowCount(); j++) {
 						publicationJTable.getModel().setValueAt(j + 1, j, 0);
 					}
@@ -413,7 +433,7 @@ public class DatabaseManagementPanel extends JPanel {
 						}
 						if (checkRemoveRow == false) {
 							checkRemoveRow = true;
-							publicationModel.removeRow(0);
+							
 						}
 					}
 				}
@@ -546,12 +566,13 @@ public class DatabaseManagementPanel extends JPanel {
 	
 	int check = 0;
 	private JPanel publicationActionsJPanel;
-	private JButton updateDataJButton;
-	private JButton deleteSubjectJButton;
+	private static JButton updateDataJButton;
+	private static JButton deleteSubjectJButton;
 	
 	private JTable getDatabaseJTable() {
 		if(publicationJTable == null) {
 			publicationJTable =  createDatabaseJTable();
+			publicationModel.removeRow(0);
 		}
 		dbsaPublicationList = LoadPublicationsFromDBSA.getPaper();
 		if(dbsaPublicationList != null){
