@@ -354,8 +354,11 @@ public class DatabaseManagementPanel extends JPanel {
 					
 					InsertSubjectFrame insertSubjectFrame = new InsertSubjectFrame(DBSAApplication.dbsaJFrame);
 					
-					System.out.println(subjectJTable.getRowCount());
-					insertSubjectFrame.setTextfieldValue(subjectJTable.getModel().getRowCount() + 1, Integer.parseInt(subjectJTable.getModel().getValueAt(subjectJTable.getRowCount() - 1, 1).toString()) + 1);
+					if(subjectJTable == null || subjectJTable.getRowCount() == 0){
+						insertSubjectFrame.setTextfieldValue(subjectJTable.getModel().getRowCount() + 1, 1);
+					}else{
+						insertSubjectFrame.setTextfieldValue(subjectJTable.getModel().getRowCount() + 1, Integer.parseInt(subjectJTable.getModel().getValueAt(subjectJTable.getRowCount() - 1, 1).toString()) + 1);
+					}
 					insertSubjectFrame.setVisible(true);
 
 				}

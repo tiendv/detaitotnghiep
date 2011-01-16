@@ -12,8 +12,11 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 
+import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
@@ -25,17 +28,15 @@ public class AboutDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JLabel jLabel1;
-	private JPanel jPanel0;
-	private JLabel applicationNameJLabel;
-	private JLabel versionJLabel;
-	private JLabel authorsJLabel;
+	private JPanel textContentJPanel;
 	private int width = 430;
 	private int height = 390;
 	private int xLocation;
 	private int yLocation;
 	private JFrame dbsaJFrame;
-	private JLabel jLabel0;
-	private JButton jButton1;
+	private JButton closeJButton;
+	private JTextArea aboutJTextContent;
+	private JScrollPane contentJScrollPane;
 	
 	public AboutDialog() {
 		initComponents();
@@ -57,17 +58,47 @@ public class AboutDialog extends JDialog {
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
 		add(getJLabel1(), new Constraints(new Leading(0, 249, 217, 217), new Leading(-2, 319, 10, 10)));
-		add(getJPanel0(), new Constraints(new Leading(250, 199, 10, 10), new Leading(0, 277, 12, 12)));
-		add(getJButton1(), new Constraints(new Leading(309, 12, 12), new Leading(283, 12, 12)));
-		setSize(451, 340);
+		add(getcloseJButton(), new Constraints(new Leading(332, 10, 10), new Leading(289, 12, 12)));
+		add(gettextContentJPanel(), new Constraints(new Leading(250, 228, 12, 12), new Leading(0, 277, 12, 12)));
+		setSize(483, 340);
 		setLocation(xLocation, yLocation);
 	}
 
-	private JButton getJButton1() {
-		if (jButton1 == null) {
-			jButton1 = new JButton();
-			jButton1.setText("Close");
-			jButton1.addActionListener(new ActionListener(){
+	private String updateTextsOfComponents(){
+		String textContent = "";
+		
+		textContent += DBSAResourceBundle.res.getString("about.dbsa");
+		textContent += DBSAResourceBundle.res.getString("version");
+		textContent += DBSAResourceBundle.res.getString("copyright.tkorg");
+		textContent += DBSAResourceBundle.res.getString("authors.and.email");
+		textContent += DBSAResourceBundle.res.getString("authors.in.about");
+		textContent += DBSAResourceBundle.res.getString("thank.you");
+		
+		return textContent;
+	}
+	
+	private JScrollPane getcontentJScrollPane() {
+		if (contentJScrollPane == null) {
+			contentJScrollPane = new JScrollPane();
+			contentJScrollPane.setViewportView(getAboutJTextContent());
+		}
+		return contentJScrollPane;
+	}
+
+	private JTextArea getAboutJTextContent() {
+		if (aboutJTextContent == null) {
+			aboutJTextContent = new JTextArea();
+			aboutJTextContent.setEditable(false);
+			aboutJTextContent.setText(updateTextsOfComponents());
+		}
+		return aboutJTextContent;
+	}
+
+	private JButton getcloseJButton() {
+		if (closeJButton == null) {
+			closeJButton = new JButton();
+			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
+			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -76,52 +107,17 @@ public class AboutDialog extends JDialog {
 				
 			});
 		}
-		return jButton1;
+		return closeJButton;
 	}
 
-	private JLabel getJLabel0() {
-		if (jLabel0 == null) {
-			jLabel0 = new JLabel();
-			jLabel0.setText("Copyright © by TKORG group");
+	private JPanel gettextContentJPanel() {
+		if (textContentJPanel == null) {
+			textContentJPanel = new JPanel();
+			textContentJPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			textContentJPanel.setLayout(new GroupLayout());
+			textContentJPanel.add(getcontentJScrollPane(), new Constraints(new Bilateral(1, 0, 22), new Leading(1, 270, 10, 10)));
 		}
-		return jLabel0;
-	}
-
-	private JLabel getAuthorsJLabel() {
-		if (authorsJLabel == null) {
-			authorsJLabel = new JLabel();
-			authorsJLabel.setText("Author: \nCuong Nguyen, \nTien Do.");
-		}
-		return authorsJLabel;
-	}
-
-	private JLabel getVersionJLabel() {
-		if (versionJLabel == null) {
-			versionJLabel = new JLabel();
-			versionJLabel.setText("Version 1.0");
-		}
-		return versionJLabel;
-	}
-
-	private JLabel getApplicationNameJLabel() {
-		if (applicationNameJLabel == null) {
-			applicationNameJLabel = new JLabel();
-			applicationNameJLabel.setText("DBSA - Database ");
-		}
-		return applicationNameJLabel;
-	}
-
-	private JPanel getJPanel0() {
-		if (jPanel0 == null) {
-			jPanel0 = new JPanel();
-			jPanel0.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			jPanel0.setLayout(new GroupLayout());
-			jPanel0.add(getApplicationNameJLabel(), new Constraints(new Leading(12, 12, 12), new Leading(12, 12, 12)));
-			jPanel0.add(getVersionJLabel(), new Constraints(new Leading(12, 12, 12), new Leading(34, 12, 12)));
-			jPanel0.add(getJLabel0(), new Constraints(new Leading(12, 12, 12), new Leading(56, 12, 12)));
-			jPanel0.add(getAuthorsJLabel(), new Constraints(new Leading(12, 12, 12), new Leading(78, 12, 12)));
-		}
-		return jPanel0;
+		return textContentJPanel;
 	}
 
 	private JLabel getJLabel1() {
