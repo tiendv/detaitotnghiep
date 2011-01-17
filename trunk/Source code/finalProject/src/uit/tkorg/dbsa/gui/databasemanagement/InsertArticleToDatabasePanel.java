@@ -31,66 +31,91 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 public class InsertArticleToDatabasePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel inputJPanel;
-	private JPanel actionsJPanel;
-	private JButton closeJButton;
-	private JButton insertJButton;
-	private JButton clearJButton;
+	private static JPanel inputJPanel;
+	private static JPanel actionsJPanel;
+	private static JButton closeJButton;
+	private static JButton insertJButton;
+	private static JButton clearJButton;
 	private JTextField titleJTextField;
 	private JTextField authorJTextField;
 	private JTextField linkJTextField;
 	private JTextField yearJTextField;
 	private JTextField abstracJTextField;
 	private JTextField publisherJTextField;
-	private JLabel authorJLabel;
-	private JLabel linkJLabel;
-	private JLabel yearJLabel;
-	private JLabel publisherJLabel;
-	private JLabel titleDesJLabel;
-	private JLabel authorDesJLabel;
-	private JLabel linkDesJLabel;
-	private JLabel yearDesJLabel;
-	private JLabel abstractDesJLabel;
-	private JLabel jLabel11;
+	private static JLabel authorJLabel;
+	private static JLabel linkJLabel;
+	private static JLabel yearJLabel;
+	private static JLabel publisherJLabel;
+	private static JLabel titleDesJLabel;
+	private static JLabel authorDesJLabel;
+	private static JLabel linkDesJLabel;
+	private static JLabel yearDesJLabel;
+	private static JLabel abstractDesJLabel;
+	private static JLabel jLabel11;
 	private InsertArtcileToDatabase insertArticle = new InsertArtcileToDatabase();
-	private JLabel jLabel0;
-	private JLabel abstractLabel;
+	private static JLabel titleJLabel;
+	private static JLabel abstractLabel;
 
 	public InsertArticleToDatabasePanel() {
 		initComponents();
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("insert.artilce.to.datatbase"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-				Font.BOLD, 12), new Color(51, 51, 51)));
+		
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 0), new Trailing(10, 66, 10, 205)));
 		add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 80, 10, 201)));
 		setSize(988, 628);
+		updateTextsOfComponents();
 	}
 
+	public void updateTextsOfComponents(){
+		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("insert.artilce.to.datatbase"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		abstractLabel.setText(DBSAResourceBundle.res.getString("abstract"));
+		titleJLabel.setText(DBSAResourceBundle.res.getString("title"));
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
+		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+				12), new Color(51, 51, 51)));
+		jLabel11.setText(DBSAResourceBundle.res.getString("input.publisher.description"));
+		abstractDesJLabel.setText(DBSAResourceBundle.res.getString("input.abstract.description"));
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		yearDesJLabel.setText(DBSAResourceBundle.res.getString("input.year.description") + year );
+		linkDesJLabel.setText(DBSAResourceBundle.res.getString("input.link.description"));
+		authorDesJLabel.setText(DBSAResourceBundle.res.getString("input.author.description"));
+		titleDesJLabel.setText(DBSAResourceBundle.res.getString("input.title.description"));
+		inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input.data"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		insertJButton.setText(DBSAResourceBundle.res.getString("insert"));
+		clearJButton.setText(DBSAResourceBundle.res.getString("clear"));
+		authorJLabel.setText(DBSAResourceBundle.res.getString("authors"));
+		linkJLabel.setText(DBSAResourceBundle.res.getString("link"));
+		yearJLabel.setText(DBSAResourceBundle.res.getString("year"));
+
+		publisherJLabel.setText(DBSAResourceBundle.res.getString("publisher"));
+	}
+	
 	private JLabel getAbstractLabel() {
 		if (abstractLabel == null) {
 			abstractLabel = new JLabel();
-			abstractLabel.setText(DBSAResourceBundle.res.getString("abstract"));
 			abstractLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			
 		}
 		return abstractLabel;
 	}
 
-	private JLabel getJLabel0() {
-		if (jLabel0 == null) {
-			jLabel0 = new JLabel();
-			jLabel0.setText(DBSAResourceBundle.res.getString("title"));
-			jLabel0.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+	private JLabel gettitleJLabel() {
+		if (titleJLabel == null) {
+			titleJLabel = new JLabel();
+			titleJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
-		return jLabel0;
+		return titleJLabel;
 	}
 
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 		}
 		return closeJButton;
 	}
@@ -98,8 +123,7 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
-					12), new Color(51, 51, 51)));
+			
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 81, 12, 12), new Leading(0, 12, 12)));
 			actionsJPanel.add(getInsertJButton(), new Constraints(new Trailing(111, 81, 12, 12), new Leading(0, 12, 12)));
@@ -111,7 +135,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getJLabel11() {
 		if (jLabel11 == null) {
 			jLabel11 = new JLabel();
-			jLabel11.setText(DBSAResourceBundle.res.getString("input.publisher.description"));
 			jLabel11.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		}
 		return jLabel11;
@@ -120,7 +143,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getAbstractDesJLabel() {
 		if (abstractDesJLabel == null) {
 			abstractDesJLabel = new JLabel();
-			abstractDesJLabel.setText(DBSAResourceBundle.res.getString("input.abstract.description"));
 			abstractDesJLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		}
 		return abstractDesJLabel;
@@ -140,7 +162,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getLinkDesJLabel() {
 		if (linkDesJLabel == null) {
 			linkDesJLabel = new JLabel();
-			linkDesJLabel.setText(DBSAResourceBundle.res.getString("input.link.description"));
 			linkDesJLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		}
 		return linkDesJLabel;
@@ -149,7 +170,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getAuthorDesJLabel() {
 		if (authorDesJLabel == null) {
 			authorDesJLabel = new JLabel();
-			authorDesJLabel.setText(DBSAResourceBundle.res.getString("input.author.description"));
 			authorDesJLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		}
 		return authorDesJLabel;
@@ -158,7 +178,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getTitleDesJLabel() {
 		if (titleDesJLabel == null) {
 			titleDesJLabel = new JLabel();
-			titleDesJLabel.setText(DBSAResourceBundle.res.getString("input.title.description"));
 			titleDesJLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		}
 		return titleDesJLabel;
@@ -167,8 +186,7 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JPanel getInputJPanel() {
 		if (inputJPanel == null) {
 			inputJPanel = new JPanel();
-			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input.data"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
+			
 			inputJPanel.setLayout(new GroupLayout());
 			inputJPanel.add(getTitleJTextField(), new Constraints(new Bilateral(122, 12, 4), new Leading(0, 26, 10, 10)));
 			inputJPanel.add(getAuthorJTextField(), new Constraints(new Bilateral(123, 12, 833), new Leading(73, 26, 10, 10)));
@@ -180,7 +198,7 @@ public class InsertArticleToDatabasePanel extends JPanel {
 			inputJPanel.add(getYearJLabel(), new Constraints(new Leading(12, 103, 28, 28), new Leading(215, 32, 10, 10)));
 			inputJPanel.add(getPublisherJLabel(), new Constraints(new Leading(12, 103, 12, 12), new Leading(400, 30, 10, 10)));
 			inputJPanel.add(getYearJTextField(), new Constraints(new Bilateral(122, 12, 4), new Leading(215, 29, 10, 10)));
-			inputJPanel.add(getJLabel0(), new Constraints(new Leading(12, 103, 28, 28), new Leading(-2, 31, 12, 12)));
+			inputJPanel.add(gettitleJLabel(), new Constraints(new Leading(12, 103, 28, 28), new Leading(-2, 31, 12, 12)));
 			inputJPanel.add(getAbstractLabel(), new Constraints(new Leading(12, 103, 27, 27), new Leading(292, 60, 12, 12)));
 			inputJPanel.add(getYearDesJLabel(), new Constraints(new Leading(122, 650, 10, 10), new Leading(248, 26, 12, 12)));
 			inputJPanel.add(getLinkDesJLabel(), new Constraints(new Leading(122, 696, 10, 10), new Leading(177, 26, 12, 12)));
@@ -195,7 +213,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getPublisherJLabel() {
 		if (publisherJLabel == null) {
 			publisherJLabel = new JLabel();
-			publisherJLabel.setText(DBSAResourceBundle.res.getString("publisher"));
 			publisherJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return publisherJLabel;
@@ -204,7 +221,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getYearJLabel() {
 		if (yearJLabel == null) {
 			yearJLabel = new JLabel();
-			yearJLabel.setText(DBSAResourceBundle.res.getString("year"));
 			yearJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return yearJLabel;
@@ -213,7 +229,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getLinkJLabel() {
 		if (linkJLabel == null) {
 			linkJLabel = new JLabel();
-			linkJLabel.setText(DBSAResourceBundle.res.getString("link"));
 			linkJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return linkJLabel;
@@ -222,7 +237,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JLabel getAuthorJLabel() {
 		if (authorJLabel == null) {
 			authorJLabel = new JLabel();
-			authorJLabel.setText(DBSAResourceBundle.res.getString("authors"));
 			authorJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return authorJLabel;
@@ -279,7 +293,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JButton getClearJButton() {
 		if (clearJButton == null) {
 			clearJButton = new JButton();
-			clearJButton.setText(DBSAResourceBundle.res.getString("clear"));
 			clearJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -303,7 +316,6 @@ public class InsertArticleToDatabasePanel extends JPanel {
 	private JButton getInsertJButton() {
 		if (insertJButton == null) {
 			insertJButton = new JButton();
-			insertJButton.setText(DBSAResourceBundle.res.getString("insert"));
 			insertJButton.addActionListener(new ActionListener(){
 
 				@Override

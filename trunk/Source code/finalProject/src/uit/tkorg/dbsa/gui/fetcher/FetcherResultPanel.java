@@ -56,17 +56,17 @@ public class FetcherResultPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	public static MyJTable resultsJTable;
-	private JScrollPane resultsJScrollPane;
-	private JPanel actionsJPanel;
-	private JButton closeJButton;
+	private static JScrollPane resultsJScrollPane;
+	private static JPanel actionsJPanel;
+	private static JButton closeJButton;
 	private static JButton deleteJButton;
 	private static JButton saveJButton;
-	private JPanel entryJPanel;
-	private JLabel authorsJLabel;
-	private JLabel yearJLabel;
-	private JLabel abstractJLabel;
-	private JLabel publisherJLabel;
-	private JLabel titleJLabel;
+	private static JPanel entryJPanel;
+	private static JLabel authorsJLabel;
+	private static JLabel yearJLabel;
+	private static JLabel abstractJLabel;
+	private static JLabel publisherJLabel;
+	private static JLabel titleJLabel;
 	private JTextArea titleJTextArea;
 	private JScrollPane jScrollPane1;
 	private JTextArea authorsJTextArea;
@@ -104,6 +104,7 @@ public class FetcherResultPanel extends JPanel {
 	public FetcherResultPanel(DBSATabPanel dbsa) {
 		initComponents();
 		dbsaTabFrame = dbsa;
+		updateTextsOfComponents();
 	
 	}
 
@@ -117,6 +118,23 @@ public class FetcherResultPanel extends JPanel {
 		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 338, 10, 142)));
 		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 141), new Trailing(61, 277, 10, 146)));
 		setSize(649, 484);
+	}
+	
+	public static void updateTextsOfComponents(){
+		linkJLabel.setText("  " + DBSAResourceBundle.res.getString("link"));
+		titleJLabel.setText("  " + DBSAResourceBundle.res.getString("title"));
+		publisherJLabel.setText("  " + DBSAResourceBundle.res.getString("publisher"));
+		abstractJLabel.setText("  " + DBSAResourceBundle.res.getString("abstract"));
+		yearJLabel.setText("  " + DBSAResourceBundle.res.getString("year"));
+		authorsJLabel.setText("  " + DBSAResourceBundle.res.getString("authors"));
+		entryJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("entry.detail"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		saveJButton.setText(DBSAResourceBundle.res.getString("save"));
+		deleteJButton.setText(DBSAResourceBundle.res.getString("delete"));
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
+		actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
+		resultsJScrollPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("result.list")));
+		getColumnName();
 	}
 
 	private JScrollPane getJScrollPane0() {
@@ -176,7 +194,6 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getLinkJLabel() {
 		if (linkJLabel == null) {
 			linkJLabel = new JLabel();
-			linkJLabel.setText("  " + DBSAResourceBundle.res.getString("link"));
 			linkJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return linkJLabel;
@@ -288,7 +305,6 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getTitleJLabel() {
 		if (titleJLabel == null) {
 			titleJLabel = new JLabel();
-			titleJLabel.setText("  " + DBSAResourceBundle.res.getString("title"));
 			titleJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return titleJLabel;
@@ -297,7 +313,6 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getPublisherJLabel() {
 		if (publisherJLabel == null) {
 			publisherJLabel = new JLabel();
-			publisherJLabel.setText("  " + DBSAResourceBundle.res.getString("publisher"));
 			publisherJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return publisherJLabel;
@@ -306,7 +321,6 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getAbstractJLabel() {
 		if (abstractJLabel == null) {
 			abstractJLabel = new JLabel();
-			abstractJLabel.setText("  " + DBSAResourceBundle.res.getString("abstract"));
 			abstractJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return abstractJLabel;
@@ -315,7 +329,6 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getYearJLabel() {
 		if (yearJLabel == null) {
 			yearJLabel = new JLabel();
-			yearJLabel.setText("  " + DBSAResourceBundle.res.getString("year"));
 			yearJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return yearJLabel;
@@ -324,7 +337,6 @@ public class FetcherResultPanel extends JPanel {
 	private JLabel getAuthorsJLabel() {
 		if (authorsJLabel == null) {
 			authorsJLabel = new JLabel();
-			authorsJLabel.setText("  " + DBSAResourceBundle.res.getString("authors"));
 			authorsJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return authorsJLabel;
@@ -523,7 +535,7 @@ public class FetcherResultPanel extends JPanel {
 	 * Ham tao danh sach ten cac cot trong table
 	 * @return String []
 	 */
-	private  String [] getColumnName(){
+	private static  String [] getColumnName(){
 		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
 				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
 				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
@@ -554,8 +566,6 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getEntryJPanel() {
 		if (entryJPanel == null) {
 			entryJPanel = new JPanel();
-			entryJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("entry.detail"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
 			entryJPanel.setLayout(new GroupLayout());
 			entryJPanel.add(getAuthorsJLabel(), new Constraints(new Leading(8, 78, 45, 26), new Leading(45, 30, 12, 12)));
 			entryJPanel.add(getTitleJLabel(), new Constraints(new Leading(8, 78, 12, 12), new Leading(10, 30, 12, 12)));
@@ -574,14 +584,13 @@ public class FetcherResultPanel extends JPanel {
 	}
 
 	boolean abc = false;
-	private JLabel linkJLabel;
+	private static JLabel linkJLabel;
 	private JEditorPane linkJEditorPane;
 	private JScrollPane jScrollPane0;
 	
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
-			saveJButton.setText(DBSAResourceBundle.res.getString("save"));
 			saveJButton.setEnabled(false);
 			
 			saveJButton.addActionListener(new ActionListener(){
@@ -683,7 +692,6 @@ public class FetcherResultPanel extends JPanel {
 	private JButton getDeleteJButton() {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
-			deleteJButton.setText(DBSAResourceBundle.res.getString("delete"));
 			deleteJButton.setEnabled(false);
 			deleteJButton.addActionListener(new ActionListener(){
 
@@ -760,7 +768,6 @@ public class FetcherResultPanel extends JPanel {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -777,7 +784,6 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 81, 12, 12), new Leading(0, 26, 10, 8)));
 			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(210, 80, 12, 12), new Leading(0, 12, 12)));
@@ -789,7 +795,6 @@ public class FetcherResultPanel extends JPanel {
 	public JScrollPane getResultsJScrollPane() {
 		if (resultsJScrollPane == null) {
 			resultsJScrollPane = new JScrollPane();
-			resultsJScrollPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("result.list")));
 			resultsJScrollPane.setViewportView(getResultsJTable());
 		}
 		return resultsJScrollPane;

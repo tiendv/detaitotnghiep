@@ -1,17 +1,14 @@
-ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%
-ACMSearchUrlPart###&dl=ACM&start=%%%waefawef
-ACMEndUrl###&coll=Portal&short=0%%%jkghj
-ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%awefaw
-ACMEndGetBibtex###&expformat=bibtex%%%awfawef
-ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%awef
-ACMEndGetAbstract###&usebody=tabbody%%%awefaw
-ACMHitsPattern###.*Found <b>(\d+,*\d*,*\d*,*\d*)</b> of.*%%%hgkjhk
-ACMMaxHitsPattern###.*Results \d+ - \d+ of (\d+,*\d*).*%%%123213123
-ACMBibPattern###(exportformats.cfm[.]+bibtex)%%%awfaw
-ACMFullCitationPattern###<A HREF="(citation.cfm.*)" class.*%%%afawf
-ACMGetIDBibtex###(exportformats[.]cfm.+bibtex)%%%waf
-ACMIdPaperPattern###\d+&%%%
-ACMAbstractPattern###<div style="display:inline">.*</div>%%%
+ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%The first part of the link connect to ACM digital library. After "query=" string is keyword, that is inputed by user. 
+ACMSearchUrlPart###&dl=ACM&start=%%%This pattern 
+ACMEndUrl###&coll=Portal&short=0%%%
+ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%The first part of the link to get bibtex file base on bibtex id.
+ACMEndGetBibtex###&expformat=bibtex%%%The last part of the link to get bibtex file. 
+ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%The first part of the link to get abstract part in the article base on article ID.
+ACMEndGetAbstract###&usebody=tabbody%%%The last part of the link to get abstract part base on article ID.
+ACMHitsPattern###.*Found <b>(\d+,*\d*,*\d*,*\d*)</b> of.*%%%This pattern to get the result number by keyword search.
+ACMMaxHitsPattern###.*Results \d+ - \d+ of (\d+,*\d*).*%%%This pattern to get the total number of articles in the ACM digital library.
+ACMFullCitationPattern###<A HREF="(citation.cfm.*)" class.*%%%This pattern to get all citation of the paper.
+ACMIdPaperPattern###\d+&%%%This pattern to get id of paper.
 IEEEStartUrl###http://ieeexplore.ieee.org/search/freesearchresult.jsp?queryText=%%%
 IEEEEndUrl1###&rowsPerPage=%%%
 IEEEEndUrl2###&pageNumber=%%%

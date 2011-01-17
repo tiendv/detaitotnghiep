@@ -52,29 +52,29 @@ public class FetcherPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	JTabbedPane dbsaTabFrame = null;
-	private JPanel fetcherJPanel;
-	private JLabel keywordJLabel;
+	private static JPanel fetcherJPanel;
+	private static JLabel keywordJLabel;
 	private JPanel inputJPanel;
-	private JLabel fetchFromJLabel;
-	private JCheckBox fetchFromACMCheckBox;
-	private JLabel maxResultLabel;
-	private JCheckBox ieeexploreDLCheckBox;
+	private static JLabel fetchFromJLabel;
+	private static JCheckBox fetchFromACMCheckBox;
+	private static JLabel maxResultLabel;
+	private static JCheckBox ieeexploreDLCheckBox;
 	private JSpinner acmJSpinner;
 	private final int ACM_MAX_RESULT = 100;
 	private JSpinner ieeexploreJSpinner;
 	private final int IEEE_MAX_RESULT = 1000;
-	private JCheckBox citeseerDLCheckBox;
+	private static JCheckBox citeseerDLCheckBox;
 	private JSpinner citeseerJSpinner;
 	private final int CITESEER_MAX_RESULT = 100;
-	private JPanel chooseJPanel;
-	private JProgressBar acmJProgressBar;
-	private JProgressBar citeseerJProgressBar;
-	private JProgressBar ieeeploreJProgressBar;
-	private JButton closeJButton;
-	private JButton showResultJButton;
-	private JButton fetcherJButton;
-	private JPanel actionsJPanel;
-	private JLabel fetcherStatusJLabel;
+	private static JPanel chooseJPanel;
+	private static JProgressBar acmJProgressBar;
+	private static JProgressBar citeseerJProgressBar;
+	private static JProgressBar ieeeploreJProgressBar;
+	private static JButton closeJButton;
+	private static JButton showResultJButton;
+	private static JButton fetcherJButton;
+	private static JPanel actionsJPanel;
+	private static JLabel fetcherStatusJLabel;
 	
 	private static int acmResultNumber;
 	private static int ieeeResultNumber;
@@ -88,9 +88,9 @@ public class FetcherPanel extends JPanel {
 	
 	private static int acmProgressPer = 0;
 	
-	private JRadioButton searchByAllRadioButton;
+	private static JRadioButton searchByAllRadioButton;
 	public static boolean checkSearchByAll;
-	private JRadioButton searchBySubjectJRadioButton;
+	private static JRadioButton searchBySubjectJRadioButton;
 	public static boolean checkSearchBySubject;
 	private ButtonGroup acmSearchRadioButtonGroup;
 	private JComboBox keywordJComboBox;
@@ -102,6 +102,7 @@ public class FetcherPanel extends JPanel {
 	public FetcherPanel(JTabbedPane dbsa) {
 		initComponents();
 		this.dbsaTabFrame = dbsa;
+		updateTextsOfComponents();
 	}
 
 	private void initComponents() {
@@ -112,7 +113,6 @@ public class FetcherPanel extends JPanel {
 		setSize(935, 477);
 	}
 	
-	@SuppressWarnings("static-access")
 	private JComboBox getKeywordJComboBox() {
 		if (keywordJComboBox == null) {
 			keywordJComboBox = new JComboBox();
@@ -140,7 +140,7 @@ public class FetcherPanel extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					
-					dbsaStatus.setDBSAProgressMessage("Please choose or enter keyword to fetch!");
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("message.choose.or.enter.keyword"));
 				}
 
 				@Override
@@ -173,8 +173,7 @@ public class FetcherPanel extends JPanel {
 			searchBySubjectJRadioButton = new JRadioButton();
 			searchBySubjectJRadioButton.setVisible(false);
 			checkSearchBySubject = false;
-			searchBySubjectJRadioButton.setText(DBSAResourceBundle.res.getString("search.by.subject"));
-			
+						
 			searchBySubjectJRadioButton.addChangeListener(new ChangeListener(){
 
 				@Override
@@ -197,8 +196,7 @@ public class FetcherPanel extends JPanel {
 			searchByAllRadioButton = new JRadioButton();
 			searchByAllRadioButton.setSelected(true);
 			checkSearchByAll = true;
-			searchByAllRadioButton.setVisible(false);
-			searchByAllRadioButton.setText(DBSAResourceBundle.res.getString("search.by.all"));
+			searchByAllRadioButton.setVisible(false);			
 			searchByAllRadioButton.addChangeListener(new ChangeListener(){
 
 				@Override
@@ -221,7 +219,6 @@ public class FetcherPanel extends JPanel {
 		if (fetcherStatusJLabel == null) {
 			fetcherStatusJLabel = new JLabel();
 			fetcherStatusJLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			fetcherStatusJLabel.setText(DBSAResourceBundle.res.getString("fetcher.status"));
 		}
 		return fetcherStatusJLabel;
 	}
@@ -229,8 +226,6 @@ public class FetcherPanel extends JPanel {
 	private JPanel getFetcherJPanel() {
 		if (fetcherJPanel == null) {
 			fetcherJPanel = new JPanel();
-			fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("fetcher"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
 			fetcherJPanel.setLayout(new GroupLayout());
 			fetcherJPanel.add(getActionsJPanel(), new Constraints(new Bilateral(0, 0, 513), new Trailing(0, 68, 278, 278)));
 			fetcherJPanel.add(getChooseJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(67, 74, 198)));
@@ -242,8 +237,6 @@ public class FetcherPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(-1, 36, 12, 12)));
 			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(0, 35, 12, 12)));
@@ -256,7 +249,6 @@ public class FetcherPanel extends JPanel {
 		
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
-			fetcherJButton.setText(DBSAResourceBundle.res.getString("fetcher"));
 			
 			fetcherJButton.addActionListener(new ActionListener(){
 
@@ -397,7 +389,6 @@ public class FetcherPanel extends JPanel {
 	private JButton getShowResultJButton() {
 		if (showResultJButton == null) {
 			showResultJButton = new JButton();
-			showResultJButton.setText(DBSAResourceBundle.res.getString("show.results"));
 			showResultJButton.isDefaultButton();
 			showResultJButton.setEnabled(false);
 			showResultJButton.addActionListener(new ActionListener(){
@@ -436,7 +427,6 @@ public class FetcherPanel extends JPanel {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.setAlignmentX(0.5f);
 			
 			closeJButton.addActionListener(new ActionListener(){
@@ -458,7 +448,6 @@ public class FetcherPanel extends JPanel {
 			ieeeploreJProgressBar.setDoubleBuffered(true);
 			ieeeploreJProgressBar.setOpaque(false);
 			ieeeploreJProgressBar.setStringPainted(true);
-			ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("ieee.digital.library"));
 		}
 		return ieeeploreJProgressBar;
 	}
@@ -474,7 +463,6 @@ public class FetcherPanel extends JPanel {
 		if (citeseerJProgressBar == null) {
 			citeseerJProgressBar = new JProgressBar();
 			citeseerJProgressBar.setStringPainted(true);
-			citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("citeseer.digital.library"));
 			
 		}
 		return citeseerJProgressBar;
@@ -484,8 +472,7 @@ public class FetcherPanel extends JPanel {
 		if (acmJProgressBar == null) {
 			acmJProgressBar = new JProgressBar();
 			acmJProgressBar.setStringPainted(true);
-			acmJProgressBar.setString(DBSAResourceBundle.res.getString("acm.digital.library"));
-			
+
 		}
 		return acmJProgressBar;
 	}
@@ -501,8 +488,6 @@ public class FetcherPanel extends JPanel {
 	private JPanel getChooseJPanel() {
 		if (chooseJPanel == null) {
 			chooseJPanel = new JPanel();
-			chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, "choose.dls", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
 			chooseJPanel.setLayout(new GroupLayout());
 			chooseJPanel.add(getFetchFromJLabel(), new Constraints(new Leading(23, 89, 10, 10), new Leading(12, 33, 12, 12)));
 			chooseJPanel.add(getMaxResultLabel(), new Constraints(new Leading(389, 96, 10, 10), new Leading(12, 32, 12, 12)));
@@ -549,7 +534,6 @@ public class FetcherPanel extends JPanel {
 		if (citeseerDLCheckBox == null) {
 			citeseerDLCheckBox = new JCheckBox();
 			citeseerDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
-			citeseerDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
 			citeseerDLCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return citeseerDLCheckBox;
@@ -583,7 +567,6 @@ public class FetcherPanel extends JPanel {
 			acmJSpinner.setModel(new SpinnerNumberModel(1, 1, ACM_MAX_RESULT, 1));
 			
 			acmJSpinner.addChangeListener(new ChangeListener() {
-	
 				public void stateChanged(ChangeEvent event) {
 					
 					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1 || Integer.parseInt(acmJSpinner.getValue().toString()) > 100) {
@@ -602,7 +585,6 @@ public class FetcherPanel extends JPanel {
 		if (ieeexploreDLCheckBox == null) {
 			ieeexploreDLCheckBox = new JCheckBox();
 			ieeexploreDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
-			ieeexploreDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
 			ieeexploreDLCheckBox.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
 		return ieeexploreDLCheckBox;
@@ -612,7 +594,6 @@ public class FetcherPanel extends JPanel {
 		if (maxResultLabel == null) {
 			maxResultLabel = new JLabel();
 			maxResultLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			maxResultLabel.setText(DBSAResourceBundle.res.getString("maxresult"));
 		}
 		return maxResultLabel;
 	}
@@ -621,7 +602,6 @@ public class FetcherPanel extends JPanel {
 		if (fetchFromACMCheckBox == null) {
 			fetchFromACMCheckBox = new JCheckBox();
 			fetchFromACMCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
-			fetchFromACMCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
 			fetchFromACMCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			fetchFromACMCheckBox.addChangeListener(new ChangeListener() {
 	
@@ -643,7 +623,7 @@ public class FetcherPanel extends JPanel {
 		if (fetchFromJLabel == null) {
 			fetchFromJLabel = new JLabel();
 			fetchFromJLabel.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			fetchFromJLabel.setText(DBSAResourceBundle.res.getString("fetch.from"));
+			
 		}
 		return fetchFromJLabel;
 	}
@@ -665,7 +645,6 @@ public class FetcherPanel extends JPanel {
 			keywordJLabel = new JLabel();
 			keywordJLabel.setBackground(Color.white);
 			keywordJLabel.setFont(new Font("Dialog", Font.BOLD, 12));
-			keywordJLabel.setText("  " + DBSAResourceBundle.res.getString("input.keyword") + " : ");
 			keywordJLabel.setBorder(new LineBorder(Color.lightGray, 1, false));
 			keywordJLabel.setAlignmentX(0.5f);
 		}
@@ -714,5 +693,27 @@ public class FetcherPanel extends JPanel {
 		return citeResultNumber;
 	}
 	
-	//public void set
+	public static void updateTextsOfComponents(){
+		citeseerDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
+		fetchFromACMCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
+		ieeexploreDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
+		fetchFromJLabel.setText(DBSAResourceBundle.res.getString("fetch.from"));
+		keywordJLabel.setText("  " + DBSAResourceBundle.res.getString("input.keyword") + " : ");
+		searchBySubjectJRadioButton.setText(DBSAResourceBundle.res.getString("search.by.subject"));
+		searchByAllRadioButton.setText(DBSAResourceBundle.res.getString("search.by.all"));
+		fetcherStatusJLabel.setText(DBSAResourceBundle.res.getString("fetcher.status"));
+		fetcherJButton.setText(DBSAResourceBundle.res.getString("fetcher"));
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
+		ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("ieee.digital.library"));
+		citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("citeseer.digital.library"));
+		acmJProgressBar.setString(DBSAResourceBundle.res.getString("acm.digital.library"));
+		maxResultLabel.setText(DBSAResourceBundle.res.getString("maxresult"));
+		showResultJButton.setText(DBSAResourceBundle.res.getString("show.results"));
+		chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("choose.dls"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("fetcher"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+	}
 }

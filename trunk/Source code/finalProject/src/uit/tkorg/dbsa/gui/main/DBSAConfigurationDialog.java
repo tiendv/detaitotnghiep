@@ -397,6 +397,9 @@ public class DBSAConfigurationDialog extends JDialog {
 				DBSAApplication.updateTextOfComponents();
 			}
 			SwingUtilities.updateComponentTreeUI(dbsaJFrame);
+			
+			
+			
 			this.dispose();
 		}
 		catch (Exception ex){

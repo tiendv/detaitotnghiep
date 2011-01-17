@@ -19,16 +19,16 @@ public class DBSATabPanel extends JTabbedPane {
 	private FetcherResultPanel fetcherResultPanel = null;
 	private InsertArticleToDatabasePanel insertArticleToDatabase = null;
 	private DatabaseManagementPanel databaseManagementJPanel = null;
-	private JTabbedPane dbsaJTabbedPane = null;
+	private static JTabbedPane dbsaJTabbedPane = null;
 
 	public DBSATabPanel() {
 		super();
 		initComponents();
 		getDbsaJTabbedPane();
+		updateTextsOfComponents();
 	}
 
-	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
+	private void initComponents() {		
 		setBackground(Color.white);
 		addTab(DBSAResourceBundle.res.getString("fetcher"), getFetcherJPanel());
 		addTab(DBSAResourceBundle.res.getString("fetcher.results"), getFetcherResultPanel());
@@ -37,10 +37,16 @@ public class DBSATabPanel extends JTabbedPane {
 		setSize(900, 500);
 	}
 
+	public void updateTextsOfComponents(){
+		setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
+		dbsaJTabbedPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
+		getDbsaJTabbedPane();
+	}
+	
 	private JTabbedPane getDbsaJTabbedPane() {
 		if (dbsaJTabbedPane == null) {
 			dbsaJTabbedPane = new JTabbedPane();
-			dbsaJTabbedPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
+			//dbsaJTabbedPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("functions")));
 		}
 		addTab(DBSAResourceBundle.res.getString("fetcher"), getFetcherJPanel());
 		addTab(DBSAResourceBundle.res.getString("fetcher.results"),getFetcherResultPanel());	
