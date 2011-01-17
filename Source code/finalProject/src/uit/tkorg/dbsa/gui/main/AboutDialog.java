@@ -34,7 +34,7 @@ public class AboutDialog extends JDialog {
 	private int xLocation;
 	private int yLocation;
 	private JFrame dbsaJFrame;
-	private JButton closeJButton;
+	private static JButton closeJButton;
 	private JTextArea aboutJTextContent;
 	private JScrollPane contentJScrollPane;
 	
@@ -62,9 +62,10 @@ public class AboutDialog extends JDialog {
 		add(gettextContentJPanel(), new Constraints(new Leading(250, 228, 12, 12), new Leading(0, 277, 12, 12)));
 		setSize(483, 340);
 		setLocation(xLocation, yLocation);
+		updateTextsOfComponents();
 	}
 
-	private String updateTextsOfComponents(){
+	public static String updateTextsOfComponents(){
 		String textContent = "";
 		
 		textContent += DBSAResourceBundle.res.getString("about.dbsa");
@@ -73,6 +74,8 @@ public class AboutDialog extends JDialog {
 		textContent += DBSAResourceBundle.res.getString("authors.and.email");
 		textContent += DBSAResourceBundle.res.getString("authors.in.about");
 		textContent += DBSAResourceBundle.res.getString("thank.you");
+
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 		
 		return textContent;
 	}
@@ -97,7 +100,6 @@ public class AboutDialog extends JDialog {
 	private JButton getcloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override

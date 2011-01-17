@@ -28,10 +28,10 @@ import uit.tkorg.dbsa.properties.files.GUIProperties;
 public class DBSAToolBar extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JButton checkConnectionJButton;
-	private JButton fetcherJButton;
-	private JButton databaseJButton;
-	private JButton resultJButton;
+	private static JButton checkConnectionJButton;
+	private static JButton fetcherJButton;
+	private static JButton databaseJButton;
+	private static JButton resultJButton;
 	private JTabbedPane dbsaTabFrame = null;
 
 	private DBSAStatusBar statusMessage = new DBSAStatusBar();
@@ -41,11 +41,11 @@ public class DBSAToolBar extends JPanel {
 		
 		initComponents();
 		this.dbsaTabFrame = dbsa;
+		updateTextsOfComponent();
 	}
 
 	private void initComponents() {
-		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("toolbar"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
-				12), new Color(51, 51, 51)));
+		
 		setPreferredSize(new Dimension(320, 80));
 		setLayout(new GroupLayout());
 		add(getFetcherJButton(), new Constraints(new Leading(12, 49, 12, 12), new Leading(0, 50, 12, 12)));
@@ -59,7 +59,6 @@ public class DBSAToolBar extends JPanel {
 		if (resultJButton == null) {
 			resultJButton = new JButton();
 			resultJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.RESULT_BUTTON_TOOLBAR_ICON)));
-			resultJButton.setToolTipText(DBSAResourceBundle.res.getString("show.fetcher.results"));
 			resultJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -112,7 +111,6 @@ public class DBSAToolBar extends JPanel {
 		if (databaseJButton == null) {
 			databaseJButton = new JButton();
 			databaseJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.DATABASE_BUTTON_TOOLBAR_ICON)));
-			databaseJButton.setToolTipText(DBSAResourceBundle.res.getString("show.database.management"));
 			databaseJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -165,7 +163,6 @@ public class DBSAToolBar extends JPanel {
 			fetcherJButton = new JButton();
 			fetcherJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.FETCHER_BUTTON_TOOLBAR_ICON)));
 			fetcherJButton.setOpaque(false);
-			fetcherJButton.setToolTipText(DBSAResourceBundle.res.getString("show.fetcher.frame"));
 			fetcherJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -216,10 +213,7 @@ public class DBSAToolBar extends JPanel {
 	private JButton getCheckConnectionJButton() {
 		if (checkConnectionJButton == null) {
 			checkConnectionJButton = new JButton();
-			//checkConnectionJButton.setVisible(false);
-			//checkConnectionJButton.setEnabled(false);
 			checkConnectionJButton.setIcon(new ImageIcon(getClass().getResource(GUIProperties.CHECK_CONNECTION_BUTTON_TOOLBAR_ICON)));
-			checkConnectionJButton.setToolTipText(DBSAResourceBundle.res.getString("check.internet.connection"));
 			checkConnectionJButton.setOpaque(true);
 			checkConnectionJButton.setSize(new Dimension(0,0));
 			checkConnectionJButton.addActionListener(new ActionListener(){
@@ -280,6 +274,16 @@ public class DBSAToolBar extends JPanel {
 			});
 		}
 		return checkConnectionJButton;
+	}
+	
+	public void updateTextsOfComponent(){
+		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("toolbar"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+				12), new Color(51, 51, 51)));
+		resultJButton.setToolTipText(DBSAResourceBundle.res.getString("show.fetcher.results"));
+		checkConnectionJButton.setToolTipText(DBSAResourceBundle.res.getString("check.internet.connection"));
+		fetcherJButton.setToolTipText(DBSAResourceBundle.res.getString("show.fetcher.frame"));
+		databaseJButton.setToolTipText(DBSAResourceBundle.res.getString("show.database.management"));
+		
 	}
 
 }

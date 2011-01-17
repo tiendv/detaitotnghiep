@@ -39,13 +39,13 @@ public class FetcherPatternDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JComboBox digitalLibraryComboBox;
-	private JLabel chooseDLJLabel;
-	private JButton closeJButton;
-	private JButton saveJButton;
-	private JPanel actionsJPanel;
+	private static JLabel chooseDLJLabel;
+	private static JButton closeJButton;
+	private static JButton saveJButton;
+	private static JPanel actionsJPanel;
 	private JTable patternJTable;
 	private JScrollPane fetcherJTableJScrollPane;
-	private JLabel dialogNameJLabel;
+	private static JLabel dialogNameJLabel;
 	private JPanel chooseDLJPanel;
 	
 	private JFrame dbsaJFrame;
@@ -53,12 +53,12 @@ public class FetcherPatternDialog extends JDialog {
 	private int yLocation;
 	private int width = 900;
 	private int height = 700;
-	private JPanel mainJPanel;
-	private JLabel patternNameJLabel;
+	private static JPanel mainJPanel;
+	private static JLabel patternNameJLabel;
 	private JTextField patternNameJTextField;
 	private JTextField patternValueJTextField;
-	private JLabel patternValueJLabel;
-	private JLabel patternDescriptionJLabel;
+	private static JLabel patternValueJLabel;
+	private static JLabel patternDescriptionJLabel;
 	private JTextField patternDescriptionJTextField;
 	
 	private static DefaultTableModel model;
@@ -66,7 +66,7 @@ public class FetcherPatternDialog extends JDialog {
 	private String patternName;
 	private String patternValue;
 	private String patternDescription;
-	private JButton setDefaultJButton;
+	private static JButton setDefaultJButton;
 	private int rowIsSelected = 0;
 	
 	public FetcherPatternDialog() {
@@ -79,6 +79,7 @@ public class FetcherPatternDialog extends JDialog {
 		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth()-width)/2;
 		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight()-height)/2;
 		initComponents();
+		
 	}
 
 	private void initComponents() {
@@ -92,12 +93,28 @@ public class FetcherPatternDialog extends JDialog {
 		add(getDialogNameJLabel(), new Constraints(new Bilateral(302, 303, 240), new Leading(24, 34, 605, 634)));
 		setSize(905, 700);
 		setLocation(xLocation, yLocation);
+		updateTextsOfComponents();
+	}
+	
+	public static void updateTextsOfComponents(){
+		
+		mainJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("pattern"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		saveJButton.setText(DBSAResourceBundle.res.getString("save.change"));
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
+		chooseDLJLabel.setText(DBSAResourceBundle.res.getString("choose.digital.library") + " :");
+		setDefaultJButton.setText(DBSAResourceBundle.res.getString("set.default"));
+		patternDescriptionJLabel.setText(DBSAResourceBundle.res.getString("description"));
+		patternValueJLabel.setText(DBSAResourceBundle.res.getString("pattern.value") + " :");
+		patternNameJLabel.setText(DBSAResourceBundle.res.getString("pattern.name") + " :");
+		dialogNameJLabel.setText(DBSAResourceBundle.res.getString("change.fetcher.pattern.title"));
 	}
 
 	private JButton getSetDefaultJButton() {
 		if (setDefaultJButton == null) {
-			setDefaultJButton = new JButton();
-			setDefaultJButton.setText(DBSAResourceBundle.res.getString("set.default"));
+			setDefaultJButton = new JButton();			
 			setDefaultJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -124,7 +141,6 @@ public class FetcherPatternDialog extends JDialog {
 	private JLabel getDescriptionJLabel() {
 		if (patternDescriptionJLabel == null) {
 			patternDescriptionJLabel = new JLabel();
-			patternDescriptionJLabel.setText(DBSAResourceBundle.res.getString("description"));
 			patternDescriptionJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return patternDescriptionJLabel;
@@ -133,7 +149,6 @@ public class FetcherPatternDialog extends JDialog {
 	private JLabel getPatternValueJLabel() {
 		if (patternValueJLabel == null) {
 			patternValueJLabel = new JLabel();
-			patternValueJLabel.setText(DBSAResourceBundle.res.getString("pattern.value") + " :");
 			patternValueJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return patternValueJLabel;
@@ -160,7 +175,6 @@ public class FetcherPatternDialog extends JDialog {
 	private JLabel getPatternNameJLabel() {
 		if (patternNameJLabel == null) {
 			patternNameJLabel = new JLabel();
-			patternNameJLabel.setText(DBSAResourceBundle.res.getString("pattern.name") + " :");
 			patternNameJLabel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return patternNameJLabel;
@@ -168,9 +182,7 @@ public class FetcherPatternDialog extends JDialog {
 
 	private JPanel getMainJPanel() {
 		if (mainJPanel == null) {
-			mainJPanel = new JPanel();
-			mainJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("pattern"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
+			mainJPanel = new JPanel();			
 			mainJPanel.setLayout(new GroupLayout());
 			mainJPanel.add(getChooseDLJPanel(), new Constraints(new Leading(12, 846, 12, 12), new Leading(12, 60, 47, 438)));
 			mainJPanel.add(getPatternNameJLabel(), new Constraints(new Leading(12, 132, 28, 87), new Leading(361, 29, 12, 12)));
@@ -200,7 +212,6 @@ public class FetcherPatternDialog extends JDialog {
 		if (dialogNameJLabel == null) {
 			dialogNameJLabel = new JLabel();
 			dialogNameJLabel.setFont(new Font("Dialog", Font.BOLD, 18));
-			dialogNameJLabel.setText(DBSAResourceBundle.res.getString("change.fetcher.pattern.title"));
 		
 		}
 		return dialogNameJLabel;
@@ -220,7 +231,7 @@ public class FetcherPatternDialog extends JDialog {
 	 * Ham tao Jtable
 	 */
 	public JTable createPatternJTable(){
-		model = new DefaultTableModel(getTableData(getNumber(), getPatternName(), getPatternValue(), getPatternDescriptionn()), getColumnName()) {
+		model = new DefaultTableModel(getTableData(getNumber(), getPatternName(), getPatternValue(), getPatternDescription()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
 			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, String.class,  };
 	
@@ -281,7 +292,7 @@ public class FetcherPatternDialog extends JDialog {
 			}
 			
 		}else{
-			Object [] data = {patternJTable.getRowCount(), getPatternName(), getPatternValue(), getPatternDescriptionn()};
+			Object [] data = {patternJTable.getRowCount(), getPatternName(), getPatternValue(), getPatternDescription()};
 			model.insertRow(patternJTable.getRowCount(), data );
 			
 			
@@ -360,7 +371,7 @@ public class FetcherPatternDialog extends JDialog {
 	}
 	
 	public  Object [] addTableData(int mNumber, String mPatternName, String mPatternValue, String mPatternDesciption){
-		Object [] dataRow =  {getNumber(), getPatternName(), getPatternValue(), getPatternDescriptionn()};
+		Object [] dataRow =  {getNumber(), getPatternName(), getPatternValue(), getPatternDescription()};
 		
 		return dataRow;
 	}
@@ -368,9 +379,7 @@ public class FetcherPatternDialog extends JDialog {
 	
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
-			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
+			actionsJPanel = new JPanel();			
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 118, 12, 12), new Leading(6, 29, 10, 10)));
 			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(148, 118, 12, 12), new Leading(6, 29, 12, 12)));
@@ -382,7 +391,6 @@ public class FetcherPatternDialog extends JDialog {
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
-			saveJButton.setText(DBSAResourceBundle.res.getString("save.change"));
 			saveJButton.setEnabled(false);
 			saveJButton.addActionListener(new ActionListener(){
 
@@ -414,7 +422,6 @@ public class FetcherPatternDialog extends JDialog {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -443,7 +450,6 @@ public class FetcherPatternDialog extends JDialog {
 	private JLabel getChooseDLJLabel() {
 		if (chooseDLJLabel == null) {
 			chooseDLJLabel = new JLabel();
-			chooseDLJLabel.setText(DBSAResourceBundle.res.getString("choose.digital.library") + " :");
 		}
 		return chooseDLJLabel;
 	}
@@ -522,7 +528,7 @@ public class FetcherPatternDialog extends JDialog {
 	public void setPatternDescription(String mDescription){
 		patternDescription = mDescription;
 	}
-	public String getPatternDescriptionn(){
+	public String getPatternDescription(){
 		return patternDescription;
 	}
 	

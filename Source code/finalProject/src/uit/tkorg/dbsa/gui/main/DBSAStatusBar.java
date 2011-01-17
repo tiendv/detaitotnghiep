@@ -37,8 +37,15 @@ public class DBSAStatusBar extends JPanel {
 		setLayout(new GroupLayout());
 		add(getStatusJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
 		setSize(643, 48);
+		updateTextsOfComponents();
 	}
 
+	public void updateTextsOfComponents(){
+		statusJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("status"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+				Font.BOLD, 12), new Color(51, 51, 51)));
+		getStatusJLabel();
+	}
+	
 	private JLabel getDbsaProgressMessage() {
 		if (dbsaProgressMessage == null) {
 			dbsaProgressMessage = new JLabel();
@@ -59,12 +66,11 @@ public class DBSAStatusBar extends JPanel {
 		return dbsaProgressbar;
 	}
 	
-
+	
 	private JPanel getStatusJPanel() {
 		if (statusJPanel == null) {
 			statusJPanel = new JPanel();
-			statusJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("status"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
-					Font.BOLD, 12), new Color(51, 51, 51)));
+			
 			statusJPanel.setLayout(new GroupLayout());
 			statusJPanel.add(getStatusJLabel(), new Constraints(new Leading(12, 85, 40, 508), new Leading(-4, 25, 12, 12)));
 			statusJPanel.add(dbsaProgressbar(), new Constraints(new Bilateral(79, 12, 10), new Leading(-4, 21, 12, 12)));

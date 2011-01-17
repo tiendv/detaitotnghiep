@@ -36,6 +36,7 @@ import uit.tkorg.dbsa.actions.database.CheckDatabaseConection;
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.InsertArticleToDatabasePanel;
+import uit.tkorg.dbsa.gui.databasemanagement.InsertSubjectFrame;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPatternDialog;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
@@ -47,45 +48,45 @@ public class DBSAApplication extends JPanel {
 	public static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
 
-	private JMenu fileJMenu = null;
-	private JMenu editJMenu = null;
-	private JMenu fetcherJMenu = null;
-	private JMenu classificationJMenu = null;
-	private JMenu optionJMenu = null;
-	private JMenu helpJMenu = null;
+	private static JMenu fileJMenu = null;
+	private static JMenu editJMenu = null;
+	private static JMenu fetcherJMenu = null;
+	private static JMenu classificationJMenu = null;
+	private static JMenu optionJMenu = null;
+	private static JMenu helpJMenu = null;
 	
-	private JMenuItem checkInternetJMenuItem = null;
-	private JMenuItem checkMySQLConnectionJMenuItem = null;
-	private JMenuItem exitJMenuItem = null;
+	private static JMenuItem checkInternetJMenuItem = null;
+	private static JMenuItem checkMySQLConnectionJMenuItem = null;
+	private static JMenuItem exitJMenuItem = null;
 	
-	private JMenuItem cutJMenuItem = null;
-	private JMenuItem copyJMenuItem = null;
-	private JMenuItem pasteJMenuItem = null;
-	private JMenuItem deleteJMenuItem = null;
-	private JMenuItem markEntriesJMenuItem = null;
-	private JMenuItem unmarkEntriesJMenuItem = null;
-	private JMenuItem unMarkAllJMenuItem = null;
-	private JMenuItem selectAllJMenuItem = null;
+	private static JMenuItem cutJMenuItem = null;
+	private static JMenuItem copyJMenuItem = null;
+	private static JMenuItem pasteJMenuItem = null;
+	private static JMenuItem deleteJMenuItem = null;
+	private static JMenuItem markEntriesJMenuItem = null;
+	private static JMenuItem unmarkEntriesJMenuItem = null;
+	private static JMenuItem unMarkAllJMenuItem = null;
+	private static JMenuItem selectAllJMenuItem = null;
 	
-	private JMenuItem patternJMenuItem = null;
+	private static JMenuItem patternJMenuItem = null;
 	
-	private JMenuItem configurationJMenuItem = null;
+	private static JMenuItem configurationJMenuItem = null;
 	
-	private JMenuItem helpJMenuItem = null;
-	private JMenuItem aboutJMenuItem = null;
+	private static JMenuItem helpJMenuItem = null;
+	private static JMenuItem aboutJMenuItem = null;
 	
-	private static DBSATabPanel dbsaTabPanel = null;
-	private FetcherPanel fetcherPanel = null;
-	private ClassificationPanel classificationPanel = null;
-	
-	private static DBSAToolBar dbsaToolbar = null;
-	
+	public static DBSAToolBar dbsaToolbar = null;
+	public static DBSATabPanel dbsaTabPanel = null;
 	public static DBSAStatusBar dbsaStatusBar = null;
 
+	public static FetcherPanel fetcherPanel = null;
 	public static DBSAFetcherPattern dbsaFetcherPattern = null;
 	public static FetcherResultPanel fetcherResultPanel = null;
+	public static FetcherPatternDialog fetcherPatternDialog = null;
 	public static DatabaseManagementPanel databaseManagementPanel = null;
-	public static InsertArticleToDatabasePanel insertArticleToDatabasePanel = null;
+	private static InsertArticleToDatabasePanel insertArticleToDatabasePanel = null;
+	public static InsertSubjectFrame insertArticleFrame = null;
+	public static AboutDialog aboutDialog = null;
 	
 	private JFrame getDBSAJFrame(){
 	
@@ -101,8 +102,11 @@ public class DBSAApplication extends JPanel {
 			dbsaFetcherPattern = new DBSAFetcherPattern();
 			
 			fetcherResultPanel = new FetcherResultPanel(dbsaTabPanel);
+			fetcherPatternDialog = new FetcherPatternDialog();
 			databaseManagementPanel = new DatabaseManagementPanel(dbsaTabPanel);
 			insertArticleToDatabasePanel =  new InsertArticleToDatabasePanel();
+			insertArticleFrame = new InsertSubjectFrame();
+			aboutDialog = new AboutDialog();
 			
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel(dbsaTabPanel);
@@ -157,7 +161,6 @@ public class DBSAApplication extends JPanel {
 	private JMenu getFileJMenu() {
 		if (fileJMenu == null) {
 			fileJMenu = new JMenu();
-			fileJMenu.setText(DBSAResourceBundle.res.getString("file"));
 			fileJMenu.add(getcheckInternetJMenuItem());
 			fileJMenu.add(getcheckMySQLConnectionJMenuItem());
 			fileJMenu.add(getExitJMenuItem());
@@ -173,7 +176,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getcheckInternetJMenuItem(){
 		if(checkInternetJMenuItem == null){
 			checkInternetJMenuItem = new JMenuItem();
-			checkInternetJMenuItem.setText(DBSAResourceBundle.res.getString("check.internet.connection"));
 			checkInternetJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK, true));
 			checkInternetJMenuItem.addActionListener(new ActionListener(){
 
@@ -231,7 +233,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getcheckMySQLConnectionJMenuItem(){
 		if(checkMySQLConnectionJMenuItem == null){
 			checkMySQLConnectionJMenuItem = new JMenuItem();
-			checkMySQLConnectionJMenuItem.setText(DBSAResourceBundle.res.getString("check.database.connection"));
 			checkMySQLConnectionJMenuItem.addActionListener(new ActionListener(){
 
 				@Override
@@ -261,7 +262,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getExitJMenuItem(){
 		if(exitJMenuItem == null){
 			exitJMenuItem = new JMenuItem();
-			exitJMenuItem.setText(DBSAResourceBundle.res.getString("exit"));
 			exitJMenuItem.addActionListener(new ActionListener(){
 
 				@Override
@@ -283,7 +283,7 @@ public class DBSAApplication extends JPanel {
 	private JMenu getEditJMenu() {
 		if (editJMenu == null) {
 			editJMenu = new JMenu();
-			editJMenu.setText(DBSAResourceBundle.res.getString("edit"));
+			
 			//editJMenu.add(getCutJMenuItem());
 			//editJMenu.add(getCopyJMenuItem());
 			//editJMenu.add(getPasteJMenuItem());
@@ -305,7 +305,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getCutJMenuItem(){
 		if(cutJMenuItem == null){
 			cutJMenuItem = new JMenuItem();
-			cutJMenuItem.setText("Cut");
 			cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK, true));
 		}
 		return cutJMenuItem;
@@ -319,7 +318,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getCopyJMenuItem(){
 		if(copyJMenuItem == null){
 			copyJMenuItem = new JMenuItem();
-			copyJMenuItem.setText("Copy");
 			copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK, true));
 		}
 		return copyJMenuItem;
@@ -333,7 +331,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getPasteJMenuItem(){
 		if(pasteJMenuItem == null){
 			pasteJMenuItem = new JMenuItem();
-			pasteJMenuItem.setText("Paste");
 			pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK, true));
 		}
 		return pasteJMenuItem;
@@ -347,7 +344,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getDeleteJMenuItem(){
 		if(deleteJMenuItem == null){
 			deleteJMenuItem = new JMenuItem();
-			deleteJMenuItem.setText("Delete");
 			deleteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK, true));
 		}
 		return deleteJMenuItem;
@@ -361,7 +357,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getMarkEntriesJMenuItem(){
 		if(markEntriesJMenuItem == null){
 			markEntriesJMenuItem = new JMenuItem();
-			markEntriesJMenuItem.setText("Mark entries");
 		}
 		return markEntriesJMenuItem;
 	}
@@ -374,7 +369,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getUnmarkEntriesJMenuItem(){
 		if(unmarkEntriesJMenuItem == null){
 			unmarkEntriesJMenuItem = new JMenuItem();
-			unmarkEntriesJMenuItem.setText("Unmark entries");
 		}
 		return unmarkEntriesJMenuItem;
 	}
@@ -387,7 +381,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getUnmarkAllJMenuItem(){
 		if(unMarkAllJMenuItem == null){
 			unMarkAllJMenuItem = new JMenuItem();
-			unMarkAllJMenuItem.setText("Unmark all");
 		}
 		return unMarkAllJMenuItem;
 	}
@@ -400,7 +393,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getSelectAllJMenuItem(){
 		if(selectAllJMenuItem == null){
 			selectAllJMenuItem = new JMenuItem();
-			selectAllJMenuItem.setText("Select all");
 			selectAllJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK, true));
 		}
 		return selectAllJMenuItem;
@@ -414,7 +406,6 @@ public class DBSAApplication extends JPanel {
 	private JMenu getClassificationJMenu() {
 		if (classificationJMenu == null) {
 			classificationJMenu = new JMenu();
-			classificationJMenu.setText(DBSAResourceBundle.res.getString("classification"));
 //			fileJMenu.add(getSaveMenuItem());
 //			fileJMenu.add(getExitMenuItem());
 		}
@@ -429,7 +420,6 @@ public class DBSAApplication extends JPanel {
 	private JMenu getFetcherJMenu() {
 		if (fetcherJMenu == null) {
 			fetcherJMenu = new JMenu();
-			fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
 			fetcherJMenu.add(getPatternJMenuItem());
 //			fileJMenu.add(getExitMenuItem());
 		}
@@ -444,9 +434,7 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getPatternJMenuItem(){
 		if(patternJMenuItem == null){
 			patternJMenuItem = new JMenuItem();
-			patternJMenuItem.setText("Change pattern");
 			patternJMenuItem.addActionListener(new ActionListener(){
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
@@ -467,7 +455,6 @@ public class DBSAApplication extends JPanel {
 	private JMenu getOptionJMenu() {
 		if (optionJMenu == null) {
 			optionJMenu = new JMenu();
-			optionJMenu.setText(DBSAResourceBundle.res.getString("option"));
 			optionJMenu.add(getConfigurationJMenuItem());
 		}
 		return optionJMenu;
@@ -481,7 +468,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getConfigurationJMenuItem(){
 		if(configurationJMenuItem == null){
 			configurationJMenuItem = new JMenuItem();
-			configurationJMenuItem.setText(DBSAResourceBundle.res.getString("config"));
 			configurationJMenuItem.addActionListener(new ActionListener(){
 
 				@Override
@@ -503,7 +489,6 @@ public class DBSAApplication extends JPanel {
 	private JMenu getHelpJMenu() {
 		if (helpJMenu == null) {
 			helpJMenu = new JMenu();
-			helpJMenu.setText(DBSAResourceBundle.res.getString("help"));
 			helpJMenu.add(getHelpJMenuItem());
 			helpJMenu.add(getAboutJMenuItem());
 			
@@ -519,8 +504,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getHelpJMenuItem(){
 		if(helpJMenuItem == null){
 			helpJMenuItem = new JMenuItem();
-			helpJMenuItem.setText(DBSAResourceBundle.res.getString("help"));
-			
 		}
 		return helpJMenuItem;
 	}
@@ -533,7 +516,6 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getAboutJMenuItem(){
 		if(aboutJMenuItem == null){
 			aboutJMenuItem = new JMenuItem();
-			aboutJMenuItem.setText(DBSAResourceBundle.res.getString("about"));
 			aboutJMenuItem.addActionListener(new ActionListener(){
 
 				@Override
@@ -620,16 +602,6 @@ public class DBSAApplication extends JPanel {
 		}
 	}
 	
-	/**
-	 * This method destroy classification module.
-	 * 
-	 * @return null
-	 */
-	public void DBSAbleClassificationPanel(){
-		if(classificationPanel != null){
-			dbsaJFrame.getContentPane().remove(classificationPanel);
-		}
-	}
 	
 	/**
 	 * This method get progress status.
@@ -642,8 +614,44 @@ public class DBSAApplication extends JPanel {
 	 * 
 	 * @return null
 	 */
+	@SuppressWarnings("static-access")
 	public static void updateTextOfComponents(){
-		dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
+		updateTextOfComponentsInThisFrame();
+		fetcherPanel.updateTextsOfComponents();
+		fetcherResultPanel.updateTextsOfComponents();
+		dbsaTabPanel.updateTextsOfComponents();
+		dbsaToolbar.updateTextsOfComponent();
+		dbsaStatusBar.updateTextsOfComponents();
+		fetcherPatternDialog.updateTextsOfComponents();
+		databaseManagementPanel.updateTextsOfComponents();
+		insertArticleToDatabasePanel.updateTextsOfComponents();
+		insertArticleFrame.updateTextsOfComponents();
+		aboutDialog.updateTextsOfComponents();
+		
+	}
+	
+	private static void updateTextOfComponentsInThisFrame(){
+		//dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
+		aboutJMenuItem.setText(DBSAResourceBundle.res.getString("about"));
+		helpJMenuItem.setText(DBSAResourceBundle.res.getString("help"));
+		configurationJMenuItem.setText(DBSAResourceBundle.res.getString("config"));
+		helpJMenu.setText(DBSAResourceBundle.res.getString("help"));
+		optionJMenu.setText(DBSAResourceBundle.res.getString("option"));
+		fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
+		patternJMenuItem.setText("Change pattern");
+		selectAllJMenuItem.setText("Select all");
+		//unMarkAllJMenuItem.setText("Unmark all");
+		//unmarkEntriesJMenuItem.setText("Unmark entries");
+		//markEntriesJMenuItem.setText("Mark entries");
+		fileJMenu.setText(DBSAResourceBundle.res.getString("file"));
+		editJMenu.setText(DBSAResourceBundle.res.getString("edit"));
+		//deleteJMenuItem.setText("Delete");
+		//pasteJMenuItem.setText("Paste");
+		exitJMenuItem.setText(DBSAResourceBundle.res.getString("exit"));
+		//copyJMenuItem.setText("Copy");
+		//cutJMenuItem.setText("Cut");
+		checkMySQLConnectionJMenuItem.setText(DBSAResourceBundle.res.getString("check.database.connection"));
+		checkInternetJMenuItem.setText(DBSAResourceBundle.res.getString("check.internet.connection"));
 	}
 	/**
 	 * @param args
@@ -664,8 +672,9 @@ public class DBSAApplication extends JPanel {
 					
 				//	com.birosoft.liquid.LiquidLookAndFeel.set
 					DBSAApplication DBSAApplication = new DBSAApplication();
-					//updateTextOfComponents();
+					
 					DBSAApplication.getDBSAJFrame().setVisible(true);
+					updateTextOfComponentsInThisFrame();
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();
