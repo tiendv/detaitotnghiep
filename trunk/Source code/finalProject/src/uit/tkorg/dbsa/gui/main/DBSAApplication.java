@@ -45,6 +45,10 @@ import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
 public class DBSAApplication extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static JFrame dbsaJFrame = null;
 	private JMenuBar jMenuBar = null;
 

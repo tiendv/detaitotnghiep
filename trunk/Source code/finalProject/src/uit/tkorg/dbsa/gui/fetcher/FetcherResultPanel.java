@@ -29,8 +29,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -77,6 +75,8 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane jScrollPane4;
 	private JTextArea publisherJTextArea;
 	private JScrollPane jScrollPane5;
+	private static JButton selectAllButton;
+	private static JButton selectAllDupButton;
 	
 	
 	private static int rowNumber = 0;
@@ -135,6 +135,53 @@ public class FetcherResultPanel extends JPanel {
 		actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
 		resultsJScrollPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("result.list")));
 		getColumnName();
+		selectAllDupButton.setText("Select Duplicate");
+		selectAllButton.setText("Select All");
+	}
+
+	private JButton getSelectAllDupButton() {
+		if (selectAllDupButton == null) {
+			selectAllDupButton = new JButton();
+			selectAllDupButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					for(int i = 0; i < resultsJTable.getRowCount(); i++){
+						if(resultsJTable.getModel().getValueAt(i, 8) != null
+								&&resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
+							resultsJTable.getModel().setValueAt(true, i, 7);
+							deleteJButton.setEnabled(true);
+							saveJButton.setEnabled(true);
+						}else{
+							resultsJTable.getModel().setValueAt(false, i, 7);
+						}
+					}
+				}
+				
+			});
+		}
+		return selectAllDupButton;
+	}
+
+	private JButton getSelectAllButton() {
+		if (selectAllButton == null) {
+			selectAllButton = new JButton();
+			selectAllButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					for(int i =0; i < resultsJTable.getRowCount(); i++){
+						resultsJTable.getModel().setValueAt(true, i, 7);
+						deleteJButton.setEnabled(true);
+						saveJButton.setEnabled(true);
+					}
+				}
+				
+			});
+		}
+		return selectAllButton;
 	}
 
 	private JScrollPane getJScrollPane0() {
@@ -447,7 +494,6 @@ public class FetcherResultPanel extends JPanel {
 					dbsa.setTitle(getTitle());
 					dbsa.setAuthors(getAuthor());
 					dbsa.setLinks(getLink());
-					//setHyperLink(dbsa.getLinks());
 					dbsa.setYear(getYear());
 					dbsa.setAbstractPub(getAbstract());
 					dbsa.setPublisher(getPublisher());
@@ -458,9 +504,6 @@ public class FetcherResultPanel extends JPanel {
 				}				
 			}	
 			
-			if(!saveJButton.isEnabled())
-				saveJButton.setEnabled(true);
-
 			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
 				checkRemovedFirst =  true;
 				
@@ -489,10 +532,12 @@ public class FetcherResultPanel extends JPanel {
 							&& model.getValueAt(i, 7).toString().equals("true")){
 						checkEnable++;
 						deleteJButton.setEnabled(true);
+						saveJButton.setEnabled(true);
 					}
 						
 					if(checkEnable == 0){
 						deleteJButton.setEnabled(false);
+						saveJButton.setEnabled(false);
 					}
 				}
 			}
@@ -634,6 +679,7 @@ public class FetcherResultPanel extends JPanel {
 					
 					if(checkInsert == true){
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("add.database.sucessfully"));
+						saveJButton.setEnabled(false);
 					}
 				}
 				
@@ -648,17 +694,24 @@ public class FetcherResultPanel extends JPanel {
 		try{
 			
 			for(int j = 0; j < resultsJTable.getRowCount(); j++){
-				
-				DBSAPublication dbsaPub = new DBSAPublication();
-				
-				dbsaPub.setTitle(resultsJTable.getModel().getValueAt(j, 1).toString());
-				dbsaPub.setAuthors(resultsJTable.getModel().getValueAt(j, 2).toString());
-				dbsaPub.setLinks(resultsJTable.getModel().getValueAt(j, 3).toString());
-				dbsaPub.setYear(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()));
-				dbsaPub.setAbstractPub(resultsJTable.getModel().getValueAt(j, 5).toString());
-				dbsaPub.setPublisher(resultsJTable.getModel().getValueAt(j, 6).toString());
-				
-				dbsaPublicationList.add(dbsaPub);
+				if(resultsJTable.getModel().getValueAt(j, 7) != null
+						&& resultsJTable.getModel().getValueAt(j, 7).toString().equals("true")){
+					DBSAPublication dbsaPub = new DBSAPublication();
+					int year = 0;
+					dbsaPub.setTitle(resultsJTable.getModel().getValueAt(j, 1).toString());
+					dbsaPub.setAuthors(resultsJTable.getModel().getValueAt(j, 2).toString());
+					dbsaPub.setLinks(resultsJTable.getModel().getValueAt(j, 3).toString());
+					if(resultsJTable.getModel().getValueAt(j, 4).toString().equals("")){
+						year = 0;
+					}else{
+						year = Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString());
+					}
+					dbsaPub.setYear(year);
+					dbsaPub.setAbstractPub(resultsJTable.getModel().getValueAt(j, 5).toString());
+					dbsaPub.setPublisher(resultsJTable.getModel().getValueAt(j, 6).toString());
+					
+					dbsaPublicationList.add(dbsaPub);
+				}
 			}
 			
 			InsertDBSAPublication insert = new InsertDBSAPublication();
@@ -667,7 +720,10 @@ public class FetcherResultPanel extends JPanel {
 			//System.out.println(resultsJTable.getRowCount());
 			
 			for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
-				model.removeRow(i);
+				if(resultsJTable.getModel().getValueAt(i, 7) != null
+						&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
+					model.removeRow(i);
+				}
 			}
 			
 			for(int k = 0; k < dbsaPublicationCheckList.size(); k++){
@@ -699,7 +755,7 @@ public class FetcherResultPanel extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					removeRowsIsSelected();
-					
+					deleteJButton.setEnabled(false);
 				}	
 			});
 		}
@@ -710,12 +766,12 @@ public class FetcherResultPanel extends JPanel {
 	int truocNam2005 = 0;
 	int sauNam2005 = 0;
 	int koxacdinh = 0;
-	
+		
 	private void removeRowsIsSelected() {
 		// TODO Auto-generated method stub
 		//int check = 0;
 				
-		for(int i = resultsJTable.getRowCount()-1; i >= 0; i--){
+		for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
 			
 			if(resultsJTable.getModel().getValueAt(i, 7) != null
 				&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
@@ -729,37 +785,40 @@ public class FetcherResultPanel extends JPanel {
 							&&resultsJTable.getModel().getValueAt(k, 8).toString().equals("true")){
 						
 						duplicateNumber ++;
+						
 					}
 				}
-					
-				nam2010 = 0;
-				truocNam2005 = 0;
-				sauNam2005 = 0;
-				koxacdinh = 0;
 				
+					
+//				nam2010 = 0;
+//				truocNam2005 = 0;
+//				sauNam2005 = 0;
+//				koxacdinh = 0;
+//				
 				for(int j = 0; j < resultsJTable.getRowCount(); j++){
 					resultsJTable.addRowToPaint(j, Color.white);
 					resultsJTable.getModel().setValueAt(j+1, j, 0);
-					
-					if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 2010)
-						nam2010 ++;
-					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 0)
-						koxacdinh++;
-					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) >= 2005)
-						sauNam2005 ++;
-					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) < 2005)
-						truocNam2005++;
-					
+//					
+//					if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 2010)
+//						nam2010 ++;
+//					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 0)
+//						koxacdinh++;
+//					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) >= 2005)
+//						sauNam2005 ++;
+//					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) < 2005)
+//						truocNam2005++;
+//					
 					if(resultsJTable.getModel().getValueAt(j, 8) != null
 						&&resultsJTable.getModel().getValueAt(j, 8).toString().equals("true")){
 				
 						resultsJTable.addRowToPaint(j, Color.red);
 					}
 				}
-				
-				System.out.println("truoc nam 2005 " + truocNam2005 + " tu nam 2005 -> 2010 " + sauNam2005 + " nam 2010 " + nam2010 + " ko xac dinh" + koxacdinh);
+//				
+//				System.out.println("truoc nam 2005 " + truocNam2005 + " tu nam 2005 -> 2010 " + sauNam2005 + " nam 2010 " + nam2010 + " ko xac dinh" + koxacdinh);
 			}
 		}
+		
 //		if(check == 0){
 //			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.choose.article.to.delete"));
 //		}
@@ -786,8 +845,10 @@ public class FetcherResultPanel extends JPanel {
 			actionsJPanel = new JPanel();
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 81, 12, 12), new Leading(0, 26, 10, 8)));
-			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(210, 80, 12, 12), new Leading(0, 12, 12)));
 			actionsJPanel.add(getDeleteJButton(), new Constraints(new Trailing(111, 81, 12, 12), new Leading(0, 26, 10, 8)));
+			actionsJPanel.add(getSelectAllButton(), new Constraints(new Trailing(308, 12, 12), new Leading(0, 12, 12)));
+			actionsJPanel.add(getSelectAllDupButton(), new Constraints(new Trailing(413, 12, 12), new Leading(0, 12, 12)));
+			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(210, 80, 12, 12), new Leading(0, 26, 12, 12)));
 		}
 		return actionsJPanel;
 	}

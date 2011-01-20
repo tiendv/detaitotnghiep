@@ -284,7 +284,7 @@ public class FetcherPanel extends JPanel {
 								try {
 									ACMFetcher(acmQuery);
 									acmJProgressBar.setIndeterminate(false);
-									acmJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+									acmJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 									fetchFromACMCheckBox.setSelected(false);
 									//Check duplicate
 									if((citeseerDLCheckBox.isSelected() != true) && (ieeexploreDLCheckBox.isSelected() != true) )
@@ -320,7 +320,7 @@ public class FetcherPanel extends JPanel {
 									CiteSeeXFetcher(citeseerQuery);	
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									citeseerJProgressBar.setIndeterminate(false);
-									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 									citeseerDLCheckBox.setSelected(false);
 									//check duplicate
 									if((ieeexploreDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
@@ -346,7 +346,7 @@ public class FetcherPanel extends JPanel {
 									try {
 										IEEExploreFetch(ieeeQuery);
 										ieeeploreJProgressBar.setIndeterminate(false);
-										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("complete"));
+										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 										ieeexploreDLCheckBox.setSelected(false);
 										//check duplicate
 										if((citeseerDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
