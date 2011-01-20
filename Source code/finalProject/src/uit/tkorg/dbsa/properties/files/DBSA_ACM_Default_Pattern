@@ -9,3 +9,4 @@ ACMHitsPattern###.*Found <b>(\d+,*\d*,*\d*,*\d*)</b> of.*%%%This pattern to get 
 ACMMaxHitsPattern###.*Results \d+ - \d+ of (\d+,*\d*).*%%%This pattern to get the total number of articles in the ACM digital library.
 ACMFullCitationPattern###<A HREF="(citation.cfm.*)" class.*%%%This pattern to get all citation of the paper.
 ACMIdPaperPattern###\d+&%%%This pattern to get id of paper.
+ACMAbstractPattern###<div style="display:inline">.*</div>%%%
