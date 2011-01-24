@@ -162,7 +162,8 @@ public class CiteSeerXFetcher {
 	            		entry.setField((DBSAApplicationConst.ABSTRACT), "");
 	            	}
 	            	DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
-            		
+	            	DBSAApplication.fetcherResultPanel.setDigitalLibrary("CITESEER");
+	            	
 	            	DBSAApplication.fetcherResultPanel.getResultsJTable();
             	}
             }
