@@ -463,6 +463,8 @@ public class IEEEXploreFetcher {
 			else
 				DBSAApplication.fetcherResultPanel.setPublisher(DBSAApplicationConst.IEEE);
 			
+			DBSAApplication.fetcherResultPanel.setDigitalLibrary("IEEE");
+			
 			DBSAApplication.fetcherResultPanel.getResultsJTable();
 			
             return entry;

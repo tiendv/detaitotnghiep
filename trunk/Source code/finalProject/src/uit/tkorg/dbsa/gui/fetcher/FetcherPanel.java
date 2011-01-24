@@ -97,6 +97,8 @@ public class FetcherPanel extends JPanel {
 	
 	private static DBSAStatusBar dbsaStatus = new DBSAStatusBar();
 	
+	public static String keyword ;
+	
 	public static boolean fetched = false;
 	
 	public FetcherPanel(JTabbedPane dbsa) {
@@ -371,6 +373,7 @@ public class FetcherPanel extends JPanel {
 						 */
 						//keywordJTextField.setEnabled(false);
 						fetcherBoolean = false;
+						keyword = keywordJComboBox.getSelectedItem().toString();
 					}
 					
 				}

@@ -78,7 +78,6 @@ public class FetcherResultPanel extends JPanel {
 	private static JButton selectAllButton;
 	private static JButton selectAllDupButton;
 	
-	
 	private static int rowNumber = 0;
 	private static String title = "";
 	private static String author = "";
@@ -99,6 +98,20 @@ public class FetcherResultPanel extends JPanel {
 	private static int duplicateNumber = 0;
 	private static boolean isDuplicate = false;
 	private static boolean duplicationArtilce = false;
+	
+	//So lieu cho tab thong ke
+	public static int num_DupInDBLP = 0;
+	public static int num_DupInDatabase = 0;
+	public static int num_Total = 0;
+	public static int acmNumberResult = 0;
+	public static int acmDupInDblp = 0;
+	public static int citeseerNumberResult = 0;
+	public static int citeseerDupInDblp = 0;
+	public static int ieeeNumberResult = 0;
+	public static int ieeeDupInDblp = 0;
+	
+	public static String digitalLibrary;
+	
 	private JTabbedPane dbsaTabFrame = null;
 	
 	public FetcherResultPanel(DBSATabPanel dbsa) {
@@ -158,7 +171,6 @@ public class FetcherResultPanel extends JPanel {
 						}
 					}
 				}
-				
 			});
 		}
 		return selectAllDupButton;
@@ -400,9 +412,9 @@ public class FetcherResultPanel extends JPanel {
 	 * Ham tao Jtable
 	 */
 	public MyJTable createResultJTable(){
-		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate()), getColumnName()) {
+		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getDigitalLibrary()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, Integer.class, String.class, String.class, Boolean.class, Boolean.class};
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, Integer.class, String.class, String.class, Boolean.class, Boolean.class, String.class};
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
@@ -438,6 +450,10 @@ public class FetcherResultPanel extends JPanel {
 		table.getColumn(DBSAResourceBundle.res.getString("duplicate")).setWidth(0);
 		table.getColumn(DBSAResourceBundle.res.getString("duplicate")).setMinWidth(0);
 		table.getColumn(DBSAResourceBundle.res.getString("duplicate")).setMaxWidth(0);
+		
+		table.getColumn("dlsName").setWidth(0);
+		table.getColumn("dlsName").setMinWidth(0);
+		table.getColumn("dlsName").setMaxWidth(0);
 		
 		for(int i = 0; i < 8; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -486,7 +502,7 @@ public class FetcherResultPanel extends JPanel {
 					}else{
 						year = getYear() + "";
 					}
-					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate()};
+					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getDigitalLibrary()};
 					model.insertRow(resultsJTable.getRowCount(), data );
 				
 					DBSAPublication dbsa = new DBSAPublication();
@@ -497,7 +513,9 @@ public class FetcherResultPanel extends JPanel {
 					dbsa.setYear(getYear());
 					dbsa.setAbstractPub(getAbstract());
 					dbsa.setPublisher(getPublisher());
+					
 					setIsDuplicate(false);
+					setDigitalLibrary(getDigitalLibrary());
 					
 					dbsaPublicationCheckList.add(dbsa);
 							
@@ -551,7 +569,50 @@ public class FetcherResultPanel extends JPanel {
 			}
 			
 		});
+		
 		return resultsJTable;
+	}
+	
+	/***
+	 * 
+	 * @return
+	 */
+	public static void getFetcherInfo(){
+		num_Total = 0;
+		acmNumberResult = 0;
+		acmDupInDblp = 0;
+		citeseerNumberResult = 0;
+		citeseerDupInDblp = 0;
+		ieeeNumberResult = 0;
+		ieeeDupInDblp = 0;
+		
+		num_Total = resultsJTable.getRowCount();
+		
+		for(int i = 0; i < num_Total; i++){
+			if(resultsJTable.getModel().getValueAt(i, 9).toString().equals("ACM")){
+				acmNumberResult ++;
+				if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
+					acmDupInDblp++;
+				}
+			}else if(resultsJTable.getModel().getValueAt(i, 9).toString().equals("CITESEER")){
+				citeseerNumberResult ++;
+				if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
+					citeseerDupInDblp++;
+				}
+			}else{
+				ieeeNumberResult++;
+				if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
+					ieeeDupInDblp++;
+				}
+			}
+			
+			if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
+				num_DupInDBLP++;
+			}
+		}
+		
+		System.out.println("TOtal-"+ num_DupInDBLP + " ACM-" + acmNumberResult + "-" + acmDupInDblp + 
+				" CITE-" + citeseerNumberResult + "-" + citeseerDupInDblp + " IEEE-" + ieeeNumberResult + "-" + ieeeDupInDblp);
 	}
 	
 	/*
@@ -560,6 +621,9 @@ public class FetcherResultPanel extends JPanel {
 	
 	@SuppressWarnings("unchecked")
 	public static boolean checkArticleIsDuplicated(){
+	
+		num_DupInDBLP = 0;
+				
 		CheckExist check = new CheckExist();
 		
 		numberArray = (ArrayList<Integer>) check.CheckTitleSignaturePublications(dbsaPublicationCheckList).clone();
@@ -571,8 +635,11 @@ public class FetcherResultPanel extends JPanel {
 			model.setValueAt(true, numberArray.get(i), 8);
 			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
 			duplicationArtilce = true;
+			
+			num_DupInDBLP ++;
 		}
-		
+		getFetcherInfo();
+		System.out.println(num_DupInDBLP);
 		return duplicationArtilce;
 	}
 	
@@ -585,7 +652,7 @@ public class FetcherResultPanel extends JPanel {
 				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
 				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
 				DBSAResourceBundle.res.getString("publisher"),DBSAResourceBundle.res.getString("mark"), 
-				DBSAResourceBundle.res.getString("duplicate")};
+				DBSAResourceBundle.res.getString("duplicate"), "dlsName"};
 			
 		return columnNames;
 	}
@@ -594,16 +661,16 @@ public class FetcherResultPanel extends JPanel {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate){
+	public  Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate, String dlName){
 		
-		Object [][] data = {addTableData(rowNumber, title, author, hyperLink, year, abstracts, publisher, isMark, duplicate)};
+		Object [][] data = {addTableData(rowNumber, title, author, hyperLink, year, abstracts, publisher, isMark, duplicate, dlName)};
 		
 		return data;
 		
 	}
 	
-	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate){
-		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate()};
+	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate, String dlName){
+		Object [] dataRow =  {rowNumber, title, author, hyperLink,year,abstracts, publisher,isMark, duplicate, dlName};
 		
 		return dataRow;
 	}
@@ -761,11 +828,6 @@ public class FetcherResultPanel extends JPanel {
 		}
 		return deleteJButton;
 	}
-	
-	int nam2010 = 0;
-	int truocNam2005 = 0;
-	int sauNam2005 = 0;
-	int koxacdinh = 0;
 		
 	private void removeRowsIsSelected() {
 		// TODO Auto-generated method stub
@@ -788,40 +850,19 @@ public class FetcherResultPanel extends JPanel {
 						
 					}
 				}
-				
-					
-//				nam2010 = 0;
-//				truocNam2005 = 0;
-//				sauNam2005 = 0;
-//				koxacdinh = 0;
-//				
+			
 				for(int j = 0; j < resultsJTable.getRowCount(); j++){
 					resultsJTable.addRowToPaint(j, Color.white);
 					resultsJTable.getModel().setValueAt(j+1, j, 0);
-//					
-//					if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 2010)
-//						nam2010 ++;
-//					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) == 0)
-//						koxacdinh++;
-//					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) >= 2005)
-//						sauNam2005 ++;
-//					else if(Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString()) < 2005)
-//						truocNam2005++;
-//					
+
 					if(resultsJTable.getModel().getValueAt(j, 8) != null
 						&&resultsJTable.getModel().getValueAt(j, 8).toString().equals("true")){
 				
 						resultsJTable.addRowToPaint(j, Color.red);
 					}
 				}
-//				
-//				System.out.println("truoc nam 2005 " + truocNam2005 + " tu nam 2005 -> 2010 " + sauNam2005 + " nam 2010 " + nam2010 + " ko xac dinh" + koxacdinh);
 			}
 		}
-		
-//		if(check == 0){
-//			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.choose.article.to.delete"));
-//		}
 	}
 
 	private JButton getCloseJButton() {
@@ -951,5 +992,13 @@ public class FetcherResultPanel extends JPanel {
 	
 	public boolean getIsDuplicate(){
 		return isDuplicate;
+	}
+	
+	public void setDigitalLibrary(String dl){
+		digitalLibrary = dl;
+	}
+	
+	public String getDigitalLibrary(){
+		return digitalLibrary;
 	}
 }

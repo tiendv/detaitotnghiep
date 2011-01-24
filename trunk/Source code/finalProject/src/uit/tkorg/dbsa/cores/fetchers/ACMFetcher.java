@@ -402,6 +402,8 @@ public class ACMFetcher {
 					entry.setField("publisher", "");
 				}
 				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField("publisher"));
+				DBSAApplication.fetcherResultPanel.setDigitalLibrary("ACM");
+				
 				DBSAApplication.fetcherResultPanel.getResultsJTable();
 		}
 		return entry;

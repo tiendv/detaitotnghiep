@@ -10,6 +10,7 @@ import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.InsertArticleToDatabasePanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.gui.statistic.DBSAStatisticPanel;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DBSATabPanel extends JTabbedPane {
@@ -19,6 +20,7 @@ public class DBSATabPanel extends JTabbedPane {
 	private FetcherResultPanel fetcherResultPanel = null;
 	private InsertArticleToDatabasePanel insertArticleToDatabase = null;
 	private DatabaseManagementPanel databaseManagementJPanel = null;
+	private DBSAStatisticPanel dbsaStatisticPanel = null;
 	private static JTabbedPane dbsaJTabbedPane = null;
 
 	public DBSATabPanel() {
@@ -34,6 +36,7 @@ public class DBSATabPanel extends JTabbedPane {
 		addTab(DBSAResourceBundle.res.getString("fetcher.results"), getFetcherResultPanel());
 		addTab(DBSAResourceBundle.res.getString("database.management"), getDatabaseManagementJPanel());
 		addTab(DBSAResourceBundle.res.getString("insert.article"), getInsertArticleToDatabaseJPanel());
+		addTab(DBSAResourceBundle.res.getString("statistic"), getDBSAStatisticPanel());
 		setSize(900, 500);
 	}
 
@@ -52,7 +55,8 @@ public class DBSATabPanel extends JTabbedPane {
 		addTab(DBSAResourceBundle.res.getString("fetcher.results"),getFetcherResultPanel());	
 		addTab(DBSAResourceBundle.res.getString("database.management"),getDatabaseManagementJPanel());
 		addTab(DBSAResourceBundle.res.getString("insert.article"), getInsertArticleToDatabaseJPanel());
-
+		addTab(DBSAResourceBundle.res.getString("statistic"), getDBSAStatisticPanel());
+		
 		return dbsaJTabbedPane;
 	}
 
@@ -82,5 +86,12 @@ public class DBSATabPanel extends JTabbedPane {
 			fetcherResultPanel = new FetcherResultPanel(this);
 		}
 		return fetcherResultPanel;
+	}
+	
+	private DBSAStatisticPanel getDBSAStatisticPanel(){
+		if(dbsaStatisticPanel == null){
+			dbsaStatisticPanel = new DBSAStatisticPanel();
+		}
+		return dbsaStatisticPanel;
 	}
 }
