@@ -85,7 +85,7 @@ public class DBSAApplicationConst {
 	public static String PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Define_Pattern";
 	public static String IEEE_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_IEEE_Default_Pattern";
 	public static String ACM_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_ACM_Default_Pattern";
-	
+	public static String AUTHOR_NAME_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\Author_Name_List";
 	/*
 	 * Define ACM DLs fetcher pattern
 	 */
