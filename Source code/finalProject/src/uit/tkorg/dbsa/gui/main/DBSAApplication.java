@@ -91,6 +91,7 @@ public class DBSAApplication extends JPanel {
 	private static InsertArticleToDatabasePanel insertArticleToDatabasePanel = null;
 	public static InsertSubjectFrame insertArticleFrame = null;
 	public static AboutDialog aboutDialog = null;
+	public static AuthorsNameList authorNameListClass = null;
 	
 	private JFrame getDBSAJFrame(){
 	
@@ -111,6 +112,7 @@ public class DBSAApplication extends JPanel {
 			insertArticleToDatabasePanel =  new InsertArticleToDatabasePanel();
 			insertArticleFrame = new InsertSubjectFrame();
 			aboutDialog = new AboutDialog();
+			authorNameListClass = new AuthorsNameList();
 			
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel(dbsaTabPanel);

@@ -93,6 +93,7 @@ public class FetcherPanel extends JPanel {
 	private static JRadioButton searchBySubjectJRadioButton;
 	public static boolean checkSearchBySubject;
 	private ButtonGroup acmSearchRadioButtonGroup;
+	private ButtonGroup listSearchRadioButtonGroup;
 	private JComboBox keywordJComboBox;
 	
 	private static DBSAStatusBar dbsaStatus = new DBSAStatusBar();
@@ -100,6 +101,10 @@ public class FetcherPanel extends JPanel {
 	public static String keyword ;
 	
 	public static boolean fetched = false;
+	private static JRadioButton loadSubjectJRadioButton;
+	private static JRadioButton loadAuthorJRadioButton;
+	private static ArrayList<Subject> subjectList = new ArrayList<Subject>();
+	private static ArrayList<String> authorNameList = new ArrayList<String>();
 	
 	public FetcherPanel(JTabbedPane dbsa) {
 		initComponents();
@@ -107,14 +112,106 @@ public class FetcherPanel extends JPanel {
 		updateTextsOfComponents();
 	}
 
+	@SuppressWarnings("static-access")
 	private void initComponents() {
+		subjectList = LoadSubject.getSubject();
+		authorNameList = DBSAApplication.authorNameListClass.getAuthorNameList();
+		
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
 		initAcmSearchRadioButtonGroup();
+		initSearchListRadioButtonGroup();
+		
 		
 		setSize(935, 477);
 	}
 	
+	private void initSearchListRadioButtonGroup() {
+		listSearchRadioButtonGroup = new ButtonGroup();
+		listSearchRadioButtonGroup.add(getloadAuthorJRadioButton());
+		listSearchRadioButtonGroup.add(getLoadSubjectJRadioButton());
+	}
+	
+	private JRadioButton getloadAuthorJRadioButton() {
+		if (loadAuthorJRadioButton == null) {
+			loadAuthorJRadioButton = new JRadioButton();	
+			loadAuthorJRadioButton.addChangeListener(new ChangeListener(){
+			
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if(loadAuthorJRadioButton.isSelected()){
+						if(authorNameList!= null){
+							keywordJComboBox.removeAllItems();
+							for(int i = 0; i < authorNameList.size(); i++){								
+								keywordJComboBox.addItem(authorNameList.get(i).toString());
+							}
+						}
+					}				
+				}			
+			});
+			
+			loadAuthorJRadioButton.addMouseListener(new MouseListener(){
+
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {					
+					dbsaStatus.setMessage(DBSAResourceBundle.res.getString("tooltip.load.author"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {					
+				}
+				public void mouseReleased(MouseEvent e) {					
+				}
+				
+			});
+		}
+		return loadAuthorJRadioButton;
+	}
+
+	private JRadioButton getLoadSubjectJRadioButton() {
+		if (loadSubjectJRadioButton == null) {
+			loadSubjectJRadioButton = new JRadioButton();
+			loadSubjectJRadioButton.setSelected(true);
+			loadSubjectJRadioButton.addChangeListener(new ChangeListener(){
+
+				@Override
+				public void stateChanged(ChangeEvent e) {					
+					if(loadSubjectJRadioButton.isSelected()){
+						if(subjectList!=null){
+							keywordJComboBox.removeAllItems();
+							for(int i = 0; i < subjectList.size(); i++){								
+								keywordJComboBox.addItem(subjectList.get(i).getSbj_name().toString());
+							}
+						}
+					}					
+				}
+			});
+			
+			loadSubjectJRadioButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setMessage(DBSAResourceBundle.res.getString("tooltip.load.subject"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+				
+			});
+		}
+		return loadSubjectJRadioButton;
+	}
+
 	private JComboBox getKeywordJComboBox() {
 		if (keywordJComboBox == null) {
 			keywordJComboBox = new JComboBox();
@@ -123,15 +220,13 @@ public class FetcherPanel extends JPanel {
 			keywordJComboBox.setDoubleBuffered(false);
 			keywordJComboBox.setRequestFocusEnabled(false);
 			
-			ArrayList<Subject> dbsaSubjectList = new ArrayList<Subject>();
-			dbsaSubjectList = LoadSubject.getSubject();
+			
 			keywordJComboBox.addItem("");
-
-			if(dbsaSubjectList != null){
-				for(int i = 0; i < dbsaSubjectList.size(); i++){
-					keywordJComboBox.addItem(dbsaSubjectList.get(i).getSbj_name());
+			if(getAuthorList()!= null)			
+				for(int i = 0; i < subjectList.size(); i++){
+					keywordJComboBox.addItem(subjectList.get(i).getSbj_name().toString());
 				}
-			}
+			
 			keywordJComboBox.addMouseListener(new MouseListener(){
 
 				@Override
@@ -638,7 +733,9 @@ public class FetcherPanel extends JPanel {
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			inputJPanel.setLayout(new GroupLayout());
 			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(4, 108, 10, 10), new Leading(-3, 36, 10, 10)));
-			inputJPanel.add(getKeywordJComboBox(), new Constraints(new Bilateral(120, 12, 783), new Leading(-3, 36, 12, 12)));
+			inputJPanel.add(getLoadSubjectJRadioButton(), new Constraints(new Trailing(8, 169, 10, 10), new Bilateral(3, 13, 10)));
+			inputJPanel.add(getloadAuthorJRadioButton(), new Constraints(new Trailing(202, 10, 565), new Bilateral(3, 13, 10)));
+			inputJPanel.add(getKeywordJComboBox(), new Constraints(new Bilateral(120, 386, 409), new Bilateral(-3, 7, 10, 36)));
 		}
 		return inputJPanel;
 	}
@@ -697,6 +794,11 @@ public class FetcherPanel extends JPanel {
 	}
 	
 	public static void updateTextsOfComponents(){
+
+		loadAuthorJRadioButton.setText(DBSAResourceBundle.res.getString("list.author.name"));
+		loadAuthorJRadioButton.setToolTipText(DBSAResourceBundle.res.getString("tooltip.load.author"));
+		loadSubjectJRadioButton.setText(DBSAResourceBundle.res.getString("list.subject.name"));
+		loadAuthorJRadioButton.setToolTipText(DBSAResourceBundle.res.getString("tooltip.load.subject"));
 		citeseerDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
 		fetchFromACMCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
 		ieeexploreDLCheckBox.setText(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
@@ -718,5 +820,21 @@ public class FetcherPanel extends JPanel {
 				Font.BOLD, 12), new Color(51, 51, 51)));
 		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
+	}
+	
+	public void setSubjectList(ArrayList<Subject> subjectLst){
+		subjectList = subjectLst;
+	}
+	
+	public ArrayList<Subject> getSubjectList(){
+		return subjectList;
+	}
+	
+	public void setAuthorList(ArrayList<String> authorLst){
+		authorNameList = authorLst;
+	}
+	
+	public ArrayList<String> getAuthorList(){
+		return authorNameList;
 	}
 }
