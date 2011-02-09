@@ -98,18 +98,18 @@ public class FetcherPatternDialog extends JDialog {
 	
 	public static void updateTextsOfComponents(){
 		
-		mainJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("pattern"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+		mainJPanel.setBorder(BorderFactory.createTitledBorder(null, /*DBSAResourceBundle.res.getString*/("pattern"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
-		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, /*DBSAResourceBundle.res.getString*/("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
-		saveJButton.setText(DBSAResourceBundle.res.getString("save.change"));
-		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
-		chooseDLJLabel.setText(DBSAResourceBundle.res.getString("choose.digital.library") + " :");
-		setDefaultJButton.setText(DBSAResourceBundle.res.getString("set.default"));
-		patternDescriptionJLabel.setText(DBSAResourceBundle.res.getString("description"));
-		patternValueJLabel.setText(DBSAResourceBundle.res.getString("pattern.value") + " :");
-		patternNameJLabel.setText(DBSAResourceBundle.res.getString("pattern.name") + " :");
-		dialogNameJLabel.setText(DBSAResourceBundle.res.getString("change.fetcher.pattern.title"));
+		saveJButton.setText(/*DBSAResourceBundle.res.getString*/("save.change"));
+		closeJButton.setText(/*DBSAResourceBundle.res.getString*/("close"));
+		chooseDLJLabel.setText(/*DBSAResourceBundle.res.getString*/("choose.digital.library") + " :");
+		setDefaultJButton.setText(/*DBSAResourceBundle.res.getString*/("set.default"));
+		patternDescriptionJLabel.setText(/*DBSAResourceBundle.res.getString*/("description"));
+		patternValueJLabel.setText(/*DBSAResourceBundle.res.getString*/("pattern.value") + " :");
+		patternNameJLabel.setText(/*DBSAResourceBundle.res.getString*/("pattern.name") + " :");
+		dialogNameJLabel.setText(/*DBSAResourceBundle.res.getString*/("change.fetcher.pattern.title"));
 	}
 
 	private JButton getSetDefaultJButton() {
@@ -119,6 +119,10 @@ public class FetcherPatternDialog extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
+					patternNameJTextField.setText("");
+					patternValueJTextField.setText("");
+					patternDescriptionJTextField.setText("");
 					
 					DBSAApplication.dbsaFetcherPattern.setDefaultPattern();
 					digitalLibraryComboBox.setSelectedItem(digitalLibraryComboBox.getSelectedItem());
@@ -294,9 +298,6 @@ public class FetcherPatternDialog extends JDialog {
 		}else{
 			Object [] data = {patternJTable.getRowCount(), getPatternName(), getPatternValue(), getPatternDescription()};
 			model.insertRow(patternJTable.getRowCount(), data );
-			
-			
-			
 		}
 		patternJTable.addMouseListener(new MouseListener(){
 
@@ -322,25 +323,13 @@ public class FetcherPatternDialog extends JDialog {
 				patternDescriptionJTextField.setText(model.getValueAt(getRowIsSelected(), 3).toString());
 				
 			}
-
-			@Override
 			public void mouseEntered(MouseEvent e) {
-				
 			}
-
-			@Override
 			public void mouseExited(MouseEvent e) {
-				
 			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
+			public void mousePressed(MouseEvent e) {				
 			}
-
-			@Override
 			public void mouseReleased(MouseEvent e) {
-				
 			}
 			
 		});
@@ -352,8 +341,8 @@ public class FetcherPatternDialog extends JDialog {
 	 * Get Column name
 	 */
 	private  String [] getColumnName(){
-		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("pattern.name"), 
-				DBSAResourceBundle.res.getString("pattern.value"), DBSAResourceBundle.res.getString("description"), };
+		String [] columnNames = { /*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("pattern.name"), 
+				/*DBSAResourceBundle.res.getString*/("pattern.value"), /*DBSAResourceBundle.res.getString*/("description"), };
 			
 		return columnNames;
 	}
@@ -393,15 +382,20 @@ public class FetcherPatternDialog extends JDialog {
 			saveJButton = new JButton();
 			saveJButton.setEnabled(false);
 			saveJButton.addActionListener(new ActionListener(){
-
+				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					
 					DBSAApplication.dbsaFetcherPattern.changePatternInfo(patternNameJTextField.getText(),
 							patternValueJTextField.getText(),
 							patternDescriptionJTextField.getText());
 					
+					patternNameJTextField.setText("");
+					patternValueJTextField.setText("");
+					patternDescriptionJTextField.setText("");
+					
 					int k = JOptionPane.showConfirmDialog(
-					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("message.save.pattern.is.changed"),
+					    DBSAApplication.dbsaJFrame, /*DBSAResourceBundle.res.getString*/("message.save.pattern.is.changed"),
 					    "An Question", JOptionPane.YES_NO_OPTION);
 									
 						if(k == JOptionPane.YES_OPTION){
@@ -426,8 +420,10 @@ public class FetcherPatternDialog extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int k = JOptionPane.showConfirmDialog(
-						    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("message.save.pattern.is.changed"),
+					if(saveJButton.isEnabled() == true){
+						
+						int k = JOptionPane.showConfirmDialog(
+						    DBSAApplication.dbsaJFrame, /*DBSAResourceBundle.res.getString*/("message.save.pattern.is.changed"),
 						    "An Question", JOptionPane.YES_NO_OPTION);
 										
 							if(k == JOptionPane.YES_OPTION){
@@ -439,8 +435,11 @@ public class FetcherPatternDialog extends JDialog {
 								dispose();
 							
 							}
-					
+					}else{
+						dispose();;
+					}
 				}
+			
 				
 			});
 		}
