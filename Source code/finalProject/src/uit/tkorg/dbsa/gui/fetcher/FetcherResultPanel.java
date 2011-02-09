@@ -506,7 +506,8 @@ public class FetcherResultPanel extends JPanel {
 		
 		if (resultsJTable == null) {
 			
-			resultsJTable = createResultJTable();			
+			resultsJTable = createResultJTable();
+			model.removeRow(0);
 		}else if(resultsJTable != null){
 			
 			for(int i = 0; i < getRowNumber(); i++){				
@@ -731,8 +732,14 @@ public class FetcherResultPanel extends JPanel {
 					//default icon, custom title
 					int n = 0;
 					boolean checkInsert = false;
-					//System.out.println("numberarray size = " + duplicateNumber);
-					if(duplicateNumber > 0){
+					boolean checkSelect = false;
+					
+					for(int i = 0; i < resultsJTable.getRowCount(); i++){
+						if(resultsJTable.getModel().getValueAt(i, 7).toString().equals("true"))
+							checkSelect = true;
+					}
+					
+					if(checkSelect && duplicateNumber > 0){
 						n = JOptionPane.showConfirmDialog(
 					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("notice.data.duplicate"),
 					    "An Question", JOptionPane.YES_NO_OPTION);
@@ -744,7 +751,8 @@ public class FetcherResultPanel extends JPanel {
 						}
 					}
 					
-					if(duplicateNumber == 0){
+					if(checkSelect && duplicateNumber == 0){
+						
 						int k = JOptionPane.showConfirmDialog(
 					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("notice.save.data"),
 					    "An Question", JOptionPane.YES_NO_OPTION);
@@ -757,6 +765,10 @@ public class FetcherResultPanel extends JPanel {
 							
 							//JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("notice.save.data"));
 						}
+					}
+					
+					if(!checkSelect){
+						JOptionPane.showMessageDialog(null, "Ban chua chon bai bao de luu");
 					}
 					
 					if(checkInsert == true){
