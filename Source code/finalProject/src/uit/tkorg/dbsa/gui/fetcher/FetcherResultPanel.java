@@ -148,8 +148,8 @@ public class FetcherResultPanel extends JPanel {
 		actionsJPanel.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("actions")));
 		resultsJScrollPane.setBorder(BorderFactory.createTitledBorder(DBSAResourceBundle.res.getString("result.list")));
 		getColumnName();
-		selectAllDupButton.setText("Select Duplicate");
-		selectAllButton.setText("Select All");
+		selectAllDupButton.setText(DBSAResourceBundle.res.getString("select.duplicate"));
+		selectAllButton.setText(DBSAResourceBundle.res.getString("select.all"));
 	}
 
 	private JButton getSelectAllDupButton() {
@@ -170,6 +170,14 @@ public class FetcherResultPanel extends JPanel {
 							resultsJTable.getModel().setValueAt(false, i, 7);
 						}
 					}
+					
+					if(resultsJTable.getRowCount() == 0){
+						selectAllButton.setEnabled(false);
+						selectAllDupButton.setEnabled(false);
+						deleteJButton.setEnabled(false);
+						saveJButton.setEnabled(false);
+					}
+					
 				}
 			});
 		}
@@ -188,6 +196,13 @@ public class FetcherResultPanel extends JPanel {
 						resultsJTable.getModel().setValueAt(true, i, 7);
 						deleteJButton.setEnabled(true);
 						saveJButton.setEnabled(true);
+					}
+					
+					if(resultsJTable.getRowCount() == 0){
+						selectAllButton.setEnabled(false);
+						selectAllDupButton.setEnabled(false);
+						deleteJButton.setEnabled(false);
+						saveJButton.setEnabled(false);
 					}
 				}
 				

@@ -5,6 +5,8 @@ package uit.tkorg.dbsa.actions.database;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -25,8 +27,9 @@ import uit.tkorg.dbsa.model.DBSAPublication;
 		 * @param updateList : list DBSAPublication for update
 		 */
 		public static void updateListData (List<DBSAPublication> updateList) {
-			for(int i =0 ; i < updateList.size();i++) {
+			for(int i = 0 ; i < updateList.size();i++) {
 				updatePublication(updateList.get(i));
+				JOptionPane.showMessageDialog(null, /*DBSAResourceBundle.res.getString*/("update.database.is.successfull"));
 			}
 			
 		}
