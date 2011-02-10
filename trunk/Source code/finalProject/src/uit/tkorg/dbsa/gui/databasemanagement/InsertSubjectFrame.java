@@ -30,8 +30,8 @@ import uit.tkorg.dbsa.model.Subject;
 public class InsertSubjectFrame extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private static JButton cancelJButton;
-	private static JButton insertJButton;
+	private static JButton closeJButton;
+	private JButton insertJButton;
 	private static JPanel actionJPanel;
 	private static JTextField numberJTextField;
 	private static JTextField subjectIDJTextField;
@@ -68,13 +68,13 @@ public class InsertSubjectFrame extends JDialog {
 		updateTextsOfComponents();
 	}
 
-	public  void updateTextsOfComponents(){
+	public void updateTextsOfComponents(){
 		bodyJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("body"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
 				12), new Color(51, 51, 51)));
 		actionJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
 		insertJButton.setText(DBSAResourceBundle.res.getString("insert"));
-		cancelJButton.setText(DBSAResourceBundle.res.getString("close"));
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 		subjectIDJLabel.setText(DBSAResourceBundle.res.getString("subject.id") + " : ");
 		subjectNameJLabel.setText(DBSAResourceBundle.res.getString("subject.name") + " : ");
 		NoJLabel.setText(DBSAResourceBundle.res.getString("no") + " : ");
@@ -115,7 +115,7 @@ public class InsertSubjectFrame extends JDialog {
 		if (actionJPanel == null) {
 			actionJPanel = new JPanel();		
 			actionJPanel.setLayout(new GroupLayout());
-			actionJPanel.add(getCancelJButton(), new Constraints(new Trailing(12, 12, 12), new Leading(0, 12, 12)));
+			actionJPanel.add(getcloseJButton(), new Constraints(new Trailing(12, 12, 12), new Leading(0, 12, 12)));
 			actionJPanel.add(getInsertJButton(), new Constraints(new Trailing(111, 78, 10, 10), new Leading(0, 12, 12)));
 		}
 		return actionJPanel;
@@ -153,19 +153,19 @@ public class InsertSubjectFrame extends JDialog {
 		return insertJButton;
 	}
 
-	private JButton getCancelJButton() {
-		if (cancelJButton == null) {
-			cancelJButton = new JButton();
-			cancelJButton.addActionListener(new ActionListener(){
+	private JButton getcloseJButton() {
+		if (closeJButton == null) {
+			closeJButton = new JButton();
+			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dispose();
+					InsertSubjectFrame.this.dispose();
 				}
 				
 			});
 		}
-		return cancelJButton;
+		return closeJButton;
 	}
 
 	private JLabel getSubjectIDJLabel() {

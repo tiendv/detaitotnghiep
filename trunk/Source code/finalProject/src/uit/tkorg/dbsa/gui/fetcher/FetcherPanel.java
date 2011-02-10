@@ -793,7 +793,7 @@ public class FetcherPanel extends JPanel {
 		return citeResultNumber;
 	}
 	
-	public static void updateTextsOfComponents(){
+	public void updateTextsOfComponents(){
 
 		loadAuthorJRadioButton.setText(DBSAResourceBundle.res.getString("list.author.name"));
 		loadAuthorJRadioButton.setToolTipText(DBSAResourceBundle.res.getString("tooltip.load.author"));
