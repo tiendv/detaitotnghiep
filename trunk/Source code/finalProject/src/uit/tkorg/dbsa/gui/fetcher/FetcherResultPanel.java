@@ -55,16 +55,16 @@ public class FetcherResultPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static MyJTable resultsJTable;
 	private static JScrollPane resultsJScrollPane;
-	private JPanel actionsJPanel;
-	private JButton closeJButton;
-	private JButton deleteJButton;
-	private JButton saveJButton;
-	private JPanel entryJPanel;
-	private JLabel authorsJLabel;
-	private JLabel yearJLabel;
-	private JLabel abstractJLabel;
-	private JLabel publisherJLabel;
-	private JLabel titleJLabel;
+	private static JPanel actionsJPanel;
+	private static JButton closeJButton;
+	private static JButton deleteJButton;
+	private static JButton saveJButton;
+	private static JPanel entryJPanel;
+	private static JLabel authorsJLabel;
+	private static JLabel yearJLabel;
+	private static JLabel abstractJLabel;
+	private static JLabel publisherJLabel;
+	private static JLabel titleJLabel;
 	private JTextArea titleJTextArea;
 	private JScrollPane jScrollPane1;
 	private JTextArea authorsJTextArea;
@@ -75,8 +75,8 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane jScrollPane4;
 	private JTextArea publisherJTextArea;
 	private JScrollPane jScrollPane5;
-	private JButton selectAllButton;
-	private JButton selectAllDupButton;
+	private static JButton selectAllButton;
+	private static JButton selectAllDupButton;
 	
 	private static int rowNumber = 0;
 	private static String title = "";

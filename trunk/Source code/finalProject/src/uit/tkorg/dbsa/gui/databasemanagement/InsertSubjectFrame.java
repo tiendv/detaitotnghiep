@@ -30,16 +30,16 @@ import uit.tkorg.dbsa.model.Subject;
 public class InsertSubjectFrame extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private static JButton closeJButton;
+	private JButton closeJButton;
 	private JButton insertJButton;
-	private static JPanel actionJPanel;
+	private JPanel actionJPanel;
 	private static JTextField numberJTextField;
 	private static JTextField subjectIDJTextField;
 	private JTextField subjectNameJTextField;
-	private static JLabel NoJLabel;
-	private static JLabel subjectNameJLabel;
-	private static JLabel subjectIDJLabel;
-	private static JPanel bodyJPanel;
+	private JLabel NoJLabel;
+	private JLabel subjectNameJLabel;
+	private JLabel subjectIDJLabel;
+	private JPanel bodyJPanel;
 	private int width = 440;
 	private int height = 390;
 	private int xLocation;
