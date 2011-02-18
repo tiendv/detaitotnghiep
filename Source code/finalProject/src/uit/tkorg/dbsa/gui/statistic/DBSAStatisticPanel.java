@@ -3,6 +3,7 @@ package uit.tkorg.dbsa.gui.statistic;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,6 +19,7 @@ import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 
+import uit.tkorg.dbsa.actions.database.GetParametersForStatisticTab;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -28,13 +30,13 @@ public class DBSAStatisticPanel extends JPanel {
 	private JScrollPane statistticJScrollPanel;
 	private JPanel mainJPanel;
 	
-	private String parameters = "";
-	private String acmDls = "";
-	private String citeseerDls = "";
-	private String ieeeDls = "";
+	private static String parameters = "";
+	private static String acmDls = "";
+	private static String citeseerDls = "";
+	private static String ieeeDls = "";
 	
-	private DefaultTableModel model =  new DefaultTableModel();
-	private JTextArea statisticJTextArea;
+	private static DefaultTableModel model;
+	private static JTextArea statisticJTextArea;
 	private JScrollPane jScrollPane0;
 	
 	private int resultNumber = 0;
@@ -49,6 +51,7 @@ public class DBSAStatisticPanel extends JPanel {
 		setLayout(new GroupLayout());
 		add(getmainJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
 		setSize(585, 395);
+		updateStatistic(0);
 	}
 
 	private JScrollPane getJScrollPane0() {
@@ -59,12 +62,21 @@ public class DBSAStatisticPanel extends JPanel {
 		return jScrollPane0;
 	}
 
+	@SuppressWarnings("static-access")
+	public static void updateStatistic(int resultTotal){
+		
+		GetParametersForStatisticTab statisticNumber = new GetParametersForStatisticTab();
+		
+		statisticJTextArea.setText("Fetcher result statistic:\n\n 1. Keyword: " 
+				+ DBSAApplication.fetcherPanel.keyword + "\n 2. Result total: " + resultTotal
+				 + "\n 3. The article number in DPLB database: " + statisticNumber.getNumberOfPublicationsInDBLP()
+				+ "\n 4. The article number in your database : " + statisticNumber.getNumberOfPublicationInDBSA());
+	}
+	
 	private JTextArea getstatisticJTextArea() {
 		if (statisticJTextArea == null) {
 			statisticJTextArea = new JTextArea();
-			statisticJTextArea.setEditable(false);
-			statisticJTextArea.setText("Fetcher result statistic:\n\n 1. Keyword: " + DBSAApplication.fetcherPanel.keyword + "\n 2. Result total: \n 3. The article number is duplicated in DPLB database."
-					+ "\n 4. The article number is duplicated in your database : \n ");
+			statisticJTextArea.setEditable(false);			
 			statisticJTextArea.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 		}
 		return statisticJTextArea;
@@ -90,18 +102,14 @@ public class DBSAStatisticPanel extends JPanel {
 	}
 
 	public JTable createResultJTable(){
-		model = new DefaultTableModel(getTableData(), getColumnName()) {
+		model = new DefaultTableModel(getTableData(getParameter(), getAcmDls(), getCiteseerDls(), getIeeeDls()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, Integer.class, String.class, String.class, Boolean.class, Boolean.class};
+			Class<?>[] types = new Class<?>[] { String.class, String.class, String.class, String.class,};
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
 			}
 			
-			/*public Class getColumnClass(int col) {
-				if (col == 6) return Boolean.class;
-				else return Object.class;
-			}*/
 		};
 		
 		JTable table = new JTable(model);
@@ -131,7 +139,6 @@ public class DBSAStatisticPanel extends JPanel {
 			}
 		}
 		
-		
 		return table;
 	}
 	
@@ -140,7 +147,7 @@ public class DBSAStatisticPanel extends JPanel {
 	 * @return String []
 	 */
 	private static  String [] getColumnName(){
-		String [] columnNames = { "Parameters", "ACM DL", "CiteSeer DL", "IEEExplore DL"};
+		String [] columnNames = {"Parameters", "ACM DL", "CiteSeer DL", "IEEExplore DL"};
 			
 		return columnNames;
 	}
@@ -149,29 +156,60 @@ public class DBSAStatisticPanel extends JPanel {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(){
+	public  Object [][] getTableData(String parameter, String acmDl, String citeseerDl, String ieeeDl){
 		
-		Object [][] data = {{getParameter(), getAcmDls(), getCiteseerDls(), getIeeeDls()}, 
-							{getParameter(), getAcmDls(), getCiteseerDls(), getIeeeDls()}};
+		Object [][] data = {addTableData(parameter, acmDl, citeseerDl, ieeeDl)};
 		
-		return data;
-		
+		return data;		
 	}
 	
-	public  Object [] addTableData(){
-		Object [] data =  {getParameter(), getAcmDls(), getCiteseerDls(), getIeeeDls()};
+	public  Object [] addTableData(String parameter, String acmDl, String citeseerDl, String ieeeDl){
+		Object [] data =  {parameter, acmDl, citeseerDl, ieeeDl};
 		
 		return data;
 	}
 	
-	private JTable getstatisticJTable() {
+	public void insertDataToTable(int rowNumber, String parameter, String acmDl, String citeseerDl, String ieeeDl){
+		Object []data = addTableData(parameter, acmDl, citeseerDl, ieeeDl);
+		model.insertRow(rowNumber, data);
+	}
+	
+	public JTable getstatisticJTable() {
 		if (statisticJTable == null) {
 			statisticJTable = createResultJTable();
+			model.removeRow(0);
+		}else{
+			JOptionPane.showMessageDialog(null, statisticJTable.getRowCount());
+			if(statisticJTable.getRowCount() > 3){
+				for(int i = statisticJTable.getRowCount() - 1; i >= 0; i--){
+					model.removeRow(i);
+					
+				}
+			JOptionPane.showMessageDialog(null, statisticJTable.getRowCount());
+			}
+			//model.removeRow(0);
+			Object []data = {getParameter(), getAcmDls(), getCiteseerDls(), getIeeeDls()};
 			
+			model.insertRow(statisticJTable.getRowCount(), data);			
 		}
+		
 		return statisticJTable;
 	}
 
+	public void removeAllRow(){
+		boolean check = false;
+		
+		if(statisticJTable.getRowCount() == 0)
+			check = true;
+		
+		for(int i = statisticJTable.getRowCount() - 1; i >= 0; i--){
+			model.removeRow(i);
+			check = true;
+		}
+		
+		//return check;
+	}
+	
 	public  void setParameter(String parameter){
 		parameters = parameter;
 	}

@@ -506,7 +506,7 @@ public class DatabaseManagementPanel extends JPanel {
 	
 		publicationModel  = new DefaultTableModel(getTableDatabase(getRowNumber(), getTitle(), getAuthor(), getLinks(), getYear(), getAbstract(), getPublisher(), getMark(), getID()), getDatabaseColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class,  String.class, Integer.class, String.class, String.class, Boolean.class, Integer.class};
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class,  String.class, String.class, String.class, String.class, Boolean.class, Integer.class};
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];

@@ -103,12 +103,16 @@ public class FetcherResultPanel extends JPanel {
 	public static int num_DupInDBLP = 0;
 	public static int num_DupInDatabase = 0;
 	public static int num_Total = 0;
+	public static int old_Num_Total = 0;
 	public static int acmNumberResult = 0;
 	public static int acmDupInDblp = 0;
+	public static int acmNumber_Before2005 = 0;
 	public static int citeseerNumberResult = 0;
 	public static int citeseerDupInDblp = 0;
+	public static int citeseerNumber_Before2005 = 0;
 	public static int ieeeNumberResult = 0;
 	public static int ieeeDupInDblp = 0;
+	public static int ieeeNumber_Before2005 = 0;
 	
 	public static String digitalLibrary;
 	
@@ -226,8 +230,6 @@ public class FetcherResultPanel extends JPanel {
 			linkJEditorPane.setEditable(false);
 			linkJEditorPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(152, 192, 228), new Color(152, 192, 228), null, null));
 			linkJEditorPane.addMouseListener(new MouseListener(){
-
-				@Override
 				public void mouseClicked(MouseEvent e) {
 					
 					try {
@@ -243,20 +245,12 @@ public class FetcherResultPanel extends JPanel {
 						ex2.printStackTrace();
 					}
 				}
-
-				@Override
 				public void mouseEntered(MouseEvent e) {	
 				}
-
-				@Override
 				public void mouseExited(MouseEvent e) {
 				}
-
-				@Override
 				public void mousePressed(MouseEvent e) {	
 				}
-
-				@Override
 				public void mouseReleased(MouseEvent e) {	}
 				
 			});
@@ -429,7 +423,7 @@ public class FetcherResultPanel extends JPanel {
 	public MyJTable createResultJTable(){
 		model = new DefaultTableModel(getTableData(getRowNumber(), getTitle(), getAuthor(), getHyperLink(), getYear(), getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getDigitalLibrary()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, Integer.class, String.class, String.class, Boolean.class, Boolean.class, String.class};
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, String.class, String.class, String.class, Boolean.class, Boolean.class, String.class};
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
@@ -556,7 +550,10 @@ public class FetcherResultPanel extends JPanel {
 				titleJTextArea.setText(model.getValueAt(n, 1).toString());
 				authorsJTextArea.setText(model.getValueAt(n, 2).toString());				
 				linkJEditorPane.setText("<html><body><a href='" + "'>" + model.getValueAt(n, 3).toString() + "</><hr></body></html>");
-				yearJTextArea.setText(model.getValueAt(n, 4).toString());
+				if(model.getValueAt(n, 4).equals(null) )
+					yearJTextArea.setText("");
+				else
+					yearJTextArea.setText(model.getValueAt(n, 4).toString());
 				abstractJTextArea.setText(model.getValueAt(n, 5).toString());
 				publisherJTextArea.setText(resultsJTable.getModel().getValueAt(n, 6).toString());
 				
@@ -594,15 +591,19 @@ public class FetcherResultPanel extends JPanel {
 	 * @return
 	 */
 	public static void getFetcherInfo(){
-		num_Total = 0;
+		
 		acmNumberResult = 0;
 		acmDupInDblp = 0;
+		acmNumber_Before2005 = 0;
 		citeseerNumberResult = 0;
 		citeseerDupInDblp = 0;
+		citeseerNumber_Before2005 = 0;
 		ieeeNumberResult = 0;
 		ieeeDupInDblp = 0;
+		ieeeNumber_Before2005 = 0;
 		
-		num_Total = resultsJTable.getRowCount();
+		num_Total = resultsJTable.getRowCount() - old_Num_Total;
+		old_Num_Total += num_Total;
 		
 		for(int i = 0; i < num_Total; i++){
 			if(resultsJTable.getModel().getValueAt(i, 9).toString().equals("ACM")){
@@ -610,22 +611,97 @@ public class FetcherResultPanel extends JPanel {
 				if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
 					acmDupInDblp++;
 				}
+				if(resultsJTable.getModel().getValueAt(i, 4) != null && resultsJTable.getModel().getValueAt(i, 4).toString() != "")
+					if(Integer.parseInt(resultsJTable.getModel().getValueAt(i, 4).toString()) < 2005){
+						acmNumber_Before2005++;
+					}
+				
 			}else if(resultsJTable.getModel().getValueAt(i, 9).toString().equals("CITESEER")){
 				citeseerNumberResult ++;
 				if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
 					citeseerDupInDblp++;
 				}
+				if(resultsJTable.getModel().getValueAt(i, 4) != null && resultsJTable.getModel().getValueAt(i, 4).toString() != "")
+					if(Integer.parseInt(resultsJTable.getModel().getValueAt(i, 4).toString()) < 2005){
+					citeseerNumber_Before2005++;
+					}
 			}else{
 				ieeeNumberResult++;
 				if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
 					ieeeDupInDblp++;
 				}
+				if(resultsJTable.getModel().getValueAt(i, 4) != null && resultsJTable.getModel().getValueAt(i, 4).toString() != "")
+					if(Integer.parseInt(resultsJTable.getModel().getValueAt(i, 4).toString()) < 2005){
+						ieeeNumber_Before2005++;
+					}
 			}
-			
+						
 			if(resultsJTable.getModel().getValueAt(i, 8).toString().equals("true")){
 				num_DupInDBLP++;
 			}
 		}
+		//xoa cac field cu
+		DBSAApplication.statisticPanel.removeAllRow();
+				
+		//thong ke so ket qua tim duoc truoc nam 2005		
+		float acmBefore2005 = 0;
+		float citeseerBefore2005  = 0;
+		float ieeeBefore2005 = 0;
+		
+		if(acmNumberResult != 0)
+			acmBefore2005 = (float)acmNumber_Before2005*100/acmNumberResult;
+		else
+			acmBefore2005 = 0;
+		
+		if(citeseerNumberResult != 0)
+			citeseerBefore2005 = (float)citeseerNumber_Before2005*100/citeseerNumberResult;
+		else
+			citeseerBefore2005 = 0;
+		
+		if(ieeeNumberResult != 0)
+			ieeeBefore2005 = (float)ieeeNumber_Before2005*100/ieeeNumberResult;
+		else
+			ieeeBefore2005 = 0;
+		
+		
+		DBSAApplication.statisticPanel.setParameter("So ket qua truoc nam 2005");
+		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + " bai, chiem " + acmBefore2005 + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + " bai, chiem " + citeseerBefore2005 + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + " bai, chiem " + ieeeBefore2005 + "%");
+		DBSAApplication.statisticPanel.getstatisticJTable();
+		
+		//thong ke so ket qua tim duoc trung trong dblp	
+		float acmDupInDatabase = 0;
+		float citeseerDupInDatabase = 0;
+		float ieeeDupInDatabase = 0;
+		
+		if(acmNumberResult != 0)
+			acmDupInDatabase = (float)acmDupInDblp*100/acmNumberResult;
+		else 
+			acmDupInDatabase = 0;
+		
+		if(citeseerNumberResult != 0)
+			citeseerDupInDatabase = (float)citeseerDupInDblp*100/citeseerNumberResult;
+		else
+			citeseerDupInDatabase = 0;
+		
+		if(ieeeNumberResult != 0)
+			ieeeDupInDatabase = (float)ieeeDupInDblp*100/ieeeNumberResult;
+		else
+			ieeeDupInDatabase = 0;
+		
+		DBSAApplication.statisticPanel.setParameter("So ket qua trung trong dplb");
+		DBSAApplication.statisticPanel.setAcmDls(acmDupInDblp + " bai chiem " + acmDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerDupInDblp + " bai, chiem " + citeseerDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeDupInDblp + " bai, chiem " + ieeeDupInDatabase + "%");
+		DBSAApplication.statisticPanel.getstatisticJTable();
+		
+		//them cac field moi		
+		DBSAApplication.statisticPanel.setParameter("So ket qua tim dc");
+		DBSAApplication.statisticPanel.setAcmDls(acmNumberResult + "");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumberResult + "");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumberResult + "");
+		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		System.out.println("TOtal-"+ num_DupInDBLP + " ACM-" + acmNumberResult + "-" + acmDupInDblp + 
 				" CITE-" + citeseerNumberResult + "-" + citeseerDupInDblp + " IEEE-" + ieeeNumberResult + "-" + ieeeDupInDblp);
@@ -635,7 +711,7 @@ public class FetcherResultPanel extends JPanel {
 	 * check article is duplicated
 	 */
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "static-access" })
 	public static boolean checkArticleIsDuplicated(){
 	
 		num_DupInDBLP = 0;
@@ -656,6 +732,8 @@ public class FetcherResultPanel extends JPanel {
 		}
 		getFetcherInfo();
 		System.out.println(num_DupInDBLP);
+		
+		DBSAApplication.statisticPanel.updateStatistic(num_Total);
 		return duplicationArtilce;
 	}
 	
@@ -866,6 +944,8 @@ public class FetcherResultPanel extends JPanel {
 				&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
 			
 				model.removeRow(i);
+				if(old_Num_Total > 0)
+					old_Num_Total --;
 				
 				duplicateNumber = 0;
 				
