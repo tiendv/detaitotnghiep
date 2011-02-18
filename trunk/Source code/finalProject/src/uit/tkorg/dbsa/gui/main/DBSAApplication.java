@@ -40,6 +40,7 @@ import uit.tkorg.dbsa.gui.databasemanagement.InsertSubjectFrame;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPatternDialog;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
+import uit.tkorg.dbsa.gui.statistic.DBSAStatisticPanel;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
@@ -92,6 +93,7 @@ public class DBSAApplication extends JPanel {
 	public static InsertSubjectFrame insertArticleFrame = null;
 	public static AboutDialog aboutDialog = null;
 	public static AuthorsNameList authorNameListClass = null;
+	public static DBSAStatisticPanel statisticPanel = null;
 	
 	private JFrame getDBSAJFrame(){
 	
@@ -113,6 +115,7 @@ public class DBSAApplication extends JPanel {
 			insertArticleFrame = new InsertSubjectFrame();
 			aboutDialog = new AboutDialog();
 			authorNameListClass = new AuthorsNameList();
+			statisticPanel = new DBSAStatisticPanel();
 			
 			if(fetcherPanel == null){
 				fetcherPanel = new FetcherPanel(dbsaTabPanel);
