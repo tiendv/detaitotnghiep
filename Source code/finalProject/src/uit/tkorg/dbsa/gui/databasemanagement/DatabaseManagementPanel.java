@@ -130,6 +130,7 @@ public class DatabaseManagementPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
+					dbsaTabFrame.setSelectedIndex(2);
 					for(int i = 0; i < publicationJTable.getRowCount(); i++){
 						
 						publicationJTable.getModel().setValueAt(true, i, 7);
@@ -482,8 +483,7 @@ public class DatabaseManagementPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					DBSAApplication.dbsaJFrame.dispose();
-				}
-				
+				}				
 			});
 		}
 		return closeJButton;
