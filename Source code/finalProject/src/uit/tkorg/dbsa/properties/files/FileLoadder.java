@@ -20,6 +20,7 @@ public class FileLoadder {
 	/**
 	 * return Arraylist Stopword From list File
 	 */
+	@SuppressWarnings("deprecation")
 	public static ArrayList<String>  loadTextFile(String url){
 		//"src\\uit\\tkorg\\dbsa\\properties\\files\\ListStopWords.txt"
 		ArrayList<String> lst = new ArrayList<String>();

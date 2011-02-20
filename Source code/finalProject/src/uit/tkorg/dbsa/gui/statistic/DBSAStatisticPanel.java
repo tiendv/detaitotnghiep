@@ -26,7 +26,7 @@ import uit.tkorg.dbsa.gui.main.DBSAApplication;
 public class DBSAStatisticPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable statisticJTable;
+	private static JTable statisticJTable;
 	private JScrollPane statistticJScrollPanel;
 	private JPanel mainJPanel;
 	
@@ -178,15 +178,8 @@ public class DBSAStatisticPanel extends JPanel {
 		if (statisticJTable == null) {
 			statisticJTable = createResultJTable();
 			model.removeRow(0);
-		}else{
-			JOptionPane.showMessageDialog(null, statisticJTable.getRowCount());
-			if(statisticJTable.getRowCount() > 3){
-				for(int i = statisticJTable.getRowCount() - 1; i >= 0; i--){
-					model.removeRow(i);
-					
-				}
-			JOptionPane.showMessageDialog(null, statisticJTable.getRowCount());
-			}
+		}else{			
+			
 			//model.removeRow(0);
 			Object []data = {getParameter(), getAcmDls(), getCiteseerDls(), getIeeeDls()};
 			
@@ -196,7 +189,7 @@ public class DBSAStatisticPanel extends JPanel {
 		return statisticJTable;
 	}
 
-	public void removeAllRow(){
+	public boolean removeAllRow(){
 		boolean check = false;
 		
 		if(statisticJTable.getRowCount() == 0)
@@ -207,7 +200,7 @@ public class DBSAStatisticPanel extends JPanel {
 			check = true;
 		}
 		
-		//return check;
+		return check;
 	}
 	
 	public  void setParameter(String parameter){

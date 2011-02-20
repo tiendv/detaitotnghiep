@@ -47,7 +47,7 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
         if (nextAssign == true) {
         	String target = new String(ch, start, length);
             if(nextField.equals(DBSAApplicationConst.YEAR)){
-            	entry.setField(nextField, String.valueOf(target.substring(0, 4)));
+            	entry.setField(nextField, String.valueOf(target));
             	nextAssign = false;
             } else if (nextField.equals("citeseerurl")) {
                 entry.setField(nextField, target);
