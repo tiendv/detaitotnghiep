@@ -97,7 +97,7 @@ public class FetcherPatternDialog extends JDialog {
 	}
 	
 	public void updateTextsOfComponents(){
-		
+		this.setTitle("Change fetcher pattern");
 		mainJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("pattern"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
 		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",

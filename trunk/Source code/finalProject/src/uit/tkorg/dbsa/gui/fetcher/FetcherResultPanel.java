@@ -89,6 +89,7 @@ public class FetcherResultPanel extends JPanel {
 	private static URL hyperlink = null;
 	
 	private static DefaultTableModel model;
+	public static String digitalLibrary;
 	
 	private static ArrayList<DBSAPublication> dbsaPublicationCheckList = new ArrayList<DBSAPublication>();
 	
@@ -113,9 +114,7 @@ public class FetcherResultPanel extends JPanel {
 	public static int ieeeNumberResult = 0;
 	public static int ieeeDupInDblp = 0;
 	public static int ieeeNumber_Before2005 = 0;
-	
-	public static String digitalLibrary;
-	
+		
 	private JTabbedPane dbsaTabFrame = null;
 	
 	public FetcherResultPanel(DBSATabPanel dbsa) {

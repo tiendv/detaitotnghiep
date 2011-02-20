@@ -37,6 +37,7 @@ import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.InsertArticleToDatabasePanel;
 import uit.tkorg.dbsa.gui.databasemanagement.InsertSubjectFrame;
+import uit.tkorg.dbsa.gui.databasemanagement.UpdateDBLPDataDialog;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherPatternDialog;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
@@ -74,6 +75,7 @@ public class DBSAApplication extends JPanel {
 	private static JMenuItem selectAllJMenuItem = null;
 	
 	private static JMenuItem patternJMenuItem = null;
+	private static JMenuItem updateDblpJMenuItem = null;
 	
 	private static JMenuItem configurationJMenuItem = null;
 	
@@ -430,7 +432,7 @@ public class DBSAApplication extends JPanel {
 		if (fetcherJMenu == null) {
 			fetcherJMenu = new JMenu();
 			fetcherJMenu.add(getPatternJMenuItem());
-//			fileJMenu.add(getExitMenuItem());
+			fetcherJMenu.add(getUpdateDblpMenuItem());
 		}
 		return fetcherJMenu;
 	}	
@@ -454,6 +456,27 @@ public class DBSAApplication extends JPanel {
 			});
 		}
 		return patternJMenuItem;
+	}
+	
+	/**
+	 * This method initalizes updateDblpJMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
+	 */
+	private JMenuItem getUpdateDblpMenuItem(){
+		if(updateDblpJMenuItem == null){
+			updateDblpJMenuItem = new JMenuItem();
+			updateDblpJMenuItem.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					UpdateDBLPDataDialog f = new UpdateDBLPDataDialog(dbsaJFrame);	
+					f.setVisible(true);
+				}
+				
+			});
+		}
+		return updateDblpJMenuItem;
 	}
 	
 	/**
@@ -648,6 +671,7 @@ public class DBSAApplication extends JPanel {
 		optionJMenu.setText(DBSAResourceBundle.res.getString("option"));
 		fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
 		patternJMenuItem.setText("Change pattern");
+		updateDblpJMenuItem.setText("Update DBLP database");
 		selectAllJMenuItem.setText("Select all");
 		//unMarkAllJMenuItem.setText("Unmark all");
 		//unmarkEntriesJMenuItem.setText("Unmark entries");

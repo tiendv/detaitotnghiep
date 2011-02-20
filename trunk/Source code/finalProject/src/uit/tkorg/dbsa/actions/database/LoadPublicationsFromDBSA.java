@@ -19,6 +19,7 @@ import uit.tkorg.dbsa.model.DBSAPublication;
  */
 public class LoadPublicationsFromDBSA {
 	 
+	@SuppressWarnings("unchecked")
 	public static ArrayList<DBSAPublication> getPaper (){
 		Session session = null;
 		try {
