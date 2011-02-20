@@ -643,31 +643,11 @@ public class FetcherResultPanel extends JPanel {
 		//xoa cac field cu
 		DBSAApplication.statisticPanel.removeAllRow();
 				
-		//thong ke so ket qua tim duoc truoc nam 2005		
-		float acmBefore2005 = 0;
-		float citeseerBefore2005  = 0;
-		float ieeeBefore2005 = 0;
-		
-		if(acmNumberResult != 0)
-			acmBefore2005 = (float)acmNumber_Before2005*100/acmNumberResult;
-		else
-			acmBefore2005 = 0;
-		
-		if(citeseerNumberResult != 0)
-			citeseerBefore2005 = (float)citeseerNumber_Before2005*100/citeseerNumberResult;
-		else
-			citeseerBefore2005 = 0;
-		
-		if(ieeeNumberResult != 0)
-			ieeeBefore2005 = (float)ieeeNumber_Before2005*100/ieeeNumberResult;
-		else
-			ieeeBefore2005 = 0;
-		
-		
-		DBSAApplication.statisticPanel.setParameter("So ket qua truoc nam 2005");
-		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + " bai, chiem " + acmBefore2005 + "%");
-		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + " bai, chiem " + citeseerBefore2005 + "%");
-		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + " bai, chiem " + ieeeBefore2005 + "%");
+		//them cac field moi		
+		DBSAApplication.statisticPanel.setParameter("So ket qua tim dc");
+		DBSAApplication.statisticPanel.setAcmDls(acmNumberResult + "");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumberResult + "");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumberResult + "");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		//thong ke so ket qua tim duoc trung trong dblp	
@@ -696,11 +676,31 @@ public class FetcherResultPanel extends JPanel {
 		DBSAApplication.statisticPanel.setIeeeDls(ieeeDupInDblp + " bai, chiem " + ieeeDupInDatabase + "%");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
-		//them cac field moi		
-		DBSAApplication.statisticPanel.setParameter("So ket qua tim dc");
-		DBSAApplication.statisticPanel.setAcmDls(acmNumberResult + "");
-		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumberResult + "");
-		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumberResult + "");
+		//thong ke so ket qua tim duoc truoc nam 2005		
+		float acmBefore2005 = 0;
+		float citeseerBefore2005  = 0;
+		float ieeeBefore2005 = 0;
+		
+		if(acmNumberResult != 0)
+			acmBefore2005 = (float)acmNumber_Before2005*100/acmNumberResult;
+		else
+			acmBefore2005 = 0;
+		
+		if(citeseerNumberResult != 0)
+			citeseerBefore2005 = (float)citeseerNumber_Before2005*100/citeseerNumberResult;
+		else
+			citeseerBefore2005 = 0;
+		
+		if(ieeeNumberResult != 0)
+			ieeeBefore2005 = (float)ieeeNumber_Before2005*100/ieeeNumberResult;
+		else
+			ieeeBefore2005 = 0;
+		
+		
+		DBSAApplication.statisticPanel.setParameter("So ket qua truoc nam 2005");
+		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + " bai, chiem " + acmBefore2005 + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + " bai, chiem " + citeseerBefore2005 + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + " bai, chiem " + ieeeBefore2005 + "%");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		System.out.println("TOtal-"+ num_DupInDBLP + " ACM-" + acmNumberResult + "-" + acmDupInDblp + 
@@ -723,7 +723,7 @@ public class FetcherResultPanel extends JPanel {
 		
 		duplicationArtilce = false;
 		for(int i = 0; i < numberArray.size(); i++)
-		{
+		{	
 			model.setValueAt(true, numberArray.get(i), 8);
 			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
 			duplicationArtilce = true;
