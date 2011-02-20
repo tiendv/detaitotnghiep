@@ -669,7 +669,7 @@ public class DBSAApplication extends JPanel {
 		configurationJMenuItem.setText(DBSAResourceBundle.res.getString("config"));
 		helpJMenu.setText(DBSAResourceBundle.res.getString("help"));
 		optionJMenu.setText(DBSAResourceBundle.res.getString("option"));
-		fetcherJMenu.setText(DBSAResourceBundle.res.getString("fetcher"));
+		fetcherJMenu.setText("Management");
 		patternJMenuItem.setText("Change pattern");
 		updateDblpJMenuItem.setText("Update DBLP database");
 		selectAllJMenuItem.setText("Select all");

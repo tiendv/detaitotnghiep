@@ -45,6 +45,7 @@ import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.DeletePublicaitonInDBSA;
 import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
 import uit.tkorg.dbsa.gui.fetcher.MyJTable;
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.DBSAPublication;
 
@@ -543,7 +544,16 @@ public class UpdateDBLPDataDialog extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					removeRowsIsSelected();
+					int n = JOptionPane.showConfirmDialog(
+					    DBSAApplication.dbsaJFrame, "Are you sure you want to delete the publications?",
+					    "An Question", JOptionPane.YES_NO_OPTION);
+					
+					if(n == JOptionPane.YES_OPTION){
+						removeRowsIsSelected();
+					}else if(n == JOptionPane.NO_OPTION){
+						
+					}
+					
 				}
 				
 			});
@@ -791,8 +801,8 @@ public class UpdateDBLPDataDialog extends JDialog {
 		return id;
 	}
 	
-	public  void setID(int id){
-		this.id = id;
+	public  void setID(int iD){
+		id = iD;
 	}
 
 }
