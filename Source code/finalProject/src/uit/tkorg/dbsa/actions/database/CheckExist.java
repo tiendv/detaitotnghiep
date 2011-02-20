@@ -80,8 +80,23 @@ public class CheckExist {
 	 */
 	public ArrayList<Integer> CheckTitleSignaturePublications(ArrayList<DBSAPublication> pub) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
-		for(int i =0; i<pub.size();i++){
+		for(int i = 0; i < pub.size();i++){
 			if(CheckTitileSignaturePublication(pub.get(i).getTitle()) == true || CheckPublicationInDBSA(pub.get(i))== true) {
+				result.add(i);
+			}
+		}
+		return result;	
+	}
+	
+	/**
+	 * 
+	 * @param pub : arraylist pub to check
+	 * @return list : pub exit
+	 */
+	public ArrayList<Integer> CheckTitleSignaturePublicationsInDBLP(ArrayList<DBSAPublication> pub) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		for(int i = 0; i < pub.size();i++){
+			if(CheckTitileSignaturePublication(pub.get(i).getTitle()) == true) {
 				result.add(i);
 			}
 		}
