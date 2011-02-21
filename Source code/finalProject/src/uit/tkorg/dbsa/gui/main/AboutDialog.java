@@ -34,7 +34,7 @@ public class AboutDialog extends JDialog {
 	private int xLocation;
 	private int yLocation;
 	private JFrame dbsaJFrame;
-	private static JButton closeJButton;
+	private JButton closeJButton;
 	private JTextArea aboutJTextContent;
 	private JScrollPane contentJScrollPane;
 	
@@ -65,7 +65,7 @@ public class AboutDialog extends JDialog {
 		updateTextsOfComponents();
 	}
 
-	public static String updateTextsOfComponents(){
+	public String updateTextsOfComponents(){
 		String textContent = "";
 		
 		textContent += DBSAResourceBundle.res.getString("about.dbsa");

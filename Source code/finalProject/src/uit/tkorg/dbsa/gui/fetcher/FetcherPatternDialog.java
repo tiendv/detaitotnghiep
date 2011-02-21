@@ -97,7 +97,7 @@ public class FetcherPatternDialog extends JDialog {
 	}
 	
 	public void updateTextsOfComponents(){
-		this.setTitle("Change fetcher pattern");
+		this.setTitle(DBSAResourceBundle.res.getString("change.fetcher.pattern.title"));
 		mainJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("pattern"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
 		actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
@@ -457,14 +457,14 @@ public class FetcherPatternDialog extends JDialog {
 		if (digitalLibraryComboBox == null) {
 			digitalLibraryComboBox = new JComboBox();
 			digitalLibraryComboBox.setModel(new DefaultComboBoxModel(
-					new Object[] { "ACM digital library", "IEEExplore digital library" }));
+					new Object[] { DBSAResourceBundle.res.getString("dl.acm"), DBSAResourceBundle.res.getString("dl.ieee") }));
 			digitalLibraryComboBox.setDoubleBuffered(false);
 			digitalLibraryComboBox.setBorder(null);
 			
 			digitalLibraryComboBox.addActionListener(new ActionListener() {
 	
 				public void actionPerformed(ActionEvent event) {
-					if (digitalLibraryComboBox.getSelectedItem() == "ACM digital library") {
+					if (digitalLibraryComboBox.getSelectedItem() == DBSAResourceBundle.res.getString("dl.acm")) {
 						
 						for(int i = patternJTable.getRowCount() - 1; i >= 0; i--){
 							model.removeRow(i);
@@ -480,7 +480,7 @@ public class FetcherPatternDialog extends JDialog {
 							model.insertRow(patternJTable.getRowCount(), data);
 						}
 					}
-					else if (digitalLibraryComboBox.getSelectedItem() == "IEEExplore digital library") {
+					else if (digitalLibraryComboBox.getSelectedItem() == DBSAResourceBundle.res.getString("dl.ieee")) {
 
 						for(int i = patternJTable.getRowCount() - 1; i >= 0; i--){
 							model.removeRow(i);

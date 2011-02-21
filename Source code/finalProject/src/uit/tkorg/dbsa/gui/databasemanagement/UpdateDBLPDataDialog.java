@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -191,11 +192,26 @@ public class UpdateDBLPDataDialog extends JDialog {
 		add(getTableJPanel(), new Constraints(new Bilateral(4, 6, 0), new Bilateral(104, 5, 10, 270)));
 		setSize(width, height);
 		setLocation(xLocation, yLocation);
+		updateTextsOfComponents();
 	}
 
+	public void updateTextsOfComponents(){
+		checkDupButton.setText(DBSAResourceBundle.res.getString("check.duplicate"));
+		selectAllJButton.setText(DBSAResourceBundle.res.getString("select.all"));
+		selectDupJButton.setText(DBSAResourceBundle.res.getString("select.duplicate"));
+		clearSelectButton.setText(DBSAResourceBundle.res.getString("clear.select"));
+		deleteJButton.setText(DBSAResourceBundle.res.getString("delete"));
+		closeJButton.setText(DBSAResourceBundle.res.getString("close"));
+		statusLabel.setText(getStatusText());
+		replaceJButton.setText(DBSAResourceBundle.res.getString("replace.dblp.data"));
+		loadFileJButton.setText(DBSAResourceBundle.res.getString("load.file"));
+		chooseFileLabel.setText(DBSAResourceBundle.res.getString("please.choose.and.load.dblp.file"));
+	}
+	
 	private JScrollPane getTableJScrollPane() {
 		if (tableJScrollPane == null) {
 			tableJScrollPane = new JScrollPane();
+			tableJScrollPane.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			tableJScrollPane.setViewportView(getpubDataJTable());
 		}
 		return tableJScrollPane;
@@ -345,10 +361,10 @@ public class UpdateDBLPDataDialog extends JDialog {
 	 * @return String []
 	 */
 	private static  String [] getColumnName(){
-		String [] columnNames = { /*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("title"), 
-				/*DBSAResourceBundle.res.getString*/("authors"), /*DBSAResourceBundle.res.getString*/("link"),
-				/*DBSAResourceBundle.res.getString*/("year"),/*DBSAResourceBundle.res.getString*/("abstract"), 
-				/*DBSAResourceBundle.res.getString*/("publisher"),/*DBSAResourceBundle.res.getString*/("X"), 
+		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
+				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
+				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
+				DBSAResourceBundle.res.getString("publisher"),("X"), 
 				("duplicate"), "id"};
 			
 		return columnNames;
@@ -389,64 +405,65 @@ public class UpdateDBLPDataDialog extends JDialog {
 
 	private JButton getCheckDupButton() {
 		if (checkDupButton == null) {
-			checkDupButton = new JButton();
-			checkDupButton.setText("Check Duplicate");
+			checkDupButton = new JButton();			
 			checkDupButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(pubDataJTable.getRowCount() > 0)
-						for(int i = pubDataJTable.getRowCount(); i >= 0; i--){
+						for(int i = pubDataJTable.getRowCount() - 1; i >= 0; i--){							
 							model.removeRow(i);
 						}
 					
 					LoadPublicationsFromDBSA loadPublication = new LoadPublicationsFromDBSA();
 					ArrayList<DBSAPublication> dbsaPublicationList = loadPublication.getPaper();
 					
-					for(int i = 0; i < dbsaPublicationList.size(); i++){
-						
-						if(dbsaPublicationList.get(i).getTitle() != null)
-							setPubTitle(dbsaPublicationList.get(i).getTitle());
-						else
-							setPubTitle("");
-						
-						if(dbsaPublicationList.get(i).getAuthors() != null)
-							setAuthor(dbsaPublicationList.get(i).getAuthors());
-						else
-							setAuthor("");
-						
-						if(dbsaPublicationList.get(i).getLinks() != null)
-							setLink(dbsaPublicationList.get(i).getLinks());
-						else
-							setLink("");
-						
-						String year;
-						if(dbsaPublicationList.get(i).getYear() != 0){
-							setYear(dbsaPublicationList.get(i).getYear());
-							year = getYear() + "";
+					if(dbsaPublicationList != null){
+						for(int i = 0; i < dbsaPublicationList.size(); i++){
+							
+							if(dbsaPublicationList.get(i).getTitle() != null)
+								setPubTitle(dbsaPublicationList.get(i).getTitle());
+							else
+								setPubTitle("");
+							
+							if(dbsaPublicationList.get(i).getAuthors() != null)
+								setAuthor(dbsaPublicationList.get(i).getAuthors());
+							else
+								setAuthor("");
+							
+							if(dbsaPublicationList.get(i).getLinks() != null)
+								setLink(dbsaPublicationList.get(i).getLinks());
+							else
+								setLink("");
+							
+							String year;
+							if(dbsaPublicationList.get(i).getYear() != 0){
+								setYear(dbsaPublicationList.get(i).getYear());
+								year = getYear() + "";
+							}
+							else{
+								setYear(0);
+								year = "";
+							}
+							
+							if(dbsaPublicationList.get(i).getAbstractPub() != null)
+								setAbstract(dbsaPublicationList.get(i).getAbstractPub());
+							else
+								setAbstract("");
+							
+							if(dbsaPublicationList.get(i).getPublisher() != null)
+								setPublisher(dbsaPublicationList.get(i).getPublisher());
+							else
+								setPublisher("");
+							
+							setID(dbsaPublicationList.get(i).getId());
+											
+							Object [] data = {pubDataJTable.getRowCount() + 1, getPubTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getID()};
+							model.insertRow(pubDataJTable.getRowCount(), data );
 						}
-						else{
-							setYear(0);
-							year = "";
-						}
 						
-						if(dbsaPublicationList.get(i).getAbstractPub() != null)
-							setAbstract(dbsaPublicationList.get(i).getAbstractPub());
-						else
-							setAbstract("");
-						
-						if(dbsaPublicationList.get(i).getPublisher() != null)
-							setPublisher(dbsaPublicationList.get(i).getPublisher());
-						else
-							setPublisher("");
-						
-						setID(dbsaPublicationList.get(i).getId());
-										
-						Object [] data = {pubDataJTable.getRowCount() + 1, getPubTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getID()};
-						model.insertRow(pubDataJTable.getRowCount(), data );
+						checkArticleIsDuplicated(dbsaPublicationList);
 					}
-					
-					checkArticleIsDuplicated(dbsaPublicationList);
 				}
 				
 			});
@@ -457,7 +474,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getSelectAllJButton() {
 		if (selectAllJButton == null) {
 			selectAllJButton = new JButton();
-			selectAllJButton.setText("Select All");
 			selectAllJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -485,7 +501,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getSelectDupJButton() {
 		if (selectDupJButton == null) {
 			selectDupJButton = new JButton();
-			selectDupJButton.setText("Select Duplicate");
 			selectDupJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -517,7 +532,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getClearSelectButton() {
 		if (clearSelectButton == null) {
 			clearSelectButton = new JButton();
-			clearSelectButton.setText("Clear select");
 			clearSelectButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -537,7 +551,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getDeleteJButton() {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
-			deleteJButton.setText("Delete");
 			deleteJButton.setEnabled(false);
 			deleteJButton.addActionListener(new ActionListener(){
 
@@ -545,7 +558,7 @@ public class UpdateDBLPDataDialog extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					
 					int n = JOptionPane.showConfirmDialog(
-					    DBSAApplication.dbsaJFrame, "Are you sure you want to delete the publications?",
+					    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("ask.before.delete.publication"),
 					    "An Question", JOptionPane.YES_NO_OPTION);
 					
 					if(n == JOptionPane.YES_OPTION){
@@ -596,7 +609,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("Close");
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -624,7 +636,7 @@ public class UpdateDBLPDataDialog extends JDialog {
 		if (statusLabel == null) {
 			statusLabel = new JLabel();
 			statusLabel.setForeground(Color.red);
-			statusLabel.setText("You haven't chosen DBLP database file...");
+			statusLabel.setText(DBSAResourceBundle.res.getString("you.have.not.chosen.dblp.data.file"));
 		}
 		return statusLabel;
 	}
@@ -632,7 +644,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getReplaceJButton() {
 		if (replaceJButton == null) {
 			replaceJButton = new JButton();
-			replaceJButton.setText("Replace DBLP data");
 		}
 		return replaceJButton;
 	}
@@ -661,15 +672,16 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getLoadFileJButton() {
 		if (loadFileJButton == null) {
 			loadFileJButton = new JButton();
-			loadFileJButton.setText("Load file");
 			loadFileJButton.addActionListener(new ActionListener(){
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {					
 					File file = getDblpChooserFile();
 					
-					localDBLPFileJTextField.setText(file.getPath());
-					statusLabel.setText("Please, press \"Replace\" button to replace your new DBLP database. ");
+					if(file != null){
+						localDBLPFileJTextField.setText(file.getPath());
+						setStatusText(DBSAResourceBundle.res.getString("please.press.replace.button"));
+					}
 				}
 				
 			});
@@ -684,7 +696,7 @@ public class UpdateDBLPDataDialog extends JDialog {
              file = dblpChooserFile.getSelectedFile();
             
         } else {
-            JOptionPane.showMessageDialog(null, "Open command cancelled by user.");
+            JOptionPane.showMessageDialog(null,DBSAResourceBundle.res.getString("user.cancel"));
         }
         
         return file;
@@ -693,7 +705,6 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JLabel getChooseFileJLabel() {
 		if (chooseFileLabel == null) {
 			chooseFileLabel = new JLabel();
-			chooseFileLabel.setText("Please, choose and load DBLP database file.");
 		}
 		return chooseFileLabel;
 	}
@@ -803,6 +814,14 @@ public class UpdateDBLPDataDialog extends JDialog {
 	
 	public  void setID(int iD){
 		id = iD;
+	}
+	
+	public void setStatusText(String status){
+		statusLabel.setText(status);
+	}
+	
+	public String getStatusText(){
+		return statusLabel.getText();
 	}
 
 }

@@ -46,6 +46,7 @@ import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
 import uit.tkorg.dbsa.gui.main.DBSATabPanel;
 import uit.tkorg.dbsa.model.DBSAPublication;
 
@@ -77,6 +78,10 @@ public class FetcherResultPanel extends JPanel {
 	private JScrollPane jScrollPane5;
 	private static JButton selectAllButton;
 	private static JButton selectAllDupButton;
+	private static JLabel linkJLabel;
+	private JEditorPane linkJEditorPane;
+	private JScrollPane jScrollPane0;
+	private static JButton clearSelectedJButton;
 	
 	private static int rowNumber = 0;
 	private static String title = "";
@@ -114,13 +119,15 @@ public class FetcherResultPanel extends JPanel {
 	public static int ieeeNumberResult = 0;
 	public static int ieeeDupInDblp = 0;
 	public static int ieeeNumber_Before2005 = 0;
-		
+
+	private static DBSAStatusBar dbsaStatus = new DBSAStatusBar();
+	
 	private JTabbedPane dbsaTabFrame = null;
 	
 	public FetcherResultPanel(DBSATabPanel dbsa) {
 		initComponents();
 		dbsaTabFrame = dbsa;
-		updateTextsOfComponents();
+		
 	
 	}
 
@@ -133,9 +140,48 @@ public class FetcherResultPanel extends JPanel {
 		add(getActionsJPanel(), new Constraints(new Bilateral(3, 3, 313), new Trailing(3, 60, 10, 10)));
 		add(getResultsJScrollPane(), new Constraints(new Bilateral(3, 3, 31), new Bilateral(4, 338, 10, 142)));
 		add(getEntryJPanel(), new Constraints(new Bilateral(3, 3, 141), new Trailing(61, 277, 10, 146)));
-		setSize(649, 484);
+		setSize(1019, 484);
+		updateTextsOfComponents();
 	}
-	
+
+	private JButton getClearSelectedJButton() {
+		if (clearSelectedJButton == null) {
+			clearSelectedJButton = new JButton();
+			clearSelectedJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					for(int i = 0; i < resultsJTable.getColumnCount(); i++){
+						model.setValueAt(false, i, 7);
+					}
+					
+					deleteJButton.setEnabled(false);
+					saveJButton.setEnabled(false);
+				}
+				
+			});
+			
+			clearSelectedJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("deselect.all.the.articles.is.selected"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
+		}
+		return clearSelectedJButton;
+	}
+
 	public void updateTextsOfComponents(){
 		linkJLabel.setText("  " + DBSAResourceBundle.res.getString("link"));
 		titleJLabel.setText("  " + DBSAResourceBundle.res.getString("title"));
@@ -153,6 +199,7 @@ public class FetcherResultPanel extends JPanel {
 		getColumnName();
 		selectAllDupButton.setText(DBSAResourceBundle.res.getString("select.duplicate"));
 		selectAllButton.setText(DBSAResourceBundle.res.getString("select.all"));
+		clearSelectedJButton.setText(DBSAResourceBundle.res.getString("clear.selected"));
 	}
 
 	private JButton getSelectAllDupButton() {
@@ -183,6 +230,23 @@ public class FetcherResultPanel extends JPanel {
 					
 				}
 			});
+			
+			selectAllDupButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("select.all.the.duplicate.article"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 		}
 		return selectAllDupButton;
 	}
@@ -209,6 +273,23 @@ public class FetcherResultPanel extends JPanel {
 					}
 				}
 				
+			});
+			
+			selectAllButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("select.all.the.article"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
 			});
 		}
 		return selectAllButton;
@@ -643,7 +724,7 @@ public class FetcherResultPanel extends JPanel {
 		DBSAApplication.statisticPanel.removeAllRow();
 				
 		//them cac field moi		
-		DBSAApplication.statisticPanel.setParameter("So ket qua tim dc");
+		DBSAApplication.statisticPanel.setParameter(DBSAResourceBundle.res.getString("statistic.the.number.result.in.a.fetcher"));
 		DBSAApplication.statisticPanel.setAcmDls(acmNumberResult + "");
 		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumberResult + "");
 		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumberResult + "");
@@ -669,10 +750,10 @@ public class FetcherResultPanel extends JPanel {
 		else
 			ieeeDupInDatabase = 0;
 		
-		DBSAApplication.statisticPanel.setParameter("So ket qua trung trong dplb");
-		DBSAApplication.statisticPanel.setAcmDls(acmDupInDblp + " bai chiem " + acmDupInDatabase + "%");
-		DBSAApplication.statisticPanel.setCiteseerDls(citeseerDupInDblp + " bai, chiem " + citeseerDupInDatabase + "%");
-		DBSAApplication.statisticPanel.setIeeeDls(ieeeDupInDblp + " bai, chiem " + ieeeDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setParameter(DBSAResourceBundle.res.getString("statistic.the.number.result.duplicate.in.dblp.data"));
+		DBSAApplication.statisticPanel.setAcmDls(acmDupInDblp + DBSAResourceBundle.res.getString("statistic.make.up") + acmDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerDupInDblp + DBSAResourceBundle.res.getString("statistic.make.up") + citeseerDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeDupInDblp + DBSAResourceBundle.res.getString("statistic.make.up") + ieeeDupInDatabase + "%");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		//thong ke so ket qua tim duoc truoc nam 2005		
@@ -696,10 +777,10 @@ public class FetcherResultPanel extends JPanel {
 			ieeeBefore2005 = 0;
 		
 		
-		DBSAApplication.statisticPanel.setParameter("So ket qua truoc nam 2005");
-		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + " bai, chiem " + acmBefore2005 + "%");
-		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + " bai, chiem " + citeseerBefore2005 + "%");
-		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + " bai, chiem " + ieeeBefore2005 + "%");
+		DBSAApplication.statisticPanel.setParameter(DBSAResourceBundle.res.getString("statistic.the.number.result.before.2005"));
+		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + DBSAResourceBundle.res.getString("statistic.make.up") + acmBefore2005 + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + DBSAResourceBundle.res.getString("statistic.make.up") + citeseerBefore2005 + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + DBSAResourceBundle.res.getString("statistic.make.up") + ieeeBefore2005 + "%");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		System.out.println("TOtal-"+ num_DupInDBLP + " ACM-" + acmNumberResult + "-" + acmDupInDblp + 
@@ -789,9 +870,7 @@ public class FetcherResultPanel extends JPanel {
 	}
 
 	boolean abc = false;
-	private static JLabel linkJLabel;
-	private JEditorPane linkJEditorPane;
-	private JScrollPane jScrollPane0;
+	
 	
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
@@ -845,7 +924,7 @@ public class FetcherResultPanel extends JPanel {
 					}
 					
 					if(!checkSelect){
-						JOptionPane.showMessageDialog(null, "Ban chua chon bai bao de luu");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("you.have.not.chosen.article.to.save"));
 					}
 					
 					if(checkInsert == true){
@@ -854,6 +933,23 @@ public class FetcherResultPanel extends JPanel {
 					}
 				}
 				
+			});
+			
+			saveJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("save.all.the.articles.is.selected"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
 			});
 		}
 		return saveJButton;
@@ -929,6 +1025,23 @@ public class FetcherResultPanel extends JPanel {
 					deleteJButton.setEnabled(false);
 				}	
 			});
+			
+			deleteJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("delete.all.the.articles.is.selected"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 		}
 		return deleteJButton;
 	}
@@ -983,6 +1096,23 @@ public class FetcherResultPanel extends JPanel {
 				}
 				
 			});
+			
+			closeJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.close.program"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 		}
 		return closeJButton;
 	}
@@ -990,12 +1120,15 @@ public class FetcherResultPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "actions", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 81, 12, 12), new Leading(0, 26, 10, 8)));
 			actionsJPanel.add(getDeleteJButton(), new Constraints(new Trailing(111, 81, 12, 12), new Leading(0, 26, 10, 8)));
-			actionsJPanel.add(getSelectAllButton(), new Constraints(new Trailing(308, 12, 12), new Leading(0, 12, 12)));
-			actionsJPanel.add(getSelectAllDupButton(), new Constraints(new Trailing(413, 12, 12), new Leading(0, 12, 12)));
 			actionsJPanel.add(getSaveJButton(), new Constraints(new Trailing(210, 80, 12, 12), new Leading(0, 26, 12, 12)));
+			actionsJPanel.add(getClearSelectedJButton(), new Constraints(new Trailing(308, 124, 495, 534), new Leading(0, 12, 12)));
+			actionsJPanel.add(getSelectAllButton(), new Constraints(new Trailing(450, 124, 398, 398), new Leading(0, 12, 12)));
+			actionsJPanel.add(getSelectAllDupButton(), new Constraints(new Trailing(592, 12, 12), new Leading(0, 12, 12)));
 		}
 		return actionsJPanel;
 	}
