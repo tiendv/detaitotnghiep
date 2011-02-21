@@ -76,8 +76,8 @@ public class FetcherPatternDialog extends JDialog {
 	public FetcherPatternDialog(JFrame mainFrame) {
 		super(mainFrame, true);
 		dbsaJFrame = mainFrame;
-		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth()-width)/2;
-		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight()-height)/2;
+		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth() - width)/2;
+		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight() - height)/2;
 		initComponents();
 		
 	}

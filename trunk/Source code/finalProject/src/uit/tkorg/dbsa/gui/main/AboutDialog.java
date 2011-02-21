@@ -43,7 +43,7 @@ public class AboutDialog extends JDialog {
 	}
 
 	public AboutDialog(JFrame mainJFrame) {
-		super();
+		super(mainJFrame, true);
 		dbsaJFrame = mainJFrame;
 		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth() - width)/2;
 		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight() - height)/2;

@@ -665,6 +665,7 @@ public class DBSAApplication extends JPanel {
 	
 	private static void updateTextOfComponentsInThisFrame(){
 		//dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
+		dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
 		aboutJMenuItem.setText(DBSAResourceBundle.res.getString("about"));
 		helpJMenuItem.setText(DBSAResourceBundle.res.getString("help"));
 		configurationJMenuItem.setText(DBSAResourceBundle.res.getString("config"));
