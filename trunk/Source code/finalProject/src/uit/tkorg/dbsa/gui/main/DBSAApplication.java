@@ -659,6 +659,7 @@ public class DBSAApplication extends JPanel {
 		insertArticleToDatabasePanel.updateTextsOfComponents();
 		insertArticleFrame.updateTextsOfComponents();
 		aboutDialog.updateTextsOfComponents();
+		statisticPanel.updateStatistic(0);
 		
 	}
 	
@@ -669,10 +670,10 @@ public class DBSAApplication extends JPanel {
 		configurationJMenuItem.setText(DBSAResourceBundle.res.getString("config"));
 		helpJMenu.setText(DBSAResourceBundle.res.getString("help"));
 		optionJMenu.setText(DBSAResourceBundle.res.getString("option"));
-		fetcherJMenu.setText("Management");
-		patternJMenuItem.setText("Change pattern");
-		updateDblpJMenuItem.setText("Update DBLP database");
-		selectAllJMenuItem.setText("Select all");
+		fetcherJMenu.setText(DBSAResourceBundle.res.getString("management"));
+		patternJMenuItem.setText(DBSAResourceBundle.res.getString("change.fetcher.pattern"));
+		updateDblpJMenuItem.setText(DBSAResourceBundle.res.getString("update.dblp.database"));
+		selectAllJMenuItem.setText(DBSAResourceBundle.res.getString("select.all"));
 		//unMarkAllJMenuItem.setText("Unmark all");
 		//unmarkEntriesJMenuItem.setText("Unmark entries");
 		//markEntriesJMenuItem.setText("Mark entries");

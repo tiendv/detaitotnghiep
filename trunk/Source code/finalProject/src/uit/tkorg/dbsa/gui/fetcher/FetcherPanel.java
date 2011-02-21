@@ -155,7 +155,7 @@ public class FetcherPanel extends JPanel {
 				public void mouseClicked(MouseEvent e) {
 				}
 				public void mouseEntered(MouseEvent e) {					
-					dbsaStatus.setMessage(DBSAResourceBundle.res.getString("tooltip.load.author"));
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("tooltip.load.author"));
 				}
 				public void mouseExited(MouseEvent e) {
 					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
@@ -197,7 +197,7 @@ public class FetcherPanel extends JPanel {
 				public void mouseClicked(MouseEvent e) {
 				}
 				public void mouseEntered(MouseEvent e) {
-					dbsaStatus.setMessage(DBSAResourceBundle.res.getString("tooltip.load.subject"));
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("tooltip.load.subject"));
 				}
 				public void mouseExited(MouseEvent e) {
 					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
@@ -346,7 +346,22 @@ public class FetcherPanel extends JPanel {
 		
 		if (fetcherJButton == null) {
 			fetcherJButton = new JButton();
-			
+			fetcherJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.fetch"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 			fetcherJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -497,6 +512,23 @@ public class FetcherPanel extends JPanel {
 				}
 				
 			});
+			
+			showResultJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.show.result"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 		}
 		return showResultJButton;
 	}
@@ -535,6 +567,22 @@ public class FetcherPanel extends JPanel {
 					
 				}
 				
+			});
+			closeJButton.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.close.program"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
 			});
 		}
 		return closeJButton;
@@ -624,6 +672,23 @@ public class FetcherPanel extends JPanel {
 					}
 				}
 			});
+			
+			citeseerJSpinner.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("select.the.number.you.want.to.fetch"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 		}
 		return citeseerJSpinner;
 	}
@@ -633,6 +698,24 @@ public class FetcherPanel extends JPanel {
 			citeseerDLCheckBox = new JCheckBox();
 			citeseerDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
 			citeseerDLCheckBox.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
+			
+			citeseerDLCheckBox.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("check.to.fetcher"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+				
+			});
 		}
 		return citeseerDLCheckBox;
 	}
@@ -654,7 +737,25 @@ public class FetcherPanel extends JPanel {
 						
 					}
 				}
+			});	
+			
+			ieeexploreJSpinner.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("select.the.number.you.want.to.fetch"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
 			});
+			
 		}
 		return ieeexploreJSpinner;
 	}
@@ -675,6 +776,23 @@ public class FetcherPanel extends JPanel {
 					
 				}
 			});
+			
+			acmJSpinner.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("select.the.number.you.want.to.fetch"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+			});
 		}
 		return acmJSpinner;
 	}
@@ -684,6 +802,24 @@ public class FetcherPanel extends JPanel {
 			ieeexploreDLCheckBox = new JCheckBox();
 			ieeexploreDLCheckBox.setFont(new Font("Times New Roman", Font.ITALIC, 18));
 			ieeexploreDLCheckBox.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			
+			ieeexploreDLCheckBox.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("check.to.fetcher"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+				
+			});
 		}
 		return ieeexploreDLCheckBox;
 	}
@@ -712,6 +848,24 @@ public class FetcherPanel extends JPanel {
 						searchBySubjectJRadioButton.setVisible(false);
 					}
 				}
+			});
+			
+			fetchFromACMCheckBox.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+				public void mouseEntered(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("check.to.fetcher"));
+				}
+				public void mouseExited(MouseEvent e) {
+					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+				}
+				public void mousePressed(MouseEvent e) {
+				}
+				public void mouseReleased(MouseEvent e) {
+				}
+				
 			});
 		}
 		return fetchFromACMCheckBox;

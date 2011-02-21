@@ -1,9 +1,6 @@
 package uit.tkorg.dbsa.gui.statistic;
 
-import java.net.URL;
-
 import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,6 +18,7 @@ import org.dyno.visual.swing.layouts.Leading;
 
 import uit.tkorg.dbsa.actions.database.GetParametersForStatisticTab;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DBSAStatisticPanel extends JPanel {
@@ -37,11 +35,8 @@ public class DBSAStatisticPanel extends JPanel {
 	
 	private static DefaultTableModel model;
 	private static JTextArea statisticJTextArea;
-	private JScrollPane jScrollPane0;
+	private JScrollPane statisticJScrollPane;
 	
-	private int resultNumber = 0;
-	private int dupInDBLPNumber = 0;
-	private int dupInDatabase = 0;
 	
 	public DBSAStatisticPanel() {
 		initComponents();
@@ -54,12 +49,12 @@ public class DBSAStatisticPanel extends JPanel {
 		updateStatistic(0);
 	}
 
-	private JScrollPane getJScrollPane0() {
-		if (jScrollPane0 == null) {
-			jScrollPane0 = new JScrollPane();
-			jScrollPane0.setViewportView(getstatisticJTextArea());
+	private JScrollPane getStatisticJScrollPane() {
+		if (statisticJScrollPane == null) {
+			statisticJScrollPane = new JScrollPane();
+			statisticJScrollPane.setViewportView(getstatisticJTextArea());
 		}
-		return jScrollPane0;
+		return statisticJScrollPane;
 	}
 
 	@SuppressWarnings("static-access")
@@ -67,10 +62,10 @@ public class DBSAStatisticPanel extends JPanel {
 		
 		GetParametersForStatisticTab statisticNumber = new GetParametersForStatisticTab();
 		
-		statisticJTextArea.setText("Fetcher result statistic:\n\n 1. Keyword: " 
-				+ DBSAApplication.fetcherPanel.keyword + "\n 2. Result total: " + resultTotal
-				 + "\n 3. The article number in DPLB database: " + statisticNumber.getNumberOfPublicationsInDBLP()
-				+ "\n 4. The article number in your database : " + statisticNumber.getNumberOfPublicationInDBSA());
+		statisticJTextArea.setText(DBSAResourceBundle.res.getString("fetcher.result.statistic") + DBSAResourceBundle.res.getString("statistic.keyword") 
+				+ DBSAApplication.fetcherPanel.keyword + DBSAResourceBundle.res.getString("statistic.result.total") + resultTotal
+				 + DBSAResourceBundle.res.getString("statistic.article.number.in.dblp") + statisticNumber.getNumberOfPublicationsInDBLP()
+				+ DBSAResourceBundle.res.getString("statistic.article.number.in.database") + statisticNumber.getNumberOfPublicationInDBSA());
 	}
 	
 	private JTextArea getstatisticJTextArea() {
@@ -87,7 +82,7 @@ public class DBSAStatisticPanel extends JPanel {
 			mainJPanel = new JPanel();
 			mainJPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, null, null));
 			mainJPanel.setLayout(new GroupLayout());
-			mainJPanel.add(getJScrollPane0(), new Constraints(new Bilateral(0, 0, 22), new Leading(1, 140, 10, 10)));
+			mainJPanel.add(getStatisticJScrollPane(), new Constraints(new Bilateral(0, 0, 22), new Leading(1, 140, 10, 10)));
 			mainJPanel.add(getstatistticJScrollPanel(), new Constraints(new Bilateral(1, 0, 22), new Bilateral(159, 0, 26, 403)));
 		}
 		return mainJPanel;
@@ -147,7 +142,10 @@ public class DBSAStatisticPanel extends JPanel {
 	 * @return String []
 	 */
 	private static  String [] getColumnName(){
-		String [] columnNames = {"Parameters", "ACM DL", "CiteSeer DL", "IEEExplore DL"};
+		String [] columnNames = {DBSAResourceBundle.res.getString("parameters"), 
+				DBSAResourceBundle.res.getString("dl.acm"), 
+				DBSAResourceBundle.res.getString("dl.citeseer"), 
+				DBSAResourceBundle.res.getString("dl.ieee")};
 			
 		return columnNames;
 	}
