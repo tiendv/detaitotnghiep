@@ -70,8 +70,8 @@ public class DBSAConfigurationDialog extends JDialog {
 	public DBSAConfigurationDialog(JFrame mainFrame) {
 		super(mainFrame, true);
 		dbsaJFrame = mainFrame;
-		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth()-width)/2;
-		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight()-height)/2;
+		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth() - width)/2;
+		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight() - height)/2;
 		initComponents();
 	}
 
@@ -326,7 +326,7 @@ public class DBSAConfigurationDialog extends JDialog {
 	private JToggleButton getOkJButton() {
 		if (okJButton == null) {
 			okJButton = new JToggleButton();
-			okJButton.setText("  Ok  ");
+			okJButton.setText(DBSAResourceBundle.res.getString("ok"));
 			okJButton.addActionListener(new ActionListener(){
 
 				@Override

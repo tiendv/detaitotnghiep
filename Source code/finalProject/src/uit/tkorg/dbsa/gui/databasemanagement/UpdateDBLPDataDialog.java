@@ -99,7 +99,7 @@ public class UpdateDBLPDataDialog extends JDialog {
 	}
 
 	public UpdateDBLPDataDialog(JFrame mainJFrame) {
-		super(mainJFrame);
+		super(mainJFrame, true);
 		dbsaJFrame = mainJFrame;
 		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth() - width)/2;
 		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight() - height)/2;
@@ -182,7 +182,7 @@ public class UpdateDBLPDataDialog extends JDialog {
 	}
 
 	private void initComponents() {
-		setTitle("Update DBLP database");
+		
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(Color.white);
 		setResizable(false);
@@ -196,6 +196,7 @@ public class UpdateDBLPDataDialog extends JDialog {
 	}
 
 	public void updateTextsOfComponents(){
+		setTitle(DBSAResourceBundle.res.getString("update.dblp.database"));
 		checkDupButton.setText(DBSAResourceBundle.res.getString("check.duplicate"));
 		selectAllJButton.setText(DBSAResourceBundle.res.getString("select.all"));
 		selectDupJButton.setText(DBSAResourceBundle.res.getString("select.duplicate"));
