@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,7 @@ import org.htmlparser.beans.StringBean;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 import net.sf.jabref.BibtexEntry;
@@ -77,6 +79,13 @@ public class ACMFetcher {
 	//Bien cho phep lua chon tiep tuc tim kiem hay không
 	public static boolean shouldContinue = true;
 	
+	// Parameter for autorun in ACM Digital
+	
+	public static boolean flagAutorun = false;
+	public static boolean flagReportDone = false;
+	public static int numberOfResult = 0;
+	public static ArrayList<DBSAPublication> newDBSAPublication = new ArrayList<DBSAPublication>();
+
 	//Lay thong tin file bitex : http://portal.acm.org/exportformats.cfm?id=152611&expformat=bibtex
 	//Lay thong tin cua abstract http://portal.acm.org/tab_abstract.cfm?id=152611&usebody=tabbody
 	//Lay id http://portal.acm.org/citation.cfm?id=152610.152611&coll=DL&dl=GUIDE&CFID=115229885&CFTOKEN=24731416
@@ -96,21 +105,32 @@ public class ACMFetcher {
 			
 			if(entryNumber%20 == 0){
 				URL url = MakeUrl(entryNumber);
-				System.out.println("Url = " + url);
+				//System.out.println("Url = " + url);
 				
 				String page = getFetcherResult(url);
 				GetResultNumber(page);
 				entryNumber = parse(page, 0, entryNumber + 1);
-				System.out.println("entryNumber " + entryNumber);
+				//System.out.println("entryNumber " + entryNumber);
+			}
+			if(isFlagAutorun()==false) {
+				int fetcherNumber = FetcherPanel.getAcmResultNumber();
+				if(entryNumber >= fetcherNumber){
+	        		//System.out.println("fetcherNumber " + fetcherNumber);
+	        		shouldContinue = false;
+	        		setFlagReportDone(true);
+	        		break;
+	        	}
+				
+			}
+			else {
+			
+				if(entryNumber >= numberOfResult){
+	        		shouldContinue = false;
+	        		setFlagReportDone(true);
+	        		break;
+	        	}	
 			}
 			
-			int fetcherNumber = FetcherPanel.getAcmResultNumber();
-
-			if(entryNumber >= fetcherNumber){
-        		System.out.println("fetcherNumber " + fetcherNumber);
-        		shouldContinue = false;
-        		break;
-        	}
 		}
 	}
 	
@@ -182,6 +202,7 @@ public class ACMFetcher {
 		
 			try {
 				hits = getNumberOfHits(page, "Found", hitsPattern);
+				numberOfResult = hits;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -236,7 +257,13 @@ public class ACMFetcher {
 	
 	private static int parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
-        int maxNumber = FetcherPanel.getAcmResultNumber();
+        int maxNumber = 0;
+        if(isFlagAutorun() == false) {
+        	
+           maxNumber = FetcherPanel.getAcmResultNumber();
+        }
+        else
+           maxNumber = numberOfResult;
         
         int fetcherNumber = firstEntryNumber + 20;
         
@@ -373,38 +400,81 @@ public class ACMFetcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(entry != null){				
+			if(entry != null){
+				
+				DBSAPublication temp = new DBSAPublication();
 				number ++;
 				DBSAApplication.fetcherResultPanel.setRowNumber(number);
 				if(entry.getField("title") == null){
-					entry.setField("title", "");
+					if(isFlagAutorun() == false)
+						entry.setField("title", "");
+					else
+						temp.setTitle("");
 				}
-				DBSAApplication.fetcherResultPanel.setTitle(entry.getField("title"));
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setTitle(entry.getField("title"));
+				else
+					temp.setTitle(entry.getField("title"));
+				
 				if(entry.getField("author") == null){
-					entry.setField("author", "");
+					if(isFlagAutorun() == false)
+						entry.setField("author", "");
+					else
+						temp.setAuthors("");
 				}
-				DBSAApplication.fetcherResultPanel.setAuthor(entry.getField("author"));
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setAuthor(entry.getField("author"));
+				else
+					temp.setAuthors(entry.getField("author"));
 				
 				if(entry.getField("url") == null){
-					entry.setField("url", "");
+					if(isFlagAutorun() == false)
+						entry.setField("url", "");
+					else
+						temp.setLinks("");
 				}
-				DBSAApplication.fetcherResultPanel.setLink(entry.getField("url"));
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setLink(entry.getField("url"));
+				else
+					temp.setLinks(entry.getField("url"));
 			
 				if(entry.getField("year") == null){
-					entry.setField("year", "");
+					if(isFlagAutorun() == false)
+						entry.setField("year", "");
+					else 
+						temp.setYear(0);
 				}
-				DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField("year")));
+					if(isFlagAutorun() == false)
+						DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField("year")));
+					else
+						temp.setYear(Integer.parseInt(entry.getField("year")));
 				if(entry.getField("abstract") == null){
-					entry.setField("abstract", "");
+					if(isFlagAutorun() == false)
+						entry.setField("abstract", "");
+					else
+						temp.setAbstractPub("");
 				}
-				DBSAApplication.fetcherResultPanel.setAbstract(entry.getField("abstract"));
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setAbstract(entry.getField("abstract"));
+				else 
+					temp.setAbstractPub(entry.getField("abstract"));
 				if(entry.getField("publisher") == null){
-					entry.setField("publisher", "");
+					if(isFlagAutorun() == false)
+						entry.setField("publisher", "");
+					else
+						temp.setPublisher("");
 				}
-				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField("publisher"));
-				DBSAApplication.fetcherResultPanel.setDigitalLibrary("ACM");
-				
-				DBSAApplication.fetcherResultPanel.getResultsJTable();
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setPublisher(entry.getField("publisher"));
+				else
+					temp.setPublisher(entry.getField("publisher"));
+				if(isFlagAutorun() == false) {
+					DBSAApplication.fetcherResultPanel.setDigitalLibrary("ACM");
+					DBSAApplication.fetcherResultPanel.getResultsJTable();
+				}
+				else 
+					newDBSAPublication.add(temp);
+					
 		}
 		return entry;
 	}
@@ -420,5 +490,33 @@ public class ACMFetcher {
         content = stringBean.getStrings(); 
         return content; 
 	} 
-    
+    /**
+     * 
+     * @parameter for autorun 
+     */
+	public static boolean isFlagAutorun() {
+		return flagAutorun;
+	}
+	public static void setFlagAutorun(boolean flagAutorun) {
+		ACMFetcher.flagAutorun = flagAutorun;
+	}
+	public static boolean isFlagReportDone() {
+		return flagReportDone;
+	}
+	public static void setFlagReportDone(boolean flagReportDone) {
+		ACMFetcher.flagReportDone = flagReportDone;
+	}
+	public static int getNumberOfResult() {
+		return numberOfResult;
+	}
+	public static void setNumberOfResult(int numberOfResult) {
+		ACMFetcher.numberOfResult = numberOfResult;
+	}
+	public static ArrayList<DBSAPublication> getNewDBSAPublication() {
+		return newDBSAPublication;
+	}
+	public static void setNewDBSAPublication(
+			ArrayList<DBSAPublication> newDBSAPublication) {
+		ACMFetcher.newDBSAPublication = newDBSAPublication;
+	}
 }
