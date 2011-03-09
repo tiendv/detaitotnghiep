@@ -5,27 +5,35 @@ import java.io.InputStream;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
-import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
-import uit.tkorg.dbsa.gui.main.DBSAFetcherPattern;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 
 import net.sf.jabref.BibtexEntry;
 import net.sf.jabref.BibtexEntryType;
-import net.sf.jabref.Globals;
 import net.sf.jabref.OutputPrinter;
 import net.sf.jabref.Util;
 import net.sf.jabref.imports.HTMLConverter;
 
 public class IEEEXploreFetcher {
-
+	
+	public static ArrayList< DBSAPublication> dbsaPublicationResultList = new ArrayList<DBSAPublication>();
+	
+	public static ArrayList<DBSAPublication> getDbsaPublicationResultList() {
+		return dbsaPublicationResultList;
+	}
+	public static void setDbsaPublicationResultList(
+			ArrayList<DBSAPublication> dbsaPublicationResultList) {
+		IEEEXploreFetcher.dbsaPublicationResultList = dbsaPublicationResultList;
+	}
 	OutputPrinter status;
     final static HTMLConverter htmlConverter = new HTMLConverter();  
     private static final int MAX_FETCH = 1000;//100
@@ -36,9 +44,14 @@ public class IEEEXploreFetcher {
     private static int piv = 0;
     private static boolean shouldContinue = false;
     private static boolean includeAbstract = true;
-  //Cac chuoi tao cau query chua tu khoa can tim kiem
+    // parameter for autorun
     
-    private static String terms;
+    public static boolean flagAutorun = false;
+    public static boolean flagReportDone = false;
+	public static int numberOfResult =0;
+	 //Cac chuoi tao cau query chua tu khoa can tim kiem
+	
+	private static String terms;
     private final static String startUrl = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_START_URL);
     private final static String endUrl1 = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_END_URL_1) + Integer.toString(perPage);
     private final static String endUrl2 = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_END_URL_2);
@@ -47,7 +60,6 @@ public class IEEEXploreFetcher {
      * Kieu cau truy van sau khi duoc thanh lap:
      * http://ieeexplore.ieee.org/search/freesearchresult.jsp?newsearch=true&queryText=database&x=0&y=0
      */
-    
     //Cac pattern tim kiem cac thong tin ve so ket qua tra ve, ket qua lon nhat, file bibtex,abtract cua bai bao va referent cua bai bao
     // Tim kiem so ket qua tra ve tu page
     private final static Pattern hitsPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_HITS_PATTERN));
@@ -68,11 +80,13 @@ public class IEEEXploreFetcher {
     
     Pattern ieeeArticleNumberPattern = Pattern.compile(DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.IEEE_ARTICLE_NUMBER_PATTERN));
     
-    
-    public IEEEXploreFetcher() {
+	public IEEEXploreFetcher() {
     	super();    
    }
-    
+    public static ArrayList<DBSAPublication> getResultList(String authorName) {
+    	processQuery(authorName);
+		return dbsaPublicationResultList;
+    }
     public static void processQuery(String query){
         terms = query;
         piv = 0;
@@ -122,19 +136,38 @@ public class IEEEXploreFetcher {
 
             parse(page, 0, 1);
             int firstEntry = perPage;
-            while (shouldContinue && firstEntry < hits) {
-            	pageNumber++;
-                searchUrl = makeUrl(pageNumber);
-                page = getResults(new URL(searchUrl));
-                
-                /** Thoat khoi vong lap neu nhan duoc lenh tam dung tu nguoi dung
-                 * if (!shouldContinue)
-                 * break;
-                 */
-                parse(page, 0, firstEntry + 1);
-                firstEntry += perPage;
-
+            if(isFlagAutorun() == false) {
+            	
+            	while (shouldContinue && firstEntry < hits) {
+                	pageNumber++;
+                    searchUrl = makeUrl(pageNumber);
+                    page = getResults(new URL(searchUrl));
+                    System.out.printf("Co Chay den phan nay  ");
+                    /** Thoat khoi vong lap neu nhan duoc lenh tam dung tu nguoi dung
+                     * if (!shouldContinue)
+                     * break;
+                     */
+                    parse(page, 0, firstEntry + 1);
+                    firstEntry += perPage;
+                }
+            	
             }
+            else {
+            	while (shouldContinue) {
+	            	pageNumber++;
+	                searchUrl = makeUrl(pageNumber);
+	                page = getResults(new URL(searchUrl));
+	   
+	                System.out.printf("Co Chay den phan nay  ");
+	                /** Thoat khoi vong lap neu nhan duoc lenh tam dung tu nguoi dung
+	                 * if (!shouldContinue)
+	                 * break;
+	                 */
+	                parse(page, 0, firstEntry + 1);
+	                firstEntry += perPage; 	
+            	}
+            }
+            
             
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -174,24 +207,40 @@ public class IEEEXploreFetcher {
      */
     private static void parse(String text, int startIndex, int firstEntryNumber) {
         piv = startIndex;
-        int fetcherNumber = FetcherPanel.getIeeeResultNumber() + firstEntryNumber;
+     	int entryNumber = firstEntryNumber;
         
-        int entryNumber = firstEntryNumber;
+        if (isFlagAutorun()==false)
+        {
+        	int fetcherNumber = FetcherPanel.getIeeeResultNumber() + firstEntryNumber;
+        
+        //	int entryNumber = firstEntryNumber;
 
-	    while ( shouldContinue) {
-	    	if (entryNumber >= fetcherNumber) {
-				shouldContinue = false;
-				break;
-			}
-	    	if(shouldContinue){
-	    		parseNextEntry(text, piv);
-	            entryNumber++;
-	    	}
-         
-	            
-	            //FetcherPanel.setIeeeProgressBar(entryNumber/fetcherNumber*100);
-	            //FetcherPanel.PROPER
+        	while ( shouldContinue) {
+        		if (entryNumber >= fetcherNumber) {
+        			shouldContinue = false;
+        			setFlagReportDone(true);
+        			break;
+        		}
+        		if(shouldContinue){
+        			parseNextEntry(text, piv);
+        			entryNumber++;
+        		}
+        	}
 	        }   
+        else {
+        	numberOfResult = hits;
+        	while ( shouldContinue) {
+        		if (entryNumber >= numberOfResult) {
+        			shouldContinue = false;
+        			setFlagReportDone(true);
+        			break;
+        		}
+        		if(shouldContinue){
+        			parseNextEntry(text, piv);
+        			entryNumber++;
+        		}
+        	}
+        }
     }
     /**
      * Hoan chinh noi dung file Bibtex
@@ -429,43 +478,89 @@ public class IEEEXploreFetcher {
         } else {
         	cleanup(entry);
         	
-    		
+    		 DBSAPublication resultDBSAPublicaiton = new DBSAPublication();//them
     		number ++;
 			DBSAApplication.fetcherResultPanel.setRowNumber(number);
 			if(entry.getField(DBSAApplicationConst.TITLE) == null){
-				entry.setField(DBSAApplicationConst.TITLE, "");
+				if(isFlagAutorun() == false)
+					entry.setField(DBSAApplicationConst.TITLE, "");
+				else
+					resultDBSAPublicaiton.setTitle(" ");//them
 			}
-			DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+			if(isFlagAutorun() == false)
+				DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE));
+			else
+				resultDBSAPublicaiton.setTitle(entry.getField(DBSAApplicationConst.TITLE));//them
 			
 			if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
+				if(isFlagAutorun() == false)
 				entry.setField(DBSAApplicationConst.AUTHOR, "");
+				else
+				resultDBSAPublicaiton.setAuthors("");//them
+				
 			}
-			DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			if(isFlagAutorun() == false)
+				DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			else
+				resultDBSAPublicaiton.setAuthors(entry.getField(DBSAApplicationConst.AUTHOR));//them
 			
 			if(entry.getField(DBSAApplicationConst.DOI) == null){
-				entry.setField(DBSAApplicationConst.DOI, "");
+				if(isFlagAutorun() == false)
+					entry.setField(DBSAApplicationConst.DOI, "");
+				else
+					resultDBSAPublicaiton.setLinks("");
 			}
-			DBSAApplication.fetcherResultPanel.setLink(DBSAApplicationConst.ARTICLE_IEEE_URL + entry.getField(DBSAApplicationConst.DOI));
+			if(isFlagAutorun() == false)
+				DBSAApplication.fetcherResultPanel.setLink(DBSAApplicationConst.ARTICLE_IEEE_URL + entry.getField(DBSAApplicationConst.DOI));
+			else
+				resultDBSAPublicaiton.setLinks(DBSAApplicationConst.ARTICLE_IEEE_URL + entry.getField(DBSAApplicationConst.DOI));//them
 			
 			
 			if(entry.getField(DBSAApplicationConst.YEAR) == null){
-				entry.setField(DBSAApplicationConst.YEAR, "");
+				if(isFlagAutorun() == false)
+					entry.setField(DBSAApplicationConst.YEAR, "");
+				else
+					resultDBSAPublicaiton.setYear((Integer) null);//them
 			}
-			DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+			if(isFlagAutorun() == false)
+				DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));
+			else
+				resultDBSAPublicaiton.setYear(Integer.parseInt(entry.getField(DBSAApplicationConst.YEAR)));//them
 			
 			if(entry.getField(DBSAApplicationConst.ABSTRACT) == null){
-				entry.setField(DBSAApplicationConst.ABSTRACT, "");
+				if(isFlagAutorun() == false)
+					entry.setField(DBSAApplicationConst.ABSTRACT, "");
+				else
+					resultDBSAPublicaiton.setAbstractPub(""); //them
 			}
-			DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
-			
-			if(entry.getField(DBSAApplicationConst.PUBLISHER) != null)
-				DBSAApplication.fetcherResultPanel.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
+			if(isFlagAutorun() == false)
+				DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
 			else
-				DBSAApplication.fetcherResultPanel.setPublisher(DBSAApplicationConst.IEEE);
+				resultDBSAPublicaiton.setAbstractPub(entry.getField(DBSAApplicationConst.ABSTRACT));//them
 			
-			DBSAApplication.fetcherResultPanel.setDigitalLibrary("IEEE");
-			
-			DBSAApplication.fetcherResultPanel.getResultsJTable();
+			if(entry.getField(DBSAApplicationConst.PUBLISHER) != null) {
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
+				else
+					resultDBSAPublicaiton.setPublisher(entry.getField(DBSAApplicationConst.PUBLISHER));
+			}
+				
+			else {
+				if(isFlagAutorun() == false)
+					DBSAApplication.fetcherResultPanel.setPublisher(DBSAApplicationConst.IEEE);
+				else
+					resultDBSAPublicaiton.setPublisher(DBSAApplicationConst.IEEE);
+			}
+			if(isFlagAutorun() == true) {
+				dbsaPublicationResultList.add(resultDBSAPublicaiton);
+				
+				System.out.print("====================== \n");
+			}
+			else
+			{
+				DBSAApplication.fetcherResultPanel.setDigitalLibrary("IEEE");
+				DBSAApplication.fetcherResultPanel.getResultsJTable();
+			}
 			
             return entry;
         }
@@ -510,4 +605,29 @@ public class IEEEXploreFetcher {
         }
         return sb.toString();
     }
+    // Get and set for Autorun 
+    
+    public static boolean isFlagAutorun() {
+		return flagAutorun;
+	}
+    
+	public static void setFlagAutorun(boolean flagAutorun) {
+		IEEEXploreFetcher.flagAutorun = flagAutorun;
+	}
+	
+	public static boolean isFlagReportDone() {
+			return flagReportDone;
+		}
+	
+	public static void setFlagReportDone(boolean flagReportDone) {
+		IEEEXploreFetcher.flagReportDone = flagReportDone;
+	}
+	
+	public static int getNumberOfResult() {
+		return numberOfResult;
+	}
+	
+	public static void setNumberOfResult(int numberOfResult) {
+		IEEEXploreFetcher.numberOfResult = numberOfResult;
+	}
 }

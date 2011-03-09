@@ -40,7 +40,7 @@ public class CheckExist {
 	 *  se tra ve  id tuong ung trong danh sach  kiem tra. Danh sach tra ve rong
 	 *  neu bai bao ko co trong du lieu dblp
 	 */
-	public ArrayList<Integer> CheckTitlePublications(ArrayList<DBSAPublication> pub) {
+	public static ArrayList<Integer> CheckTitlePublications(ArrayList<DBSAPublication> pub) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		for(int i =0; i<pub.size();i++){
 			if(CheckTitilePublication(pub.get(i).getTitle()) == true || CheckPublicationInDBSA(pub.get(i))== true) {
