@@ -6,12 +6,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -66,54 +66,61 @@ public class CiteSeerXFetcher {
 		
 	}
 	
-	public boolean processQuery(String keyword/*, String type, String feedType*/){
+	int atomStart = 0;	
+	int maxResult = FetcherPanel.getCiteResultNumber();
+	int start = 0;
+	public boolean processQuery(String keyword, int startNumber){
 	
 		shouldContinue = true;
+		
 		//replace all white-space to '+'
 		keyword = keyword.replaceAll("\\s", "+");
-				
-		String queryString = baseURL + keyword + feedAction + feedAtom + "&sort=rel";
-		List<BibtexEntry> entries = new ArrayList<BibtexEntry>();
+			
+		String queryString = baseURL + keyword + feedAction + feedAtom + "&sort=rel&start=" + atomStart;
+		
+		ArrayList<BibtexEntry> entries = new ArrayList<BibtexEntry>();		
 		System.out.println(queryString);
 		
 		try {
 			
 			URL citeseerUrl = new URL(queryString);
-			
 			HttpURLConnection citeseerConnection = (HttpURLConnection) citeseerUrl.openConnection();
 			InputStream inputStream = citeseerConnection.getInputStream();
-			
 			DefaultHandler handlerBase = new CiteSeerXAtomEntryHandler(entries);
 			
             if (saxParser == null)
             	saxParser = SAXParserFactory.newInstance().newSAXParser();
-        
-            saxParser.parse(inputStream, handlerBase);
             
-            int checkResult = 0;
-            for(BibtexEntry entry : entries){
+            saxParser.parse(inputStream, handlerBase);
+           
+            for(BibtexEntry entry: entries){          	
             	
-            	if(checkResult == 0){
-            		String yearURL = startSearchYearPub + keyword + endSearchYearPub ;
-	    			URL url1 = new URL(yearURL);
-	    			System.out.println(url1);
-	    			pages = getResults(url1);
-            	}else if(checkResult%10 == 0){
+            	if(startNumber % 10 == 0 && startNumber != 0 ){
             		resultNumber += 10;
 	    			String yearURL = startSearchYearPub + keyword + endSearchYearPub + resultNumber;
 	    			URL url1 = new URL(yearURL);
-	    			System.out.println(url1);
-	    			pages = getResults(url1);
+	    			
+	    			pages = getResults(url1);	    			
             	}
-            	if(checkResult >= FetcherPanel.getCiteResultNumber()){
+            	else if(startNumber == 0){
+            		
+            		String yearURL = startSearchYearPub + keyword + endSearchYearPub;
+	    			URL url1 = new URL(yearURL);
+	    			
+	    			pages = getResults(url1);
+	    			
+            	}else
+            	if(startNumber > maxResult){
             		shouldContinue = false;
             		break;
             	}
             	
-            	checkResult++;
-            	if(shouldContinue == true || checkResult > FetcherPanel.getCiteResultNumber()){
+            	startNumber++;
+            	if(startNumber == 100)
+            		atomStart += 100;
+            	
+            	if(shouldContinue == true && startNumber <= maxResult){
             		
-	            	
 	            	Set<String> fields = entry.getAllFields();
 	            	
 	            	for(String f:fields){
@@ -166,7 +173,15 @@ public class CiteSeerXFetcher {
 	            	
 	            	DBSAApplication.fetcherResultPanel.getResultsJTable();
             	}
+            	
             }
+            
+            if(startNumber%100 == 0 && startNumber <= FetcherPanel.getCiteResultNumber() && shouldContinue == true){
+            	maxResult -= 100;
+            	resultNumber += 10;
+            	
+        		processQuery(keyword, 0);        		
+        	}
             
 		} catch (MalformedURLException e) {
 			

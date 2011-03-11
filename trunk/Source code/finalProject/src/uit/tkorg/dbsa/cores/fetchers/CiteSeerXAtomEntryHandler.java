@@ -22,7 +22,7 @@ import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
  */
 public class CiteSeerXAtomEntryHandler extends DefaultHandler {
 	
-	List<BibtexEntry> entries =null;
+	ArrayList<BibtexEntry> entries = null;
 	
 	BibtexEntry entry = null;
 
@@ -33,7 +33,7 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
 
 
     
-    public CiteSeerXAtomEntryHandler(List<BibtexEntry> entries){
+    public CiteSeerXAtomEntryHandler(ArrayList<BibtexEntry> entries){
     	if(entries == null){
     		this.entries = new ArrayList<BibtexEntry>();
     	}else {
@@ -119,7 +119,7 @@ public class CiteSeerXAtomEntryHandler extends DefaultHandler {
 
 	}
 
-	public List<BibtexEntry> getAllEntries(){
+	public ArrayList<BibtexEntry> getAllEntries(){
 		return entries;
 	}
 

@@ -102,7 +102,7 @@ public class DatabaseManagementPanel extends JPanel {
 	}
 	
 	public void updateTextsOfComponents(){
-		setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("database.management"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+		databaseJTableInJScrollPane.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("database.management"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
 				12), new Color(51, 51, 51)));
 		selectAllPubJButton.setText(DBSAResourceBundle.res.getString("select.all"));
 		deleteSubjectJButton.setText(DBSAResourceBundle.res.getString("delete.sub"));

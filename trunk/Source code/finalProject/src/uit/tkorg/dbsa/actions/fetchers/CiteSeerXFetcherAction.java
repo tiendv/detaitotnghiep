@@ -12,7 +12,7 @@ import uit.tkorg.dbsa.cores.fetchers.CiteSeerXFetcher;
 public class CiteSeerXFetcherAction {
 	public static void Fetcher ( String keyword ){
 	CiteSeerXFetcher fetcher = new CiteSeerXFetcher();
-	fetcher.processQuery(keyword);
+	fetcher.processQuery(keyword, 0);
 	}
 
 }
