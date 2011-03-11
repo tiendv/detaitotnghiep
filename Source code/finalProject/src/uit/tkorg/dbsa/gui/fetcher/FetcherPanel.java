@@ -60,12 +60,12 @@ public class FetcherPanel extends JPanel {
 	private static JLabel maxResultLabel;
 	private static JCheckBox ieeexploreDLCheckBox;
 	private JSpinner acmJSpinner;
-	private final int ACM_MAX_RESULT = 100;
+	private final int ACM_MAX_RESULT = 1000;
 	private JSpinner ieeexploreJSpinner;
 	private final int IEEE_MAX_RESULT = 1000;
 	private static JCheckBox citeseerDLCheckBox;
 	private JSpinner citeseerJSpinner;
-	private final int CITESEER_MAX_RESULT = 100;
+	private final int CITESEER_MAX_RESULT = 1000;
 	private static JPanel chooseJPanel;
 	private static JProgressBar acmJProgressBar;
 	private static JProgressBar citeseerJProgressBar;
@@ -222,7 +222,7 @@ public class FetcherPanel extends JPanel {
 			
 			
 			keywordJComboBox.addItem("");
-			if(getAuthorList()!= null)			
+			if(getAuthorList()!= null && subjectList != null)			
 				for(int i = 0; i < subjectList.size(); i++){
 					keywordJComboBox.addItem(subjectList.get(i).getSbj_name().toString());
 				}
@@ -768,7 +768,7 @@ public class FetcherPanel extends JPanel {
 			acmJSpinner.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent event) {
 					
-					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1 || Integer.parseInt(acmJSpinner.getValue().toString()) > 100) {
+					if (Integer.parseInt(acmJSpinner.getValue().toString()) < 1 || Integer.parseInt(acmJSpinner.getValue().toString()) > ACM_MAX_RESULT) {
 						acmJSpinner.setValue(1);
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.result.number") + ACM_MAX_RESULT);
 						
