@@ -18,7 +18,7 @@ public class ACMFetcherAutoRun {
 	 * @param listAuthorname
 	 * @return
 	 */
-	public ArrayList<DBSAPublication> getNewDBSAPubicationNew (ArrayList<String> listAuthorname){
+	public static ArrayList<DBSAPublication> getNewDBSAPubicationNew (ArrayList<String> listAuthorname){
 		
 		ArrayList<DBSAPublication> newDBSAPublication = new ArrayList<DBSAPublication>();
 		for (int i=0 ; i< listAuthorname.size(); i++) {
@@ -39,7 +39,7 @@ public class ACMFetcherAutoRun {
 	 * @param authorName: Name of Author
 	 * @return : arraylist DBSAPublication from ACM Digital Library new
 	 */
-	public ArrayList<DBSAPublication> getDBSAPublication (String authorName) {
+	public static ArrayList<DBSAPublication> getDBSAPublication (String authorName) {
 		
 		// Get Publication from Digital Library
 		
