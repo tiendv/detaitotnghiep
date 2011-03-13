@@ -417,7 +417,7 @@ public class DBSAConfigAutoFetch {
 	
 		if(n == JOptionPane.YES_OPTION){
 			accept = true;
-			autoFetchResult();
+			DBSAApplication.showResultDialog();
 		}else if(n == JOptionPane.NO_OPTION){
 			accept = false;
 		}
@@ -454,8 +454,6 @@ public class DBSAConfigAutoFetch {
 				}
 			}
 		}
-		
-		DBSAApplication.showResultDialog();
 		
 		return resultList;
 	}
