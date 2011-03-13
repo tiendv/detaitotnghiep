@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -33,6 +34,9 @@ import javax.swing.event.ChangeListener;
 import net.sf.jabref.sql.DbImportAction;
 
 import uit.tkorg.dbsa.actions.database.CheckDatabaseConection;
+import uit.tkorg.dbsa.cores.autofetch.DBSAConfigAutoFetch;
+import uit.tkorg.dbsa.gui.autofetch.DBSAAutoFetchResultPanel;
+import uit.tkorg.dbsa.gui.autofetch.DBSAConfigAutoFetchPanel;
 import uit.tkorg.dbsa.gui.classification.ClassificationPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.DatabaseManagementPanel;
 import uit.tkorg.dbsa.gui.databasemanagement.InsertArticleToDatabasePanel;
@@ -76,6 +80,7 @@ public class DBSAApplication extends JPanel {
 	
 	private static JMenuItem patternJMenuItem = null;
 	private static JMenuItem updateDblpJMenuItem = null;
+	private static JMenuItem configAutoFetchJMenuItem = null;
 	
 	private static JMenuItem configurationJMenuItem = null;
 	
@@ -96,6 +101,7 @@ public class DBSAApplication extends JPanel {
 	public static AboutDialog aboutDialog = null;
 	public static AuthorsNameList authorNameListClass = null;
 	public static DBSAStatisticPanel statisticPanel = null;
+	public static DBSAStatisticPanel configAutoFetchPanel = null;
 	
 	private JFrame getDBSAJFrame(){
 	
@@ -433,6 +439,7 @@ public class DBSAApplication extends JPanel {
 			fetcherJMenu = new JMenu();
 			fetcherJMenu.add(getPatternJMenuItem());
 			fetcherJMenu.add(getUpdateDblpMenuItem());
+			fetcherJMenu.add(getConfigAutoFetchJMenuItem());
 		}
 		return fetcherJMenu;
 	}	
@@ -477,6 +484,27 @@ public class DBSAApplication extends JPanel {
 			});
 		}
 		return updateDblpJMenuItem;
+	}
+	
+	/**
+	 * This method initalizes updateDblpJMenuItem
+	 * 
+	 * @return javax.swing.JMenuItem
+	 */
+	private JMenuItem getConfigAutoFetchJMenuItem(){
+		if(configAutoFetchJMenuItem == null){
+			configAutoFetchJMenuItem = new JMenuItem();
+			configAutoFetchJMenuItem.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					DBSAConfigAutoFetchPanel f = new DBSAConfigAutoFetchPanel(dbsaJFrame);	
+					f.setVisible(true);
+				}
+				
+			});
+		}
+		return configAutoFetchJMenuItem;
 	}
 	
 	/**
@@ -562,6 +590,10 @@ public class DBSAApplication extends JPanel {
 		return aboutJMenuItem;
 	}
 		
+	public static void showResultDialog(){
+		DBSAAutoFetchResultPanel f = new DBSAAutoFetchResultPanel();
+		f.setVisible(true);
+	}
 	
 	/**
 	 * 
@@ -674,6 +706,7 @@ public class DBSAApplication extends JPanel {
 		fetcherJMenu.setText(DBSAResourceBundle.res.getString("management"));
 		patternJMenuItem.setText(DBSAResourceBundle.res.getString("change.fetcher.pattern"));
 		updateDblpJMenuItem.setText(DBSAResourceBundle.res.getString("update.dblp.database"));
+		configAutoFetchJMenuItem.setText("Config auto fetch");
 		selectAllJMenuItem.setText(DBSAResourceBundle.res.getString("select.all"));
 		//unMarkAllJMenuItem.setText("Unmark all");
 		//unmarkEntriesJMenuItem.setText("Unmark entries");
@@ -688,6 +721,11 @@ public class DBSAApplication extends JPanel {
 		checkMySQLConnectionJMenuItem.setText(DBSAResourceBundle.res.getString("check.database.connection"));
 		checkInternetJMenuItem.setText(DBSAResourceBundle.res.getString("check.internet.connection"));
 	}
+	
+	public static void checkToFetch(){		
+		DBSAConfigAutoFetch.checkToFetch();
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -710,6 +748,7 @@ public class DBSAApplication extends JPanel {
 					
 					DBSAApplication.getDBSAJFrame().setVisible(true);
 					updateTextOfComponentsInThisFrame();
+					checkToFetch();
 				}
 				catch (Exception ex) {
 					ex.printStackTrace();

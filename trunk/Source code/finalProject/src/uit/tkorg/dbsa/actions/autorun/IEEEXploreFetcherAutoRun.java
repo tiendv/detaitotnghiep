@@ -19,7 +19,7 @@ public class IEEEXploreFetcherAutoRun {
 	 * @param listAuthorname : List name of author for Autorun
 	 * @return : List of New DBSAPublication From IEEE Library
 	 */
-	public ArrayList<DBSAPublication> getNewDBSAPubicationNew (ArrayList<String> listAuthorname){
+	public static ArrayList<DBSAPublication> getNewDBSAPubicationNew (ArrayList<String> listAuthorname){
 		
 		ArrayList<DBSAPublication> newDBSAPublication = new ArrayList<DBSAPublication>();
 		for (int i=0 ; i< listAuthorname.size(); i++) {
@@ -40,7 +40,7 @@ public class IEEEXploreFetcherAutoRun {
 	 * @param authorName: Name of Author
 	 * @return : arraylist DBSAPublication from IEEEXplore Digital Library new
 	 */
-	public ArrayList<DBSAPublication> getDBSAPublication (String authorName) {
+	public static ArrayList<DBSAPublication> getDBSAPublication (String authorName) {
 		
 		// Get Publication from Digital Library
 		

@@ -50,10 +50,16 @@ public class DBSAApplicationConst {
 	 */
 	
 	public static String CITESEERURL = "citeseerurl";
-	public static String HREF = "href";
-	public static String IEEE = "IEEE";
+	public static String HREF = "href";	
 	public static String GOOGLE_URL = "http://www.google.com"; 
 	public static String ARTICLE_IEEE_URL = "http://doi.ieeecomputersociety.org/";
+	public static String TIMER = "TIMER";
+	public static String DATEBEGIN = "DATEBEGIN";
+	public static String ACM = "ACM";
+	public static String CITESEER = "CITESEER";
+	public static String IEEE = "IEEE";
+	public static String TRUE = "true";
+	public static String FALSE = "false";
 	/*
 	 * 
 	 */
@@ -86,6 +92,8 @@ public class DBSAApplicationConst {
 	public static String IEEE_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_IEEE_Default_Pattern";
 	public static String ACM_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_ACM_Default_Pattern";
 	public static String AUTHOR_NAME_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\Author_Name_List";
+	public static String KEYWORD_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_fetcher_keyword_List";
+	public static String AUTO_FETCHER_PARAMETERS_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_fetcher_Parameters";
 	/*
 	 * Define ACM DLs fetcher pattern
 	 */
