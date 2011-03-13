@@ -51,6 +51,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	
 	public DBSAAutoFetchResultPanel() {
 		initComponents();
+		DBSAAutoFetchResult.insertToJTable(resultJTable, model);
 	}
 
 	public DBSAAutoFetchResultPanel(Frame parent) {
@@ -271,7 +272,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 			resultJTable = createResultJTable();
 			model.removeRow(0);
 		}else if(resultJTable != null){
-			DBSAAutoFetchResult.insertToJTable(resultJTable, model);
+			
 			
 			if(resultJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
 				checkRemovedFirst =  true;				
