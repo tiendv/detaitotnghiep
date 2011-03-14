@@ -8,7 +8,6 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -23,8 +22,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
@@ -63,17 +60,15 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JButton saveJButton;
 	private JPanel actionJPanel;
 	private JComboBox timerJComboBox;
-	private static final String PREFERRED_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
-	
 	private int width = 870 ;
-	private int height = 654;
+	private int height = 656;
 	private int xLocation;
 	private int yLocation;
 	private JFrame dbsaJFrame;
 	
 	private DefaultListModel keywordInDBListModel = new DefaultListModel();
 	private DefaultListModel keywordListModel = new DefaultListModel();
-	
+	private static final String PREFERRED_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
 	public DBSAConfigAutoFetchPanel() {
 		initComponents();
 		
@@ -170,9 +165,9 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
 		add(getParameterJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 113, 10, 10)));
-		add(getKeywordJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(125, 432, 10, 10)));
-		add(getActionJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(563, 78, 10, 10)));
-		setSize(870, 654);
+		add(getKeywordJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(125, 98, 10, 432)));
+		add(getActionJPanel(), new Constraints(new Bilateral(0, 0, 0), new Trailing(19, 10, 563)));
+		setSize(width, height);
 		setLocation(xLocation, yLocation);
 	}
 
