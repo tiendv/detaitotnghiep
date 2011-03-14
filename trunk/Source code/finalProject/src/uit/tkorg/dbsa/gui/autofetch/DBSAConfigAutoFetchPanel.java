@@ -381,7 +381,9 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					String keyword = newKeywordTextField.getText();
-					DBSAConfigAutoFetch.addNewKeyword(keywordListModel, keyword);
+					if(!keyword.equals("") && !keyword.equals(null)){
+						DBSAConfigAutoFetch.addNewKeyword(keywordListModel, keyword);
+					}
 				}
 				
 			});
