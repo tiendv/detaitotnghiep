@@ -47,8 +47,6 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 
 	private DefaultTableModel model;
 	
-	
-	
 	public DBSAAutoFetchResultPanel() {
 		initComponents();
 		DBSAAutoFetchResult.insertToJTable(resultJTable, model);
@@ -139,9 +137,9 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		setBackground(Color.white);
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
-		add(getTableResultJPanel(), new Constraints(new Bilateral(4, 6, 812), new Bilateral(7, 87, 10, 373)));
-		add(getActionsJPanel(), new Constraints(new Bilateral(4, 6, 0), new Leading(448, 76, 10, 10)));
-		setSize(822, 529);
+		add(getTableResultJPanel(), new Constraints(new Bilateral(4, 6, 812), new Bilateral(7, 87, 10)));
+		add(getActionsJPanel(), new Constraints(new Bilateral(4, 6, 0), new Trailing(5, 76, 10, 448)));
+		setSize(822, 495);
 	}
 
 	private JButton getSaveJButton() {
@@ -198,7 +196,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		model = new DefaultTableModel(getTableData(DBSAAutoFetchResult.getRowNumber(),
 				DBSAAutoFetchResult.getPubTitle(), DBSAAutoFetchResult.getAuthor(), 
 				DBSAAutoFetchResult.getHyperLink(), DBSAAutoFetchResult.getYear(), 
-				DBSAAutoFetchResult.getAbstract(), DBSAAutoFetchResult.getPublisher(), 
+				DBSAAutoFetchResult.getAbstract(), DBSAAutoFetchResult.getAbstract(), 
 				DBSAAutoFetchResult.getMark(), DBSAAutoFetchResult.getIsDuplicate(), 
 				DBSAAutoFetchResult.getID()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
@@ -288,10 +286,10 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	 * @return String []
 	 */
 	private static  String [] getColumnName(){
-		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
-				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
-				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
-				DBSAResourceBundle.res.getString("publisher"),("X"), 
+		String [] columnNames = { /*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("title"), 
+				/*DBSAResourceBundle.res.getString*/("authors"), /*DBSAResourceBundle.res.getString*/("link"),
+				/*DBSAResourceBundle.res.getString*/("year"),/*DBSAResourceBundle.res.getString*/("abstract"), 
+				/*DBSAResourceBundle.res.getString*/("publisher"),("X"), 
 				("duplicate"), "id"};
 			
 		return columnNames;
