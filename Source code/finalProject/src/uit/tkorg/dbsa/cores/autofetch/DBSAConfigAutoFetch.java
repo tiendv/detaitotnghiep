@@ -417,11 +417,36 @@ public class DBSAConfigAutoFetch {
 	
 		if(n == JOptionPane.YES_OPTION){
 			accept = true;
+			changeTimer();
 			DBSAApplication.showResultDialog();
 		}else if(n == JOptionPane.NO_OPTION){
 			accept = false;
 		}
 		return accept;
+	}
+	
+	public static void changeTimer(){
+		ArrayList<String> parameter = getAutoFetcherParameter();
+		
+		String temp = "";
+		String parameterName = "";
+		
+		if(parameter != null){
+			for(int i = 0; i < parameter.size(); i++){
+				//tim vi tri cua chuoi "###" 
+				int endIndex = parameter.get(i).indexOf("###");				
+				parameterName = parameter.get(i).substring(0, endIndex);
+			
+				if(parameterName.equals(DBSAApplicationConst.DATEBEGIN)){	
+					
+					temp += DBSAApplicationConst.DATEBEGIN + "###" + getDateNow() + "\n";
+				}else{
+					temp += parameter.get(i) + "\n";
+				}
+			}
+			
+			MyFileWriter.writeToFile(DBSAApplicationConst.AUTO_FETCHER_PARAMETERS_LIST_LINK, temp);
+		}
 	}
 	
 	/***
@@ -467,7 +492,7 @@ public class DBSAConfigAutoFetch {
 	}
 	
 	//Lay cac tham so de tu dong thu thap
-	public static ArrayList<String> getAutoFetcherParameter(DefaultListModel listModel){
+	public static ArrayList<String> getAutoFetcherParameter(){
 		
 		ArrayList<String> parameters = FileLoadder.loadTextFile(DBSAApplicationConst.AUTO_FETCHER_PARAMETERS_LIST_LINK);
 		

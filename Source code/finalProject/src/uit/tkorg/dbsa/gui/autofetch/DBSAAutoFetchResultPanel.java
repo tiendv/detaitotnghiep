@@ -203,7 +203,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	private JPanel getTableResultJPanel() {
 		if (tableResultJPanel == null) {
 			tableResultJPanel = new JPanel();
-			tableResultJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("reslut.list"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			tableResultJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("result.list"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			tableResultJPanel.setLayout(new GroupLayout());
 			tableResultJPanel.add(getTableResultJScrollPane(), new Constraints(new Bilateral(3, 2, 797), new Bilateral(-3, 3, 10, 347)));
