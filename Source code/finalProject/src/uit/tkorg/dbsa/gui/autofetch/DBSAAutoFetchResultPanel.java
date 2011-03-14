@@ -6,12 +6,15 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -44,6 +47,11 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	private JButton closeJButton;
 	private JPanel actionsJPanel;
 	private JButton saveJButton;
+	private int width = 822 ;
+	private int height = 495;
+	private int xLocation;
+	private int yLocation;
+	private JFrame dbsaJFrame;
 
 	private DefaultTableModel model;
 	
@@ -52,8 +60,12 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		DBSAAutoFetchResult.insertToJTable(resultJTable, model);
 	}
 
-	public DBSAAutoFetchResultPanel(Frame parent) {
-		super(parent);
+	public DBSAAutoFetchResultPanel(JFrame mainJFrame) {
+		super(mainJFrame, true);
+		dbsaJFrame = mainJFrame;
+		xLocation = dbsaJFrame.getX() + (dbsaJFrame.getWidth() - width)/2;
+		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight() - height)/2;
+		
 		initComponents();
 	}
 
@@ -132,20 +144,30 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	}
 
 	private void initComponents() {
-		setTitle("Ket qua tu dong thu thap du lieu cua he thong");
+		setTitle(DBSAResourceBundle.res.getString("the.results.fetch.from.digital.library"));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(Color.white);
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
 		add(getTableResultJPanel(), new Constraints(new Bilateral(4, 6, 812), new Bilateral(7, 87, 10)));
 		add(getActionsJPanel(), new Constraints(new Bilateral(4, 6, 0), new Trailing(5, 76, 10, 448)));
-		setSize(822, 495);
+		setSize(width, height);
+		setLocation(xLocation, yLocation);
 	}
 
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
-			saveJButton.setText("Save to file");
+			saveJButton.setText(DBSAResourceBundle.res.getString("save.to.file"));
+			saveJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					DBSAAutoFetchResult.saveDataToFile(resultJTable);
+				}
+				
+			});
 		}
 		return saveJButton;
 	}
@@ -153,7 +175,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
-			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, "Border Title", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 125, 10, 10), new Leading(0, 40, 10, 10)));
@@ -166,6 +188,14 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
 			closeJButton.setText("Close");
+			closeJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+				
+			});
 		}
 		return closeJButton;
 	}
@@ -173,7 +203,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	private JPanel getTableResultJPanel() {
 		if (tableResultJPanel == null) {
 			tableResultJPanel = new JPanel();
-			tableResultJPanel.setBorder(BorderFactory.createTitledBorder(null, "Danh sach ket qua", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			tableResultJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("reslut.list"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			tableResultJPanel.setLayout(new GroupLayout());
 			tableResultJPanel.add(getTableResultJScrollPane(), new Constraints(new Bilateral(3, 2, 797), new Bilateral(-3, 3, 10, 347)));
@@ -196,11 +226,9 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		model = new DefaultTableModel(getTableData(DBSAAutoFetchResult.getRowNumber(),
 				DBSAAutoFetchResult.getPubTitle(), DBSAAutoFetchResult.getAuthor(), 
 				DBSAAutoFetchResult.getHyperLink(), DBSAAutoFetchResult.getYear(), 
-				DBSAAutoFetchResult.getAbstract(), DBSAAutoFetchResult.getAbstract(), 
-				DBSAAutoFetchResult.getMark(), DBSAAutoFetchResult.getIsDuplicate(), 
-				DBSAAutoFetchResult.getID()), getColumnName()) {
+				DBSAAutoFetchResult.getAbstract(), DBSAAutoFetchResult.getPublisher()), getColumnName()) {
 		private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, String.class, String.class, String.class, Boolean.class, Boolean.class, Integer.class};
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class, URL.class, String.class, String.class, String.class};
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
@@ -208,7 +236,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		
 		};
 		
-		MyJTable table = new MyJTable(model);
+		JTable table = new JTable(model);
 		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
 		//Cho phep sap xep theo tu cot rieng biet
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
@@ -229,15 +257,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer)tcr; 
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);  
 		
-		table.getColumn(("duplicate")).setWidth(0);
-		table.getColumn(("duplicate")).setMinWidth(0);
-		table.getColumn(("duplicate")).setMaxWidth(0);
-		
-		table.getColumn(("id")).setWidth(0);
-		table.getColumn(("id")).setMinWidth(0);
-		table.getColumn(("id")).setMaxWidth(0);
-		
-		for(int i = 0; i < 8; i++){
+		for(int i = 0; i < 7; i++){
 			TableColumn col = table.getColumnModel().getColumn(i);
 			if(i == 0){
 				col.setPreferredWidth(30);
@@ -250,11 +270,9 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 			}else if(i == 4){
 				col.setPreferredWidth(60);
 			}else if (i == 5){
-				col.setPreferredWidth(150);
+				col.setPreferredWidth(180);
 			}else if(i == 6){
 				col.setPreferredWidth(80);
-			}else if(i == 7){
-				col.setPreferredWidth(30);
 			}
 		}
 		
@@ -286,11 +304,10 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	 * @return String []
 	 */
 	private static  String [] getColumnName(){
-		String [] columnNames = { /*DBSAResourceBundle.res.getString*/("no"), /*DBSAResourceBundle.res.getString*/("title"), 
-				/*DBSAResourceBundle.res.getString*/("authors"), /*DBSAResourceBundle.res.getString*/("link"),
-				/*DBSAResourceBundle.res.getString*/("year"),/*DBSAResourceBundle.res.getString*/("abstract"), 
-				/*DBSAResourceBundle.res.getString*/("publisher"),("X"), 
-				("duplicate"), "id"};
+		String [] columnNames = { DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
+				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
+				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
+				DBSAResourceBundle.res.getString("publisher")};
 			
 		return columnNames;
 	}
@@ -299,16 +316,16 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate, int idPub){
+	public  Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher){
 		
-		Object [][] data = {addTableData(rowNumber, title, author, hyperLink, year, abstracts, publisher, isMark, duplicate, idPub)};
+		Object [][] data = {addTableData(rowNumber, title, author, hyperLink, year, abstracts, publisher)};
 		
 		return data;
 		
 	}
 	
-	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher, boolean isMark, boolean duplicate, int idPub){
-		Object [] dataRow =  {rowNumber, title, author, hyperLink,year,abstracts, publisher,isMark, duplicate, idPub};
+	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher){
+		Object [] dataRow =  {rowNumber, title, author, hyperLink,year,abstracts, publisher};
 		
 		return dataRow;
 	}

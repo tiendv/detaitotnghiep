@@ -706,7 +706,7 @@ public class DBSAApplication extends JPanel {
 		fetcherJMenu.setText(DBSAResourceBundle.res.getString("management"));
 		patternJMenuItem.setText(DBSAResourceBundle.res.getString("change.fetcher.pattern"));
 		updateDblpJMenuItem.setText(DBSAResourceBundle.res.getString("update.dblp.database"));
-		configAutoFetchJMenuItem.setText("Config auto fetch");
+		configAutoFetchJMenuItem.setText(DBSAResourceBundle.res.getString("config.auto.fetch"));
 		selectAllJMenuItem.setText(DBSAResourceBundle.res.getString("select.all"));
 		//unMarkAllJMenuItem.setText("Unmark all");
 		//unmarkEntriesJMenuItem.setText("Unmark entries");

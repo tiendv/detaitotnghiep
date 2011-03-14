@@ -78,7 +78,7 @@ public class DBSAConfigAutoFetch {
 					listModel.remove(itemsIsSelected[i]);
 				}			
 			}else{
-				JOptionPane.showMessageDialog(null, "Vui long chon danh sach tu khoa muon xoa");
+				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.choose.keywords.to.delete"));
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class DBSAConfigAutoFetch {
 				leftListModel.remove(itemIsSelected[i]);
 			}			
 		}else{
-			JOptionPane.showMessageDialog(null, "Vui long chon danh sach tu khoa muon di chuyen");
+			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.choose.keywords.to.move"));
 		}
 	}
 	
@@ -116,7 +116,7 @@ public class DBSAConfigAutoFetch {
 				rightListModel.remove(itemIsSelected[i]);
 			}			
 		}else{
-			JOptionPane.showMessageDialog(null, "Vui long chon danh sach tu khoa muon di chuyen");
+			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.choose.keywords.to.move"));
 		}
 	}
 	
@@ -133,9 +133,9 @@ public class DBSAConfigAutoFetch {
 				
 				MyFileWriter.writeToFile(DBSAApplicationConst.KEYWORD_LIST_LINK, temp);
 				
-				JOptionPane.showMessageDialog(null, "Ban da luu thanh cong!");
+				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("you.have.successfully.saved"));
 			}else{
-				JOptionPane.showMessageDialog(null, "khong co tu khoa nao trong danh sach. Vui long them tu khoa hoac chon them tu khoa tu ben cot ben trai.");
+				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("no.keyword.in.the.list"));
 			}
 		}
 	}
@@ -412,7 +412,7 @@ public class DBSAConfigAutoFetch {
 	public static boolean pendMessageAutoFetch(){
 		boolean accept = false;
 		int n = JOptionPane.showConfirmDialog(
-	    DBSAApplication.dbsaJFrame, "He thong tu dong thu thap da duoc khoi dong. \nBan co muon thu thap ngay bay gio ko?",
+	    DBSAApplication.dbsaJFrame, DBSAResourceBundle.res.getString("automatic.fetcher.system.is.started"),
 	    "An Question", JOptionPane.YES_NO_OPTION);
 	
 		if(n == JOptionPane.YES_OPTION){

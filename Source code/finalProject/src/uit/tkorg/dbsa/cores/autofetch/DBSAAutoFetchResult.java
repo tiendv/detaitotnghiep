@@ -8,6 +8,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import uit.tkorg.dbsa.model.DBSAPublication;
+import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
+import uit.tkorg.dbsa.properties.files.MyFileWriter;
 
 public class DBSAAutoFetchResult {
 
@@ -18,11 +20,7 @@ public class DBSAAutoFetchResult {
 	private static int year = 0;
 	private static String abstracts = "";
 	private static String publisher = "";
-	private static boolean mark = false;
 	private static URL hyperlink = null;
-	private static boolean isDuplicate = false;
-	public static String digitalLibrary;
-	public static int id;
 	
 	public DBSAAutoFetchResult(){
 		
@@ -67,15 +65,33 @@ public class DBSAAutoFetchResult {
 					setPublisher(resultList.get(i).getPublisher());
 				else
 					setPublisher("");
-				
-				setID(resultList.get(i).getId());
 								
-				Object [] data = {resultJTable.getRowCount() + 1, getPubTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getID()};
+				Object [] data = {resultJTable.getRowCount() + 1, getPubTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher()};
 				model.insertRow(resultJTable.getRowCount(), data );
 				
 			}
 		}
 		
+	}
+	
+	public static void saveDataToFile(JTable table){
+		
+		if(table != null){
+			if(table.getRowCount() > 0){
+				String temp = "";
+				for(int i = 0; i < table.getRowCount(); i++){
+					temp += table.getValueAt(i, 0) + " -|- ";
+					temp += table.getValueAt(i, 1) + " -|- ";
+					temp += table.getValueAt(i, 2) + " -|- ";
+					temp += table.getValueAt(i, 3) + " -|- ";
+					temp += table.getValueAt(i, 4) + " -|- ";
+					temp += table.getValueAt(i, 5) + " -|- ";
+					temp += table.getValueAt(i, 6) + " -|- \n";
+				}
+				
+				MyFileWriter.writeToFile(DBSAApplicationConst.AUTO_FETCHER_RESULTS_LINK, temp);
+			}
+		}
 	}
 		
 	/*
@@ -139,14 +155,6 @@ public class DBSAAutoFetchResult {
 		return publisher;
 	}
 	
-	public static void setMark(boolean isMark){
-		mark = isMark;
-	}
-	
-	public static  boolean getMark(){
-		return mark;
-	}
-	
 	public static void setHyperLink(String _hyperLink){
 		try {
 			hyperlink = new URL(_hyperLink);
@@ -159,27 +167,5 @@ public class DBSAAutoFetchResult {
 	public static URL getHyperLink(){
 		return hyperlink;
 	}
-	
-	public static void setIsDuplicate(boolean duplicate){
-		isDuplicate = duplicate;
-	}
-	
-	public static boolean getIsDuplicate(){
-		return isDuplicate;
-	}
-	
-	public static void setDigitalLibrary(String dl){
-		digitalLibrary = dl;
-	}
-	
-	public static String getDigitalLibrary(){
-		return digitalLibrary;
-	}
-	public static   int getID(){
-		return id;
-	}
-	
-	public static  void setID(int iD){
-		id = iD;
-	}
+
 }
