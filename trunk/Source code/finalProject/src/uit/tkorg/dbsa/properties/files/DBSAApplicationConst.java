@@ -92,8 +92,9 @@ public class DBSAApplicationConst {
 	public static String IEEE_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_IEEE_Default_Pattern";
 	public static String ACM_PATTERN_RESOURCE_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_ACM_Default_Pattern";
 	public static String AUTHOR_NAME_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\Author_Name_List";
-	public static String KEYWORD_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_fetcher_keyword_List";
-	public static String AUTO_FETCHER_PARAMETERS_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_fetcher_Parameters";
+	public static String KEYWORD_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_Fetcher_Keyword_List";
+	public static String AUTO_FETCHER_PARAMETERS_LIST_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_Fetcher_Parameters";
+	public static String AUTO_FETCHER_RESULTS_LINK = "src\\uit\\tkorg\\dbsa\\properties\\files\\DBSA_Auto_Fetch_Results";
 	/*
 	 * Define ACM DLs fetcher pattern
 	 */

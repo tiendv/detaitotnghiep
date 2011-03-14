@@ -33,6 +33,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.cores.autofetch.DBSAConfigAutoFetch;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class DBSAConfigAutoFetchPanel extends JDialog {
@@ -160,6 +161,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	}
 
 	private void initComponents() {
+		setTitle(DBSAResourceBundle.res.getString("config.auto.fetch"));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(Color.white);
 		setForeground(Color.black);
@@ -175,8 +177,18 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 		if (timerJComboBox == null) {
 			timerJComboBox = new JComboBox();
 			timerJComboBox.setModel(new DefaultComboBoxModel(new Object[] 
-			    { "1 ngay", "2 ngay", "3 ngay", "4 ngay", "5 ngay", "6 ngay", 
-				"1 tuan", "2 tuan", "3 tuan", "1 thang", "2 thang", "3 thang" }));
+			    {	DBSAResourceBundle.res.getString("timer.1.day"), 
+					DBSAResourceBundle.res.getString("timer.2.day"), 
+					DBSAResourceBundle.res.getString("timer.3.day"),
+					DBSAResourceBundle.res.getString("timer.4.day"),
+					DBSAResourceBundle.res.getString("timer.5.day"),
+					DBSAResourceBundle.res.getString("timer.6.day"),
+					DBSAResourceBundle.res.getString("timer.1.week"),
+					DBSAResourceBundle.res.getString("timer.2.week"),
+					DBSAResourceBundle.res.getString("timer.3.week"),
+					DBSAResourceBundle.res.getString("timer.1.month"),
+					DBSAResourceBundle.res.getString("timer.2.month"),
+					DBSAResourceBundle.res.getString("timer.3.month") }));
 			timerJComboBox.setDoubleBuffered(false);
 			timerJComboBox.setBorder(null);
 			timerJComboBox.setSelectedIndex(DBSAConfigAutoFetch.getTimerSelected() - 1);
@@ -187,7 +199,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JPanel getActionJPanel() {
 		if (actionJPanel == null) {
 			actionJPanel = new JPanel();
-			actionJPanel.setBorder(BorderFactory.createTitledBorder(null, "Hoat dong", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			actionJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionJPanel.setLayout(new GroupLayout());
 			actionJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 106, 10, 10), new Leading(0, 38, 10, 10)));
@@ -199,7 +211,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JButton getSaveJButton() {
 		if (saveJButton == null) {
 			saveJButton = new JButton();
-			saveJButton.setText("Luu");
+			saveJButton.setText(DBSAResourceBundle.res.getString("save"));
 			saveJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -217,7 +229,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("Dong");
+			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -234,7 +246,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JPanel getKeywordJPanel() {
 		if (keywordJPanel == null) {
 			keywordJPanel = new JPanel();
-			keywordJPanel.setBorder(BorderFactory.createTitledBorder(null, "Chon danh sach tu khoa tim kiem", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+			keywordJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("keyword.list.to.search"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			keywordJPanel.setLayout(new GroupLayout());
 			keywordJPanel.add(getNewKeywordJLabel(), new Constraints(new Leading(12, 12, 12), new Leading(12, 12, 12)));
@@ -253,7 +265,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JButton getDeleteAllJButton() {
 		if (deleteAllJButton == null) {
 			deleteAllJButton = new JButton();
-			deleteAllJButton.setText("XOA TAT CA");
+			deleteAllJButton.setText(DBSAResourceBundle.res.getString("delete.all").toUpperCase());
 			deleteAllJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -270,7 +282,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JButton getDeleteJButton() {
 		if (deleteJButton == null) {
 			deleteJButton = new JButton();
-			deleteJButton.setText("XOA");
+			deleteJButton.setText(DBSAResourceBundle.res.getString("delete").toUpperCase());
 			deleteJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -363,7 +375,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JButton getAddNewKeywordButton() {
 		if (addNewKeywordButton == null) {
 			addNewKeywordButton = new JButton();
-			addNewKeywordButton.setText("Them");
+			addNewKeywordButton.setText(DBSAResourceBundle.res.getString("add"));
 			addNewKeywordButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -380,7 +392,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JTextField getNewKeywordTextField() {
 		if (newKeywordTextField == null) {
 			newKeywordTextField = new JTextField();
-			newKeywordTextField.setText("Tu khoa moi");
+			
 			newKeywordTextField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		}
 		return newKeywordTextField;
@@ -389,7 +401,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JLabel getNewKeywordJLabel() {
 		if (newKeywordJLabel == null) {
 			newKeywordJLabel = new JLabel();
-			newKeywordJLabel.setText("Them tu khoa moi : ");
+			newKeywordJLabel.setText(DBSAResourceBundle.res.getString("add.new.keyword") + " : ");
 		}
 		return newKeywordJLabel;
 	}
@@ -397,7 +409,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JPanel getParameterJPanel() {
 		if (parameterJPanel == null) {
 			parameterJPanel = new JPanel();
-			parameterJPanel.setBorder(BorderFactory.createTitledBorder(null, "Chon cac thong so de thu thap", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+			parameterJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("choose.parameters.to.fetch"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			parameterJPanel.setLayout(new GroupLayout());
 			parameterJPanel.add(getTimerLabel(), new Constraints(new Leading(12, 12, 12), new Leading(12, 12, 12)));
@@ -413,7 +425,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JCheckBox getIeeeDLJCheckBox() {
 		if (ieeeDLJCheckBox == null) {
 			ieeeDLJCheckBox = new JCheckBox();
-			ieeeDLJCheckBox.setText("Thu vien so IEEExplorer");
+			ieeeDLJCheckBox.setText(DBSAResourceBundle.res.getString("dl.ieee"));
 			ieeeDLJCheckBox.setSelected(DBSAConfigAutoFetch.getIeeeDLCheckboxStatus());
 		}
 		return ieeeDLJCheckBox;
@@ -423,7 +435,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 		if (citeseerDLJCheckBox == null) {
 			citeseerDLJCheckBox = new JCheckBox();
 			citeseerDLJCheckBox.setSelected(true);
-			citeseerDLJCheckBox.setText("Thu vien so Citeseer");
+			citeseerDLJCheckBox.setText(DBSAResourceBundle.res.getString("dl.citeseer"));
 			citeseerDLJCheckBox.setSelected(DBSAConfigAutoFetch.getCiteseerDLCheckboxStatus());
 		}
 		return citeseerDLJCheckBox;
@@ -432,7 +444,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JCheckBox getAcmDLJCheckBox() {
 		if (acmDLJCheckBox == null) {
 			acmDLJCheckBox = new JCheckBox();
-			acmDLJCheckBox.setText("Thu vien so ACM");
+			acmDLJCheckBox.setText(DBSAResourceBundle.res.getString("dl.acm"));
 			acmDLJCheckBox.setSelected(DBSAConfigAutoFetch.getAcmDLCheckboxStatus());
 		}
 		return acmDLJCheckBox;
@@ -441,7 +453,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JLabel getDigitalLibraryJLabel() {
 		if (digitalLibraryJLabel == null) {
 			digitalLibraryJLabel = new JLabel();
-			digitalLibraryJLabel.setText("Chon thu vien so :");
+			digitalLibraryJLabel.setText(DBSAResourceBundle.res.getString("choose.digital.library"));
 		}
 		return digitalLibraryJLabel;
 	}
@@ -449,7 +461,7 @@ public class DBSAConfigAutoFetchPanel extends JDialog {
 	private JLabel getTimerLabel() {
 		if (timerLabel == null) {
 			timerLabel = new JLabel();
-			timerLabel.setText("Chon thoi gian thu thap :");
+			timerLabel.setText(DBSAResourceBundle.res.getString("choose.time.to.fetch"));
 		}
 		return timerLabel;
 	}
