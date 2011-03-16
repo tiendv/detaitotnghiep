@@ -106,10 +106,13 @@ public class FetcherPanel extends JPanel {
 	private static ArrayList<Subject> subjectList = new ArrayList<Subject>();
 	private static ArrayList<String> authorNameList = new ArrayList<String>();
 	
+	private static PopUpSubjectTree subjectTreeJFrame = new PopUpSubjectTree(); ;
+	
 	public FetcherPanel(JTabbedPane dbsa) {
 		initComponents();
 		this.dbsaTabFrame = dbsa;
 		updateTextsOfComponents();
+		
 	}
 
 	@SuppressWarnings("static-access")
@@ -134,12 +137,14 @@ public class FetcherPanel extends JPanel {
 	
 	private JRadioButton getloadAuthorJRadioButton() {
 		if (loadAuthorJRadioButton == null) {
-			loadAuthorJRadioButton = new JRadioButton();	
+			loadAuthorJRadioButton = new JRadioButton();
+			loadAuthorJRadioButton.setSelected(true);
 			loadAuthorJRadioButton.addChangeListener(new ChangeListener(){
 			
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if(loadAuthorJRadioButton.isSelected()){
+						subjectTreeJFrame.dispose();
 						if(authorNameList!= null){
 							keywordJComboBox.removeAllItems();
 							for(int i = 0; i < authorNameList.size(); i++){								
@@ -161,7 +166,6 @@ public class FetcherPanel extends JPanel {
 					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
 				}
 
-				@Override
 				public void mousePressed(MouseEvent e) {					
 				}
 				public void mouseReleased(MouseEvent e) {					
@@ -175,18 +179,23 @@ public class FetcherPanel extends JPanel {
 	private JRadioButton getLoadSubjectJRadioButton() {
 		if (loadSubjectJRadioButton == null) {
 			loadSubjectJRadioButton = new JRadioButton();
-			loadSubjectJRadioButton.setSelected(true);
+			
 			loadSubjectJRadioButton.addChangeListener(new ChangeListener(){
 
 				@Override
 				public void stateChanged(ChangeEvent e) {					
 					if(loadSubjectJRadioButton.isSelected()){
-						if(subjectList!=null){
-							keywordJComboBox.removeAllItems();
-							for(int i = 0; i < subjectList.size(); i++){								
-								keywordJComboBox.addItem(subjectList.get(i).getSbj_name().toString());
-							}
-						}
+						
+						subjectTreeJFrame.setLocation( loadSubjectJRadioButton.getX() - 40,
+								 loadSubjectJRadioButton.getY() + 225) ;
+												
+						subjectTreeJFrame.setVisible(true);
+//						if(subjectList!=null){
+//							keywordJComboBox.removeAllItems();
+//							for(int i = 0; i < subjectList.size(); i++){								
+//								keywordJComboBox.addItem(subjectList.get(i).getSbj_name().toString());
+//							}
+//						}
 					}					
 				}
 			});
@@ -210,6 +219,11 @@ public class FetcherPanel extends JPanel {
 			});
 		}
 		return loadSubjectJRadioButton;
+	}
+	
+	void setTextJCombobox(String str){
+		keywordJComboBox.setSelectedItem(str);
+		subjectTreeJFrame.dispose();
 	}
 
 	private JComboBox getKeywordJComboBox() {
