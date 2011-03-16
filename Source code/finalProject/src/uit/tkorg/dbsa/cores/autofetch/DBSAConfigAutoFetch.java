@@ -3,20 +3,16 @@ package uit.tkorg.dbsa.cores.autofetch;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import uit.tkorg.dbsa.actions.autorun.ACMFetcherAutoRun;
 import uit.tkorg.dbsa.actions.autorun.IEEEXploreFetcherAutoRun;
 import uit.tkorg.dbsa.actions.database.LoadAuthor;
-import uit.tkorg.dbsa.gui.autofetch.DBSAAutoFetchResultPanel;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.Author;
 import uit.tkorg.dbsa.model.DBSAPublication;
-import uit.tkorg.dbsa.model.Publication;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.FileLoadder;
 import uit.tkorg.dbsa.properties.files.MyFileWriter;
@@ -454,30 +450,66 @@ public class DBSAConfigAutoFetch {
 	 */
 	public static ArrayList<DBSAPublication> autoFetchResult(){
 		
-		ArrayList<DBSAPublication> resultList = new ArrayList<DBSAPublication>();
+		final ArrayList<DBSAPublication> resultList = new ArrayList<DBSAPublication>();
 		
 		if(getAcmDLCheckboxStatus() == true){
-			ArrayList<DBSAPublication> temp = new ArrayList<DBSAPublication>();
-			temp = ACMFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
-			
-			for(int i = 0; i < temp.size(); i++){
-				resultList.add(temp.get(i));
-			}
+			Thread acmThread = new Thread( new Runnable() {
+				
+				@Override
+				public void run() {
+					ArrayList<DBSAPublication> temp = new ArrayList<DBSAPublication>();
+					temp = ACMFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
+					if(temp!= null) {
+						for(int i = 0; i < temp.size(); i++){
+							resultList.add(temp.get(i));
+						}
+					}
+					
+				}
+			});
+			acmThread.start();
 		}
 		
+		
 		if(getCiteseerDLCheckboxStatus() == true){
+			Thread citeSeerThread = new Thread (new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					ArrayList<DBSAPublication> temp = new ArrayList<DBSAPublication>();
+					temp = IEEEXploreFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
+					
+					if(temp != null){
+						for(int i = 0; i < temp.size(); i++){
+							resultList.add(temp.get(i));
+						}
+					}
+					
+				}
+			});
+			citeSeerThread.start();
 			
 		}
 		
 		if(getIeeeDLCheckboxStatus() == true){
-			ArrayList<DBSAPublication> temp = new ArrayList<DBSAPublication>();
-			temp = IEEEXploreFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
-			
-			if(temp != null){
-				for(int i = 0; i < temp.size(); i++){
-					resultList.add(temp.get(i));
+			Thread ieeeXploreThread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					ArrayList<DBSAPublication> temp = new ArrayList<DBSAPublication>();
+					temp = IEEEXploreFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
+					
+					if(temp != null){
+						for(int i = 0; i < temp.size(); i++){
+							resultList.add(temp.get(i));
+						}
+					}
+					
 				}
-			}
+			});
+			ieeeXploreThread.start();
 		}
 		
 		return resultList;
