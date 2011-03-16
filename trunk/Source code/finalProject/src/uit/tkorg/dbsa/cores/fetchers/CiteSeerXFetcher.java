@@ -18,12 +18,15 @@ import javax.xml.parsers.SAXParserFactory;
 
 
 import net.sf.jabref.BibtexEntry;
+import net.sf.jabref.Globals;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.fetcher.FetcherResultPanel;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 /**
  * @author Tiger
@@ -32,6 +35,9 @@ import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
  */
 public class CiteSeerXFetcher {
 	
+	
+	// pattern for get ATOM link
+	
 	private static boolean shouldContinue = true;
 	public static String baseURL = "http://citeseerx.ist.psu.edu/search?q=";
 	public static String startSearchYearPub = "http://citeseer.ist.psu.edu/search?q=";
@@ -39,16 +45,34 @@ public class CiteSeerXFetcher {
 	private static int resultNumber = 0;
 	private static Pattern searchPattern = Pattern.compile("\\d+");
 	private static String pages = null;
+	
+	
+	
 	 /* search title, author ,table
 	 * doc
 	 * auth
 	 * table
 	 */
 	
+	
 	public static final String typeDoc="docs";
 	public static final String typeAuthor="auth";
 	public static final String typeTable="table";
 	public static final String typeAction="&t=";	
+	/**
+	 * Parameter for autorun
+	 * 
+	 */
+	public static boolean flagAutorun = false;
+	public static boolean flagReportDone = false;
+	public static int numberOfResult = 0;
+	public static ArrayList<DBSAPublication> newDBSAPublication = new ArrayList<DBSAPublication>();
+	// Patterb for get Number of result
+	
+	public static String endSearchResultNumber ="&submit=Search&sort=rel";
+	private static String contentPage = null;
+	private static Pattern getPageResult = Pattern.compile(".*(\\d+,*\\d*,*\\d*,*\\d*).* documents");
+	
 	/**
 	 * Append feed action can get a XML-based page
 	 * atom
@@ -61,25 +85,41 @@ public class CiteSeerXFetcher {
 	
 	
 	protected SAXParserFactory parserFactory;
-	protected SAXParser saxParser;
+	protected static SAXParser saxParser;
 	public CiteSeerXFetcher(){
 		
 	}
 	
-	int atomStart = 0;	
-	int maxResult = FetcherPanel.getCiteResultNumber();
+	static int atomStart = 0;	
+	static int maxResult = FetcherPanel.getCiteResultNumber();
 	int start = 0;
-	public boolean processQuery(String keyword, int startNumber){
-	
+	public static boolean processQuery(String keyword, int startNumber){
+		
 		shouldContinue = true;
 		
 		//replace all white-space to '+'
 		keyword = keyword.replaceAll("\\s", "+");
-			
-		String queryString = baseURL + keyword + feedAction + feedAtom + "&sort=rel&start=" + atomStart;
 		
+		if(isFlagAutorun() == true){
+			
+			String urlQuery = baseURL + keyword + endSearchResultNumber;
+			URL urlGetResultNumber;
+		 
+			try {
+				urlGetResultNumber = new URL(urlQuery);
+				contentPage = getResults (urlGetResultNumber);		
+				numberOfResult= getNumberOfHits(contentPage,getPageResult);	
+				maxResult = numberOfResult;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		String queryString = baseURL + keyword + feedAction + feedAtom + "&sort=rel&start=" + atomStart;
 		ArrayList<BibtexEntry> entries = new ArrayList<BibtexEntry>();		
-		System.out.println(queryString);
+		//System.out.println(queryString);
 		
 		try {
 			
@@ -99,7 +139,6 @@ public class CiteSeerXFetcher {
             		resultNumber += 10;
 	    			String yearURL = startSearchYearPub + keyword + endSearchYearPub + resultNumber;
 	    			URL url1 = new URL(yearURL);
-	    			
 	    			pages = getResults(url1);	    			
             	}
             	else if(startNumber == 0){
@@ -112,6 +151,7 @@ public class CiteSeerXFetcher {
             	}else
             	if(startNumber > maxResult){
             		shouldContinue = false;
+            		setFlagReportDone(true);
             		break;
             	}
             	
@@ -122,19 +162,30 @@ public class CiteSeerXFetcher {
             	if(shouldContinue == true && startNumber <= maxResult){
             		
 	            	Set<String> fields = entry.getAllFields();
+	            	DBSAPublication temp = new DBSAPublication();
 	            	
-	            	for(String f:fields){
-	            		System.out.println(f+":"+entry.getField(f));
-	            	}	
-	            	
+	            //	for(String f:fields){
+	            	//	System.out.println(f+":"+entry.getField(f));
+	            //	}	
+	            	if(isFlagAutorun() == false)
 	            	DBSAApplication.fetcherResultPanel.setRowNumber(1);
 	            	
 	            	if(entry.getField(DBSAApplicationConst.TITLE) == null){
+	            		if ( isFlagAutorun() == false)
 	            		entry.setField((DBSAApplicationConst.TITLE), "");
+	            		else 
+	            			temp.setTitle("");
 	            	}
-	            	DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
+	            	if(isFlagAutorun() == false)
+	            		DBSAApplication.fetcherResultPanel.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));
+	            	else
+	            		temp.setTitle(entry.getField(DBSAApplicationConst.TITLE).replaceAll("/em", ""));	
+	            	
 	            	if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
+	            		if(isFlagAutorun() == false)
 	            		entry.setField((DBSAApplicationConst.AUTHOR), "");
+	            		else
+	            			temp.setAuthors("");
 	            	}
 	            
 	            	String searchString = (entry.getField(DBSAApplicationConst.AUTHOR));
@@ -145,9 +196,9 @@ public class CiteSeerXFetcher {
 	            	if(ind != -1){
 		            	String subString = pages.substring(ind, ind + searchString.length() + 100);
 		    	        
-		    	        String temp = subString.replaceAll("&#8212;"," ");
+		    	        String temp1 = subString.replaceAll("&#8212;"," ");
 		    	        
-		    	        Matcher m = searchPattern.matcher(temp);
+		    	        Matcher m = searchPattern.matcher(temp1);
 		    	        
 		    	        if(m.find()){
 		    	        	number = m.group(0);
@@ -155,23 +206,49 @@ public class CiteSeerXFetcher {
 			            	
 		    	        }
 	            	}
+	            	if(isFlagAutorun() == false)
 	            	DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+	            	else 
+	            		temp.setAuthors(entry.getField(DBSAApplicationConst.AUTHOR));
+	            	
 	            	if(entry.getField(DBSAApplicationConst.CITESEERURL) == null){
-	            		entry.setField((DBSAApplicationConst.CITESEERURL), "");
+	            		if(isFlagAutorun() == false)
+	            			entry.setField((DBSAApplicationConst.CITESEERURL), "");
+	            		else 
+	            			temp.setLinks("");
 	            	}
-	            	DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.CITESEERURL));
+	            	if (isFlagAutorun() == false)
+	            		DBSAApplication.fetcherResultPanel.setLink(entry.getField(DBSAApplicationConst.CITESEERURL));
+	            	else
+	            		temp.setLinks(entry.getField(DBSAApplicationConst.CITESEERURL));
 	            	
 	            	if(entry.getField(DBSAApplicationConst.YEAR) == null){
-	            		entry.setField(number, "");
+	            		if(isFlagAutorun() == false)
+	            				entry.setField(number, "");
+	            		else
+	            			temp.setYear(0);
 	            	}
-	            	DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(number));
-	            	if(entry.getField(DBSAApplicationConst.ABSTRACT) == null){
-	            		entry.setField((DBSAApplicationConst.ABSTRACT), "");
-	            	}
-	            	DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
-	            	DBSAApplication.fetcherResultPanel.setDigitalLibrary("CITESEER");
+	            	if(isFlagAutorun() == false)
+	            		DBSAApplication.fetcherResultPanel.setYear(Integer.parseInt(number));
+	            	else
+	            		temp.setYear(Integer.parseInt(number));
 	            	
-	            	DBSAApplication.fetcherResultPanel.getResultsJTable();
+	            	if(entry.getField(DBSAApplicationConst.ABSTRACT) == null){
+	            		if(isFlagAutorun() == false)
+	            			entry.setField((DBSAApplicationConst.ABSTRACT), "");
+	            		else
+	            			temp.setAbstractPub("");
+	            	}
+	            	if(isFlagAutorun() == false)
+	            		DBSAApplication.fetcherResultPanel.setAbstract(entry.getField(DBSAApplicationConst.ABSTRACT));
+	            	else
+	            		temp.setAbstractPub(entry.getField(DBSAApplicationConst.ABSTRACT));
+	            	
+	            	DBSAApplication.fetcherResultPanel.setDigitalLibrary("CITESEER");
+	            	if(isFlagAutorun() == false)
+	            		DBSAApplication.fetcherResultPanel.getResultsJTable();
+	            	else
+	            		newDBSAPublication.add(temp);
             	}
             	
             }
@@ -214,5 +291,74 @@ public class CiteSeerXFetcher {
         }
         return sb.toString();
     }
+	/*
+	 * Ham tim 1 chuoi trong file html dua vao noi dung the (Pattern). 
+	 * The nay (Pattern) duoc dinh nghia bang cach su dung Regular Expressions.
+	 * @return int
+	 */
+	private static int getNumberOfHits(String page, Pattern pattern) throws IOException {
+	        Matcher m = pattern.matcher(page);
+	        if (!m.find()) {
+	        	System.out.println("Unmatched!");
+	        } else {
+	            try {
+	            	String number = m.group(0);   
+	            	System.out.println("============so ra nay============="+number);
+	            	number = number.replaceAll("documents", "");
+	            	System.out.println("============so ra nay============="+number);
+	            	number = number.replaceAll(",", "");
+	            	System.out.println("============so ra nay============="+number);
+	            	number = number.replaceAll(" ", "");
+	            	
+	                return Integer.parseInt(number);
+	            } catch (NumberFormatException ex) {
+	                throw new IOException(Globals.lang("Could not parse number of hits"));
+	            } catch (IllegalStateException e) {
+	                throw new IOException(Globals.lang("Could not parse number of hits"));
+	            }
+	        }
+	        throw new IOException(Globals.lang("Could not parse number of hits"));
+	}
+	
+	// Method for autorun
+	
+	public static boolean isFlagAutorun() {
+		return flagAutorun;
+	}
+
+
+	public static void setFlagAutorun(boolean flagAutorun) {
+		CiteSeerXFetcher.flagAutorun = flagAutorun;
+	}
+
+
+	public static boolean isFlagReportDone() {
+		return flagReportDone;
+	}
+
+
+	public static void setFlagReportDone(boolean flagReportDone) {
+		CiteSeerXFetcher.flagReportDone = flagReportDone;
+	}
+
+
+	public static ArrayList<DBSAPublication> getNewDBSAPublication() {
+		return newDBSAPublication;
+	}
+
+
+	public static void setNewDBSAPublication(
+			ArrayList<DBSAPublication> newDBSAPublication) {
+		CiteSeerXFetcher.newDBSAPublication = newDBSAPublication;
+	}
+	public static int getNumberOfResult() {
+		return numberOfResult;
+	}
+
+
+	public static void setNumberOfResult(int numberOfResult) {
+		CiteSeerXFetcher.numberOfResult = numberOfResult;
+	}
+
 	
 }
