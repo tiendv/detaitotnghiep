@@ -161,8 +161,12 @@ public class DatabaseManagementPanel extends JPanel {
 		}
 		return selectAllPubJButton;
 	}
-
+	
+	private static boolean checkToDel = false;
 	private JButton getDeleteSubjectJButton() {
+		
+	
+		
 		if (deleteSubjectJButton == null) {
 			deleteSubjectJButton = new JButton();
 			deleteSubjectJButton.setEnabled(false);
@@ -171,6 +175,8 @@ public class DatabaseManagementPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
+					checkToDel = true;
 					// TODO Auto-generated method stub
 					for (int i = subjectJTable.getRowCount() - 1; i >= 0; i--) {
 						ArrayList<Subject> subjectList = new ArrayList<Subject>();
@@ -184,7 +190,15 @@ public class DatabaseManagementPanel extends JPanel {
 								
 								subjectModel.removeRow(i);
 							}else{
-								JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("can.not.delete.the.subject"));
+								subjectModel.setValueAt(false ,i, 3);
+								
+								if(checkToDel == true){
+									JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("can.not.delete.the.subject"));
+									checkToDel = false;
+								}
+								
+								
+								
 							}
 						}
 					}
