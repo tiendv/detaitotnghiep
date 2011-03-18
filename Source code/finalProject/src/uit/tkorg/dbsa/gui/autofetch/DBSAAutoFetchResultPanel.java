@@ -34,6 +34,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.cores.autofetch.DBSAAutoFetchResult;
+import uit.tkorg.dbsa.cores.autofetch.DBSAConfigAutoFetch;
 import uit.tkorg.dbsa.gui.fetcher.MyJTable;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 
@@ -53,11 +54,10 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	private int yLocation;
 	private JFrame dbsaJFrame;
 
-	private DefaultTableModel model;
+	private static DefaultTableModel model;
 	
 	public DBSAAutoFetchResultPanel() {
-		initComponents();
-		DBSAAutoFetchResult.insertToJTable(resultJTable, model);
+		initComponents();		
 	}
 
 	public DBSAAutoFetchResultPanel(JFrame mainJFrame) {
@@ -67,6 +67,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		yLocation = dbsaJFrame.getY() + (dbsaJFrame.getHeight() - height)/2;
 		
 		initComponents();
+		DBSAConfigAutoFetch.autoFetchResult();
 	}
 
 	public DBSAAutoFetchResultPanel(Frame parent, boolean modal) {
@@ -282,13 +283,15 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	
 	boolean checkRemovedFirst = false;
 	
-	private JTable getresultJTable() {
+	public JTable getresultJTable() {
 		if (resultJTable == null) {
 			
 			resultJTable = createResultJTable();
 			model.removeRow(0);
 		}else if(resultJTable != null){
 			
+			Object [] data = DBSAConfigAutoFetch.getDataObj();
+			model.insertRow(resultJTable.getRowCount(), data );
 			
 			if(resultJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
 				checkRemovedFirst =  true;				
@@ -316,7 +319,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 	 * Ham input data cho table
 	 * @return Object [][]
 	 */
-	public  Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher){
+	public Object [][] getTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher){
 		
 		Object [][] data = {addTableData(rowNumber, title, author, hyperLink, year, abstracts, publisher)};
 		
@@ -324,7 +327,7 @@ public class DBSAAutoFetchResultPanel extends JDialog {
 		
 	}
 	
-	public  Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher){
+	public Object [] addTableData(int rowNumber, String title, String author, URL hyperLink, int year, String abstracts, String publisher){
 		Object [] dataRow =  {rowNumber, title, author, hyperLink,year,abstracts, publisher};
 		
 		return dataRow;

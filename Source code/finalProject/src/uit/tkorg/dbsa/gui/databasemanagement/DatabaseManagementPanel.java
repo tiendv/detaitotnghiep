@@ -178,10 +178,14 @@ public class DatabaseManagementPanel extends JPanel {
 							Subject subject = new Subject();
 							subject.setId(Integer.parseInt(subjectModel.getValueAt(i, 1).toString()));
 							
-							subjectList.add(subject);
-							deleteSubject.deleteSubject(subject);
-							
-							subjectModel.removeRow(i);
+							if(subject.getId() > 43){
+								subjectList.add(subject);
+								deleteSubject.deleteSubject(subject);
+								
+								subjectModel.removeRow(i);
+							}else{
+								JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("can.not.delete.the.subject"));
+							}
 						}
 					}
 					for (int j = 0; j < subjectJTable.getRowCount(); j++) {
