@@ -416,12 +416,13 @@ public class FetcherPanel extends JPanel {
 								acmJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.acmdl"));
 								try {
 									ACMFetcher(acmQuery);
-									acmJProgressBar.setIndeterminate(false);
-									acmJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
+									
 									fetchFromACMCheckBox.setSelected(false);
 									//Check duplicate
 									if((citeseerDLCheckBox.isSelected() != true) && (ieeexploreDLCheckBox.isSelected() != true) )
 										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
+									acmJProgressBar.setIndeterminate(false);
+									acmJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									//showResultJButton.setEnabled(true);
 								} catch (IOException ex) {
@@ -452,12 +453,13 @@ public class FetcherPanel extends JPanel {
 									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.citeseerdl"));
 									CiteSeeXFetcher(citeseerQuery);	
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-									citeseerJProgressBar.setIndeterminate(false);
-									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
+																		
 									citeseerDLCheckBox.setSelected(false);
 									//check duplicate
 									if((ieeexploreDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
 										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
+									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
+									citeseerJProgressBar.setIndeterminate(false);
 									//showResultJButton.setEnabled(true);	
 								
 							}});
@@ -477,13 +479,13 @@ public class FetcherPanel extends JPanel {
 									ieeeploreJProgressBar.setStringPainted(true);
 									ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("fetching.from.ieeedl"));
 									try {
-										IEEExploreFetch(ieeeQuery);
-										ieeeploreJProgressBar.setIndeterminate(false);
-										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
+										IEEExploreFetch(ieeeQuery);																		
 										ieeexploreDLCheckBox.setSelected(false);
 										//check duplicate
 										if((citeseerDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
 											DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
+										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
+										ieeeploreJProgressBar.setIndeterminate(false);		
 										//showResultJButton.setEnabled(true);
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									} catch (IOException t) {
