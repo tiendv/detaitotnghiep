@@ -39,11 +39,13 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import uit.tkorg.dbsa.actions.database.LoadAuthor;
 import uit.tkorg.dbsa.actions.database.LoadSubject;
 import uit.tkorg.dbsa.actions.fetchers.IEEEXploreFetcherAction;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
+import uit.tkorg.dbsa.model.Author;
 import uit.tkorg.dbsa.model.Subject;
 
 
@@ -71,7 +73,7 @@ public class FetcherPanel extends JPanel {
 	private static JProgressBar citeseerJProgressBar;
 	private static JProgressBar ieeeploreJProgressBar;
 	private static JButton closeJButton;
-	private static JButton showResultJButton;
+	//private static JButton showResultJButton;
 	private static JButton fetcherJButton;
 	private static JPanel actionsJPanel;
 	private static JLabel fetcherStatusJLabel;
@@ -115,10 +117,15 @@ public class FetcherPanel extends JPanel {
 		
 	}
 
-	@SuppressWarnings("static-access")
 	private void initComponents() {
 		subjectList = LoadSubject.getSubject();
-		authorNameList = DBSAApplication.authorNameListClass.getAuthorNameList();
+		ArrayList<Author> authorList = LoadAuthor.getAuthor(100);
+		
+		if(authorList != null){
+			for(int i = 0; i < authorList.size(); i++){
+				authorNameList.add(authorList.get(i).getAuthor());
+			}
+		}
 		
 		setLayout(new GroupLayout());
 		add(getFetcherJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 0, 0)));
@@ -416,7 +423,7 @@ public class FetcherPanel extends JPanel {
 									if((citeseerDLCheckBox.isSelected() != true) && (ieeexploreDLCheckBox.isSelected() != true) )
 										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-									showResultJButton.setEnabled(true);
+									//showResultJButton.setEnabled(true);
 								} catch (IOException ex) {
 									// TODO Auto-generated catch block
 									ex.printStackTrace();
@@ -451,7 +458,7 @@ public class FetcherPanel extends JPanel {
 									//check duplicate
 									if((ieeexploreDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
 										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
-									showResultJButton.setEnabled(true);	
+									//showResultJButton.setEnabled(true);	
 								
 							}});
 						citeseerThread.start();	
@@ -477,7 +484,7 @@ public class FetcherPanel extends JPanel {
 										//check duplicate
 										if((citeseerDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
 											DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
-										showResultJButton.setEnabled(true);
+										//showResultJButton.setEnabled(true);
 										fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 									} catch (IOException t) {
 
@@ -513,40 +520,40 @@ public class FetcherPanel extends JPanel {
 		
 	
 	}
-	private JButton getShowResultJButton() {
-		if (showResultJButton == null) {
-			showResultJButton = new JButton();
-			showResultJButton.isDefaultButton();
-			showResultJButton.setEnabled(false);
-			showResultJButton.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					dbsaTabFrame.setSelectedIndex(1);
-				}
-				
-			});
-			
-			showResultJButton.addMouseListener(new MouseListener(){
-
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				}
-				public void mouseEntered(MouseEvent e) {
-					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.show.result"));
-				}
-				public void mouseExited(MouseEvent e) {
-					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
-				}
-				public void mousePressed(MouseEvent e) {
-				}
-				public void mouseReleased(MouseEvent e) {
-				}
-			});
-		}
-		return showResultJButton;
-	}
-	
+//	private JButton getShowResultJButton() {
+//		if (showResultJButton == null) {
+//			showResultJButton = new JButton();
+//			showResultJButton.isDefaultButton();
+//			showResultJButton.setEnabled(false);
+//			showResultJButton.addActionListener(new ActionListener(){
+//
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					dbsaTabFrame.setSelectedIndex(1);
+//				}
+//				
+//			});
+//			
+//			showResultJButton.addMouseListener(new MouseListener(){
+//
+//				@Override
+//				public void mouseClicked(MouseEvent e) {
+//				}
+//				public void mouseEntered(MouseEvent e) {
+//					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.show.result"));
+//				}
+//				public void mouseExited(MouseEvent e) {
+//					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+//				}
+//				public void mousePressed(MouseEvent e) {
+//				}
+//				public void mouseReleased(MouseEvent e) {
+//				}
+//			});
+//		}
+//		return showResultJButton;
+//	}
+//	
 	private void ACMFetcher(String keyword) throws IOException{
 		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
 	}
