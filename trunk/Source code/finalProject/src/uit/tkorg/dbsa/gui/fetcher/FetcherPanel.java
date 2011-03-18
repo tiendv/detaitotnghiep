@@ -349,8 +349,8 @@ public class FetcherPanel extends JPanel {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
 			actionsJPanel.setLayout(new GroupLayout());
-			actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(-1, 36, 12, 12)));
-			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(0, 35, 12, 12)));
+			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(-1, 36, 12, 12)));
+			//actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(0, 35, 12, 12)));
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(-1, 36, 12, 12)));
 		}
 		return actionsJPanel;
@@ -981,7 +981,7 @@ public class FetcherPanel extends JPanel {
 		citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("citeseer.digital.library"));
 		acmJProgressBar.setString(DBSAResourceBundle.res.getString("acm.digital.library"));
 		maxResultLabel.setText(DBSAResourceBundle.res.getString("maxresult"));
-		showResultJButton.setText(DBSAResourceBundle.res.getString("show.results"));
+		//showResultJButton.setText(DBSAResourceBundle.res.getString("show.results"));
 		chooseJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("choose.dls"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 				Font.BOLD, 12), new Color(51, 51, 51)));
 		fetcherJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("fetcher"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",

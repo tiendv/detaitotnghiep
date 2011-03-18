@@ -21,6 +21,7 @@ article.is.duplicated = Bài báo đã tồn tại trong cơ sở dữ liệu.\n
 bad.request = Bad request
 body = Nội dung
 bold = In đậm
+can.not.delete.the.subject = Bạn không có quyền xóa chủ đề của lĩnh vực khoa học máy tính.
 change.fetcher.pattern.title = THAY ĐỔI PATTERN THU THẬP
 change.fetcher.pattern = Thay đổi pattern thu thập
 check.database.connection = Kiểm tra kết nối cơ sở dữ liệu!

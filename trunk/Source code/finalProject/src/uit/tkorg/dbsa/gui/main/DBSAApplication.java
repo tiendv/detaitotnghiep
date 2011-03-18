@@ -103,6 +103,8 @@ public class DBSAApplication extends JPanel {
 	public static DBSAStatisticPanel statisticPanel = null;
 	public static DBSAStatisticPanel configAutoFetchPanel = null;
 	
+	public static DBSAAutoFetchResultPanel autoFetchResultPanel = null;
+	
 	private JFrame getDBSAJFrame(){
 	
 		if (dbsaJFrame == null) {
@@ -120,6 +122,7 @@ public class DBSAApplication extends JPanel {
 			fetcherPatternDialog = new FetcherPatternDialog();
 			databaseManagementPanel = new DatabaseManagementPanel(dbsaTabPanel);
 			insertArticleToDatabasePanel =  new InsertArticleToDatabasePanel();
+			autoFetchResultPanel = new DBSAAutoFetchResultPanel();
 			insertArticleFrame = new InsertSubjectFrame();
 			aboutDialog = new AboutDialog();
 			authorNameListClass = new AuthorsNameList();
@@ -589,12 +592,16 @@ public class DBSAApplication extends JPanel {
 		}
 		return aboutJMenuItem;
 	}
-		
-	public static void showResultDialog(){
-		DBSAAutoFetchResultPanel f = new DBSAAutoFetchResultPanel();
-		f.setVisible(true);
-	}
 	
+	/**
+	 * 
+	 */
+	 
+	public static void showResultDialog(){
+		autoFetchResultPanel = new DBSAAutoFetchResultPanel(dbsaJFrame);
+	
+	}
+
 	/**
 	 * 
 	 * return DBSATabPanel

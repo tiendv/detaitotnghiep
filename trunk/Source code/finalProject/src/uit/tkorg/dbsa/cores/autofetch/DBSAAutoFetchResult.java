@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import uit.tkorg.dbsa.gui.autofetch.DBSAAutoFetchResultPanel;
+import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.MyFileWriter;
@@ -26,54 +28,56 @@ public class DBSAAutoFetchResult {
 		
 	}
 	
-	public static void insertToJTable(JTable resultJTable, DefaultTableModel model){
-		ArrayList<DBSAPublication> resultList = DBSAConfigAutoFetch.autoFetchResult();
-		
-		if(resultList != null){
-			for(int i = 0; i < resultList.size(); i++){
-				if(resultList.get(i).getTitle() != null)
-					setPubTitle(resultList.get(i).getTitle());
-				else
-					setPubTitle("");
-				
-				if(resultList.get(i).getAuthors() != null)
-					setAuthor(resultList.get(i).getAuthors());
-				else
-					setAuthor("");
-				
-				if(resultList.get(i).getLinks() != null)
-					setLink(resultList.get(i).getLinks());
-				else
-					setLink("");
-				
-				String year;
-				if(resultList.get(i).getYear() != 0){
-					setYear(resultList.get(i).getYear());
-					year = getYear() + "";
-				}
-				else{
-					setYear(0);
-					year = "";
-				}
-				
-				if(resultList.get(i).getAbstractPub() != null)
-					setAbstract(resultList.get(i).getAbstractPub());
-				else
-					setAbstract("");
-				
-				if(resultList.get(i).getPublisher() != null)
-					setPublisher(resultList.get(i).getPublisher());
-				else
-					setPublisher("");
-								
-				Object [] data = {resultJTable.getRowCount() + 1, getPubTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher()};
-				model.insertRow(resultJTable.getRowCount(), data );
-				
-			}
-		}
-		
-	}
+	private static int countNumber = 0;
 	
+	public static Object[] getData(DBSAPublication result){
+		Object [] data = null;
+		
+		if(result != null){			
+			if(result.getTitle() != null)
+				setPubTitle(result.getTitle());
+			else
+				setPubTitle("");
+			
+			if(result.getAuthors() != null)
+				setAuthor(result.getAuthors());
+			else
+				setAuthor("");
+			
+			if(result.getLinks() != null)
+				setLink(result.getLinks());
+			else
+				setLink("");
+			
+			String year;
+			if(result.getYear() != 0){
+				setYear(result.getYear());
+				year = getYear() + "";
+			}
+			else{
+				setYear(0);
+				year = "";
+			}
+			
+			if(result.getAbstractPub() != null)
+				setAbstract(result.getAbstractPub());
+			else
+				setAbstract("");
+			
+			if(result.getPublisher() != null)
+				setPublisher(result.getPublisher());
+			else
+				setPublisher("");
+				
+			countNumber++;
+			
+			Object [] data_temp = {countNumber, getPubTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher()};
+			data = data_temp;
+		}	
+		
+		return data;
+	}
+
 	public static void saveDataToFile(JTable table){
 		
 		if(table != null){

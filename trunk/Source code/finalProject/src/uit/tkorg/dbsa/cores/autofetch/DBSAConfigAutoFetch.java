@@ -7,6 +7,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import uit.tkorg.dbsa.actions.autorun.ACMFetcherAutoRun;
+import uit.tkorg.dbsa.actions.autorun.CiteSeerFetcherAutoRun;
 import uit.tkorg.dbsa.actions.autorun.IEEEXploreFetcherAutoRun;
 import uit.tkorg.dbsa.actions.database.LoadAuthor;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
@@ -19,6 +20,8 @@ import uit.tkorg.dbsa.properties.files.MyFileWriter;
 
 public class DBSAConfigAutoFetch {
 	private static ArrayList<String> parameterItems;
+	private static Object[] dataObj;
+	
 	public DBSAConfigAutoFetch() {
 		
 	}
@@ -448,9 +451,15 @@ public class DBSAConfigAutoFetch {
 	/***
 	 * 
 	 */
-	public static ArrayList<DBSAPublication> autoFetchResult(){
+	//private static ArrayList<DBSAPublication> resultList;
+	
+	private static boolean _acm = false;
+	private static boolean _citeseer = false;
+	private static boolean _ieee = false;
+	public static void autoFetchResult(){
 		
-		final ArrayList<DBSAPublication> resultList = new ArrayList<DBSAPublication>();
+		System.out.println( getAcmDLCheckboxStatus() + " " + getCiteseerDLCheckboxStatus() + getIeeeDLCheckboxStatus() + "");
+		//resultList = new ArrayList<DBSAPublication>();
 		
 		if(getAcmDLCheckboxStatus() == true){
 			Thread acmThread = new Thread( new Runnable() {
@@ -461,14 +470,24 @@ public class DBSAConfigAutoFetch {
 					temp = ACMFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
 					if(temp!= null) {
 						for(int i = 0; i < temp.size(); i++){
-							resultList.add(temp.get(i));
+							//resultList.add(temp.get(i));
+							setDataObj(DBSAAutoFetchResult.getData(temp.get(i)));							
+							DBSAApplication.autoFetchResultPanel.getresultJTable();
+						}
+						
+						_acm = true;
+						if(_acm == true && _citeseer == true && _ieee == true){							
+							DBSAApplication.autoFetchResultPanel.setVisible(true);
 						}
 					}
 					
 				}
 			});
 			acmThread.start();
+		}else{
+			_acm = true;
 		}
+			
 		
 		
 		if(getCiteseerDLCheckboxStatus() == true){
@@ -478,11 +497,18 @@ public class DBSAConfigAutoFetch {
 				public void run() {
 					// TODO Auto-generated method stub
 					ArrayList<DBSAPublication> temp = new ArrayList<DBSAPublication>();
-					temp = IEEEXploreFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
+					temp = CiteSeerFetcherAutoRun.getNewDBSAPubicationNew(getKeywordList());
 					
 					if(temp != null){
 						for(int i = 0; i < temp.size(); i++){
-							resultList.add(temp.get(i));
+							//resultList.add(temp.get(i));
+							setDataObj(DBSAAutoFetchResult.getData(temp.get(i)));							
+							DBSAApplication.autoFetchResultPanel.getresultJTable();
+						}
+											
+						_citeseer = true;
+						if(_acm == true && _citeseer == true && _ieee == true){							
+							DBSAApplication.autoFetchResultPanel.setVisible(true);
 						}
 					}
 					
@@ -490,6 +516,8 @@ public class DBSAConfigAutoFetch {
 			});
 			citeSeerThread.start();
 			
+		}else{
+			_citeseer = true;
 		}
 		
 		if(getIeeeDLCheckboxStatus() == true){
@@ -503,16 +531,32 @@ public class DBSAConfigAutoFetch {
 					
 					if(temp != null){
 						for(int i = 0; i < temp.size(); i++){
-							resultList.add(temp.get(i));
+							//resultList.add(temp.get(i));
+							setDataObj(DBSAAutoFetchResult.getData(temp.get(i)));
+							
+							DBSAApplication.autoFetchResultPanel.getresultJTable();
+							
+						}
+						
+						
+						_ieee = true;
+						if(_acm == true && _citeseer == true && _ieee == true){							
+							DBSAApplication.autoFetchResultPanel.setVisible(true);
 						}
 					}
 					
 				}
 			});
 			ieeeXploreThread.start();
+			
+		}else{
+			_ieee = true;
 		}
 		
-		return resultList;
+	}
+	
+	public static void getData(){
+		
 	}
 	
 	//lay danh sach tu khoa
@@ -529,6 +573,14 @@ public class DBSAConfigAutoFetch {
 		ArrayList<String> parameters = FileLoadder.loadTextFile(DBSAApplicationConst.AUTO_FETCHER_PARAMETERS_LIST_LINK);
 		
 		return parameters;
+	}
+	
+	public static void setDataObj(Object [] _dataObj){
+		dataObj = _dataObj;
+	}
+	
+	public static Object [] getDataObj(){
+		return dataObj;
 	}
 
 }
