@@ -3,6 +3,7 @@ package uit.tkorg.dbsa.gui.main;
 /**
  *
  * @author cuongnp
+ * modifier : tiendv
  */
 
 import java.awt.BorderLayout;
@@ -11,6 +12,7 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -567,6 +569,26 @@ public class DBSAApplication extends JPanel {
 	private JMenuItem getHelpJMenuItem(){
 		if(helpJMenuItem == null){
 			helpJMenuItem = new JMenuItem();
+			helpJMenuItem.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					 	File file=new File(".");
+			            String path= "src\\uit\\tkorg\\dbsa\\properties\\files\\";
+			           // path=path.substring(0,path.length()-1);
+			           // System.out.println(path);
+			            path=path+"help.chm";
+			           // JOptionPane.showMessageDialog(null, path);
+			            try {
+							Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+path);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+				}
+			});
 		}
 		return helpJMenuItem;
 	}
