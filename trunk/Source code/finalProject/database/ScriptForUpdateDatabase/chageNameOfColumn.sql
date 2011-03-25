@@ -1,0 +1,1 @@
+alter table dblp_author_ref_new change id pub_id int(8) unsigned;
