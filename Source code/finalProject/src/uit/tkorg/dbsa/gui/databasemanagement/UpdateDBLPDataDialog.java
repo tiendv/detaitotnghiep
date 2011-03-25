@@ -5,14 +5,22 @@ import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
+import java.awt.HeadlessException;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -29,6 +37,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -45,6 +54,8 @@ import org.dyno.visual.swing.layouts.Trailing;
 import uit.tkorg.dbsa.actions.database.CheckExist;
 import uit.tkorg.dbsa.actions.database.DeletePublicaitonInDBSA;
 import uit.tkorg.dbsa.actions.database.LoadPublicationsFromDBSA;
+import uit.tkorg.dbsa.core.databasemanagement.ScriptRunner;
+import uit.tkorg.dbsa.core.databasemanagement.SQLFileFilter;
 import uit.tkorg.dbsa.gui.fetcher.MyJTable;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
@@ -645,6 +656,54 @@ public class UpdateDBLPDataDialog extends JDialog {
 	private JButton getReplaceJButton() {
 		if (replaceJButton == null) {
 			replaceJButton = new JButton();
+			replaceJButton.setEnabled(false);
+			replaceJButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {					
+				Connection temp = uit.tkorg.dbsa.core.databasemanagement.DatabaseConection.getDatabaseConection();
+				try {
+					if (!temp.isClosed())
+					{
+						String path = localDBLPFileJTextField.getText();
+						if (path == null) {
+							JOptionPane.showMessageDialog(null,"Don't have Script to run !");
+							replaceJButton.setEnabled(false);
+						}
+						else {
+								
+								int reply = JOptionPane.showConfirmDialog(null, "It can delete your data ! Are you sure, want to run it ?", title, JOptionPane.YES_NO_OPTION);
+								if(reply == JOptionPane.NO_OPTION)
+								{
+									replaceJButton.setEnabled(false);
+								}
+								else {
+									ScriptRunner runner = new ScriptRunner(temp, false, false);
+									Reader test = null;
+									try {
+										test = new BufferedReader(new FileReader(path));
+										runner.runScript(test);
+										JOptionPane.showMessageDialog(null,"Done");
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (SQLException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+							}			
+					}
+				}
+				}catch (HeadlessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		});
 		}
 		return replaceJButton;
 	}
@@ -681,6 +740,7 @@ public class UpdateDBLPDataDialog extends JDialog {
 					
 					if(file != null){
 						localDBLPFileJTextField.setText(file.getPath());
+						replaceJButton.setEnabled(true);
 						setStatusText(DBSAResourceBundle.res.getString("please.press.replace.button"));
 					}
 				}
@@ -691,6 +751,8 @@ public class UpdateDBLPDataDialog extends JDialog {
 	}
 
 	private File getDblpChooserFile(){
+		dblpChooserFile.addChoosableFileFilter(new SQLFileFilter());
+		dblpChooserFile.setAcceptAllFileFilterUsed(false);
 		int returnVal = dblpChooserFile.showOpenDialog(UpdateDBLPDataDialog.this);
 		File file = null;
         if (returnVal == JFileChooser.APPROVE_OPTION) {
