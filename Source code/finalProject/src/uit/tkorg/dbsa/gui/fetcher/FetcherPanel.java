@@ -394,9 +394,7 @@ public class FetcherPanel extends JPanel {
 					//boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
 					if(!DBSAApplication.isInternetReachable()){
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.internet.connection"));
-					}
-					
-					if(keywordJComboBox.getSelectedItem().toString().replaceAll(" ", "").equals("")){
+					}else if(keywordJComboBox.getSelectedItem().toString().replaceAll(" ", "").equals("")){
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("message.request.input.keyword"));
 					}
 					else if(keywordJComboBox.getSelectedItem().toString() != "" && DBSAApplication.isInternetReachable()){

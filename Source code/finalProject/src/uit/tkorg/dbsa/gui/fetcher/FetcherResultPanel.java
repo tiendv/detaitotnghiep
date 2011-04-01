@@ -1050,6 +1050,7 @@ public class FetcherResultPanel extends JPanel {
 		// TODO Auto-generated method stub
 		//int check = 0;
 				
+		if(resultsJTable != null)
 		for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
 			
 			if(resultsJTable.getModel().getValueAt(i, 7) != null
