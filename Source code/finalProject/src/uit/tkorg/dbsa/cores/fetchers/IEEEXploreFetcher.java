@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
@@ -493,16 +495,22 @@ public class IEEEXploreFetcher {
 				resultDBSAPublicaiton.setTitle(entry.getField(DBSAApplicationConst.TITLE));//them
 			
 			if(entry.getField(DBSAApplicationConst.AUTHOR) == null){
-				if(isFlagAutorun() == false)
-				entry.setField(DBSAApplicationConst.AUTHOR, "");
+				if(isFlagAutorun() == false){
+					
+					entry.setField(DBSAApplicationConst.AUTHOR.replaceAll("\\<.*?>","") , "");
+				}
 				else
 				resultDBSAPublicaiton.setAuthors("");//them
 				
 			}
-			if(isFlagAutorun() == false)
-				DBSAApplication.fetcherResultPanel.setAuthor(entry.getField(DBSAApplicationConst.AUTHOR));
+			
+			if(isFlagAutorun() == false){
+				String _author = entry.getField(DBSAApplicationConst.AUTHOR).replaceAll("span class='snippet'>","");
+			
+				DBSAApplication.fetcherResultPanel.setAuthor( _author);
+			}
 			else
-				resultDBSAPublicaiton.setAuthors(entry.getField(DBSAApplicationConst.AUTHOR));//them
+				resultDBSAPublicaiton.setAuthors(entry.getField(DBSAApplicationConst.AUTHOR).replaceAll("\\<.*?>",""));//them
 			
 			if(entry.getField(DBSAApplicationConst.DOI) == null){
 				if(isFlagAutorun() == false)
