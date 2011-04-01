@@ -52,7 +52,7 @@ import uit.tkorg.dbsa.properties.files.DBSAApplicationConst;
 import uit.tkorg.dbsa.properties.files.DBSAModulesProperties;
 
 public class DBSAApplication extends JPanel {
-
+  
 	/**
 	 * 
 	 */
@@ -115,6 +115,8 @@ public class DBSAApplication extends JPanel {
 			dbsaJFrame.setJMenuBar(getJMenuBar());
 			//dbsaJFrame.setSize(640, 480);
 			dbsaJFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			dbsaJFrame.setResizable(false);
+			
 			dbsaJFrame.setBackground(Color.white);
 			//ComponentUtilities.setMiniSize(dbsaJFrame);
 			dbsaJFrame.setTitle(DBSAResourceBundle.res.getString("application.name"));
