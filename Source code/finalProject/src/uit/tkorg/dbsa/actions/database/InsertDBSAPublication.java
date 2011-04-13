@@ -27,7 +27,7 @@ public class InsertDBSAPublication {
 			
 		  SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 		  session = sessionFactory.openSession();
-		  for(int i = 0; i< pub.size();i++)
+		  for(int i = 0; i < pub.size(); i++)
 		  {
 			  Transaction tx = session.beginTransaction();
 			  session.save(pub.get(i));

@@ -355,10 +355,11 @@ public class FetcherPanel extends JPanel {
 	private JPanel getActionsJPanel() {
 		if (actionsJPanel == null) {
 			actionsJPanel = new JPanel();
+			actionsJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("actions"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			actionsJPanel.setLayout(new GroupLayout());
-			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(138, 241, 271), new Leading(-1, 36, 12, 12)));
-			//actionsJPanel.add(getShowResultJButton(), new Constraints(new Trailing(265, 107, 12, 12), new Leading(0, 35, 12, 12)));
 			actionsJPanel.add(getCloseJButton(), new Constraints(new Trailing(12, 108, 383, 383), new Leading(-1, 36, 12, 12)));
+			actionsJPanel.add(getFetcherJButton(), new Constraints(new Trailing(138, 113, 10, 10), new Leading(-1, 36, 12, 12)));
 		}
 		return actionsJPanel;
 	}
@@ -391,7 +392,7 @@ public class FetcherPanel extends JPanel {
 					fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					
 					
-					//boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
+					boolean checkInternetConnecttion = DBSAApplication.isInternetReachable();
 					if(!DBSAApplication.isInternetReachable()){
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("check.internet.connection"));
 					}else if(keywordJComboBox.getSelectedItem().toString().replaceAll(" ", "").equals("")){
@@ -418,7 +419,7 @@ public class FetcherPanel extends JPanel {
 									fetchFromACMCheckBox.setSelected(false);
 									//Check duplicate
 									if((citeseerDLCheckBox.isSelected() != true) && (ieeexploreDLCheckBox.isSelected() != true) )
-										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
+										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated_2();
 									acmJProgressBar.setIndeterminate(false);
 									acmJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 									fetcherJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -455,7 +456,7 @@ public class FetcherPanel extends JPanel {
 									citeseerDLCheckBox.setSelected(false);
 									//check duplicate
 									if((ieeexploreDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
-										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
+										DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated_2();
 									citeseerJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 									citeseerJProgressBar.setIndeterminate(false);
 									//showResultJButton.setEnabled(true);	
@@ -481,7 +482,7 @@ public class FetcherPanel extends JPanel {
 										ieeexploreDLCheckBox.setSelected(false);
 										//check duplicate
 										if((citeseerDLCheckBox.isSelected() != true) && (fetchFromACMCheckBox.isSelected() != true))
-											DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated();
+											DBSAApplication.fetcherResultPanel.checkArticleIsDuplicated_2();
 										ieeeploreJProgressBar.setString(DBSAResourceBundle.res.getString("done"));
 										ieeeploreJProgressBar.setIndeterminate(false);		
 										//showResultJButton.setEnabled(true);
@@ -514,46 +515,7 @@ public class FetcherPanel extends JPanel {
 		}
 		return fetcherJButton;
 	}
-		
-	public void fetcherFunction(final JButton fetchJButton){
 
-		
-	
-	}
-//	private JButton getShowResultJButton() {
-//		if (showResultJButton == null) {
-//			showResultJButton = new JButton();
-//			showResultJButton.isDefaultButton();
-//			showResultJButton.setEnabled(false);
-//			showResultJButton.addActionListener(new ActionListener(){
-//
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					dbsaTabFrame.setSelectedIndex(1);
-//				}
-//				
-//			});
-//			
-//			showResultJButton.addMouseListener(new MouseListener(){
-//
-//				@Override
-//				public void mouseClicked(MouseEvent e) {
-//				}
-//				public void mouseEntered(MouseEvent e) {
-//					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.show.result"));
-//				}
-//				public void mouseExited(MouseEvent e) {
-//					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
-//				}
-//				public void mousePressed(MouseEvent e) {
-//				}
-//				public void mouseReleased(MouseEvent e) {
-//				}
-//			});
-//		}
-//		return showResultJButton;
-//	}
-//	
 	private void ACMFetcher(String keyword) throws IOException{
 		uit.tkorg.dbsa.actions.fetchers.ACMFetcherAction.Fetcher(keyword);
 	}
@@ -938,33 +900,33 @@ public class FetcherPanel extends JPanel {
 	 * 
 	 * 
 	 */
-	public static int getAcmResultNumber(){
+	public int getAcmResultNumber(){
 		return acmResultNumber;
 	}
 	
-	public static void setAcmResultNumber(int resultNumber){
+	public void setAcmResultNumber(int resultNumber){
 		acmResultNumber = resultNumber;
 	}
 	
-	public static int getIeeeResultNumber(){
+	public int getIeeeResultNumber(){
 		return ieeeResultNumber;
 	}
 	
-	public static void setIeeeResultNumber(int resultNumber){
+	public void setIeeeResultNumber(int resultNumber){
 		ieeeResultNumber = resultNumber;
 	}
 
 	/**
 	 * @param citeResultNumber the citeResultNumber to set
 	 */
-	public static void setCiteResultNumber(int citeResultNumber) {
+	public void setCiteResultNumber(int citeResultNumber) {
 		FetcherPanel.citeResultNumber = citeResultNumber;
 	}
 
 	/**
 	 * @return the citeResultNumber
 	 */
-	public static int getCiteResultNumber() {
+	public int getCiteResultNumber() {
 		return citeResultNumber;
 	}
 	

@@ -91,10 +91,9 @@ public class CiteSeerXFetcher {
 	}
 	
 	static int atomStart = 0;	
-	static int maxResult = FetcherPanel.getCiteResultNumber();
 	int start = 0;
 	public static boolean processQuery(String keyword, int startNumber){
-		
+		int maxResult = DBSAApplication.fetcherPanel.getCiteResultNumber();
 		shouldContinue = true;
 		
 		//replace all white-space to '+'
@@ -253,7 +252,7 @@ public class CiteSeerXFetcher {
             	
             }
             
-            if(startNumber%100 == 0 && startNumber <= FetcherPanel.getCiteResultNumber() && shouldContinue == true){
+            if(startNumber%100 == 0 && startNumber <= DBSAApplication.fetcherPanel.getCiteResultNumber() && shouldContinue == true){
             	maxResult -= 100;
             	resultNumber += 10;
             	

@@ -1,6 +1,6 @@
 ACMStartUrl###http://portal.acm.org/results.cfm?query=%%%The first part of the link connect to ACM digital library. After "query=" string is keyword, that is inputed by user. 
 ACMSearchUrlPart###&dl=ACM&start=%%%This pattern 
-ACMEndUrl###&coll=Portal&short=0%%%
+ACMEndUrl###&coll=Portal&short=0%%%test 2222
 ACMStartGetBibtex###http://portal.acm.org/exportformats.cfm?id=%%%The first part of the link to get bibtex file base on bibtex id.
 ACMEndGetBibtex###&expformat=bibtex%%%The last part of the link to get bibtex file. 
 ACMStartGetAbstract###http://portal.acm.org/tab_abstract.cfm?id=%%%The first part of the link to get abstract part in the article base on article ID.

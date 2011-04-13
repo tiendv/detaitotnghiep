@@ -113,7 +113,7 @@ public class ACMFetcher {
 				//System.out.println("entryNumber " + entryNumber);
 			}
 			if(isFlagAutorun()==false) {
-				int fetcherNumber = FetcherPanel.getAcmResultNumber();
+				int fetcherNumber = DBSAApplication.fetcherPanel.getAcmResultNumber();
 				if(entryNumber >= fetcherNumber){
 	        		//System.out.println("fetcherNumber " + fetcherNumber);
 	        		shouldContinue = false;
@@ -260,7 +260,7 @@ public class ACMFetcher {
         int maxNumber = 0;
         if(isFlagAutorun() == false) {
         	
-           maxNumber = FetcherPanel.getAcmResultNumber();
+           maxNumber = DBSAApplication.fetcherPanel.getAcmResultNumber();
         }
         else
            maxNumber = numberOfResult;
@@ -360,7 +360,7 @@ public class ACMFetcher {
 				if(bitex.length() > 90){
 					entry = BibtexParser.singleFromString(bitex);
 				}else{
-					FetcherPanel.setAcmResultNumber(FetcherPanel.getAcmResultNumber() - 1);
+					DBSAApplication.fetcherPanel.setAcmResultNumber(DBSAApplication.fetcherPanel.getAcmResultNumber() - 1);
 				}
 				
 			} catch (InterruptedException e) {
