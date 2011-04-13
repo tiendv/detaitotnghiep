@@ -856,7 +856,7 @@ public class FetcherResultPanel extends JPanel {
 		for(int i = 0; i < numberArray.size(); i++)
 		{				
 			duplicationArtilce = true;
-			
+			model.setValueAt(true, numberArray.get(i), 8);
 			num_DupInDBLP ++;
 		}
 		getFetcherInfo();

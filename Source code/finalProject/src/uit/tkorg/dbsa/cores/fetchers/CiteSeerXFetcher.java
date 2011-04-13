@@ -92,8 +92,11 @@ public class CiteSeerXFetcher {
 	
 	static int atomStart = 0;	
 	int start = 0;
+	
+	static int count = 0; 
+	
 	public static boolean processQuery(String keyword, int startNumber){
-		int maxResult = DBSAApplication.fetcherPanel.getCiteResultNumber();
+		int maxResult = DBSAApplication.fetcherPanel.getCiteResultNumber() - count*100;
 		shouldContinue = true;
 		
 		//replace all white-space to '+'
@@ -114,11 +117,10 @@ public class CiteSeerXFetcher {
 				e.printStackTrace();
 			}
 			
-		}
+		}			
 		
 		String queryString = baseURL + keyword + feedAction + feedAtom + "&sort=rel&start=" + atomStart;
 		ArrayList<BibtexEntry> entries = new ArrayList<BibtexEntry>();		
-		//System.out.println(queryString);
 		
 		try {
 			
@@ -147,8 +149,7 @@ public class CiteSeerXFetcher {
 	    			
 	    			pages = getResults(url1);
 	    			
-            	}else
-            	if(startNumber > maxResult){
+            	}else if(startNumber > maxResult){
             		shouldContinue = false;
             		setFlagReportDone(true);
             		break;
@@ -248,14 +249,13 @@ public class CiteSeerXFetcher {
 	            		DBSAApplication.fetcherResultPanel.getResultsJTable();
 	            	else
 	            		newDBSAPublication.add(temp);
-            	}
-            	
+            	}            	
             }
             
             if(startNumber%100 == 0 && startNumber <= DBSAApplication.fetcherPanel.getCiteResultNumber() && shouldContinue == true){
-            	maxResult -= 100;
+            	maxResult -= 100;            	
             	resultNumber += 10;
-            	
+            	count ++;
         		processQuery(keyword, 0);        		
         	}
             
