@@ -213,7 +213,7 @@ public class IEEEXploreFetcher {
         
         if (isFlagAutorun()==false)
         {
-        	int fetcherNumber = FetcherPanel.getIeeeResultNumber() + firstEntryNumber;
+        	int fetcherNumber = DBSAApplication.fetcherPanel.getIeeeResultNumber() + firstEntryNumber;
         
         //	int entryNumber = firstEntryNumber;
 

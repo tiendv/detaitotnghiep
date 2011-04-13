@@ -1,6 +1,7 @@
 package uit.tkorg.dbsa.gui.fetcher;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -47,7 +48,6 @@ import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
-import uit.tkorg.dbsa.gui.main.DBSATabPanel;
 import uit.tkorg.dbsa.model.DBSAPublication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -98,7 +98,7 @@ public class FetcherResultPanel extends JPanel {
 	
 	private static ArrayList<DBSAPublication> dbsaPublicationCheckList = new ArrayList<DBSAPublication>();
 	
-	private static ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
+//	private static ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
 	
 	private static ArrayList<Integer> numberArray = new ArrayList<Integer>();
 	private static int duplicateNumber = 0;
@@ -124,7 +124,7 @@ public class FetcherResultPanel extends JPanel {
 	
 	private JTabbedPane dbsaTabFrame = null;
 	
-	public FetcherResultPanel(DBSATabPanel dbsa) {
+	public FetcherResultPanel(JTabbedPane dbsa) {
 		initComponents();
 		dbsaTabFrame = dbsa;
 		
@@ -144,6 +144,31 @@ public class FetcherResultPanel extends JPanel {
 		updateTextsOfComponents();
 	}
 
+	private JButton getCheckDuplicateJButton() {
+		if (checkDuplicateJButton == null) {
+			checkDuplicateJButton = new JButton();
+			checkDuplicateJButton.setText(DBSAResourceBundle.res.getString("check.duplicate"));
+			checkDuplicateJButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Thread checkDuplicateThread = new Thread (new Runnable(){
+						@Override
+						public void run() {
+							checkDuplicateJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+							checkArticleIsDuplicated();
+							
+						}});
+					checkDuplicateThread.start();	
+					checkDuplicateThread.interrupt();
+					
+				}
+				
+			});
+		}
+		return checkDuplicateJButton;
+	}
+
 	private JButton getClearSelectedJButton() {
 		if (clearSelectedJButton == null) {
 			clearSelectedJButton = new JButton();
@@ -151,9 +176,11 @@ public class FetcherResultPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
-					for(int i = 0; i < resultsJTable.getColumnCount(); i++){
-						model.setValueAt(false, i, 7);
+					if(resultsJTable.getRowCount() > 0){						
+						for(int i = 0; i < resultsJTable.getRowCount(); i++){							
+							resultsJTable.getModel().setValueAt(false, i, 7);
+						}
+					}else{			
 					}
 					
 					deleteJButton.setEnabled(false);
@@ -489,10 +516,6 @@ public class FetcherResultPanel extends JPanel {
 		}
 		return authorsJLabel;
 	}
-
-	//public void setDefaultTableModel(DefaultTableModel value){
-	//	model = value;
-	//}
 	
 	public DefaultTableModel getDefaultTableModel(){
 		return model;
@@ -586,6 +609,7 @@ public class FetcherResultPanel extends JPanel {
 			
 			for(int i = 0; i < getRowNumber(); i++){				
 				if((i + 1) == getRowNumber()){
+					
 					String year;
 					if(getYear() == 0){
 						year = "";
@@ -593,8 +617,10 @@ public class FetcherResultPanel extends JPanel {
 						year = getYear() + "";
 					}
 					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getDigitalLibrary()};
-					model.insertRow(resultsJTable.getRowCount(), data );
-				
+					model.insertRow(resultsJTable.getRowCount(), data );				
+					
+					System.out.println(" row number 2->" + model.getRowCount());
+					
 					DBSAPublication dbsa = new DBSAPublication();
 					dbsa.setId(resultsJTable.getRowCount() + 1);
 					dbsa.setTitle(getTitle());
@@ -612,12 +638,6 @@ public class FetcherResultPanel extends JPanel {
 				}				
 			}	
 			
-			if(resultsJTable.getModel().getValueAt(0, 2).toString().replaceAll(" ", "").equals("")){
-				checkRemovedFirst =  true;
-				
-				model.removeRow(0);
-							
-			}		
 		}
 		
 		resultsJTable.addMouseListener(new MouseListener(){
@@ -626,6 +646,8 @@ public class FetcherResultPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 			
 				int n  = resultsJTable.getSelectedRow();
+				
+				System.out.println( "selected row " + resultsJTable.getSelectedRow() );
 					
 				titleJTextArea.setText(model.getValueAt(n, 1).toString());
 				authorsJTextArea.setText(model.getValueAt(n, 2).toString());				
@@ -639,6 +661,8 @@ public class FetcherResultPanel extends JPanel {
 				
 				
 				for(int i = 0; i < resultsJTable.getRowCount();i++){
+					
+					System.out.println("row number 3-->" +  resultsJTable.getRowCount());
 					if(model.getValueAt(i, 7) != null
 							&& model.getValueAt(i, 7).toString().equals("true")){
 						checkEnable++;
@@ -751,9 +775,9 @@ public class FetcherResultPanel extends JPanel {
 			ieeeDupInDatabase = 0;
 		
 		DBSAApplication.statisticPanel.setParameter(DBSAResourceBundle.res.getString("statistic.the.number.result.duplicate.in.dblp.data"));
-		DBSAApplication.statisticPanel.setAcmDls(acmDupInDblp + DBSAResourceBundle.res.getString("statistic.make.up") + acmDupInDatabase + "%");
-		DBSAApplication.statisticPanel.setCiteseerDls(citeseerDupInDblp + DBSAResourceBundle.res.getString("statistic.make.up") + citeseerDupInDatabase + "%");
-		DBSAApplication.statisticPanel.setIeeeDls(ieeeDupInDblp + DBSAResourceBundle.res.getString("statistic.make.up") + ieeeDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setAcmDls(acmDupInDblp + " " + DBSAResourceBundle.res.getString("statistic.make.up") + acmDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerDupInDblp + " " + DBSAResourceBundle.res.getString("statistic.make.up") + citeseerDupInDatabase + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeDupInDblp  + " " + DBSAResourceBundle.res.getString("statistic.make.up") + ieeeDupInDatabase + "%");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		//thong ke so ket qua tim duoc truoc nam 2005		
@@ -778,9 +802,9 @@ public class FetcherResultPanel extends JPanel {
 		
 		
 		DBSAApplication.statisticPanel.setParameter(DBSAResourceBundle.res.getString("statistic.the.number.result.before.2005"));
-		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + DBSAResourceBundle.res.getString("statistic.make.up") + acmBefore2005 + "%");
-		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + DBSAResourceBundle.res.getString("statistic.make.up") + citeseerBefore2005 + "%");
-		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + DBSAResourceBundle.res.getString("statistic.make.up") + ieeeBefore2005 + "%");
+		DBSAApplication.statisticPanel.setAcmDls(acmNumber_Before2005 + " " + DBSAResourceBundle.res.getString("statistic.make.up") + acmBefore2005 + "%");
+		DBSAApplication.statisticPanel.setCiteseerDls(citeseerNumber_Before2005 + " " + DBSAResourceBundle.res.getString("statistic.make.up") + citeseerBefore2005 + "%");
+		DBSAApplication.statisticPanel.setIeeeDls(ieeeNumber_Before2005 + " " + DBSAResourceBundle.res.getString("statistic.make.up") + ieeeBefore2005 + "%");
 		DBSAApplication.statisticPanel.getstatisticJTable();
 		
 		System.out.println("TOtal-"+ num_DupInDBLP + " ACM-" + acmNumberResult + "-" + acmDupInDblp + 
@@ -792,7 +816,7 @@ public class FetcherResultPanel extends JPanel {
 	 */
 	
 	@SuppressWarnings({ "unchecked", "static-access" })
-	public static boolean checkArticleIsDuplicated(){
+	public boolean checkArticleIsDuplicated(){
 	
 		num_DupInDBLP = 0;
 				
@@ -802,16 +826,41 @@ public class FetcherResultPanel extends JPanel {
 		duplicateNumber = numberArray.size();
 		
 		duplicationArtilce = false;
+		if(numberArray.size() > 0){
+			for(int i = 0; i < numberArray.size(); i++)
+			{	
+				model.setValueAt(true, numberArray.get(i), 8);
+				resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
+				duplicationArtilce = true;
+				
+				num_DupInDBLP ++;
+			}
+		}
+		getFetcherInfo();
+		//System.out.println(num_DupInDBLP);
+		checkDuplicateJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		DBSAApplication.statisticPanel.updateStatistic(num_Total);
+		return duplicationArtilce;
+	}
+	
+	public static boolean checkArticleIsDuplicated_2(){
+		
+		num_DupInDBLP = 0;
+				
+		CheckExist check = new CheckExist();
+		
+		numberArray = (ArrayList<Integer>) check.CheckTitleSignaturePublications(dbsaPublicationCheckList).clone();
+		duplicateNumber = numberArray.size();
+		
+		duplicationArtilce = false;
 		for(int i = 0; i < numberArray.size(); i++)
-		{	
-			model.setValueAt(true, numberArray.get(i), 8);
-			resultsJTable.addRowToPaint(numberArray.get(i), Color.red);
+		{				
 			duplicationArtilce = true;
 			
 			num_DupInDBLP ++;
 		}
 		getFetcherInfo();
-		System.out.println(num_DupInDBLP);
+		//System.out.println(num_DupInDBLP);
 		
 		DBSAApplication.statisticPanel.updateStatistic(num_Total);
 		return duplicationArtilce;
@@ -870,6 +919,7 @@ public class FetcherResultPanel extends JPanel {
 	}
 
 	boolean abc = false;
+	private JButton checkDuplicateJButton;
 	
 	
 	private JButton getSaveJButton() {
@@ -955,57 +1005,113 @@ public class FetcherResultPanel extends JPanel {
 		return saveJButton;
 	}
 	
-	@SuppressWarnings("static-access")
 	public boolean insertToDatabase(){
 		boolean checkInsert = false;
 		try{
-			
-			for(int j = 0; j < resultsJTable.getRowCount(); j++){
-				if(resultsJTable.getModel().getValueAt(j, 7) != null
-						&& resultsJTable.getModel().getValueAt(j, 7).toString().equals("true")){
-					DBSAPublication dbsaPub = new DBSAPublication();
-					int year = 0;
-					dbsaPub.setTitle(resultsJTable.getModel().getValueAt(j, 1).toString());
-					dbsaPub.setAuthors(resultsJTable.getModel().getValueAt(j, 2).toString());
-					dbsaPub.setLinks(resultsJTable.getModel().getValueAt(j, 3).toString());
-					if(resultsJTable.getModel().getValueAt(j, 4).toString().equals("")){
-						year = 0;
-					}else{
-						year = Integer.parseInt(resultsJTable.getModel().getValueAt(j, 4).toString());
-					}
-					dbsaPub.setYear(year);
-					dbsaPub.setAbstractPub(resultsJTable.getModel().getValueAt(j, 5).toString());
-					dbsaPub.setPublisher(resultsJTable.getModel().getValueAt(j, 6).toString());
+			if(resultsJTable != null){
+				if(resultsJTable.getRowCount() > 0){
+					ArrayList<DBSAPublication> dbsaPublicationList = new ArrayList<DBSAPublication>();
+					InsertDBSAPublication insert = new InsertDBSAPublication();
 					
-					dbsaPublicationList.add(dbsaPub);
+					for(int i = 0; i < resultsJTable.getRowCount(); i++){
+						if(Boolean.parseBoolean(model.getValueAt(i, 7).toString()) == true){
+							
+							DBSAPublication _dbsaPub = new DBSAPublication();
+													
+							String _title = "";
+							String _author = "";
+							String _link = "";
+							int year = 0;	
+							String _abstract = "";
+							String _publisher = "";
+							
+							if(resultsJTable.getModel().getValueAt(i, 1) != null){
+								_title = resultsJTable.getModel().getValueAt(i, 1).toString();
+							}else{
+								
+							}
+							_dbsaPub.setTitle(_title);
+							
+							if(resultsJTable.getModel().getValueAt(i, 2) != null){
+								_author = resultsJTable.getModel().getValueAt(i, 2).toString();
+							}else{
+								
+							}
+							_dbsaPub.setAuthors(_author);
+							
+							if(resultsJTable.getModel().getValueAt(i, 3) != null){
+								_link = resultsJTable.getModel().getValueAt(i, 3).toString();
+							}else{
+								
+							}
+							_dbsaPub.setLinks(_link);
+							
+							if(resultsJTable.getModel().getValueAt(i, 4).toString().equals("")
+									|| resultsJTable.getModel().getValueAt(i, 4) == null){
+								year = 0;
+							}else{
+								year = Integer.parseInt(resultsJTable.getModel().getValueAt(i, 4).toString());
+							}
+							_dbsaPub.setYear(year);						
+							
+							if(resultsJTable.getModel().getValueAt(i, 5) != null){
+								_abstract = resultsJTable.getModel().getValueAt(i, 5).toString();
+							}else{
+								
+							}
+							_dbsaPub.setAbstractPub(_abstract);
+							
+							if(resultsJTable.getModel().getValueAt(i, 6) != null){
+								_publisher = resultsJTable.getModel().getValueAt(i, 6).toString();
+							}else{
+								
+							}
+							_dbsaPub.setPublisher(_publisher);
+							
+							dbsaPublicationList.add(_dbsaPub);
+							
+						}
+					}
+					
+					insert.InsertPublicationList(dbsaPublicationList);
+						
+					if(dbsaPublicationList.size() > 0){
+						for(int i = dbsaPublicationList.size() - 1; i >= 0; i--){
+							dbsaPublicationList.clear();
+						}
+					}
+										
+					for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
+						if(Boolean.parseBoolean(model.getValueAt(i, 7).toString()) == true){
+							model.removeRow(i);
+						}
+					}
+					
+					for(int i = 0; i < resultsJTable.getRowCount(); i++){
+						resultsJTable.getModel().setValueAt(i + 1, i, 0);
+					}
+					
+					for(int i = 0; i < resultsJTable.getRowCount(); i++){
+						resultsJTable.addRowToPaint(i, Color.white);					
+						resultsJTable.getModel().setValueAt(i + 1, i, 0);
+						
+						if(Boolean.parseBoolean(model.getValueAt(i, 8).toString()) == true){
+							resultsJTable.addRowToPaint( i, Color.red);
+						}
+					}
+					
+					titleJTextArea.setText("");
+					authorsJTextArea.setText("");
+					yearJTextArea.setText("");
+					abstractJTextArea.setText("");
+					publisherJTextArea.setText("");
+					linkJEditorPane.setText("");
+					
+					saveJButton.setEnabled(false);
+					checkInsert = true;
+					
 				}
-			}
-			
-			InsertDBSAPublication insert = new InsertDBSAPublication();
-			insert.InsertPublicationList(dbsaPublicationList);
-			
-			//System.out.println(resultsJTable.getRowCount());
-			
-			for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
-				if(resultsJTable.getModel().getValueAt(i, 7) != null
-						&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
-					model.removeRow(i);
-				}
-			}
-			
-			for(int k = 0; k < dbsaPublicationCheckList.size(); k++){
-				dbsaPublicationCheckList.remove(k);
-//				System.out.println("dbsaPublicationCheckList" + dbsaPublicationCheckList.size());
-			}
-			
-			titleJTextArea.setText("");
-			authorsJTextArea.setText("");
-			yearJTextArea.setText("");
-			abstractJTextArea.setText("");
-			publisherJTextArea.setText("");
-			
-			saveJButton.setEnabled(false);
-			checkInsert = true;
+			}	
 		}catch(Exception ex){
 			System.out.println(ex.getMessage());
 		}
@@ -1047,16 +1153,22 @@ public class FetcherResultPanel extends JPanel {
 	}
 		
 	private void removeRowsIsSelected() {
-		// TODO Auto-generated method stub
-		//int check = 0;
+		
+		if(resultsJTable != null){
+			if(resultsJTable.getRowCount() > 0 ){
+				System.out.println("number  - "+ resultsJTable.getRowCount());
+				for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
+					System.out.println("number " + i + " - "+ resultsJTable.getRowCount());
+					if(resultsJTable.getModel().getValueAt(i, 7) != null){
+						if(Boolean.parseBoolean(resultsJTable.getModel().getValueAt(i, 7).toString()) == true){
+							
+							resultsJTable.getModel().setValueAt(false, i, 8);
+							resultsJTable.getModel().setValueAt(false, i, 7);
+							model.removeRow(i);
+						}
+					}
+				}
 				
-		if(resultsJTable != null)
-		for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
-			
-			if(resultsJTable.getModel().getValueAt(i, 7) != null
-				&& resultsJTable.getModel().getValueAt(i, 7).toString().equals("true")){
-			
-				model.removeRow(i);
 				if(old_Num_Total > 0)
 					old_Num_Total --;
 				
@@ -1064,21 +1176,18 @@ public class FetcherResultPanel extends JPanel {
 				
 				for(int k = 0; k < resultsJTable.getRowCount(); k++){
 					if(resultsJTable.getModel().getValueAt(k, 8) != null
-							&&resultsJTable.getModel().getValueAt(k, 8).toString().equals("true")){
+							&& resultsJTable.getModel().getValueAt(k, 8).toString().equals("true")){
 						
-						duplicateNumber ++;
-						
+						duplicateNumber ++;						
 					}
 				}
-			
-				for(int j = 0; j < resultsJTable.getRowCount(); j++){
-					resultsJTable.addRowToPaint(j, Color.white);
-					resultsJTable.getModel().setValueAt(j+1, j, 0);
-
-					if(resultsJTable.getModel().getValueAt(j, 8) != null
-						&&resultsJTable.getModel().getValueAt(j, 8).toString().equals("true")){
 				
-						resultsJTable.addRowToPaint(j, Color.red);
+				for(int i = 0; i < resultsJTable.getRowCount(); i++){
+					resultsJTable.addRowToPaint(i, Color.white);					
+					resultsJTable.getModel().setValueAt(i + 1, i, 0);
+					
+					if(Boolean.parseBoolean(model.getValueAt(i, 8).toString()) == true){
+						resultsJTable.addRowToPaint( i, Color.red);
 					}
 				}
 			}
@@ -1107,7 +1216,7 @@ public class FetcherResultPanel extends JPanel {
 					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("press.to.close.program"));
 				}
 				public void mouseExited(MouseEvent e) {
-					dbsaStatus.setDBSAProgressMessage(DBSAResourceBundle.res.getString("group.name"));
+					dbsaStatus.setDBSAProgressMessage(("group.name"));
 				}
 				public void mousePressed(MouseEvent e) {
 				}
@@ -1130,6 +1239,7 @@ public class FetcherResultPanel extends JPanel {
 			actionsJPanel.add(getClearSelectedJButton(), new Constraints(new Trailing(308, 124, 495, 534), new Leading(0, 12, 12)));
 			actionsJPanel.add(getSelectAllButton(), new Constraints(new Trailing(450, 124, 398, 398), new Leading(0, 12, 12)));
 			actionsJPanel.add(getSelectAllDupButton(), new Constraints(new Trailing(592, 12, 12), new Leading(0, 12, 12)));
+			actionsJPanel.add(getCheckDuplicateJButton(), new Constraints(new Trailing(734, 124, 12, 12), new Leading(0, 12, 12)));
 		}
 		return actionsJPanel;
 	}
