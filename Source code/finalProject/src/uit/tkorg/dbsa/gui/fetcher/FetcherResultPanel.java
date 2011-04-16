@@ -1084,6 +1084,7 @@ public class FetcherResultPanel extends JPanel {
 					for(int i = resultsJTable.getRowCount() - 1; i >= 0; i--){
 						if(Boolean.parseBoolean(model.getValueAt(i, 7).toString()) == true){
 							model.removeRow(i);
+							dbsaPublicationCheckList.remove(i);
 						}
 					}
 					
@@ -1165,6 +1166,7 @@ public class FetcherResultPanel extends JPanel {
 							resultsJTable.getModel().setValueAt(false, i, 8);
 							resultsJTable.getModel().setValueAt(false, i, 7);
 							model.removeRow(i);
+							dbsaPublicationCheckList.remove(i);
 						}
 					}
 				}
