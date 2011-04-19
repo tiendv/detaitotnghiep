@@ -41,7 +41,29 @@ public class LoadPublicaitonFromDBLP {
 			
 			return result = tempresult.get(0);
 		} finally {
-			//session.close();
+			session.close();
+		}
+		
+	}
+	public static ArrayList<Publication> getPublicationsWithIDSpace(int from, int to) {
+		ArrayList<Publication> result = new ArrayList<Publication>();
+		Session session = null;
+		try {
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+			org.hibernate.Query q = session.createQuery("from Publication where id between "+from +" and "+to);
+			ArrayList<Publication>   tempresult = (ArrayList<Publication>) q.list();
+			if(tempresult.isEmpty())
+				return null;
+			else {
+				for (int i = 0; i< tempresult.size();i++) {
+					result.add(tempresult.get(i));
+				}
+				return result;
+			}
+
+		} finally {
+			session.close();
 		}
 		
 	}
@@ -59,25 +81,48 @@ public class LoadPublicaitonFromDBLP {
 				for(int i= 0; i< tempresult.size();i++){
 					listname +=tempresult.get(i).getAuthor()+",";
 				}
-				//System.out.printf(listname);
-				//String test = listname.substring(listname.length()-1);
 				return listname;
 			}
 			
 		} finally {
 			session.close();
 		}
+	}
+	public static ArrayList<Publication> getPublicationsWithDate(String date) {
+		
+		// Day format : Year - moth - day
+		
+		ArrayList<Publication> result = new ArrayList<Publication>();
+		Session session = null;
+		try {
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+			org.hibernate.Query q = session.createQuery("from Publication where mdate='"+ date+"'");
+			System.out.printf("from Publication where mday= '"+ date+"'");
+			ArrayList<Publication>   tempresult = (ArrayList<Publication>) q.list();
+			if(tempresult.isEmpty())
+				return null;
+			else {
+				for (int i = 0; i< tempresult.size();i++) {
+					result.add(tempresult.get(i));
+				}
+				return result;
+			}
+
+		} finally {
+			session.close();
+		}
 		
 	}
 	
-	/*public static void main(String[] args) {
-	 	Publication test = new Publication();
-	 	test = LoadPublicaitonFromDBLP.getPublicaitonWithID(10);
-	 	System.out.printf("title of pub la:"+ test.getTitle());
+/*	public static void main(String[] args) {
+	 	ArrayList<Publication> test = new ArrayList<Publication>();
+	 	test = LoadPublicaitonFromDBLP.getPublicationsWithDate("2006-02-24");
+	 	System.out.printf("title of pub la:"+ test.get(10).getTitle());
 	 	
-	 	/String testauthor = new String();
+	 //	String testauthor = new String();
 	 	
 	 	
-	}
-*/
+	}*/
+
 }
