@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 
 import uit.tkorg.dbsa.cores.hibernate.HibernateUtil;
 import uit.tkorg.dbsa.model.DBSAPublication;
+import uit.tkorg.dbsa.model.Publication;
 
 /**
  * @author tiendv
@@ -34,6 +35,31 @@ public class LoadPublicationsFromDBSA {
 		} finally {
 			session.close();
 		}
+	}
+public static ArrayList<DBSAPublication> getPublicationsWithDate(String date) {
+		
+		// Day format : Year - moth - day
+		
+		ArrayList<DBSAPublication> result = new ArrayList<DBSAPublication>();
+		Session session = null;
+		try {
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+			org.hibernate.Query q = session.createQuery("from DBSAPublication where mdate='"+ date+"'");
+			ArrayList<DBSAPublication>   tempresult = (ArrayList<DBSAPublication>) q.list();
+			if(tempresult.isEmpty())
+				return null;
+			else {
+				for (int i = 0; i< tempresult.size();i++) {
+					result.add(tempresult.get(i));
+				}
+				return result;
+			}
+
+		} finally {
+			session.close();
+		}
+		
 	}
 
 /*	public static void main(String[] args) {
