@@ -41,7 +41,7 @@ public class LoadPublicaitonFromDBLP {
 			
 			return result = tempresult.get(0);
 		} finally {
-			session.close();
+			//session.close();
 		}
 		
 	}
