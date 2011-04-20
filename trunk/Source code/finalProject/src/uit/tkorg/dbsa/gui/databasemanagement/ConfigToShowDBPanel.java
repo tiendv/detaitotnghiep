@@ -1,6 +1,7 @@
 package uit.tkorg.dbsa.gui.databasemanagement;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -16,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -218,6 +220,7 @@ public class ConfigToShowDBPanel extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
+					okJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					setSizeResultNumber(Integer.parseInt(sizeJSpinner.getValue().toString()));
 					setBeginResultNumber(Integer.parseInt(beginNumJSpinner.getValue().toString()));
 					
@@ -225,8 +228,10 @@ public class ConfigToShowDBPanel extends JDialog {
 						DBSAApplication.databaseManagementPanel.ShowDBLPDatabaseByDate(MyDateListener.getDateSelected());
 					}else{
 						DBSAApplication.databaseManagementPanel.ShowDBLPDatabase(getSizeResultNumber(), getBeginResultNumber());
+						
 					}
 					dispose();
+					okJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				}
 				
 			});
