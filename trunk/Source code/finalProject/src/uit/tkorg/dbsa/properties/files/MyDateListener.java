@@ -17,6 +17,7 @@ public class MyDateListener implements DateListener {
 			
 			setDateSelected(date);
 			
+			//System.out.println( ">>>>>>>>> " + getDateSelected());
 		} else {
 			System.out.println("No time selected.");
 		}
