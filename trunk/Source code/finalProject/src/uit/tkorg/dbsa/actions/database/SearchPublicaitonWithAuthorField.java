@@ -65,13 +65,13 @@ public class SearchPublicaitonWithAuthorField {
 	}
 	
 	/*public static void main(String[] args) {
-	 	ArrayList<DBSAPublication> test = new ArrayList<DBSAPublication>();
-	 	test = getDBSAPublicaitonWithAuthorName("tin huynh");
+	 	ArrayList<Publication> test = new ArrayList<Publication>();
+	 	test = getDBLPPublicaitonWithAuthorName("Michael L. Heytens");
 	 	if(test.isEmpty())
 	 	System.out.print("romg");
 	 	else {
-	 		System.out.printf("......................");
+	 		for (int i =0; i< test.size(); i++)
+	 		System.out.printf(".........." + test.get(i).getTitle());
 	 	}
-	}
-*/
+	}*/
 }
