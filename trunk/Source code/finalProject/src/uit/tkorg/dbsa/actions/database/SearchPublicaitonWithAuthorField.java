@@ -43,7 +43,7 @@ public class SearchPublicaitonWithAuthorField {
 			}
 			
 		} finally {
-			session.close();
+			//session.close();
 		}	
 	}
 	public static ArrayList<DBSAPublication> getDBSAPublicaitonWithAuthorName (String authorName) {
@@ -60,7 +60,7 @@ public class SearchPublicaitonWithAuthorField {
 			return result;
 			
 		} finally {
-			session.close();
+			//session.close();
 		}	
 	}
 	
