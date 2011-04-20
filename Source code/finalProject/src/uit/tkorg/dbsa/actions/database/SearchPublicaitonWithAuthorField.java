@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import uit.tkorg.dbsa.cores.hibernate.HibernateUtil;
 import uit.tkorg.dbsa.model.Author;
 import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.model.Publication;
@@ -22,6 +25,8 @@ public class SearchPublicaitonWithAuthorField {
 		ArrayList<Publication> result = new ArrayList<Publication>();
 		Session session = null;
 		try {
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
 			 Query q = session.createQuery("from Author au where au.author = :var");
 		        q.setString("var", authorName);
 		        List authors = q.list();
@@ -42,21 +47,31 @@ public class SearchPublicaitonWithAuthorField {
 		}	
 	}
 	public static ArrayList<DBSAPublication> getDBSAPublicaitonWithAuthorName (String authorName) {
-		ArrayList<DBSAPublication> result = new ArrayList<DBSAPublication>();
 		Session session = null;
 		try {
-			 Query q = session.createQuery("from Author au where au.author = :var");
-		        q.setString("var", authorName);
-		        List authors = q.list();
-			if(authors.isEmpty())
+			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+			 Query q = session.createQuery("from DBSAPublication  where authors like '%"+authorName+"%'");
+			//System.out.printf("from DBSAPublication  where authors like '\\%"+authorName+"\\%'");
+			 ArrayList<DBSAPublication>   result = (ArrayList<DBSAPublication>) q.list();
+			if(result.isEmpty())
 				return null;
-			else {
-				return result;
-			}
+			
+			return result;
 			
 		} finally {
 			session.close();
 		}	
 	}
-
+	
+	/*public static void main(String[] args) {
+	 	ArrayList<DBSAPublication> test = new ArrayList<DBSAPublication>();
+	 	test = getDBSAPublicaitonWithAuthorName("tin huynh");
+	 	if(test.isEmpty())
+	 	System.out.print("romg");
+	 	else {
+	 		System.out.printf("......................");
+	 	}
+	}
+*/
 }
