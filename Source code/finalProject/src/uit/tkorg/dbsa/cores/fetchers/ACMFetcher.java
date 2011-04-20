@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
-import org.apache.xerces.impl.xpath.regex.ParseException;
 import org.htmlparser.beans.StringBean;
 
 import uit.tkorg.dbsa.gui.fetcher.FetcherPanel;
