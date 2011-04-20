@@ -1,6 +1,7 @@
 package uit.tkorg.dbsa.gui.databasemanagement;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -27,6 +28,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.freixas.jcalendar.JCalendar;
 
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.properties.files.MyDateListener;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
@@ -162,7 +164,7 @@ public class ConfigToShowFetcherDBPanel extends JDialog {
 	private JPanel getCalendarJPanel() {
 		if (calendarJPanel == null) {
 			calendarJPanel = new JPanel();
-			calendarJPanel.setBorder(BorderFactory.createTitledBorder(null, /*DBSAResourceBundle.res.getString*/("calendar"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+			calendarJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("calendar"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
 					12), new Color(51, 51, 51)));
 			calendarJPanel.setLayout(new FlowLayout());
 			
@@ -200,12 +202,13 @@ public class ConfigToShowFetcherDBPanel extends JDialog {
 	private JButton getOkJButton() {
 		if (okJButton == null) {
 			okJButton = new JButton();
-			okJButton.setText(/*DBSAResourceBundle.res.getString*/("ok"));
+			okJButton.setText(DBSAResourceBundle.res.getString("ok"));
 			okJButton.addActionListener(new ActionListener(){
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
-						
+				public void actionPerformed(ActionEvent e) {								
+					
+					okJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					if(searchByDateJCheckBox.isSelected()){
 						if(MyDateListener.getDateSelected() != null){
 							DBSAApplication.databaseManagementPanel.ShowFetcherDatabaseByDate(MyDateListener.getDateSelected());
@@ -215,9 +218,9 @@ public class ConfigToShowFetcherDBPanel extends JDialog {
 							
 					}else{
 						DBSAApplication.databaseManagementPanel.ShowFetcherDatabase();
+						dispose();
 					}
-					
-					dispose();
+					okJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				}
 				
 			});

@@ -1,6 +1,7 @@
 package uit.tkorg.dbsa.gui.databasemanagement;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
@@ -28,6 +29,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class SearchInDatabasePanel extends JDialog {
@@ -137,7 +139,7 @@ public class SearchInDatabasePanel extends JDialog {
 	}
 
 	private void initComponents() {
-		setTitle("Search papers in database");
+		setTitle(DBSAResourceBundle.res.getString("title.search.paper.in.db"));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(Color.white);
 		setForeground(Color.black);
@@ -151,18 +153,20 @@ public class SearchInDatabasePanel extends JDialog {
 	private JButton getSearchJButton() {
 		if (searchJButton == null) {
 			searchJButton = new JButton();
-			searchJButton.setText("Search");
+			searchJButton.setText(DBSAResourceBundle.res.getString("search"));
 			searchJButton.addActionListener(new ActionListener(){
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {					
+					
+					searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					if(keywordJTextField.getText() == ""){
-						JOptionPane.showMessageDialog(null, "Please input key word to search.");
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.key.word.to.search"));
 					}else{
 						DBSAApplication.databaseManagementPanel.SearchResultInDatabase(keywordJTextField.getText(), searchByJComboBox.getSelectedIndex());
+						dispose();
 					}
-					
-					dispose();
+					searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				}
 				
 			});
@@ -173,7 +177,7 @@ public class SearchInDatabasePanel extends JDialog {
 	private JButton getCloseJButton() {
 		if (closeJButton == null) {
 			closeJButton = new JButton();
-			closeJButton.setText("Close");
+			closeJButton.setText(DBSAResourceBundle.res.getString("close"));
 			closeJButton.addActionListener(new ActionListener(){
 
 				@Override
@@ -201,7 +205,7 @@ public class SearchInDatabasePanel extends JDialog {
 	private JPanel getInputJPanel() {
 		if (inputJPanel == null) {
 			inputJPanel = new JPanel();
-			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, "input", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
+			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
 					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			inputJPanel.setLayout(new GroupLayout());
 			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(12, 88, 10, 10), new Leading(16, 12, 12)));
@@ -222,7 +226,7 @@ public class SearchInDatabasePanel extends JDialog {
 	private JLabel getSearchByJLabel() {
 		if (searchByJLabel == null) {
 			searchByJLabel = new JLabel();
-			searchByJLabel.setText("Search by :");
+			searchByJLabel.setText(DBSAResourceBundle.res.getString("search.by"));
 		}
 		return searchByJLabel;
 	}
@@ -230,7 +234,7 @@ public class SearchInDatabasePanel extends JDialog {
 	private JLabel getKeywordJLabel() {
 		if (keywordJLabel == null) {
 			keywordJLabel = new JLabel();
-			keywordJLabel.setText("Key word :");
+			keywordJLabel.setText(DBSAResourceBundle.res.getString("input.keyword"));
 		}
 		return keywordJLabel;
 	}
