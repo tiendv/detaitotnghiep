@@ -5,6 +5,8 @@ package uit.tkorg.dbsa.actions.database;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -99,6 +101,7 @@ public class LoadPublicaitonFromDBLP {
 			session = sessionFactory.openSession();
 			org.hibernate.Query q = session.createQuery("from Publication where mdate='"+ date+"'");
 			System.out.printf("from Publication where mday= '"+ date+"'");
+			//JOptionPane.showMessageDialog(null, "from Publication where mday= '"+ date+"'");
 			ArrayList<Publication>   tempresult = (ArrayList<Publication>) q.list();
 			if(tempresult.isEmpty())
 				return null;
@@ -115,14 +118,18 @@ public class LoadPublicaitonFromDBLP {
 		
 	}
 	
-/*	public static void main(String[] args) {
-	 	ArrayList<Publication> test = new ArrayList<Publication>();
-	 	test = LoadPublicaitonFromDBLP.getPublicationsWithDate("2006-02-24");
-	 	System.out.printf("title of pub la:"+ test.get(10).getTitle());
-	 	
-	 //	String testauthor = new String();
-	 	
-	 	
-	}*/
+//	public static void main(String[] args) {
+//	 	ArrayList<Publication> test = new ArrayList<Publication>();
+//	 	test = LoadPublicaitonFromDBLP.getPublicationsWithDate("2009-04-13");
+//	 	
+//	 	for(int i = 1; i < test.size(); i++ ){
+//	 		System.out.println(" year " + i + " - " + test.get(i).getYear());	
+//	 	}
+//	 	System.out.printf("title of pub la:"+ test.get(10).getTitle());
+//	 	
+//	 //	String testauthor = new String();
+//	 	
+//	 	
+//	}
 
 }
