@@ -12,5 +12,6 @@
 		<property column="publisher" name="publisher" type="string"/>
 		<property column="authors" name="authors" type="string"/>
 		<property column="links" name="links" type="string"/>
+		<property column="mdate" name="mdate" type="date"/>
     </class>
 </hibernate-mapping>
