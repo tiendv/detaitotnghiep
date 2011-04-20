@@ -38,8 +38,9 @@ public class SearchPublicaitonWithAuthorField {
 							Publication mypub = au.getPublications();
 							result.add(mypub);
 			        }
-					return result;
+				
 			}
+			return result;
 			
 		} finally {
 			//session.close();
