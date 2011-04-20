@@ -33,7 +33,6 @@ public class SearchPublicaitonWithAuthorField {
 			if(authors.isEmpty())
 				return null;
 			else {
-					List<Publication> pubs = new ArrayList<Publication>();
 						for (int i = 0; i < authors.size(); i++) {
 							Author au = (Author) authors.get(i);
 							Publication mypub = au.getPublications();
