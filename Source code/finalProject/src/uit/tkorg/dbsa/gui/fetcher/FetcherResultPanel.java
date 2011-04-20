@@ -616,10 +616,10 @@ public class FetcherResultPanel extends JPanel {
 					}else{
 						year = getYear() + "";
 					}
-					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), getLink(), year, getAbstract(), getPublisher(), getMark(), getIsDuplicate(), getDigitalLibrary()};
+					Object [] data = {resultsJTable.getRowCount() + 1, getTitle(), getAuthor(), 
+							getLink(), year, getAbstract(), getPublisher(), getMark(), 
+							getIsDuplicate(), getDigitalLibrary()};
 					model.insertRow(resultsJTable.getRowCount(), data );				
-					
-					System.out.println(" row number 2->" + model.getRowCount());
 					
 					DBSAPublication dbsa = new DBSAPublication();
 					dbsa.setId(resultsJTable.getRowCount() + 1);
@@ -646,8 +646,6 @@ public class FetcherResultPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 			
 				int n  = resultsJTable.getSelectedRow();
-				
-				System.out.println( "selected row " + resultsJTable.getSelectedRow() );
 					
 				titleJTextArea.setText(model.getValueAt(n, 1).toString());
 				authorsJTextArea.setText(model.getValueAt(n, 2).toString());				
@@ -662,7 +660,6 @@ public class FetcherResultPanel extends JPanel {
 				
 				for(int i = 0; i < resultsJTable.getRowCount();i++){
 					
-					System.out.println("row number 3-->" +  resultsJTable.getRowCount());
 					if(model.getValueAt(i, 7) != null
 							&& model.getValueAt(i, 7).toString().equals("true")){
 						checkEnable++;
