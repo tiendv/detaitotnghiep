@@ -46,6 +46,7 @@ public static ArrayList<DBSAPublication> getPublicationsWithDate(String date) {
 			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
 			org.hibernate.Query q = session.createQuery("from DBSAPublication where mdate='"+ date+"'");
+			System.out.println("from DBSAPublication where mdate='"+ date+"'");
 			ArrayList<DBSAPublication>   tempresult = (ArrayList<DBSAPublication>) q.list();
 			if(tempresult.isEmpty())
 				return null;
