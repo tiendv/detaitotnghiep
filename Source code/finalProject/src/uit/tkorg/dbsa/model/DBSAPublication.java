@@ -4,6 +4,7 @@
 package uit.tkorg.dbsa.model;
 
 import java.net.URL;
+import java.util.Date;
 
 /**
  * @author tiendv
@@ -18,7 +19,14 @@ public class DBSAPublication {
 	private String publisher;
 	private String authors;
 	private String links;
+	private Date mdate;
 	
+	public Date getMdate() {
+		return mdate;
+	}
+	public void setMdate(Date mdate) {
+		this.mdate = mdate;
+	}
 	public int getId() {
 		return id;
 	}
