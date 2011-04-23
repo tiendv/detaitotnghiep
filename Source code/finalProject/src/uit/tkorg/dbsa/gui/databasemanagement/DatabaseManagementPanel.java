@@ -320,6 +320,8 @@ public class DatabaseManagementPanel extends JPanel {
 				checkRemoveRow = true;
 				
 			}
+		}else{
+			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("no.results.found"));
 		}
 	}
 	

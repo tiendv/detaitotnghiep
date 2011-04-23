@@ -140,7 +140,7 @@ public class ConfigToShowFetcherDBPanel extends JDialog {
 	}
 
 	private void initComponents() {
-		setTitle("title.config.to.show.dblp.db.form");
+		setTitle(DBSAResourceBundle.res.getString("title.config.to.show.dblp.db.form"));
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(Color.white);
 		setForeground(Color.black);
@@ -156,7 +156,7 @@ public class ConfigToShowFetcherDBPanel extends JDialog {
 		if (searchByDateJCheckBox == null) {
 			searchByDateJCheckBox = new JCheckBox();
 			searchByDateJCheckBox.setSelected(true);
-			searchByDateJCheckBox.setText("show.by.date");
+			searchByDateJCheckBox.setText(DBSAResourceBundle.res.getString("show.by.date"));
 		}
 		return searchByDateJCheckBox;
 	}
@@ -212,6 +212,7 @@ public class ConfigToShowFetcherDBPanel extends JDialog {
 					if(searchByDateJCheckBox.isSelected()){
 						if(MyDateListener.getDateSelected() != null){
 							DBSAApplication.databaseManagementPanel.ShowFetcherDatabaseByDate(MyDateListener.getDateSelected());
+							dispose();
 						}else{
 							JOptionPane.showMessageDialog(null, "Please, choose date in calendar");
 						}
