@@ -9,18 +9,24 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -28,14 +34,17 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
-import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.actions.database.LoadPublicaitonFromDBLP;
+import uit.tkorg.dbsa.actions.database.SearchPublicaitonWithAuthorField;
+import uit.tkorg.dbsa.actions.database.SearchPublicationInDatabase;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
+import uit.tkorg.dbsa.model.DBSAPublication;
+import uit.tkorg.dbsa.model.Publication;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class SearchInDatabasePanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private JComboBox searchByJComboBox;
 	private JLabel keywordJLabel;
 	private JLabel searchByJLabel;
 	private JTextField keywordJTextField;
@@ -44,11 +53,24 @@ public class SearchInDatabasePanel extends JDialog {
 	private JButton closeJButton;
 	private JButton searchJButton;
 
-	private int width = 403 ;
-	private int height = 250;
+	private int width = 1013 ;
+	private int height = 638;
 	private int xLocation;
 	private int yLocation;
 	private JFrame dbsaJFrame;
+	private JPanel resultJPanel;
+	private JTable resultJTable;
+	private JScrollPane resultScrollPane;
+	
+	private static int rowNumber = 0;
+	private static String title = "";
+	private static String author = "";
+	private static int year = 0;
+	private static String abstracts = "";
+	private static String links ="";
+	private static String publisher = "";
+	
+	private static DefaultTableModel publicationModel;
 	
 	public SearchInDatabasePanel() {
 		initComponents();
@@ -145,9 +167,324 @@ public class SearchInDatabasePanel extends JDialog {
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(0, 1, 0), new Trailing(10, 10, 128)));
-		add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(0, 89, 10)));
+		add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 111, 10, 10)));
+		add(getresultJPanel(), new Constraints(new Bilateral(0, 1, 0), new Bilateral(117, 89, 0)));
 		setSize(width, height);
 		setLocation(xLocation, yLocation);
+	}
+
+	private JCheckBox getPublisherJCheckBox() {
+		if (publisherJCheckBox == null) {
+			publisherJCheckBox = new JCheckBox();
+			publisherJCheckBox.setText(DBSAResourceBundle.res.getString("publisher"));
+		}
+		return publisherJCheckBox;
+	}
+
+	private JCheckBox getAbstractCheckBox() {
+		if (abstractCheckBox == null) {
+			abstractCheckBox = new JCheckBox();
+			abstractCheckBox.setText(DBSAResourceBundle.res.getString("abstract"));
+		}
+		return abstractCheckBox;
+	}
+
+	private JCheckBox getYearJCheckBox() {
+		if (yearJCheckBox == null) {
+			yearJCheckBox = new JCheckBox();
+			yearJCheckBox.setText(DBSAResourceBundle.res.getString("year"));
+		}
+		return yearJCheckBox;
+	}
+
+	private JCheckBox getAuthorJCheckBox() {
+		if (authorJCheckBox == null) {
+			authorJCheckBox = new JCheckBox();
+			authorJCheckBox.setText(DBSAResourceBundle.res.getString("authors"));
+		}
+		return authorJCheckBox;
+	}
+
+	private JCheckBox getTitleJCheckBox() {
+		if (titleJCheckBox == null) {
+			titleJCheckBox = new JCheckBox();
+			titleJCheckBox.setText(DBSAResourceBundle.res.getString("title"));
+		}
+		return titleJCheckBox;
+	}
+
+	private JScrollPane getresultScrollPane() {
+		if (resultScrollPane == null) {
+			resultScrollPane = new JScrollPane();
+			resultScrollPane.setViewportView(getSearchResultJTable());
+		}
+		return resultScrollPane;
+	}
+
+	private JTable getSearchResultJTable() {
+		if(resultJTable == null) {
+			resultJTable =  createDatabaseJTable();
+			publicationModel.removeRow(0);
+		}
+		
+		return resultJTable;
+	}
+	
+	private JTable createDatabaseJTable(){
+		
+		publicationModel  = new DefaultTableModel(getTableDatabase(getRowNumber(), getTitle(), getAuthor(), getLinks(), getYear(), getAbstract(), getPublisher()), getDatabaseColumnName()) {
+		private static final long serialVersionUID = 1L;
+			Class<?>[] types = new Class<?>[] { Integer.class, String.class, String.class,  String.class, String.class, String.class, String.class};
+
+			public Class<?> getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+		};
+		
+		JTable table = new JTable(publicationModel);
+		
+		//Sap xep noi dung cac dong trong table theo thu tu alpha B.
+		//Cho phep sap xep theo tu cot rieng biet
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+		table.setRowSorter(sorter);
+		
+		/*
+		 * Set width of table column 
+		 */
+		table.setShowGrid(true);
+		table.setShowVerticalLines(true);
+		table.setShowHorizontalLines(true);
+		
+		for(int i = 0; i < 7; i++){
+			TableColumn col = table.getColumnModel().getColumn(i);
+			if(i == 0){
+				col.setPreferredWidth(50);
+			}else if(i == 1){
+				col.setPreferredWidth(250);
+			}else if(i == 2){
+				col.setPreferredWidth(150);
+			}else if(i == 3){
+				col.setPreferredWidth(150);
+			}else if(i == 4){
+				col.setPreferredWidth(100);
+			}else if(i == 5){
+				col.setPreferredWidth(400);
+			}else if(i == 6){
+				col.setPreferredWidth(100);
+			}
+		}
+		
+		return table;
+	}
+	
+	public DefaultTableModel getDefaultTableModel(){
+		return publicationModel;
+	}
+	
+	/*
+	 * Ham tao danh sach ten cac cot trong table
+	 * @return String []
+	 */
+	private static  String [] getDatabaseColumnName(){
+		String [] columnNames = {DBSAResourceBundle.res.getString("no"), DBSAResourceBundle.res.getString("title"), 
+				DBSAResourceBundle.res.getString("authors"), DBSAResourceBundle.res.getString("link"),
+				DBSAResourceBundle.res.getString("year"),DBSAResourceBundle.res.getString("abstract"), 
+				DBSAResourceBundle.res.getString("publisher")};
+		
+		return columnNames;
+	}
+	
+	/*
+	 * Ham input data cho table
+	 * @return Object [][]
+	 */
+	public  Object [][] getTableDatabase(int rowNumber, String title, String author, String links, int year, String abstracts, String publisher){
+		
+		Object [][] data = {addTableDatabase(rowNumber, title, author, links, year, abstracts, publisher)};
+		
+		return data;
+		
+	}
+	
+	public  Object [] addTableDatabase(int rowNumber, String title, String author, String links, int year, String abstracts, String publisher){
+		Object [] dataRow =  {getRowNumber(), getTitle(), getAuthor(), getLinks(), getYear(), getAbstract(), getPublisher()};
+		
+		return dataRow;
+	}
+	
+	//SearchPublicaitonWithAuthorField searchPubByAuthor = new SearchPublicaitonWithAuthorField();
+	SearchPublicationInDatabase  searchPub = new SearchPublicationInDatabase();
+	private JCheckBox titleJCheckBox;
+	private JCheckBox authorJCheckBox;
+	private JCheckBox yearJCheckBox;
+	private JCheckBox abstractCheckBox;
+	private JCheckBox publisherJCheckBox;
+		
+	public void SearchResultInDatabase(String keyword){
+		ArrayList<Publication> result_DBLP = new ArrayList<Publication>();
+		ArrayList<DBSAPublication> result = new ArrayList<DBSAPublication>();		
+		
+		/**
+		 * Search by author name 
+		 * **/
+		if(authorJCheckBox.isSelected()){
+			result = searchPub.getDBSAPublicaitonWithAuthorName(keyword);
+			result_DBLP = searchPub.getDBLPPublicaitonWithAuthorName(keyword);
+			
+			if (result != null) {
+				for (int i = 0; i < result.size(); i++) {							
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataToDatabaseJTable(result.get(i)));
+				}				
+			}
+			if (result_DBLP != null) {
+				for (int i = 0; i < result_DBLP.size(); i++) {					
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataDBLPToDatabaseJTable(result_DBLP.get(i)));
+				}			
+			}
+		}
+		
+		/**
+		 * Search by title 
+		 * **/
+		if(titleJCheckBox.isSelected()){
+			result = searchPub.getDBSAPublicaitonWithTitle(keyword);
+			result_DBLP = searchPub.getDBLPPublicaitonWithTitle(keyword);
+			if (result != null) {
+				for (int i = 0; i < result.size(); i++) {							
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataToDatabaseJTable(result.get(i)));
+				}			
+			}
+			if (result_DBLP != null) {
+				for (int i = 0; i < result_DBLP.size(); i++) {						
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataDBLPToDatabaseJTable(result_DBLP.get(i)));
+				}			
+			}
+		}
+		
+		/**
+		 * Search by abstract
+		 * **/
+		if(abstractCheckBox.isSelected()){
+			result = searchPub.getDBSAPublicaitonWithAbtract(keyword);
+			if (result != null) {
+				for (int i = 0; i < result.size(); i++) {							
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataToDatabaseJTable(result.get(i)));
+				}			
+			}
+		}				
+		
+		/**
+		 * Search by publisher
+		 * **/
+		if(publisherJCheckBox.isSelected()){
+			result = searchPub.getDBSAPublicaitonWithPublisher(keyword);
+			result_DBLP = searchPub.getDBLPPublicaitonWithPublisher(keyword);
+			if (result != null) {
+				for (int i = 0; i < result.size(); i++) {							
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataToDatabaseJTable(result.get(i)));
+				}			
+			}
+			if (result_DBLP != null) {
+				for (int i = 0; i < result_DBLP.size(); i++) {						
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataDBLPToDatabaseJTable(result_DBLP.get(i)));
+				}			
+			}
+		}		
+		
+		/**
+		 * Search by year 
+		 * **/
+		if(yearJCheckBox.isSelected()){
+			int _year = 0;
+			try{
+				_year = Integer.parseInt(keyword);
+				if(_year != 0){	
+					result = searchPub.getDBSAPublicaitonWithYear(_year);
+					result_DBLP = searchPub.getDBLPPublicaitonWithYear(_year);
+				}
+			}catch (NumberFormatException e) {
+				
+				JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.year.keyowrd.is.number"));
+			}
+			if (result != null) {
+				for (int i = 0; i < result.size(); i++) {							
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataToDatabaseJTable(result.get(i)));
+				}			
+			}
+			if (result_DBLP != null) {
+				for (int i = 0; i < result_DBLP.size(); i++) {						
+					publicationModel.insertRow(resultJTable.getRowCount(), addDataDBLPToDatabaseJTable(result_DBLP.get(i)));
+				}			
+			}			
+		}		
+		
+		if(resultJTable.getRowCount() <= 0){
+			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("your.search") + " - " + keywordJTextField.getText()  + " - " + DBSAResourceBundle.res.getString("did.not.macth.any.document"));
+		}
+	}
+	
+	private Object[] addDataDBLPToDatabaseJTable(Publication dblpPub){
+		
+		String _title = "";
+		String _author = "";
+		String _link = "";
+		String _year = "";
+		String _abstract = "";
+		String _publisher ="";
+			
+		if(dblpPub.getTitle() != null){
+			_title = dblpPub.getTitle();
+		}
+		
+		if(LoadPublicaitonFromDBLP.getPublicaitonAuthorWith(dblpPub.getId()) != null ){
+			_author = LoadPublicaitonFromDBLP.getPublicaitonAuthorWith(dblpPub.getId());
+		}
+		
+		if(dblpPub.getUrl() != null){
+			_link = dblpPub.getUrl();
+		}
+		
+		if(dblpPub.getYear() == 0){
+			_year = "";
+		}else{
+			_year = dblpPub.getYear() + "";
+		}
+		
+		if(dblpPub.getPublisher() != null){
+			_publisher = dblpPub.getPublisher();
+		}		
+		
+		Object []data = {resultJTable.getRowCount() + 1, _title, _author, _link,
+				_year, _abstract, _publisher };
+		
+		return data;
+	}
+
+	private Object[] addDataToDatabaseJTable(DBSAPublication dbsaPublication){
+		
+		String year;
+		if(dbsaPublication.getYear() == 0){
+			year = "";
+		}else{
+			year = dbsaPublication.getYear() + "";
+		}
+		
+		Object []data = {resultJTable.getRowCount() + 1, dbsaPublication.getTitle(), dbsaPublication.getAuthors(), dbsaPublication.getLinks(),
+				year, dbsaPublication.getAbstractPub(), dbsaPublication.getPublisher()};
+		
+		return data;
+	}
+	
+
+	private JPanel getresultJPanel() {
+		if (resultJPanel == null) {
+			resultJPanel = new JPanel();
+			resultJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("search.result"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
+			resultJPanel.setLayout(new GroupLayout());
+			resultJPanel.add(getresultScrollPane(), new Constraints(new Bilateral(1, 0, 22), new Bilateral(0, 0, 26, 403)));
+		}
+		return resultJPanel;
 	}
 
 	private JButton getSearchJButton() {
@@ -158,13 +495,17 @@ public class SearchInDatabasePanel extends JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {					
-					
+					if(resultJTable.getRowCount() > 0){
+						for(int i = resultJTable.getRowCount() - 1; i >= 0; i--){
+							publicationModel.removeRow(i);
+						}
+					}
 					searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					if(keywordJTextField.getText() == ""){
 						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.key.word.to.search"));
-					}else{
-						DBSAApplication.databaseManagementPanel.SearchResultInDatabase(keywordJTextField.getText(), searchByJComboBox.getSelectedIndex());
-						dispose();
+					}else{				
+						
+						SearchResultInDatabase(keywordJTextField.getText());						
 					}
 					searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				}
@@ -205,13 +546,18 @@ public class SearchInDatabasePanel extends JDialog {
 	private JPanel getInputJPanel() {
 		if (inputJPanel == null) {
 			inputJPanel = new JPanel();
-			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION,
-					new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
 			inputJPanel.setLayout(new GroupLayout());
 			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(12, 88, 10, 10), new Leading(16, 12, 12)));
-			inputJPanel.add(getSearchByJLabel(), new Constraints(new Leading(12, 88, 12, 12), new Leading(59, 25, 10, 10)));
-			inputJPanel.add(getKeywordJTextField(), new Constraints(new Bilateral(116, 12, 4), new Leading(12, 25, 12, 12)));
-			inputJPanel.add(getSearchByJComboBox(), new Constraints(new Bilateral(118, 15, 60), new Leading(59, 12, 12)));
+			inputJPanel.add(getKeywordJTextField(), new Constraints(new Bilateral(124, 132, 4), new Leading(8, 36, 12, 12)));
+			inputJPanel.add(getSearchJButton(), new Constraints(new Trailing(12, 102, 142, 142), new Leading(8, 36, 12, 12)));
+			inputJPanel.add(getAuthorJCheckBox(), new Constraints(new Leading(259, 131, 8, 8), new Leading(52, 8, 8)));
+			inputJPanel.add(getYearJCheckBox(), new Constraints(new Leading(394, 131, 8, 8), new Leading(53, 8, 8)));
+			inputJPanel.add(getAbstractCheckBox(), new Constraints(new Leading(529, 131, 8, 8), new Leading(53, 8, 8)));
+			inputJPanel.add(getPublisherJCheckBox(), new Constraints(new Leading(664, 131, 8, 8), new Leading(54, 8, 8)));
+			inputJPanel.add(getSearchByJLabel(), new Constraints(new Leading(12, 99, 10, 10), new Leading(52, 25, 12, 12)));
+			inputJPanel.add(getTitleJCheckBox(), new Constraints(new Leading(119, 131, 8, 8), new Leading(52, 8, 8)));
 		}
 		return inputJPanel;
 	}
@@ -239,14 +585,58 @@ public class SearchInDatabasePanel extends JDialog {
 		return keywordJLabel;
 	}
 
-	private JComboBox getSearchByJComboBox() {
-		if (searchByJComboBox == null) {
-			searchByJComboBox = new JComboBox();
-			searchByJComboBox.setModel(new DefaultComboBoxModel(new Object[] { "Author name", "In the title",  }));
-			searchByJComboBox.setDoubleBuffered(false);
-			searchByJComboBox.setBorder(null);
-		}
-		return searchByJComboBox;
+	public  void setRowNumber(int number){
+		rowNumber = number;
+	}
+	
+	public   int getRowNumber(){
+		return rowNumber;
+	}
+	
+	public  void setTitle(String titleString){
+		title = titleString;
+	}
+
+	public   String getTitle(){
+		return title;
+	}
+	
+	public  void setAuthor(String authorString){
+		author = authorString;
+	}
+
+	public  String getAuthor(){
+		return author;
+	}
+	
+	public  void setYear(int _year){
+		year = _year;
+	}
+
+	public  int getYear(){
+		return year;
+	}
+	
+	public  void setAbstract(String abstractString){
+		abstracts = abstractString;
+	}
+
+	public  String getAbstract(){
+		return abstracts;
+	}
+	
+	public  void setPublisher(String publisherString){
+		publisher = publisherString;
+	}
+	public  String getPublisher(){
+		return publisher;
+	}
+	public  void setLinks(String linksString){
+		links = linksString;
+	}
+	
+	public  String getLinks(){
+		return links;
 	}
 
 }
