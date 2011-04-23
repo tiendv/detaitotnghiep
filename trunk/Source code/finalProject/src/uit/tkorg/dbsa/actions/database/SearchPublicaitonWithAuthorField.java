@@ -51,8 +51,8 @@ public class SearchPublicaitonWithAuthorField {
 		try {
 			SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
-			 Query q = session.createQuery("from DBSAPublication  where authors like '%"+authorName+"%'");
-			//System.out.printf("from DBSAPublication  where authors like '\\%"+authorName+"\\%'");
+			 Query q = session.createQuery("from DBSAPublication  where authors like '%" + authorName + "%'");
+			 //System.out.printf("from DBSAPublication  where authors like '%"+authorName+"%'");
 			 ArrayList<DBSAPublication>   result = (ArrayList<DBSAPublication>) q.list();
 			if(result.isEmpty())
 				return null;
@@ -64,15 +64,15 @@ public class SearchPublicaitonWithAuthorField {
 		}	
 	}
 	
-	public static void main(String[] args) {
-	 	ArrayList<Publication> test = new ArrayList<Publication>();
-	 	test = getDBLPPublicaitonWithAuthorName("Rafiul Ahad");
-	 	System.out.println(test.size() + "<<<<<<<<<<<<<<<");
-	 	if(test.isEmpty())
-	 	System.out.print("romg");
-	 	else {
-	 		for (int i =0; i< test.size(); i++)
-	 		System.out.printf(".........." + test.get(i).getTitle());
-	 	}
-	}
+//	public static void main(String[] args) {
+//	 	ArrayList<Publication> test = new ArrayList<Publication>();
+//	 	test = getDBLPPublicaitonWithAuthorName("Rafiul Ahad");
+//	 	System.out.println(test.size() + "<<<<<<<<<<<<<<<");
+//	 	if(test.isEmpty())
+//	 	System.out.print("romg");
+//	 	else {
+//	 		for (int i =0; i< test.size(); i++)
+//	 		System.out.printf(".........." + test.get(i).getTitle());
+//	 	}
+//	}
 }
