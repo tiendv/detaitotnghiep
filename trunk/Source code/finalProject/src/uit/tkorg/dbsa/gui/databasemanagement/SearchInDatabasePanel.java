@@ -225,7 +225,6 @@ public class SearchInDatabasePanel extends JDialog {
 	private JCheckBox getSinceYearCheckBox() {
 		if (sinceYearCheckBox == null) {
 			sinceYearCheckBox = new JCheckBox();
-			sinceYearCheckBox.setSelected(true);
 			sinceYearCheckBox.setText(DBSAResourceBundle.res.getString("since.year"));
 			sinceYearCheckBox.addActionListener(new ActionListener() {
 	
