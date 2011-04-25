@@ -9,11 +9,15 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +32,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import jxl.write.DateTime;
+
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
@@ -35,7 +41,6 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
 import uit.tkorg.dbsa.actions.database.LoadPublicaitonFromDBLP;
-import uit.tkorg.dbsa.actions.database.SearchPublicaitonWithAuthorField;
 import uit.tkorg.dbsa.actions.database.SearchPublicationInDatabase;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.DBSAPublication;
@@ -53,7 +58,7 @@ public class SearchInDatabasePanel extends JDialog {
 	private JButton closeJButton;
 	private JButton searchJButton;
 
-	private int width = 1013 ;
+	private int width = 1049 ;
 	private int height = 638;
 	private int xLocation;
 	private int yLocation;
@@ -71,6 +76,7 @@ public class SearchInDatabasePanel extends JDialog {
 	private static String publisher = "";
 	
 	private static DefaultTableModel publicationModel;
+	private JTable tempJTable = new JTable() ;
 	
 	public SearchInDatabasePanel() {
 		initComponents();
@@ -167,10 +173,150 @@ public class SearchInDatabasePanel extends JDialog {
 		setForeground(Color.black);
 		setLayout(new GroupLayout());
 		add(getActionsJPanel(), new Constraints(new Bilateral(0, 1, 0), new Trailing(10, 10, 128)));
-		add(getInputJPanel(), new Constraints(new Bilateral(0, 0, 0), new Leading(0, 111, 10, 10)));
-		add(getresultJPanel(), new Constraints(new Bilateral(0, 1, 0), new Bilateral(117, 89, 0)));
+		add(getInputJPanel(), new Constraints(new Bilateral(0, 225, 813), new Leading(0, 126, 10, 10)));
+		add(getFilterJPanel(), new Constraints(new Trailing(1, 206, 10, 10), new Leading(2, 122, 153, 504)));
+		add(getresultJPanel(), new Constraints(new Bilateral(0, 1, 0), new Bilateral(136, 89, 52, 429)));
 		setSize(width, height);
 		setLocation(xLocation, yLocation);
+	}
+
+	private JComboBox getBeginYearJComboBox() {
+		if (beginYearJComboBox == null) {
+			beginYearJComboBox = new JComboBox();
+			beginYearJComboBox.setDoubleBuffered(false);
+			beginYearJComboBox.setBorder(null);
+			createYearCombobox(beginYearJComboBox);
+			beginYearJComboBox.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JComboBox cb = (JComboBox)e.getSource();
+			        int petName = Integer.parseInt(cb.getSelectedItem().toString());
+		        	System.out.println(petName);
+				}
+				
+			});
+		}
+		return beginYearJComboBox;
+	}
+
+	private JComboBox getEndYearJComboBox() {
+		if (endYearJComboBox == null) {
+			endYearJComboBox = new JComboBox();
+			
+			endYearJComboBox.setDoubleBuffered(false);
+			endYearJComboBox.setBorder(null);
+			createYearCombobox(endYearJComboBox);
+			endYearJComboBox.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JComboBox cb = (JComboBox)e.getSource();
+			        
+			        int _beginYearIsSelected = Integer.parseInt(beginYearJComboBox.getSelectedItem().toString());
+			        int _endYearIsSelected = Integer.parseInt(cb.getSelectedItem().toString());
+			        
+			        if(sinceYearCheckBox.isSelected()){
+			        	if(_beginYearIsSelected > _endYearIsSelected){
+			        		JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("invalid.year"));
+			        	}else{
+			        		filterSearchResult(tempJTable, publicationModel, _beginYearIsSelected, _endYearIsSelected);
+			        	}
+			        }
+				}				
+			});
+		}
+		return endYearJComboBox;
+	}
+
+	private JCheckBox getSinceYearCheckBox() {
+		if (sinceYearCheckBox == null) {
+			sinceYearCheckBox = new JCheckBox();
+			sinceYearCheckBox.setText(DBSAResourceBundle.res.getString("since.year"));
+			
+		}
+		return sinceYearCheckBox;
+	}
+
+	private JComboBox getYearJComboBox() {
+		if (yearJComboBox == null) {
+			yearJComboBox = new JComboBox();
+			yearJComboBox.setDoubleBuffered(false);
+			yearJComboBox.setBorder(null);
+			createYearCombobox(yearJComboBox);
+			yearJComboBox.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JComboBox cb = (JComboBox)e.getSource();
+			        int _yearIsSelected = Integer.parseInt(cb.getSelectedItem().toString());
+		        
+			        if(yearJCheckBox.isSelected()){
+			        	filterSearchResult(tempJTable, publicationModel, _yearIsSelected);
+			        }
+				}
+				
+			});
+		}
+		return yearJComboBox;
+	}
+	
+	//Ham khoi tao danh sach nam
+	private void createYearCombobox(JComboBox tempCombo){
+				
+		Calendar now = Calendar.getInstance();
+		
+		for(int i = 1950; i <= now.get(Calendar.YEAR); i++){
+			tempCombo.addItem(i); 
+		}		
+	}
+	
+	private void filterSearchResult(JTable _table, DefaultTableModel _tableModel, int _year){
+		
+		int year = 0;
+		for(int i = _table.getRowCount() - 1; i >= 0; i--){
+			try{
+				year = Integer.parseInt(_tableModel.getValueAt(i, 4).toString());
+				if(year != 0){	
+					if(year != _year){
+						_tableModel.removeRow(i);
+					}
+				}
+			}catch (NumberFormatException e) {
+				
+				//JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.year.keyowrd.is.number"));
+			}
+		}
+	}
+	
+private void filterSearchResult(JTable _table, DefaultTableModel _tableModel, int _beginYear, int _endYear){
+		
+	int year = 0;
+	for(int i = _table.getRowCount() - 1 ; i >= 0; i--){
+		try{
+			year = Integer.parseInt(_tableModel.getValueAt(i, 4).toString());
+			if(year != 0){	
+				if(year < _beginYear || year > _endYear){
+					_tableModel.removeRow(i);
+				}
+			}
+		}catch (NumberFormatException e) {
+			
+			//JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.year.keyowrd.is.number"));
+		}
+	}
+	}
+
+	private JPanel getFilterJPanel() {
+		if (filterJPanel == null) {
+			filterJPanel = new JPanel();
+			filterJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("filter"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD,
+					12), new Color(51, 51, 51)));
+			filterJPanel.setLayout(new GroupLayout());
+			filterJPanel.add(getYearJCheckBox(), new Constraints(new Leading(8, 67, 10, 10), new Leading(0, 8, 8)));
+			filterJPanel.add(getSinceYearCheckBox(), new Constraints(new Leading(8, 126, 10, 10), new Leading(33, 8, 8)));
+			filterJPanel.add(getYearJComboBox(), new Constraints(new Trailing(12, 82, 10, 10), new Leading(0, 12, 12)));
+			filterJPanel.add(getEndYearJComboBox(), new Constraints(new Trailing(12, 82, 12, 12), new Leading(67, 12, 12)));
+			filterJPanel.add(getBeginYearJComboBox(), new Constraints(new Bilateral(12, 100, 60), new Leading(67, 12, 12)));
+		}
+		return filterJPanel;
 	}
 
 	private JCheckBox getPublisherJCheckBox() {
@@ -319,6 +465,11 @@ public class SearchInDatabasePanel extends JDialog {
 	private JCheckBox yearJCheckBox;
 	private JCheckBox abstractCheckBox;
 	private JCheckBox publisherJCheckBox;
+	private JPanel filterJPanel;
+	private JComboBox yearJComboBox;
+	private JCheckBox sinceYearCheckBox;
+	private JComboBox endYearJComboBox;
+	private JComboBox beginYearJComboBox;
 		
 	public void SearchResultInDatabase(String keyword){
 		ArrayList<Publication> result_DBLP = new ArrayList<Publication>();
@@ -417,7 +568,7 @@ public class SearchInDatabasePanel extends JDialog {
 				}			
 			}			
 		}		
-		
+		tempJTable = resultJTable;
 		if(resultJTable.getRowCount() <= 0){
 			JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("your.search") + " - " + keywordJTextField.getText()  + " - " + DBSAResourceBundle.res.getString("did.not.macth.any.document"));
 		}
@@ -494,20 +645,25 @@ public class SearchInDatabasePanel extends JDialog {
 			searchJButton.addActionListener(new ActionListener(){
 
 				@Override
-				public void actionPerformed(ActionEvent e) {					
-					if(resultJTable.getRowCount() > 0){
-						for(int i = resultJTable.getRowCount() - 1; i >= 0; i--){
-							publicationModel.removeRow(i);
+				public void actionPerformed(ActionEvent e) {
+					if(!titleJCheckBox.isSelected() && !authorJCheckBox.isSelected() 
+							&& !abstractCheckBox.isSelected() && !publisherJCheckBox.isSelected()){
+						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.choose.fields.to.search"));
+					}else{
+						if(resultJTable.getRowCount() > 0){
+							for(int i = resultJTable.getRowCount() - 1; i >= 0; i--){
+								publicationModel.removeRow(i);
+							}
 						}
+						searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						if(keywordJTextField.getText() == ""){
+							JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.key.word.to.search"));
+						}else{				
+							
+							SearchResultInDatabase(keywordJTextField.getText());						
+						}
+						searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 					}
-					searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-					if(keywordJTextField.getText() == ""){
-						JOptionPane.showMessageDialog(null, DBSAResourceBundle.res.getString("please.input.key.word.to.search"));
-					}else{				
-						
-						SearchResultInDatabase(keywordJTextField.getText());						
-					}
-					searchJButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				}
 				
 			});
@@ -546,18 +702,17 @@ public class SearchInDatabasePanel extends JDialog {
 	private JPanel getInputJPanel() {
 		if (inputJPanel == null) {
 			inputJPanel = new JPanel();
-			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, DBSAResourceBundle.res.getString("input"), TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+			inputJPanel.setBorder(BorderFactory.createTitledBorder(null, "input", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 					Font.BOLD, 12), new Color(51, 51, 51)));
 			inputJPanel.setLayout(new GroupLayout());
 			inputJPanel.add(getKeywordJLabel(), new Constraints(new Leading(12, 88, 10, 10), new Leading(16, 12, 12)));
-			inputJPanel.add(getKeywordJTextField(), new Constraints(new Bilateral(124, 132, 4), new Leading(8, 36, 12, 12)));
-			inputJPanel.add(getSearchJButton(), new Constraints(new Trailing(12, 102, 142, 142), new Leading(8, 36, 12, 12)));
 			inputJPanel.add(getAuthorJCheckBox(), new Constraints(new Leading(259, 131, 8, 8), new Leading(52, 8, 8)));
-			inputJPanel.add(getYearJCheckBox(), new Constraints(new Leading(394, 131, 8, 8), new Leading(53, 8, 8)));
-			inputJPanel.add(getAbstractCheckBox(), new Constraints(new Leading(529, 131, 8, 8), new Leading(53, 8, 8)));
-			inputJPanel.add(getPublisherJCheckBox(), new Constraints(new Leading(664, 131, 8, 8), new Leading(54, 8, 8)));
 			inputJPanel.add(getSearchByJLabel(), new Constraints(new Leading(12, 99, 10, 10), new Leading(52, 25, 12, 12)));
 			inputJPanel.add(getTitleJCheckBox(), new Constraints(new Leading(119, 131, 8, 8), new Leading(52, 8, 8)));
+			inputJPanel.add(getKeywordJTextField(), new Constraints(new Leading(124, 547, 10, 10), new Leading(8, 36, 12, 12)));
+			inputJPanel.add(getSearchJButton(), new Constraints(new Trailing(12, 102, 140, 683), new Leading(6, 36, 12, 12)));
+			inputJPanel.add(getAbstractCheckBox(), new Constraints(new Leading(394, 131, 8, 8), new Leading(52, 8, 8)));
+			inputJPanel.add(getPublisherJCheckBox(), new Constraints(new Leading(529, 131, 8, 8), new Leading(52, 8, 8)));
 		}
 		return inputJPanel;
 	}
