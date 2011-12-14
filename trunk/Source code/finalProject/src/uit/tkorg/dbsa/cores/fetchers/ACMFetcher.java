@@ -106,8 +106,9 @@ public class ACMFetcher {
 				URL url = MakeUrl(entryNumber);
 				//System.out.println("Url = " + url);
 				
+				String temp = getUrlContentsAsText(url.toString());
+				GetResultNumber(temp);
 				String page = getFetcherResult(url);
-				GetResultNumber(page);
 				entryNumber = parse(page, 0, entryNumber + 1);
 				//System.out.println("entryNumber " + entryNumber);
 			}
@@ -237,7 +238,8 @@ public class ACMFetcher {
 	            try {
 	            	String number = m.group(1);
 	            	
-	            	number = number.replaceAll(",", "");
+	            	number = number.replaceAll(",","").replaceAll(" ", "");
+	            	System.out.println(number);
 	            	
 	                return Integer.parseInt(number);
 	            } catch (NumberFormatException ex) {
