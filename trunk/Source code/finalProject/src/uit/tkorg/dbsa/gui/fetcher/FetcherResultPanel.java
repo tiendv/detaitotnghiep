@@ -49,6 +49,7 @@ import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
 import uit.tkorg.dbsa.model.DBSAPublication;
+import uit.tkorg.dbsa.properties.files.WriteExcel;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class FetcherResultPanel extends JPanel {
@@ -1070,7 +1071,13 @@ public class FetcherResultPanel extends JPanel {
 						}
 					}
 					
-					insert.InsertPublicationList(dbsaPublicationList);
+					// Save all to Exel file 
+					
+					WriteExcel exel = new WriteExcel();
+					exel.setOutputFile("C:/test.xls");
+					exel.write(dbsaPublicationList);
+					
+					//insert.InsertPublicationList(dbsaPublicationList);
 						
 					if(dbsaPublicationList.size() > 0){
 						for(int i = dbsaPublicationList.size() - 1; i >= 0; i--){
