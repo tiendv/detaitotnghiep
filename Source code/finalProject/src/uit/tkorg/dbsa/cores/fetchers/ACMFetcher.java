@@ -43,8 +43,8 @@ public class ACMFetcher {
 	
 	// Cac chuoi tao cau query cho  advancde search cho subject 
 	
-	private static String startAdvancedSearchSubjectUrl ="http://portal.acm.org/results.cfm?CFID=113292600&CFTOKEN=55934314&adv=1&COLL=DL&DL=ACM&termzone=all&allofem=&anyofem=&noneofem=&peoplezone=Name&people=&peoplehow=and&keyword=&keywordhow=AND&affil=&affilhow=AND&pubin=&pubinhow=and&pubby=&pubbyhow=OR&since_year=&before_year=&pubashow=OR&sponsor=&sponsorhow=AND&confdate=&confdatehow=OR&confloc=&conflochow=OR&isbnhow=OR&isbn=&doi=&ccs=+&subj=";
-	private static String endAdvancedSearchSubjectUrl = "&hasft=on&hasabs=on&hasrev=on&Go.x=12&Go.y=10";
+	private static String startAdvancedSearchSubjectUrl ="http://dl.acm.org/results.cfm?adv=1&COLL=DL&DL=ACM&Go.x=0&Go.y=0&termzone=all&allofem=\"";
+	private static String endAdvancedSearchSubjectUrl = "\"";
 	
 	// Chuoi de lay thong tin :
 	private static String startGetBibtex = DBSAApplication.dbsaFetcherPattern.getPattern(DBSAApplicationConst.ACM_START_GET_BIBTEX);
@@ -104,7 +104,7 @@ public class ACMFetcher {
 			
 			if(entryNumber%20 == 0){
 				URL url = MakeUrl(entryNumber);
-				//System.out.println("Url = " + url);
+				System.out.println("Url = " + url);
 				
 				String temp = getUrlContentsAsText(url.toString());
 				GetResultNumber(temp);
@@ -142,21 +142,21 @@ public class ACMFetcher {
 		
 		URL urlSearch = null;	
 		
-		if(FetcherPanel.checkSearchByAll){
-			StringBuffer sb = new StringBuffer(startUrl); 
-			sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
-			sb.append(searchUrlPart);
-			sb.append(startIndex + 1);
-			sb.append(endUrl);
-			
-				
-			try {
-				//Tao URL tu chuoi tren
-				urlSearch = new URL(sb.toString());
-			} catch (MalformedURLException e) {			
-				e.printStackTrace();
-			}
-		}else{
+//		if(FetcherPanel.checkSearchByAll){
+//			StringBuffer sb = new StringBuffer(startUrl); 
+//			sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
+//			sb.append(searchUrlPart);
+//			sb.append(startIndex + 1);
+//			sb.append(endUrl);
+//			
+//				
+//			try {
+//				//Tao URL tu chuoi tren
+//				urlSearch = new URL(sb.toString());
+//			} catch (MalformedURLException e) {			
+//				e.printStackTrace();
+//			}
+//		}else{
 			StringBuffer sb = new StringBuffer(startAdvancedSearchSubjectUrl);
 			sb.append(keywordString.replaceAll(" ", "+"));
 			sb.append(endAdvancedSearchSubjectUrl);
@@ -166,7 +166,7 @@ public class ACMFetcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+//		}
 		
 		
 		return urlSearch;
