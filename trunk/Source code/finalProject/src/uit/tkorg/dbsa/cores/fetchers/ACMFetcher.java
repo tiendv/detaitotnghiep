@@ -109,6 +109,8 @@ public class ACMFetcher {
 				String temp = getUrlContentsAsText(url.toString());
 				GetResultNumber(temp);
 				String page = getFetcherResult(url);
+			//	System.out.println(page);
+				
 				entryNumber = parse(page, 0, entryNumber + 1);
 				//System.out.println("entryNumber " + entryNumber);
 			}
@@ -142,21 +144,24 @@ public class ACMFetcher {
 		
 		URL urlSearch = null;	
 		
-//		if(FetcherPanel.checkSearchByAll){
-//			StringBuffer sb = new StringBuffer(startUrl); 
-//			sb.append(keywordString.replaceAll(" ", "20%"));	//Chuyen khoang trang (" ") thanh 20% de gui len search
-//			sb.append(searchUrlPart);
-//			sb.append(startIndex + 1);
-//			sb.append(endUrl);
-//			
-//				
-//			try {
-//				//Tao URL tu chuoi tren
-//				urlSearch = new URL(sb.toString());
-//			} catch (MalformedURLException e) {			
-//				e.printStackTrace();
-//			}
-//		}else{
+		if(FetcherPanel.checkSearchByAll){
+			StringBuffer sb = new StringBuffer(startUrl); 
+			sb.append("\"");
+			
+			sb.append(keywordString.replaceAll(" ", "+"));
+			sb.append("\"");
+			sb.append(searchUrlPart);
+			sb.append(startIndex + 1);
+/*			sb.append(endUrl);*/
+			
+				
+			try {
+				//Tao URL tu chuoi tren
+				urlSearch = new URL(sb.toString());
+			} catch (MalformedURLException e) {			
+				e.printStackTrace();
+			}
+		}else{
 			StringBuffer sb = new StringBuffer(startAdvancedSearchSubjectUrl);
 			sb.append(keywordString.replaceAll(" ", "+"));
 			sb.append(endAdvancedSearchSubjectUrl);
@@ -166,7 +171,7 @@ public class ACMFetcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//		}
+		}
 		
 		
 		return urlSearch;
