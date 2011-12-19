@@ -144,7 +144,8 @@ public class ACMFetcher {
 		
 		URL urlSearch = null;	
 		
-		if(FetcherPanel.checkSearchByAll){
+//		if(FetcherPanel.checkSearchByAll){
+		if(true){
 			StringBuffer sb = new StringBuffer(startUrl); 
 			sb.append("\"");
 			
