@@ -48,6 +48,7 @@ import uit.tkorg.dbsa.actions.database.InsertDBSAPublication;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
 import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.gui.main.DBSAStatusBar;
+import uit.tkorg.dbsa.gui.statistic.DBSAStatisticPanel;
 import uit.tkorg.dbsa.model.DBSAPublication;
 import uit.tkorg.dbsa.properties.files.WriteExcel;
 
@@ -937,6 +938,7 @@ public class FetcherResultPanel extends JPanel {
 					int n = 0;
 					boolean checkInsert = false;
 					boolean checkSelect = false;
+					old_Num_Total=0;
 					
 					for(int i = 0; i < resultsJTable.getRowCount(); i++){
 						if(resultsJTable.getModel().getValueAt(i, 7).toString().equals("true"))
@@ -1133,6 +1135,7 @@ public class FetcherResultPanel extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					removeRowsIsSelected();
+					old_Num_Total=0;
 					deleteJButton.setEnabled(false);
 				}	
 			});
