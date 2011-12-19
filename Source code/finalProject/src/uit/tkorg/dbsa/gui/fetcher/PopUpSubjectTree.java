@@ -11,6 +11,7 @@ import javax.swing.tree.TreePath;
 
 import uit.tkorg.dbsa.actions.database.LoadSubject;
 import uit.tkorg.dbsa.gui.main.DBSAApplication;
+import uit.tkorg.dbsa.gui.main.DBSAResourceBundle;
 import uit.tkorg.dbsa.model.Subject;
 
 public class PopUpSubjectTree extends JWindow{
@@ -37,7 +38,7 @@ public class PopUpSubjectTree extends JWindow{
 			ArrayList<Subject> subjectList = LoadSubject.getSubject();
 			
 			DefaultTreeModel treeModel = null;
-			DefaultMutableTreeNode nodeMain = new DefaultMutableTreeNode("Danh sach cac chu de");
+			DefaultMutableTreeNode nodeMain = new DefaultMutableTreeNode(DBSAResourceBundle.res.getString("list.listSubject"));
 			DefaultMutableTreeNode nodeParrent = null;
 			if(subjectList != null)
 			for(int i = 0; i < subjectList.size(); i++){				
