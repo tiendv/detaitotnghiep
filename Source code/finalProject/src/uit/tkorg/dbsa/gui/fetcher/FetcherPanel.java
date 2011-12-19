@@ -824,8 +824,8 @@ public class FetcherPanel extends JPanel {
 	
 				public void stateChanged(ChangeEvent event) {
 					if (fetchFromACMCheckBox.isSelected()) {
-						searchByAllRadioButton.setVisible(true);
-						searchBySubjectJRadioButton.setVisible(true);
+						searchByAllRadioButton.setVisible(false);
+						searchBySubjectJRadioButton.setVisible(false);
 					} else {
 						searchByAllRadioButton.setVisible(false);
 						searchBySubjectJRadioButton.setVisible(false);
